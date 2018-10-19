@@ -5,11 +5,11 @@
 SUIT                                                            B. Moran
 Internet-Draft                                             H. Tschofenig
 Intended status: Informational                               ARM Limited
-Expires: April 21, 2019                                 October 18, 2018
+Expires: April 22, 2019                                 October 19, 2018
 
 
                 SUIT CBOR manifest serialisation format
-                      draft-moran-suit-manifest-02
+                      draft-moran-suit-manifest-03
 
 Abstract
 
@@ -33,7 +33,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 21, 2019.
+   This Internet-Draft will expire on April 22, 2019.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                 [Page 1]
+Moran & Tschofenig       Expires April 22, 2019                 [Page 1]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                 [Page 2]
+Moran & Tschofenig       Expires April 22, 2019                 [Page 2]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -118,11 +118,11 @@ Internet-Draft          Firmware Manifest Format            October 2018
    11. Security Considerations . . . . . . . . . . . . . . . . . . .  33
    12. Mailing List Information  . . . . . . . . . . . . . . . . . .  33
    13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  33
-   14. References  . . . . . . . . . . . . . . . . . . . . . . . . .  33
-     14.1.  Normative References . . . . . . . . . . . . . . . . . .  33
-     14.2.  Informative References . . . . . . . . . . . . . . . . .  34
-     14.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  34
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  34
+   14. References  . . . . . . . . . . . . . . . . . . . . . . . . .  34
+     14.1.  Normative References . . . . . . . . . . . . . . . . . .  34
+     14.2.  Informative References . . . . . . . . . . . . . . . . .  35
+     14.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  35
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  35
 
 1.  Introduction
 
@@ -165,7 +165,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                 [Page 3]
+Moran & Tschofenig       Expires April 22, 2019                 [Page 3]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -221,7 +221,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                 [Page 4]
+Moran & Tschofenig       Expires April 22, 2019                 [Page 4]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -277,7 +277,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                 [Page 5]
+Moran & Tschofenig       Expires April 22, 2019                 [Page 5]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -333,7 +333,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                 [Page 6]
+Moran & Tschofenig       Expires April 22, 2019                 [Page 6]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -389,7 +389,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                 [Page 7]
+Moran & Tschofenig       Expires April 22, 2019                 [Page 7]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -445,7 +445,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                 [Page 8]
+Moran & Tschofenig       Expires April 22, 2019                 [Page 8]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -501,7 +501,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                 [Page 9]
+Moran & Tschofenig       Expires April 22, 2019                 [Page 9]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -557,7 +557,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 10]
+Moran & Tschofenig       Expires April 22, 2019                [Page 10]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -613,7 +613,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 11]
+Moran & Tschofenig       Expires April 22, 2019                [Page 11]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -669,7 +669,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 12]
+Moran & Tschofenig       Expires April 22, 2019                [Page 12]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -725,7 +725,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 13]
+Moran & Tschofenig       Expires April 22, 2019                [Page 13]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -781,7 +781,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 14]
+Moran & Tschofenig       Expires April 22, 2019                [Page 14]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -837,7 +837,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 15]
+Moran & Tschofenig       Expires April 22, 2019                [Page 15]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -893,7 +893,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 16]
+Moran & Tschofenig       Expires April 22, 2019                [Page 16]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -949,7 +949,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 17]
+Moran & Tschofenig       Expires April 22, 2019                [Page 17]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1005,7 +1005,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 18]
+Moran & Tschofenig       Expires April 22, 2019                [Page 18]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1061,7 +1061,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 19]
+Moran & Tschofenig       Expires April 22, 2019                [Page 19]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1117,7 +1117,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 20]
+Moran & Tschofenig       Expires April 22, 2019                [Page 20]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1173,7 +1173,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 21]
+Moran & Tschofenig       Expires April 22, 2019                [Page 21]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1229,7 +1229,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 22]
+Moran & Tschofenig       Expires April 22, 2019                [Page 22]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1285,7 +1285,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 23]
+Moran & Tschofenig       Expires April 22, 2019                [Page 23]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1341,7 +1341,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 24]
+Moran & Tschofenig       Expires April 22, 2019                [Page 24]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1397,7 +1397,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 25]
+Moran & Tschofenig       Expires April 22, 2019                [Page 25]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1453,7 +1453,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 26]
+Moran & Tschofenig       Expires April 22, 2019                [Page 26]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1509,7 +1509,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 27]
+Moran & Tschofenig       Expires April 22, 2019                [Page 27]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1565,7 +1565,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 28]
+Moran & Tschofenig       Expires April 22, 2019                [Page 28]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1621,7 +1621,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 29]
+Moran & Tschofenig       Expires April 22, 2019                [Page 29]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1677,7 +1677,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 30]
+Moran & Tschofenig       Expires April 22, 2019                [Page 30]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1733,7 +1733,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 31]
+Moran & Tschofenig       Expires April 22, 2019                [Page 31]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1789,7 +1789,7 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 32]
+Moran & Tschofenig       Expires April 22, 2019                [Page 32]
 
 Internet-Draft          Firmware Manifest Format            October 2018
 
@@ -1829,8 +1829,40 @@ Internet-Draft          Firmware Manifest Format            October 2018
 
 13.  Acknowledgements
 
-   We would like the following persons for their support in designing
-   this mechanism
+   We would like to thank the following persons for their support in
+   designing this mechanism:
+
+   -  Milosch Meriac
+
+   -  Geraint Luff
+
+   -  Dan Ros
+
+   -  John-Paul Stanford
+
+   -  Carsten Bormann
+
+
+
+
+Moran & Tschofenig       Expires April 22, 2019                [Page 33]
+
+Internet-Draft          Firmware Manifest Format            October 2018
+
+
+   -  Henk Birkholz
+
+   -  Oeyvind Roenningstad
+
+   -  Frank Audun Kvamtroe
+
+   -  Krzysztof Chru&#347;ci&#324;ski
+
+   -  Andrzej Puzdrowski
+
+   -  Michael Richardson
+
+   -  David Brown
 
 14.  References
 
@@ -1840,15 +1872,6 @@ Internet-Draft          Firmware Manifest Format            October 2018
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
-
-
-
-
-
-Moran & Tschofenig       Expires April 21, 2019                [Page 33]
-
-Internet-Draft          Firmware Manifest Format            October 2018
-
 
    [RFC4122]  Leach, P., Mealling, M., and R. Salz, "A Universally
               Unique IDentifier (UUID) URN Namespace", RFC 4122,
@@ -1871,11 +1894,27 @@ Internet-Draft          Firmware Manifest Format            October 2018
               "CBOR Web Token (CWT)", RFC 8392, DOI 10.17487/RFC8392,
               May 2018, <https://www.rfc-editor.org/info/rfc8392>.
 
+
+
+
+
+
+
+
+Moran & Tschofenig       Expires April 22, 2019                [Page 34]
+
+Internet-Draft          Firmware Manifest Format            October 2018
+
+
 14.2.  Informative References
 
    [Architecture]
               Moran, B., "A Firmware Update Architecture for Internet of
-              Things Devices", July 2017.
+              Things Devices", July 2018.
+
+   [Information]
+              Moran, B., "Firmware Updates for Internet of Things
+              Devices - An Information Model for Manifests", July 2018.
 
 14.3.  URIs
 
@@ -1901,4 +1940,21 @@ Authors' Addresses
 
 
 
-Moran & Tschofenig       Expires April 21, 2019                [Page 34]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Moran & Tschofenig       Expires April 22, 2019                [Page 35]

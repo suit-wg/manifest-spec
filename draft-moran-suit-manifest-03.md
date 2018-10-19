@@ -50,8 +50,15 @@ informative:
       name:  Brendan Moran
       org: ARM Limited
     date: July 2018
+    HTML: https://tools.ietf.org/html/draft-ietf-suit-architecture-01
+  Information:
+    title: Firmware Updates for Internet of Things Devices - An Information Model for Manifests
+    author:
+      ins: B. Moran
+      name:  Brendan Moran
+      org: ARM Limited
+    date: July 2018
     HTML: https://tools.ietf.org/html/draft-ietf-suit-information-model-01
-    https://tools.ietf.org/html/draft-ietf-suit-information-model-01
 
 
 --- abstract
@@ -1189,4 +1196,17 @@ Archives of the list can be found at:
 
 # Acknowledgements
 
-We would like the following persons for their support in designing this mechanism
+We would like to thank the following persons for their support in designing this mechanism:
+
+* Milosch Meriac
+* Geraint Luff
+* Dan Ros
+* John-Paul Stanford
+* Carsten Bormann
+* Henk Birkholz
+* Øyvind Rønningstad
+* Frank Audun Kvamtrø
+* Krzysztof Chruściński
+* Andrzej Puzdrowski
+* Michael Richardson
+* David Brown
