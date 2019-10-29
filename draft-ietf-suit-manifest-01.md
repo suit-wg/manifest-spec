@@ -1,7 +1,7 @@
 ---
 title: SUIT CBOR manifest serialisation format
 abbrev: Firmware Manifest Format
-docname: draft-moran-suit-manifest-05
+docname: draft-ietf-suit-manifest-01
 category: info
 
 ipr: pre5378Trust200902
@@ -1137,27 +1137,28 @@ In order to create a valid SUIT Manifest document the structure of the correspon
 ~~~ CDDL
 SUIT_Outer_Wrapper = {
     suit-authentication-wrapper => bstr .cbor SUIT_Authentication_Wrapper / nil,
-    suit-manifest               => bstr .cbor SUIT_Manifest,
+    $$SUIT_Manifest_Wrapped,
     suit-dependency-resolution  => bstr .cbor SUIT_Command_Sequence,
     suit-payload-fetch          => bstr .cbor SUIT_Command_Sequence,
     suit-install                => bstr .cbor SUIT_Command_Sequence,
     suit-text                   => bstr .cbor SUIT_Text_Map,
     suit-coswid                 => bstr .cbor concise-software-identity
 }
-suit-authentication-wrapper = 1
-suit-manifest = 2
-suit-dependency-resolution = 7
-suit-payload-fetch = 8
-suit-install = 9
-suit-text = 13
-suit-coswid = 14
 
-SUIT_Authentication_Wrapper = [ * (
+SUIT_Authentication_Wrapper = [ + (
     COSE_Mac_Tagged /
     COSE_Sign_Tagged /
     COSE_Mac0_Tagged /
-    COSE_Sign1_Tagged)]
+    COSE_Sign1_Tagged)
+]
 
+SUIT_Encryption_Wrapper = COSE_Encrypt_Tagged / COSE_Encrypt0_Tagged
+
+$$SUIT_Manifest_Wrapped //= (suit-manifest  => bstr .cbor SUIT_Manifest)
+$$SUIT_Manifest_Wrapped //= (
+    suit-manifest-encryption-info => bstr .cbor SUIT_Encryption_Wrapper,
+    suit-manifest-encrypted       => bstr
+)
 
 COSE_Mac_Tagged = any
 COSE_Sign_Tagged = any
@@ -1173,12 +1174,8 @@ SUIT_Digest = [
 ]
 
 ; Named Information Hash Algorithm Identifiers
+suit-digest-algorithm-ids /= algorithm-id-sha224
 suit-digest-algorithm-ids /= algorithm-id-sha256
-suit-digest-algorithm-ids /= algorithm-id-sha256-128
-suit-digest-algorithm-ids /= algorithm-id-sha256-120
-suit-digest-algorithm-ids /= algorithm-id-sha256-96
-suit-digest-algorithm-ids /= algorithm-id-sha256-64
-suit-digest-algorithm-ids /= algorithm-id-sha256-32
 suit-digest-algorithm-ids /= algorithm-id-sha384
 suit-digest-algorithm-ids /= algorithm-id-sha512
 suit-digest-algorithm-ids /= algorithm-id-sha3-224
@@ -1189,34 +1186,27 @@ suit-digest-algorithm-ids /= algorithm-id-sha3-512
 SUIT_Manifest = {
     suit-manifest-version         => 1,
     suit-manifest-sequence-number => uint,
-    ? suit-dependencies           => [ + SUIT_Dependency ],
-    ? suit-components             => [ + SUIT_Component ],
-    ? suit-dependency-components  => [ + SUIT_Component_Reference ],
-    ? suit-common                 => bstr .cbor SUIT_Command_Sequence,
+    ? suit-common                 => bstr .cbor SUIT_Common,
     ? suit-dependency-resolution  => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
     ? suit-payload-fetch          => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
     ? suit-install                => SUIT_Digest / bstr .cbor SUIT_Command_Sequence
     ? suit-validate               => bstr .cbor SUIT_Command_Sequence
     ? suit-load                   => bstr .cbor SUIT_Command_Sequence
     ? suit-run                    => bstr .cbor SUIT_Command_Sequence
-    ? suit-text-info              => SUIT_Digest / bstr .cbor SUIT_Text_Map
+    ? suit-text                   => SUIT_Digest / bstr .cbor SUIT_Text_Map
     ? suit-coswid                 => SUIT_Digest / bstr .cbor concise-software-identity
 }
 
-suit-manifest-version = 1
-suit-manifest-sequence-number = 2
-suit-dependencies = 3
-suit-components = 4
-suit-dependency-components = 5
-suit-common = 6
-suit-dependency-resolution = 7
-suit-payload-fetch = 8
-suit-install = 9
-suit-validate = 10
-suit-load = 11
-suit-run = 12
-suit-text-info = 13
-suit-coswid = 14
+SUIT_Common = {
+    ? suit-dependencies           => bstr .cbor SUIT_Dependencies,
+    ? suit-components             => bstr .cbor SUIT_Components,
+    ? suit-dependency-components  => bstr .cbor SUIT_Component_References,
+    ? suit-common-sequence        => bstr .cbor SUIT_Command_Sequence,
+}
+
+SUIT_Dependencies         = [ + SUIT_Dependency ]
+SUIT_Components           = [ + SUIT_Component_Identifier ]
+SUIT_Component_References = [ + SUIT_Component_Reference ]
 
 concise-software-identity = any
 
@@ -1225,84 +1215,79 @@ SUIT_Dependency = {
     suit-dependency-prefix => SUIT_Component_Identifier,
 }
 
-suit-dependency-digest = 1
-suit-dependency-prefix = 2
-
 SUIT_Component_Identifier =  [* bstr]
 
-SUIT_Component = {
-    suit-component-identifier => SUIT_Component_Identifier,
-    ? suit-component-size => uint,
-    ? suit-component-digest => SUIT_Digest,
-}
-
-suit-component-identifier = 1
-suit-component-size = 2
-suit-component-digest = 3
 
 SUIT_Component_Reference = {
     suit-component-identifier => SUIT_Component_Identifier,
     suit-component-dependency-index => uint
 }
 
-suit-component-dependency-index = 2
 
-SUIT_Command_Sequence = [ + { SUIT_Condition // SUIT_Directive // SUIT_Command_Custom} ]
+SUIT_Command_Sequence = [ + (SUIT_Condition // SUIT_Directive // SUIT_Command_Custom) ]
 
-SUIT_Command_Custom = (nint => bstr)
+SUIT_Command_Custom = (nint, bstr)
+SUIT_Condition //= (suit-condition-vendor-identifier, nil)
+SUIT_Condition //= (suit-condition-class-identifier,  nil)
+SUIT_Condition //= (suit-condition-device-identifier, nil)
+SUIT_Condition //= (suit-condition-image-match,       nil)
+SUIT_Condition //= (suit-condition-image-not-match,   nil)
+SUIT_Condition //= (suit-condition-use-before,        uint)
+SUIT_Condition //= (suit-condition-minimum-battery,   uint)
+SUIT_Condition //= (suit-condition-update-authorised, int)
+SUIT_Condition //= (suit-condition-version,           SUIT_Condition_Version_Argument)
+SUIT_Condition //= (suit-condition-component-offset,  uint)
+SUIT_Condition //= (suit-condition-custom,            bstr)
 
-SUIT_Condition //= (SUIT_Condition_Vendor_Identifier => RFC4122_UUID) ; SUIT_Condition_Vendor_Identifier
-SUIT_Condition //= (2 => RFC4122_UUID) ; SUIT_Condition_Class_Identifier
-SUIT_Condition //= (3 => RFC4122_UUID) ; SUIT_Condition_Device_Identifier
-SUIT_Condition //= (4 => SUIT_Digest) ; SUIT_Condition_Image_Match
-SUIT_Condition //= (5 => SUIT_Digest) ; SUIT_Condition_Image_Not_Match
-SUIT_Condition //= (6 => uint) ; SUIT_Condition_Use_Before
-SUIT_Condition //= (7 => uint) ; SUIT_Condition_Minimum_Battery
-SUIT_Condition //= (8 => int) ;  SUIT_Condition_Update_Authorised
-SUIT_Condition //= (9 => SUIT_Condition_Version_Argument) ; SUIT_Condition_Version
-SUIT_Condition //= (10 => uint) ; SUIT_Condition_Component_Offset
-SUIT_Condition //= (nint => bstr) ; SUIT_Condition_Custom
-
-SUIT_Condition_Vendor_Identifier = 1
 RFC4122_UUID = bstr .size 16
 
 SUIT_Condition_Version_Argument = [
     suit-condition-version-comparison: SUIT_Condition_Version_Comparison_Types,
     suit-condition-version-comparison: SUIT_Condition_Version_Comparison_Value
 ]
-SUIT_Condition_Version_Comparison_Types /= SUIT_Condition_Version_Comparison_Greater
-SUIT_Condition_Version_Comparison_Types /= SUIT_Condition_Version_Comparison_Greater_Equal
-SUIT_Condition_Version_Comparison_Types /= SUIT_Condition_Version_Comparison_Equal
-SUIT_Condition_Version_Comparison_Types /= SUIT_Condition_Version_Comparison_Lesser_Equal
-SUIT_Condition_Version_Comparison_Types /= SUIT_Condition_Version_Comparison_Lesser
+SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-greater
+SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-greater-equal
+SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-equal
+SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-lesser-equal
+SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-lesser
 
-SUIT_Condition_Version_Comparison_Greater = 1
-SUIT_Condition_Version_Comparison_Greater_Equal = 2
-SUIT_Condition_Version_Comparison_Equal = 3
-SUIT_Condition_Version_Comparison_Lesser_Equal = 4
-SUIT_Condition_Version_Comparison_Lesser = 5
+suit-condition-version-comparison-greater = 1
+suit-condition-version-comparison-greater-equal = 2
+suit-condition-version-comparison-equal = 3
+suit-condition-version-comparison-lesser-equal = 4
+suit-condition-version-comparison-lesser = 5
 
 SUIT_Condition_Version_Comparison_Value = [+int]
 
-SUIT_Directive //= (11 => uint/bool) ; SUIT_Directive_Set_Component_Index
-SUIT_Directive //= (12 => uint/bool) ; SUIT_Directive_Set_Manifest_Index
-SUIT_Directive //= (13 => bstr .cbor SUIT_Command_Sequence) ; SUIT_Directive_Run_Sequence
-SUIT_Directive //= (14 => bstr .cbor SUIT_Command_Sequence) ; SUIT_Directive_Run_Sequence_Conditional
-SUIT_Directive //= (15 => nil) ; SUIT_Directive_Process_Dependency
-SUIT_Directive //= (16 => {+ SUIT_Parameters}) ; SUIT_Directive_Set_Parameters
-SUIT_Directive //= (19 => {+ SUIT_Parameters}) ; SUIT_Directive_Override_Parameters
-SUIT_Directive //= (20 => nil/bstr) ; SUIT_Directive_Fetch
-SUIT_Directive //= (21 => nil/bstr) ; SUIT_Directive_Copy
-SUIT_Directive //= (22 => nil/bstr) ; SUIT_Directive_Run
-SUIT_Directive //= (23 => { + SUIT_Wait_Events }) ; SUIT_Directive_Wait
+SUIT_Directive //= (suit-directive-set-component-index,      uint/bool)
+SUIT_Directive //= (suit-directive-set-dependency-index,     uint/bool)
+SUIT_Directive //= (suit-directive-run-sequence,             bstr .cbor SUIT_Command_Sequence)
+SUIT_Directive //= (suit-directive-try-each,                 SUIT_Directive_Try_Each_Argument)
+SUIT_Directive //= (suit-directive-process-dependency,       nil)
+SUIT_Directive //= (suit-directive-set-parameters,           {+ SUIT_Parameters})
+SUIT_Directive //= (suit-directive-override-parameters,      {+ SUIT_Parameters})
+SUIT_Directive //= (suit-directive-fetch,                    nil)
+SUIT_Directive //= (suit-directive-copy,                     nil)
+SUIT_Directive //= (suit-directive-swap,                     nil)
+SUIT_Directive //= (suit-directive-run,                      nil)
+SUIT_Directive //= (suit-directive-wait,                     { + SUIT_Wait_Events })
+SUIT_Directive //= (suit-directive-run-with-arguments,       bstr)
 
-SUIT_Wait_Events //= (1 => SUIT_Wait_Event_Argument_Authorisation)
-SUIT_Wait_Events //= (2 => SUIT_Wait_Event_Argument_Power)
-SUIT_Wait_Events //= (3 => SUIT_Wait_Event_Argument_Network)
-SUIT_Wait_Events //= (4 => SUIT_Wait_Event_Argument_Other_Device_Version)
-SUIT_Wait_Events //= (5 => SUIT_Wait_Event_Argument_Time)
-SUIT_Wait_Events //= (6 => SUIT_Wait_Event_Argument_Time_Of_Day)
-SUIT_Wait_Events //= (7 => SUIT_Wait_Event_Argument_Day_Of_Week)
+SUIT_Directive_Try_Each_Argument = [
+    + bstr .cbor SUIT_Command_Sequence,
+    nil / bstr .cbor SUIT_Command_Sequence
+]
+
+SUIT_Wait_Events //= (suit-wait-event-authorisation => int)
+SUIT_Wait_Events //= (suit-wait-event-power => int)
+SUIT_Wait_Events //= (suit-wait-event-network => int)
+SUIT_Wait_Events //= (suit-wait-event-other-device-version
+    => SUIT_Wait_Event_Argument_Other_Device_Version)
+SUIT_Wait_Events //= (suit-wait-event-time => uint); Timestamp
+SUIT_Wait_Events //= (suit-wait-event-time-of-day
+    => uint); Time of Day (seconds since 00:00:00)
+SUIT_Wait_Events //= (suit-wait-event-day-of-week
+    => uint); Days since Sunday
 
 
 SUIT_Wait_Event_Argument_Authorisation = int ; priority
@@ -1316,29 +1301,29 @@ SUIT_Wait_Event_Argument_Time = uint ; Timestamp
 SUIT_Wait_Event_Argument_Time_Of_Day = uint ; Time of Day (seconds since 00:00:00)
 SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 
-SUIT_Parameters //= (1 => bool) ; SUIT_Parameter_Strict_Order
-SUIT_Parameters //= (2 => bool) ; SUIT_Parameter_Coerce_Condition_Failure
-SUIT_Parameters //= (3 => bstr) ; SUIT_Parameter_Vendor_ID
-SUIT_Parameters //= (4 => bstr) ; SUIT_Parameter_Class_ID
-SUIT_Parameters //= (5 => bstr) ; SUIT_Parameter_Device_ID
-SUIT_Parameters //= (6 => bstr .cbor SUIT_URI_List) ; SUIT_Parameter_URI_List
-SUIT_Parameters //= (7 => bstr .cbor SUIT_Encryption_Info) ; SUIT_Parameter_Encryption_Info
-SUIT_Parameters //= (8 => bstr .cbor SUIT_Compression_Info) ; SUIT_Parameter_Compression_Info
-SUIT_Parameters //= (9 => bstr .cbor SUIT_Unpack_Info) ; SUIT_Parameter_Unpack_Info
-SUIT_Parameters //= (10 => bstr .cbor SUIT_Component_Identifier) ; SUIT_Parameter_Source_Component
-SUIT_Parameters //= (11 => bstr .cbor SUIT_Digest) ; SUIT_Parameter_Image_Digest
-SUIT_Parameters //= (12 => uint) ; SUIT_Parameter_Image_Size
-SUIT_Parameters //= (nint => int/bool/bstr) ; SUIT_Parameter_Custom
+SUIT_Parameters //= (suit-parameter-strict-order => bool)
+SUIT_Parameters //= (suit-parameter-coerce-condition-failure => bool)
+SUIT_Parameters //= (suit-parameter-vendor-id => bstr)
+SUIT_Parameters //= (suit-parameter-class-id => bstr)
+SUIT_Parameters //= (suit-parameter-device-id => bstr)
+SUIT_Parameters //= (suit-parameter-uri => bstr)
+SUIT_Parameters //= (suit-parameter-encryption-info => bstr .cbor SUIT_Encryption_Info)
+SUIT_Parameters //= (suit-parameter-compression-info => bstr .cbor SUIT_Compression_Info)
+SUIT_Parameters //= (suit-parameter-unpack-info => bstr .cbor SUIT_Unpack_Info)
+SUIT_Parameters //= (suit-parameter-source-component => bstr .cbor SUIT_Component_Identifier)
+SUIT_Parameters //= (suit-parameter-image-digest => bstr .cbor SUIT_Digest)
+SUIT_Parameters //= (suit-parameter-image-size => uint)
+SUIT_Parameters //= (suit-parameter-uri-list => bstr .cbor SUIT_Component_URI_List)
+SUIT_Parameters //= (suit-parameter-custom => int/bool/bstr)
 
-SUIT_URI_List = [ + [priority: int, uri: tstr] ]
+SUIT_Component_URI_List = [ + [priority: int, uri: tstr] ]
+SUIT_Priority_Parameter_List = [ + [priority: int, parameters: { + SUIT_Parameters }] ]
 
 SUIT_Encryption_Info = COSE_Encrypt_Tagged/COSE_Encrypt0_Tagged
 SUIT_Compression_Info = {
     suit-compression-algorithm => SUIT_Compression_Algorithms
     ? suit-compression-parameters => bstr
 }
-suit-compression-algorithm = 1
-suit-compression-parameters = 2
 
 SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_gzip
 SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_bzip2
@@ -1355,8 +1340,6 @@ SUIT_Unpack_Info = {
     suit-unpack-algorithm => SUIT_Unpack_Algorithms
     ? suit-unpack-parameters => bstr
 }
-suit-unpack-algorithm  = 1
-suit-unpack-parameters = 2
 
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Delta
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Hex
@@ -1367,6 +1350,103 @@ SUIT_Unpack_Algorithm_Hex = 2
 SUIT_Unpack_Algorithm_Elf = 3
 
 SUIT_Text_Map = {int => tstr}
+
+suit-authentication-wrapper = 1
+suit-manifest = 2
+
+suit-manifest-encryption-info = 3
+suit-manifest-encrypted       = 4
+
+suit-manifest-version = 1
+suit-manifest-sequence-number = 2
+suit-common = 3
+suit-dependency-resolution = 7
+suit-payload-fetch = 8
+suit-install = 9
+suit-validate = 10
+suit-load = 11
+suit-run = 12
+suit-text = 13
+suit-coswid = 14
+
+suit-dependencies = 1
+suit-components = 2
+suit-dependency-components = 3
+suit-common-sequence = 4
+
+suit-dependency-digest = 1
+suit-dependency-prefix = 2
+
+suit-component-identifier = 1
+suit-component-dependency-index = 2
+
+suit-command-custom = nint
+
+suit-condition-vendor-identifier = 1
+suit-condition-class-identifier  = 2
+suit-condition-image-match       = 3
+suit-condition-use-before        = 4
+suit-condition-component-offset  = 5
+suit-condition-custom = 6
+
+suit-condition-device-identifier        = 24
+suit-condition-image-not-match          = 25
+suit-condition-minimum-battery          = 26
+suit-condition-update-authorised        = 27
+suit-condition-version                  = 28
+
+suit-directive-set-component-index      = 12
+suit-directive-set-dependency-index     = 13
+suit-directive-abort                    = 14
+suit-directive-try-each                 = 15
+suit-directive-do-each                  = 16 ; TBD
+suit-directive-map-filter               = 17 ; TBD
+suit-directive-process-dependency       = 18
+suit-directive-set-parameters           = 19
+suit-directive-override-parameters      = 20
+suit-directive-fetch                    = 21
+suit-directive-copy                     = 22
+suit-directive-run                      = 23
+
+suit-directive-wait                     = 29
+suit-directive-run-sequence             = 30
+suit-directive-run-with-arguments       = 31
+suit-directive-swap                     = 32
+
+suit-wait-event-argument-authorisation = 1
+suit-wait-event-power = 2
+suit-wait-event-network = 3
+suit-wait-event-other-device-version = 4
+suit-wait-event-time = 5
+suit-wait-event-time-of-day = 6
+suit-wait-event-day-of-week = 7
+suit-wait-event-authorisation = 8
+
+suit-parameter-strict-order = 1
+suit-parameter-coerce-condition-failure = 2
+suit-parameter-vendor-id = 3
+suit-parameter-class-id = 4
+suit-parameter-device-id = 5
+suit-parameter-uri = 6
+suit-parameter-encryption-info = 7
+suit-parameter-compression-info = 8
+suit-parameter-unpack-info = 9
+suit-parameter-source-component = 10
+suit-parameter-image-digest = 11
+suit-parameter-image-size = 12
+
+suit-parameter-uri-list = 24
+suit-parameter-uri-list-append = 25
+suit-parameter-prioritised-parameters = 26
+
+suit-parameter-custom = nint
+
+suit-compression-algorithm = 1
+suit-compression-parameters = 2
+
+suit-unpack-algorithm  = 1
+suit-unpack-parameters = 2
+
 ~~~
 
 # Examples
@@ -1415,28 +1495,32 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : None
-    / manifest / 3 : h'a40101020103583ca2024c818245466c6173684300340104'
-                     h'582a8213a20b582000112233445566778899aabbccddeeff'
-                     h'0123456789abcdeffedcba98765432100c1987d00c47860c'
-                     h'0003f617f6' \
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f658405e5f'
+                        h'b84f9e9729a4d74096ad485921e842b4e320cc3fa177'
+                        h'8c2807377e1969e42449b3261109d273df4b3ceb9a61'
+                        h'06a46f0a7938de9a8441ab515b82463b39ee',
+    / manifest / 2 : h'a40101020103583ea2024c818245466c6173684300340104'
+                     h'582c8213a20b8202582000112233445566778899aabbccdd'
+                     h'eeff0123456789abcdeffedcba98765432100c1987d00c47'
+                     h'860c0003f617f6' \
     {
-        / structure-version / 1 : 1
-        / sequence-number / 2 : 1
-        / common / 3 : h'a2024c818245466c6173684300340104582a8213a20b58'
-                       h'2000112233445566778899aabbccddeeff0123456789ab'
-                       h'cdeffedcba98765432100c1987d0' \ {
+        / structure-version / 1 : 1,
+        / sequence-number / 2 : 1,
+        / common / 3 : h'a2024c818245466c6173684300340104582c8213a20b82'
+                       h'02582000112233445566778899aabbccddeeff01234567'
+                       h'89abcdeffedcba98765432100c1987d0' \ {
             / components / 2 : h'818245466c61736843003401' \
             [
                 [h'466c617368', h'003401'],
             ],
-            / common / 4 : h'8213a20b582000112233445566778899aabbccddee'
-                           h'ff0123456789abcdeffedcba98765432100c1987d0'
-            \ [
+            / common-sequence / 4 : h'8213a20b820258200011223344556677'
+                                    h'8899aabbccddeeff0123456789abcdef'
+                                    h'fedcba98765432100c1987d0' \ [
                 / set-vars / 19, {
-                    / digest / 11 :h'00112233445566778899aabbccddeeff01'
-                                   h'23456789abcdeffedcba9876543210',
-                    / size / 12 : 34768
+                    / digest / 11 : [ 2,
+                        h'00112233445566778899aabbccddeeff0123456789ab'
+                        h'cdeffedcba9876543210' ],
+                    / size / 12 : 34768,
                 },
             ],
         },
@@ -1451,16 +1535,29 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 83
+Total size of outer wrapper without COSE authentication object: 85
 
 Outer:
 
 ~~~
-a201f603584da40101020103583ca2024c818245466c6173684300340104582a8213a20b
-582000112233445566778899aabbccddeeff0123456789abcdeffedcba98765432100c19
-87d00c47860c0003f617f6
+a201f602584fa40101020103583ea2024c818245466c6173684300340104582c8213a20b
+8202582000112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210
+0c1987d00c47860c0003f617f6
 ~~~
 
+
+
+Total size of outer wrapper with COSE authentication object: 170
+
+Signed Outer:
+
+~~~
+a2015854d28443a10126a1044874657374206b6579f658405e5fb84f9e9729a4d74096ad
+485921e842b4e320cc3fa1778c2807377e1969e42449b3261109d273df4b3ceb9a6106a4
+6f0a7938de9a8441ab515b82463b39ee02584fa40101020103583ea2024c818245466c61
+73684300340104582c8213a20b8202582000112233445566778899aabbccddeeff012345
+6789abcdeffedcba98765432100c1987d00c47860c0003f617f6
+~~~
 
 ## Example 1:
 
@@ -1506,29 +1603,33 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : None
-    / manifest / 3 : h'a40101020203583ca2024c818245466c6173684300340104'
-                     h'582a8213a20b582000112233445566778899aabbccddeeff'
-                     h'0123456789abcdeffedcba98765432100c1987d009582586'
-                     h'0c0013a106781b687474703a2f2f6578616d706c652e636f'
-                     h'6d2f66696c652e62696e15f6' \
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f658403d4e'
+                        h'9ff1ca8803a81ae1e2b13df28c527a4d6975e860035e'
+                        h'e9a88576b5e6f2bf12f33017e88157bcff58d712e7f8'
+                        h'010821ae0f82f78eb681b61697345e655cf4',
+    / manifest / 2 : h'a40101020203583ea2024c818245466c6173684300340104'
+                     h'582c8213a20b8202582000112233445566778899aabbccdd'
+                     h'eeff0123456789abcdeffedcba98765432100c1987d00958'
+                     h'25860c0013a106781b687474703a2f2f6578616d706c652e'
+                     h'636f6d2f66696c652e62696e15f6' \
     {
-        / structure-version / 1 : 1
-        / sequence-number / 2 : 2
-        / common / 3 : h'a2024c818245466c6173684300340104582a8213a20b58'
-                       h'2000112233445566778899aabbccddeeff0123456789ab'
-                       h'cdeffedcba98765432100c1987d0' \ {
+        / structure-version / 1 : 1,
+        / sequence-number / 2 : 2,
+        / common / 3 : h'a2024c818245466c6173684300340104582c8213a20b82'
+                       h'02582000112233445566778899aabbccddeeff01234567'
+                       h'89abcdeffedcba98765432100c1987d0' \ {
             / components / 2 : h'818245466c61736843003401' \
             [
                 [h'466c617368', h'003401'],
             ],
-            / common / 4 : h'8213a20b582000112233445566778899aabbccddee'
-                           h'ff0123456789abcdeffedcba98765432100c1987d0'
-            \ [
+            / common-sequence / 4 : h'8213a20b820258200011223344556677'
+                                    h'8899aabbccddeeff0123456789abcdef'
+                                    h'fedcba98765432100c1987d0' \ [
                 / set-vars / 19, {
-                    / digest / 11 :h'00112233445566778899aabbccddeeff01'
-                                   h'23456789abcdeffedcba9876543210',
-                    / size / 12 : 34768
+                    / digest / 11 : [ 2,
+                        h'00112233445566778899aabbccddeeff0123456789ab'
+                        h'cdeffedcba9876543210' ],
+                    / size / 12 : 34768,
                 },
             ],
         },
@@ -1536,7 +1637,7 @@ Converted into the SUIT manifest, this produces:
                             h'6c652e636f6d2f66696c652e62696e15f6' \ [
             / set-component-index / 12, 0,
             / set-vars / 19, {
-                / uri / 6 : http://example.com/file.bin
+                / uri / 6 : http://example.com/file.bin,
             },
             / fetch / 21, None,
         ],
@@ -1546,15 +1647,30 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 114
+Total size of outer wrapper without COSE authentication object: 116
 
 Outer:
 
 ~~~
-a201f603586ca40101020203583ca2024c818245466c6173684300340104582a8213a20b
-582000112233445566778899aabbccddeeff0123456789abcdeffedcba98765432100c19
-87d0095825860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f66696c65
-2e62696e15f6
+a201f602586ea40101020203583ea2024c818245466c6173684300340104582c8213a20b
+8202582000112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210
+0c1987d0095825860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f6669
+6c652e62696e15f6
+~~~
+
+
+
+Total size of outer wrapper with COSE authentication object: 201
+
+Signed Outer:
+
+~~~
+a2015854d28443a10126a1044874657374206b6579f658403d4e9ff1ca8803a81ae1e2b1
+3df28c527a4d6975e860035ee9a88576b5e6f2bf12f33017e88157bcff58d712e7f80108
+21ae0f82f78eb681b61697345e655cf402586ea40101020203583ea2024c818245466c61
+73684300340104582c8213a20b8202582000112233445566778899aabbccddeeff012345
+6789abcdeffedcba98765432100c1987d0095825860c0013a106781b687474703a2f2f65
+78616d706c652e636f6d2f66696c652e62696e15f6
 ~~~
 
 ## Example 2:
@@ -1610,37 +1726,43 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : None
-    / manifest / 3 : h'a501010203035864a2024c818245466c6173684300340104'
-                     h'58528613a40350fa6b4a53d5ad5fdfbe9de663e4d41ffe04'
-                     h'501492af1425695e48bf429b2d51f2ab450b582000112233'
-                     h'445566778899aabbccddeeff0123456789abcdeffedcba98'
-                     h'765432100c1987d001f602f6095825860c0013a106781b68'
-                     h'7474703a2f2f6578616d706c652e636f6d2f66696c652e62'
-                     h'696e15f60c47860c0003f617f6' \
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f65840e637'
+                        h'5a57596cb4a35a90a30b4099bccf7e2352a9829bf7bb'
+                        h'1b56cfc0e713955be4fd360e366c94e32dfc344695b1'
+                        h'20b2c59732b2e3f079fc2693c5a459d9ce44',
+    / manifest / 2 : h'a501010203035866a2024c818245466c6173684300340104'
+                     h'58548613a40350fa6b4a53d5ad5fdfbe9de663e4d41ffe04'
+                     h'501492af1425695e48bf429b2d51f2ab450b820258200011'
+                     h'2233445566778899aabbccddeeff0123456789abcdeffedc'
+                     h'ba98765432100c1987d001f602f6095825860c0013a10678'
+                     h'1b687474703a2f2f6578616d706c652e636f6d2f66696c65'
+                     h'2e62696e15f60c47860c0003f617f6' \
     {
-        / structure-version / 1 : 1
-        / sequence-number / 2 : 3
-        / common / 3 : h'a2024c818245466c617368430034010458528613a40350'
+        / structure-version / 1 : 1,
+        / sequence-number / 2 : 3,
+        / common / 3 : h'a2024c818245466c617368430034010458548613a40350'
                        h'fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425'
-                       h'695e48bf429b2d51f2ab450b5820001122334455667788'
-                       h'99aabbccddeeff0123456789abcdeffedcba9876543210'
-                       h'0c1987d001f602f6' \ {
+                       h'695e48bf429b2d51f2ab450b8202582000112233445566'
+                       h'778899aabbccddeeff0123456789abcdeffedcba987654'
+                       h'32100c1987d001f602f6' \ {
             / components / 2 : h'818245466c61736843003401' \
             [
                 [h'466c617368', h'003401'],
             ],
-            / common / 4 : h'8613a40350fa6b4a53d5ad5fdfbe9de663e4d41ffe'
-                           h'04501492af1425695e48bf429b2d51f2ab450b5820'
-                           h'00112233445566778899aabbccddeeff0123456789'
-                           h'abcdeffedcba98765432100c1987d001f602f6' \ [
+            / common-sequence / 4 : h'8613a40350fa6b4a53d5ad5fdfbe9de6'
+                                    h'63e4d41ffe04501492af1425695e48bf'
+                                    h'429b2d51f2ab450b8202582000112233'
+                                    h'445566778899aabbccddeeff01234567'
+                                    h'89abcdeffedcba98765432100c1987d0'
+                                    h'01f602f6' \ [
                 / set-vars / 19, {
                     / vendor-id / 3 : h'fa6b4a53d5ad5fdfbe9de663e4d41f'
-                                      h'fe'
-                    / class-id / 4 : h'1492af1425695e48bf429b2d51f2ab45'
-                    / digest / 11 :h'00112233445566778899aabbccddeeff01'
-                                   h'23456789abcdeffedcba9876543210',
-                    / size / 12 : 34768
+                                      h'fe',
+                    / class-id / 4 : h'1492af1425695e48bf429b2d51f2ab45',
+                    / digest / 11 : [ 2,
+                        h'00112233445566778899aabbccddeeff0123456789ab'
+                        h'cdeffedcba9876543210' ],
+                    / size / 12 : 34768,
                 },
                 / condition-vendor-id / 1, None,
                 / condition-class-id / 2, None,
@@ -1650,7 +1772,7 @@ Converted into the SUIT manifest, this produces:
                             h'6c652e636f6d2f66696c652e62696e15f6' \ [
             / set-component-index / 12, 0,
             / set-vars / 19, {
-                / uri / 6 : http://example.com/file.bin
+                / uri / 6 : http://example.com/file.bin,
             },
             / fetch / 21, None,
         ],
@@ -1665,16 +1787,32 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 163
+Total size of outer wrapper without COSE authentication object: 165
 
 Outer:
 
 ~~~
-a201f603589da501010203035864a2024c818245466c617368430034010458528613a403
+a201f602589fa501010203035866a2024c818245466c617368430034010458548613a403
 50fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425695e48bf429b2d51f2ab450b
-582000112233445566778899aabbccddeeff0123456789abcdeffedcba98765432100c19
-87d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f
-66696c652e62696e15f60c47860c0003f617f6
+8202582000112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210
+0c1987d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e636f
+6d2f66696c652e62696e15f60c47860c0003f617f6
+~~~
+
+
+
+Total size of outer wrapper with COSE authentication object: 250
+
+Signed Outer:
+
+~~~
+a2015854d28443a10126a1044874657374206b6579f65840e6375a57596cb4a35a90a30b
+4099bccf7e2352a9829bf7bb1b56cfc0e713955be4fd360e366c94e32dfc344695b120b2
+c59732b2e3f079fc2693c5a459d9ce4402589fa501010203035866a2024c818245466c61
+7368430034010458548613a40350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af14
+25695e48bf429b2d51f2ab450b8202582000112233445566778899aabbccddeeff012345
+6789abcdeffedcba98765432100c1987d001f602f6095825860c0013a106781b68747470
+3a2f2f6578616d706c652e636f6d2f66696c652e62696e15f60c47860c0003f617f6
 ~~~
 
 ## Example 3:
@@ -1755,56 +1893,63 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : None
-    / manifest / 3 : h'a50101020403589ba20254828245466c6173684300340182'
-                     h'4352414d4200040458818e13a20350fa6b4a53d5ad5fdfbe'
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f65840ef4b'
+                        h'399c55131a51bebafb46da6e6b79c59417fdefea7b87'
+                        h'e4234bf8f978094e3092c8506d8a912fbacaec5ba365'
+                        h'24ae0e4bb1aa14197e4d0afe10ba47e29e5a',
+    / manifest / 2 : h'a50101020403589fa20254828245466c6173684300340182'
+                     h'4352414d4200040458858e13a20350fa6b4a53d5ad5fdfbe'
                      h'9de663e4d41ffe04501492af1425695e48bf429b2d51f2ab'
-                     h'450c0013a20b582000112233445566778899aabbccddeeff'
-                     h'0123456789abcdeffedcba98765432100c1987d00c0113a2'
-                     h'0b582000112233445566778899aabbccddeeff0123456789'
-                     h'abcdeffedcba98765432100c1987d001f602f6095825860c'
-                     h'0013a106781b687474703a2f2f6578616d706c652e636f6d'
-                     h'2f66696c652e62696e15f60c518e0c0003f60c0113a10a00'
-                     h'15f603f617f6' \
+                     h'450c0013a20b8202582000112233445566778899aabbccdd'
+                     h'eeff0123456789abcdeffedcba98765432100c1987d00c01'
+                     h'13a20b8202582000112233445566778899aabbccddeeff01'
+                     h'23456789abcdeffedcba98765432100c1987d001f602f609'
+                     h'5825860c0013a106781b687474703a2f2f6578616d706c65'
+                     h'2e636f6d2f66696c652e62696e15f60c518e0c0003f60c01'
+                     h'13a10a0015f603f617f6' \
     {
-        / structure-version / 1 : 1
-        / sequence-number / 2 : 4
+        / structure-version / 1 : 1,
+        / sequence-number / 2 : 4,
         / common / 3 : h'a20254828245466c61736843003401824352414d420004'
-                       h'0458818e13a20350fa6b4a53d5ad5fdfbe9de663e4d41f'
+                       h'0458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d41f'
                        h'fe04501492af1425695e48bf429b2d51f2ab450c0013a2'
-                       h'0b582000112233445566778899aabbccddeeff01234567'
-                       h'89abcdeffedcba98765432100c1987d00c0113a20b5820'
-                       h'00112233445566778899aabbccddeeff0123456789abcd'
-                       h'effedcba98765432100c1987d001f602f6' \ {
+                       h'0b8202582000112233445566778899aabbccddeeff0123'
+                       h'456789abcdeffedcba98765432100c1987d00c0113a20b'
+                       h'8202582000112233445566778899aabbccddeeff012345'
+                       h'6789abcdeffedcba98765432100c1987d001f602f6' \ {
             / components / 2 : h'828245466c61736843003401824352414d4200'
                                h'04' \
             [
                 [h'466c617368', h'003401'],
                 [h'52414d', h'0004'],
             ],
-            / common / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe'
-                           h'04501492af1425695e48bf429b2d51f2ab450c0013'
-                           h'a20b582000112233445566778899aabbccddeeff01'
-                           h'23456789abcdeffedcba98765432100c1987d00c01'
-                           h'13a20b582000112233445566778899aabbccddeeff'
-                           h'0123456789abcdeffedcba98765432100c1987d001'
-                           h'f602f6' \ [
+            / common-sequence / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de6'
+                                    h'63e4d41ffe04501492af1425695e48bf'
+                                    h'429b2d51f2ab450c0013a20b82025820'
+                                    h'00112233445566778899aabbccddeeff'
+                                    h'0123456789abcdeffedcba9876543210'
+                                    h'0c1987d00c0113a20b82025820001122'
+                                    h'33445566778899aabbccddeeff012345'
+                                    h'6789abcdeffedcba98765432100c1987'
+                                    h'd001f602f6' \ [
                 / set-vars / 19, {
                     / vendor-id / 3 : h'fa6b4a53d5ad5fdfbe9de663e4d41f'
-                                      h'fe'
-                    / class-id / 4 : h'1492af1425695e48bf429b2d51f2ab45'
+                                      h'fe',
+                    / class-id / 4 : h'1492af1425695e48bf429b2d51f2ab45',
                 },
                 / set-component-index / 12, 0,
                 / set-vars / 19, {
-                    / digest / 11 :h'00112233445566778899aabbccddeeff01'
-                                   h'23456789abcdeffedcba9876543210',
-                    / size / 12 : 34768
+                    / digest / 11 : [ 2,
+                        h'00112233445566778899aabbccddeeff0123456789ab'
+                        h'cdeffedcba9876543210' ],
+                    / size / 12 : 34768,
                 },
                 / set-component-index / 12, 1,
                 / set-vars / 19, {
-                    / digest / 11 :h'00112233445566778899aabbccddeeff01'
-                                   h'23456789abcdeffedcba9876543210',
-                    / size / 12 : 34768
+                    / digest / 11 : [ 2,
+                        h'00112233445566778899aabbccddeeff0123456789ab'
+                        h'cdeffedcba9876543210' ],
+                    / size / 12 : 34768,
                 },
                 / condition-vendor-id / 1, None,
                 / condition-class-id / 2, None,
@@ -1814,7 +1959,7 @@ Converted into the SUIT manifest, this produces:
                             h'6c652e636f6d2f66696c652e62696e15f6' \ [
             / set-component-index / 12, 0,
             / set-vars / 19, {
-                / uri / 6 : http://example.com/file.bin
+                / uri / 6 : http://example.com/file.bin,
             },
             / fetch / 21, None,
         ],
@@ -1823,7 +1968,7 @@ Converted into the SUIT manifest, this produces:
             / condition-image / 3, None,
             / set-component-index / 12, 1,
             / set-vars / 19, {
-                / source-component / 10 : 0
+                / source-component / 10 : 0,
             },
             / fetch / 21, None,
             / condition-image / 3, None,
@@ -1835,18 +1980,36 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 228
+Total size of outer wrapper without COSE authentication object: 232
 
 Outer:
 
 ~~~
-a201f60358dea50101020403589ba20254828245466c61736843003401824352414d4200
-040458818e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425695e48bf
-429b2d51f2ab450c0013a20b582000112233445566778899aabbccddeeff0123456789ab
-cdeffedcba98765432100c1987d00c0113a20b582000112233445566778899aabbccddee
-ff0123456789abcdeffedcba98765432100c1987d001f602f6095825860c0013a106781b
-687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f60c518e0c0003f6
-0c0113a10a0015f603f617f6
+a201f60258e2a50101020403589fa20254828245466c61736843003401824352414d4200
+040458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425695e48bf
+429b2d51f2ab450c0013a20b8202582000112233445566778899aabbccddeeff01234567
+89abcdeffedcba98765432100c1987d00c0113a20b8202582000112233445566778899aa
+bbccddeeff0123456789abcdeffedcba98765432100c1987d001f602f6095825860c0013
+a106781b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f60c518e
+0c0003f60c0113a10a0015f603f617f6
+~~~
+
+
+
+Total size of outer wrapper with COSE authentication object: 317
+
+Signed Outer:
+
+~~~
+a2015854d28443a10126a1044874657374206b6579f65840ef4b399c55131a51bebafb46
+da6e6b79c59417fdefea7b87e4234bf8f978094e3092c8506d8a912fbacaec5ba36524ae
+0e4bb1aa14197e4d0afe10ba47e29e5a0258e2a50101020403589fa20254828245466c61
+736843003401824352414d4200040458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d4
+1ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b8202582000112233445566
+778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c0113a20b8202
+582000112233445566778899aabbccddeeff0123456789abcdeffedcba98765432100c19
+87d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f
+66696c652e62696e15f60c518e0c0003f60c0113a10a0015f603f617f6
 ~~~
 
 ## Example 4:
@@ -1932,56 +2095,63 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : None
-    / manifest / 3 : h'a60101020503589ba20254828245466c6173684300340182'
-                     h'4352414d4200040458818e13a20350fa6b4a53d5ad5fdfbe'
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f65840e90d'
+                        h'ab6e502bad8132adf86b4d78defaebac64fa6c6b2882'
+                        h'd12b36f492b14ce75819ed3524de4d66ddfd5e1d80a5'
+                        h'984004c1ac9b003b2da32589583a93c541dd',
+    / manifest / 2 : h'a60101020503589fa20254828245466c6173684300340182'
+                     h'4352414d4200040458858e13a20350fa6b4a53d5ad5fdfbe'
                      h'9de663e4d41ffe04501492af1425695e48bf429b2d51f2ab'
-                     h'450c0013a20b582000112233445566778899aabbccddeeff'
-                     h'0123456789abcdeffedcba98765432100c1987d00c0113a2'
-                     h'0b58200123456789abcdeffedcba98765432100011223344'
-                     h'5566778899aabbccddeeff0c1987d001f602f6095825860c'
-                     h'0013a106781b687474703a2f2f6578616d706c652e636f6d'
-                     h'2f66696c652e62696e15f60b508a0c0003f60c0113a20841'
-                     h'f60a0016f60c458403f617f6' \
+                     h'450c0013a20b8202582000112233445566778899aabbccdd'
+                     h'eeff0123456789abcdeffedcba98765432100c1987d00c01'
+                     h'13a20b820258200123456789abcdeffedcba987654321000'
+                     h'112233445566778899aabbccddeeff0c1987d001f602f609'
+                     h'5825860c0013a106781b687474703a2f2f6578616d706c65'
+                     h'2e636f6d2f66696c652e62696e15f60b528a0c0003f60c01'
+                     h'13a20843a101010a0016f60c458403f617f6' \
     {
-        / structure-version / 1 : 1
-        / sequence-number / 2 : 5
+        / structure-version / 1 : 1,
+        / sequence-number / 2 : 5,
         / common / 3 : h'a20254828245466c61736843003401824352414d420004'
-                       h'0458818e13a20350fa6b4a53d5ad5fdfbe9de663e4d41f'
+                       h'0458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d41f'
                        h'fe04501492af1425695e48bf429b2d51f2ab450c0013a2'
-                       h'0b582000112233445566778899aabbccddeeff01234567'
-                       h'89abcdeffedcba98765432100c1987d00c0113a20b5820'
-                       h'0123456789abcdeffedcba987654321000112233445566'
-                       h'778899aabbccddeeff0c1987d001f602f6' \ {
+                       h'0b8202582000112233445566778899aabbccddeeff0123'
+                       h'456789abcdeffedcba98765432100c1987d00c0113a20b'
+                       h'820258200123456789abcdeffedcba9876543210001122'
+                       h'33445566778899aabbccddeeff0c1987d001f602f6' \ {
             / components / 2 : h'828245466c61736843003401824352414d4200'
                                h'04' \
             [
                 [h'466c617368', h'003401'],
                 [h'52414d', h'0004'],
             ],
-            / common / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe'
-                           h'04501492af1425695e48bf429b2d51f2ab450c0013'
-                           h'a20b582000112233445566778899aabbccddeeff01'
-                           h'23456789abcdeffedcba98765432100c1987d00c01'
-                           h'13a20b58200123456789abcdeffedcba9876543210'
-                           h'00112233445566778899aabbccddeeff0c1987d001'
-                           h'f602f6' \ [
+            / common-sequence / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de6'
+                                    h'63e4d41ffe04501492af1425695e48bf'
+                                    h'429b2d51f2ab450c0013a20b82025820'
+                                    h'00112233445566778899aabbccddeeff'
+                                    h'0123456789abcdeffedcba9876543210'
+                                    h'0c1987d00c0113a20b82025820012345'
+                                    h'6789abcdeffedcba9876543210001122'
+                                    h'33445566778899aabbccddeeff0c1987'
+                                    h'd001f602f6' \ [
                 / set-vars / 19, {
                     / vendor-id / 3 : h'fa6b4a53d5ad5fdfbe9de663e4d41f'
-                                      h'fe'
-                    / class-id / 4 : h'1492af1425695e48bf429b2d51f2ab45'
+                                      h'fe',
+                    / class-id / 4 : h'1492af1425695e48bf429b2d51f2ab45',
                 },
                 / set-component-index / 12, 0,
                 / set-vars / 19, {
-                    / digest / 11 :h'00112233445566778899aabbccddeeff01'
-                                   h'23456789abcdeffedcba9876543210',
+                    / digest / 11 : [ 2,
+                        h'00112233445566778899aabbccddeeff0123456789ab'
+                        h'cdeffedcba9876543210' ]
                     / size / 12 : 34768
                 },
                 / set-component-index / 12, 1,
                 / set-vars / 19, {
-                    / digest / 11 :h'0123456789abcdeffedcba987654321000'
-                                   h'112233445566778899aabbccddeeff',
-                    / size / 12 : 34768
+                    / digest / 11 : [ 2,
+                        h'0123456789abcdeffedcba9876543210001122334455'
+                        h'66778899aabbccddeeff' ],
+                    / size / 12 : 34768,
                 },
                 / condition-vendor-id / 1, None,
                 / condition-class-id / 2, None,
@@ -1991,17 +2161,17 @@ Converted into the SUIT manifest, this produces:
                             h'6c652e636f6d2f66696c652e62696e15f6' \ [
             / set-component-index / 12, 0,
             / set-vars / 19, {
-                / uri / 6 : http://example.com/file.bin
+                / uri / 6 : http://example.com/file.bin,
             },
             / fetch / 21, None,
         ],
-        / load-image / 11 : h'8a0c0003f60c0113a20841f60a0016f6' \ [
+        / load-image / 11 : h'8a0c0003f60c0113a20843a101010a0016f6' \ [
             / set-component-index / 12, 0,
             / condition-image / 3, None,
             / set-component-index / 12, 1,
             / set-vars / 19, {
-                / unknown / 8 : h'f6'
-                / source-component / 10 : 0
+                / compression-info / 8 : h'a10101',
+                / source-component / 10 : 0,
             },
             / copy / 22, None,
         ],
@@ -2015,18 +2185,37 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 234
+Total size of outer wrapper without COSE authentication object: 240
 
 Outer:
 
 ~~~
-a201f60358e4a60101020503589ba20254828245466c61736843003401824352414d4200
-040458818e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425695e48bf
-429b2d51f2ab450c0013a20b582000112233445566778899aabbccddeeff0123456789ab
-cdeffedcba98765432100c1987d00c0113a20b58200123456789abcdeffedcba98765432
-1000112233445566778899aabbccddeeff0c1987d001f602f6095825860c0013a106781b
-687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f60b508a0c0003f6
-0c0113a20841f60a0016f60c458403f617f6
+a201f60258eaa60101020503589fa20254828245466c61736843003401824352414d4200
+040458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425695e48bf
+429b2d51f2ab450c0013a20b8202582000112233445566778899aabbccddeeff01234567
+89abcdeffedcba98765432100c1987d00c0113a20b820258200123456789abcdeffedcba
+987654321000112233445566778899aabbccddeeff0c1987d001f602f6095825860c0013
+a106781b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f60b528a
+0c0003f60c0113a20843a101010a0016f60c458403f617f6
+~~~
+
+
+
+Total size of outer wrapper with COSE authentication object: 325
+
+Signed Outer:
+
+~~~
+a2015854d28443a10126a1044874657374206b6579f65840e90dab6e502bad8132adf86b
+4d78defaebac64fa6c6b2882d12b36f492b14ce75819ed3524de4d66ddfd5e1d80a59840
+04c1ac9b003b2da32589583a93c541dd0258eaa60101020503589fa20254828245466c61
+736843003401824352414d4200040458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d4
+1ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b8202582000112233445566
+778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c0113a20b8202
+58200123456789abcdeffedcba987654321000112233445566778899aabbccddeeff0c19
+87d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f
+66696c652e62696e15f60b528a0c0003f60c0113a20843a101010a0016f60c458403f617
+f6
 ~~~
 
 ## Example 5:
@@ -2112,67 +2301,74 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : None
-    / manifest / 3 : h'a60101020603589ea202578282467b1b4595ab2143003401'
-                     h'8245466c6173684200040458818e13a20350fa6b4a53d5ad'
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f658402282'
+                        h'c1e7770b1806afb0cf78e74003af39166b9db14b0a7c'
+                        h'172d18598c8be16e3cec48770fb8471675a5b3bab05a'
+                        h'22e370a03320a7346f252f9629c3417ed153',
+    / manifest / 2 : h'a6010102060358a2a202578282467b1b4595ab2143003401'
+                     h'8245466c6173684200040458858e13a20350fa6b4a53d5ad'
                      h'5fdfbe9de663e4d41ffe04501492af1425695e48bf429b2d'
-                     h'51f2ab450c0013a20b582000112233445566778899aabbcc'
-                     h'ddeeff0123456789abcdeffedcba98765432100c1987d00c'
-                     h'0113a20b58200123456789abcdeffedcba98765432100011'
-                     h'2233445566778899aabbccddeeff0c1987d001f602f60958'
-                     h'25860c0013a106581b687474703a2f2f6578616d706c652e'
-                     h'636f6d2f66696c652e62696e15f60b528e0c011819f60c00'
-                     h'03f60c0113a10a0015f60c47860c0103f617f6' \
+                     h'51f2ab450c0013a20b8202582000112233445566778899aa'
+                     h'bbccddeeff0123456789abcdeffedcba98765432100c1987'
+                     h'd00c0113a20b820258200123456789abcdeffedcba987654'
+                     h'321000112233445566778899aabbccddeeff0c1987d001f6'
+                     h'02f6095825860c0013a106781b687474703a2f2f6578616d'
+                     h'706c652e636f6d2f66696c652e62696e15f60b528e0c0118'
+                     h'19f60c0003f60c0113a10a0015f60c47860c0103f617f6' \
     {
-        / structure-version / 1 : 1
-        / sequence-number / 2 : 6
+        / structure-version / 1 : 1,
+        / sequence-number / 2 : 6,
         / common / 3 : h'a202578282467b1b4595ab21430034018245466c617368'
-                       h'4200040458818e13a20350fa6b4a53d5ad5fdfbe9de663'
+                       h'4200040458858e13a20350fa6b4a53d5ad5fdfbe9de663'
                        h'e4d41ffe04501492af1425695e48bf429b2d51f2ab450c'
-                       h'0013a20b582000112233445566778899aabbccddeeff01'
-                       h'23456789abcdeffedcba98765432100c1987d00c0113a2'
-                       h'0b58200123456789abcdeffedcba987654321000112233'
-                       h'445566778899aabbccddeeff0c1987d001f602f6' \ {
+                       h'0013a20b8202582000112233445566778899aabbccddee'
+                       h'ff0123456789abcdeffedcba98765432100c1987d00c01'
+                       h'13a20b820258200123456789abcdeffedcba9876543210'
+                       h'00112233445566778899aabbccddeeff0c1987d001f602'
+                       h'f6' \ {
             / components / 2 : h'8282467b1b4595ab21430034018245466c6173'
                                h'68420004' \
             [
                 [h'7b1b4595ab21', h'003401'],
                 [h'466c617368', h'0004'],
             ],
-            / common / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe'
-                           h'04501492af1425695e48bf429b2d51f2ab450c0013'
-                           h'a20b582000112233445566778899aabbccddeeff01'
-                           h'23456789abcdeffedcba98765432100c1987d00c01'
-                           h'13a20b58200123456789abcdeffedcba9876543210'
-                           h'00112233445566778899aabbccddeeff0c1987d001'
-                           h'f602f6' \ [
+            / common-sequence / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de6'
+                                    h'63e4d41ffe04501492af1425695e48bf'
+                                    h'429b2d51f2ab450c0013a20b82025820'
+                                    h'00112233445566778899aabbccddeeff'
+                                    h'0123456789abcdeffedcba9876543210'
+                                    h'0c1987d00c0113a20b82025820012345'
+                                    h'6789abcdeffedcba9876543210001122'
+                                    h'33445566778899aabbccddeeff0c1987'
+                                    h'd001f602f6' \ [
                 / set-vars / 19, {
                     / vendor-id / 3 : h'fa6b4a53d5ad5fdfbe9de663e4d41f'
-                                      h'fe'
-                    / class-id / 4 : h'1492af1425695e48bf429b2d51f2ab45'
+                                      h'fe',
+                    / class-id / 4 : h'1492af1425695e48bf429b2d51f2ab45',
                 },
                 / set-component-index / 12, 0,
                 / set-vars / 19, {
-                    / digest / 11 :h'00112233445566778899aabbccddeeff01'
-                                   h'23456789abcdeffedcba9876543210',
-                    / size / 12 : 34768
+                    / digest / 11 : [ 2,
+                        h'00112233445566778899aabbccddeeff0123456789ab'
+                        h'cdeffedcba9876543210' ],
+                    / size / 12 : 34768,
                 },
                 / set-component-index / 12, 1,
                 / set-vars / 19, {
-                    / digest / 11 :h'0123456789abcdeffedcba987654321000'
-                                   h'112233445566778899aabbccddeeff',
-                    / size / 12 : 34768
+                    / digest / 11 : [ 2,
+                        h'0123456789abcdeffedcba9876543210001122334455'
+                        h'66778899aabbccddeeff' ],
+                    / size / 12 : 34768,
                 },
                 / condition-vendor-id / 1, None,
                 / condition-class-id / 2, None,
             ],
         },
-        / apply-image / 9 : h'860c0013a106581b687474703a2f2f6578616d70'
+        / apply-image / 9 : h'860c0013a106781b687474703a2f2f6578616d70'
                             h'6c652e636f6d2f66696c652e62696e15f6' \ [
             / set-component-index / 12, 0,
             / set-vars / 19, {
-                / uri / 6 : h'687474703a2f2f6578616d706c652e636f6d2f66'
-                            h'696c652e62696e'
+                / uri / 6 : http://example.com/file.bin,
             },
             / fetch / 21, None,
         ],
@@ -2183,7 +2379,7 @@ Converted into the SUIT manifest, this produces:
             / condition-image / 3, None,
             / set-component-index / 12, 1,
             / set-vars / 19, {
-                / source-component / 10 : 0
+                / source-component / 10 : 0,
             },
             / fetch / 21, None,
         ],
@@ -2196,18 +2392,39 @@ Converted into the SUIT manifest, this produces:
 }
 ~~~
 
-Total size of outer wrapper without COSE authentication object: 241
+
+
+Total size of outer wrapper without COSE authentication object: 245
 
 Outer:
 
 ~~~
-a201f60358eba60101020603589ea202578282467b1b4595ab21430034018245466c6173
-684200040458818e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af142569
-5e48bf429b2d51f2ab450c0013a20b582000112233445566778899aabbccddeeff012345
-6789abcdeffedcba98765432100c1987d00c0113a20b58200123456789abcdeffedcba98
-7654321000112233445566778899aabbccddeeff0c1987d001f602f6095825860c0013a1
-06581b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f60b528e0c
-011819f60c0003f60c0113a10a0015f60c47860c0103f617f6
+a201f60258efa6010102060358a2a202578282467b1b4595ab21430034018245466c6173
+684200040458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af142569
+5e48bf429b2d51f2ab450c0013a20b8202582000112233445566778899aabbccddeeff01
+23456789abcdeffedcba98765432100c1987d00c0113a20b820258200123456789abcdef
+fedcba987654321000112233445566778899aabbccddeeff0c1987d001f602f609582586
+0c0013a106781b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f6
+0b528e0c011819f60c0003f60c0113a10a0015f60c47860c0103f617f6
+~~~
+
+
+
+Total size of outer wrapper with COSE authentication object: 330
+
+Signed Outer:
+
+~~~
+a2015854d28443a10126a1044874657374206b6579f658402282c1e7770b1806afb0cf78
+e74003af39166b9db14b0a7c172d18598c8be16e3cec48770fb8471675a5b3bab05a22e3
+70a03320a7346f252f9629c3417ed1530258efa6010102060358a2a202578282467b1b45
+95ab21430034018245466c6173684200040458858e13a20350fa6b4a53d5ad5fdfbe9de6
+63e4d41ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b8202582000112233
+445566778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c0113a2
+0b820258200123456789abcdeffedcba987654321000112233445566778899aabbccddee
+ff0c1987d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e63
+6f6d2f66696c652e62696e15f60b528e0c011819f60c0003f60c0113a10a0015f60c4786
+0c0103f617f6
 ~~~
 
 ## Example 6:
@@ -2288,58 +2505,65 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : None
-    / manifest / 3 : h'a5010102070358a0a20257828245466c6173684300340182'
-                     h'45466c617368430004020458838e13a20350fa6b4a53d5ad'
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f65840d00c'
+                        h'd62be643247904621f2956b11b97fcbcd22f87701dd9'
+                        h'008e949f8c801f55d7095b545d6db0060bd47c5f78ee'
+                        h'5cb1fea17c875a36a599aec4e8b876cfdae7',
+    / manifest / 2 : h'a5010102070358a4a20257828245466c6173684300340182'
+                     h'45466c617368430004020458878e13a20350fa6b4a53d5ad'
                      h'5fdfbe9de663e4d41ffe04501492af1425695e48bf429b2d'
-                     h'51f2ab450c0013a20b582000112233445566778899aabbcc'
-                     h'ddeeff0123456789abcdeffedcba98765432100c1987d00c'
-                     h'0113a20b58200123456789abcdeffedcba98765432100011'
-                     h'2233445566778899aabbccddeeff0c1a00012c2201f602f6'
-                     h'09584b8c0c0013a106781c687474703a2f2f6578616d706c'
-                     h'652e636f6d2f66696c65312e62696e0c0113a106781c6874'
-                     h'74703a2f2f6578616d706c652e636f6d2f66696c65322e62'
-                     h'696e0cf515f60c49880cf503f60c0017f6' \
+                     h'51f2ab450c0013a20b8202582000112233445566778899aa'
+                     h'bbccddeeff0123456789abcdeffedcba98765432100c1987'
+                     h'd00c0113a20b820258200123456789abcdeffedcba987654'
+                     h'321000112233445566778899aabbccddeeff0c1a00012c22'
+                     h'01f602f609584b8c0c0013a106781c687474703a2f2f6578'
+                     h'616d706c652e636f6d2f66696c65312e62696e0c0113a106'
+                     h'781c687474703a2f2f6578616d706c652e636f6d2f66696c'
+                     h'65322e62696e0cf515f60c49880cf503f60c0017f6' \
     {
-        / structure-version / 1 : 1
-        / sequence-number / 2 : 7
+        / structure-version / 1 : 1,
+        / sequence-number / 2 : 7,
         / common / 3 : h'a20257828245466c617368430034018245466c61736843'
-                       h'0004020458838e13a20350fa6b4a53d5ad5fdfbe9de663'
+                       h'0004020458878e13a20350fa6b4a53d5ad5fdfbe9de663'
                        h'e4d41ffe04501492af1425695e48bf429b2d51f2ab450c'
-                       h'0013a20b582000112233445566778899aabbccddeeff01'
-                       h'23456789abcdeffedcba98765432100c1987d00c0113a2'
-                       h'0b58200123456789abcdeffedcba987654321000112233'
-                       h'445566778899aabbccddeeff0c1a00012c2201f602f6'
-        \ {
+                       h'0013a20b8202582000112233445566778899aabbccddee'
+                       h'ff0123456789abcdeffedcba98765432100c1987d00c01'
+                       h'13a20b820258200123456789abcdeffedcba9876543210'
+                       h'00112233445566778899aabbccddeeff0c1a00012c2201'
+                       h'f602f6' \ {
             / components / 2 : h'828245466c617368430034018245466c617368'
                                h'43000402' \
             [
                 [h'466c617368', h'003401'],
                 [h'466c617368', h'000402'],
             ],
-            / common / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe'
-                           h'04501492af1425695e48bf429b2d51f2ab450c0013'
-                           h'a20b582000112233445566778899aabbccddeeff01'
-                           h'23456789abcdeffedcba98765432100c1987d00c01'
-                           h'13a20b58200123456789abcdeffedcba9876543210'
-                           h'00112233445566778899aabbccddeeff0c1a00012c'
-                           h'2201f602f6' \ [
+            / common-sequence / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de6'
+                                    h'63e4d41ffe04501492af1425695e48bf'
+                                    h'429b2d51f2ab450c0013a20b82025820'
+                                    h'00112233445566778899aabbccddeeff'
+                                    h'0123456789abcdeffedcba9876543210'
+                                    h'0c1987d00c0113a20b82025820012345'
+                                    h'6789abcdeffedcba9876543210001122'
+                                    h'33445566778899aabbccddeeff0c1a00'
+                                    h'012c2201f602f6' \ [
                 / set-vars / 19, {
                     / vendor-id / 3 : h'fa6b4a53d5ad5fdfbe9de663e4d41f'
-                                      h'fe'
-                    / class-id / 4 : h'1492af1425695e48bf429b2d51f2ab45'
+                                      h'fe',
+                    / class-id / 4 : h'1492af1425695e48bf429b2d51f2ab45',
                 },
                 / set-component-index / 12, 0,
                 / set-vars / 19, {
-                    / digest / 11 :h'00112233445566778899aabbccddeeff01'
-                                   h'23456789abcdeffedcba9876543210',
-                    / size / 12 : 34768
+                    / digest / 11 : [ 2,
+                        h'00112233445566778899aabbccddeeff0123456789ab'
+                        h'cdeffedcba9876543210' ],
+                    / size / 12 : 34768,
                 },
                 / set-component-index / 12, 1,
                 / set-vars / 19, {
-                    / digest / 11 :h'0123456789abcdeffedcba987654321000'
-                                   h'112233445566778899aabbccddeeff',
-                    / size / 12 : 76834
+                    / digest / 11 : [ 2,
+                        h'0123456789abcdeffedcba9876543210001122334455'
+                        h'66778899aabbccddeeff' ],
+                    / size / 12 : 76834,
                 },
                 / condition-vendor-id / 1, None,
                 / condition-class-id / 2, None,
@@ -2372,21 +2596,39 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 264
+Total size of outer wrapper without COSE authentication object: 268
 
 Outer:
 
 ~~~
-a201f603590101a5010102070358a0a20257828245466c617368430034018245466c6173
-68430004020458838e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425
-695e48bf429b2d51f2ab450c0013a20b582000112233445566778899aabbccddeeff0123
-456789abcdeffedcba98765432100c1987d00c0113a20b58200123456789abcdeffedcba
-987654321000112233445566778899aabbccddeeff0c1a00012c2201f602f609584b8c0c
-0013a106781c687474703a2f2f6578616d706c652e636f6d2f66696c65312e62696e0c01
-13a106781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e62696e0cf515
-f60c49880cf503f60c0017f6
+a201f602590105a5010102070358a4a20257828245466c617368430034018245466c6173
+68430004020458878e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425
+695e48bf429b2d51f2ab450c0013a20b8202582000112233445566778899aabbccddeeff
+0123456789abcdeffedcba98765432100c1987d00c0113a20b820258200123456789abcd
+effedcba987654321000112233445566778899aabbccddeeff0c1a00012c2201f602f609
+584b8c0c0013a106781c687474703a2f2f6578616d706c652e636f6d2f66696c65312e62
+696e0c0113a106781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e6269
+6e0cf515f60c49880cf503f60c0017f6
 ~~~
 
+
+
+Total size of outer wrapper with COSE authentication object: 353
+
+Signed Outer:
+
+~~~
+a2015854d28443a10126a1044874657374206b6579f65840d00cd62be643247904621f29
+56b11b97fcbcd22f87701dd9008e949f8c801f55d7095b545d6db0060bd47c5f78ee5cb1
+fea17c875a36a599aec4e8b876cfdae702590105a5010102070358a4a20257828245466c
+617368430034018245466c617368430004020458878e13a20350fa6b4a53d5ad5fdfbe9d
+e663e4d41ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b82025820001122
+33445566778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c0113
+a20b820258200123456789abcdeffedcba987654321000112233445566778899aabbccdd
+eeff0c1a00012c2201f602f609584b8c0c0013a106781c687474703a2f2f6578616d706c
+652e636f6d2f66696c65312e62696e0c0113a106781c687474703a2f2f6578616d706c65
+2e636f6d2f66696c65322e62696e0cf515f60c49880cf503f60c0017f6
+~~~
 
 #  IANA Considerations
 

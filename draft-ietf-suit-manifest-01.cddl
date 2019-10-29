@@ -1,6 +1,6 @@
 SUIT_Outer_Wrapper = {
     suit-authentication-wrapper => bstr .cbor SUIT_Authentication_Wrapper / nil,
-    $SUIT_Manifest_Wrapped,
+    $$SUIT_Manifest_Wrapped,
     suit-dependency-resolution  => bstr .cbor SUIT_Command_Sequence,
     suit-payload-fetch          => bstr .cbor SUIT_Command_Sequence,
     suit-install                => bstr .cbor SUIT_Command_Sequence,
@@ -17,10 +17,11 @@ SUIT_Authentication_Wrapper = [ + (
 
 SUIT_Encryption_Wrapper = COSE_Encrypt_Tagged / COSE_Encrypt0_Tagged
 
-SUIT_Manifest_Wrapped //= (suit-manifest  => bstr .cbor SUIT_Manifest)
-SUIT_Manifest_Wrapped //= (
+$$SUIT_Manifest_Wrapped //= (suit-manifest  => bstr .cbor SUIT_Manifest)
+$$SUIT_Manifest_Wrapped //= (
     suit-manifest-encryption-info => bstr .cbor SUIT_Encryption_Wrapper,
     suit-manifest-encrypted       => bstr
+)
 
 COSE_Mac_Tagged = any
 COSE_Sign_Tagged = any
