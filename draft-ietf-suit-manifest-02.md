@@ -1,8 +1,8 @@
 ---
-title: SUIT CBOR manifest serialisation format
-abbrev: Firmware Manifest Format
-docname: draft-ietf-suit-manifest-01
-category: info
+title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest 
+abbrev: SUIT CBOR Manifest
+docname: draft-ietf-suit-manifest-02
+category: std
 
 ipr: pre5378Trust200902
 area: Security
@@ -48,28 +48,8 @@ normative:
 
 
 informative:
-  RFC6920:
-  Architecture:
-    target: https://tools.ietf.org/html/draft-ietf-suit-architecture-02
-    title: A Firmware Update Architecture for Internet of Things Devices
-    author:
-      ins: B. Moran
-      name:  Brendan Moran
-      org: ARM Limited
-    date: January 2019
-    format:
-        HTML: https://tools.ietf.org/html/draft-ietf-suit-architecture-02
-  Information:
-    target: https://tools.ietf.org/html/draft-ietf-suit-information-model-02
-    title: Firmware Updates for Internet of Things Devices - An Information Model for Manifests
-    author:
-      ins: B. Moran
-      name:  Brendan Moran
-      org: ARM Limited
-    date: January 2019
-    format:
-        HTML: https://tools.ietf.org/html/draft-ietf-suit-information-model-02
-
+  I-D.ietf-suit-architecture: 
+  I-D.ietf-suit-information-model:
 
 
 --- abstract
@@ -84,20 +64,15 @@ information protecting the manifest.
 
 A firmware update mechanism is an essential security feature for IoT devices to deal with vulnerabilities. While the transport of firmware images to the devices themselves is important there are already various techniques available, such as the Lightweight Machine-to-Machine (LwM2M) protocol offering device management of IoT devices. Equally important is the inclusion of meta-data about the conveyed firmware image (in the form of a manifest) and the use of end-to-end security protection to detect modifications and (optionally) to make reverse engineering more difficult. End-to-end security allows the author, who builds the firmware image, to be sure that no other party (including potential adversaries) can install firmware updates on IoT devices without adequate privileges. This authorization process is ensured by the use of dedicated symmetric or asymmetric keys installed on the IoT device: for use cases where only integrity protection is required it is sufficient to install a trust anchor on the IoT device. For confidentiality protected firmware images it is additionally required to install either one or multiple symmetric or asymmetric keys on the IoT device. Starting security protection at the author is a risk mitigation technique so firmware images and manifests can be stored on untrusted respositories; it also reduces the scope of a compromise of any repository or intermediate system to be no worse than a denial of service.
 
-It is assumed that the reader is familiar with the high-level firmware update architecture {{Architecture}}.
+It is assumed that the reader is familiar with the high-level firmware update architecture {{I-D.ietf-suit-architecture}}.
 
 The SUIT manifest is heavily optimised for consumption by constrained devices. This means that it is not constructed as a conventional descriptive document. Instead, of describing what an update IS, it describes what a recipient should DO.
 
-While the SUIT manifest is informed by and optimised for firmware update use cases, there is nothing in the {{Information}} that restricts its use to only firmware use cases. Software update and delivery of arbitrary data can equally be managed by SUIT-based metadata.
+While the SUIT manifest is informed by and optimised for firmware update use cases, there is nothing in the {{I-D.ietf-suit-information-model}} that restricts its use to only firmware use cases. Software update and delivery of arbitrary data can equally be managed by SUIT-based metadata.
 
 #  Conventions and Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
-"MAY", and "OPTIONAL" in this document are to be interpreted as
-described in BCP 14 {{!RFC2119}} {{!RFC8174}} when, and only when, they
-appear in all capitals, as shown here.
-
+{::boilerplate bcp14}
 
 * SUIT: Sofware Update for the Internet of Things, the IETF working group for this standard.
 * Payload: A piece of information to be delivered. Typically Firmware for the purposes of SUIT.
@@ -110,12 +85,53 @@ appear in all capitals, as shown here.
 * Directive: An action for the Recipient to perform.
 * Command: A Condition or a Directive.
 * Trusted Execution: A process by which a system ensures that only trusted code is executed, for example secure boot.
+* A/B images: Dividing a device's storage into two or more bootable images, at different offsets, such that the active image can write to the inactive image(s).
 
-#  Distributing firmware
-Distributing firmware in a multi-party environment is a difficult operation. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in {{Architecture}}.
+The map indices in this encoding are reset to 1 for each map within the structure. This is to keep the indices as small as possible. The goal is to keep the index objects to single bytes (CBOR positive integers 1-23).
 
-# Workflow of a device applying a firmware update
-The manifest is designed to work with a pull parser, where each section of the manifest is used in sequence. The expected workflow for a device installing an update can be broken down into 5 steps:
+Wherever enumerations are used, they are started at 1. This allows detection of several common software errors that are caused by uninitialised variables. Positive numbers in enumerations are reserved for IANA registration. Negative numbers are used to identify application-specific implementations.
+
+CDDL names are hyphenated and CDDL structures follow the convention adopted in COSE {{RFC8152}}: SUIT_Structure_Name.
+
+# How to use this document
+
+For information about firmware update in general and the background of the suit manifest, see {{background}}.
+To implement an updatable device, see {{interpreter-behaviour}} and {{manifest-structure}}.
+To implement a tool that generates updates, see {{creating-manifests}} and {{manifest-structure}}.
+
+# Background {#background}
+
+Distributing firmware updates to diverse devices with diverse trust anchors in a coordinated system presents unique challenges. Devices have a broad set of constraints, requiring different metadata to make appropriate decisions. There may be many actors in production IoT systems, each of whom has some authority. Distributing firmware in such a multi-party environment presents additional challenges. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in {{I-D.ietf-suit-architecture}}.
+
+## Landscape
+
+The various constraints on IoT devices creates a broad set of use-case requirements. For example, devices with:
+
+* limited processing power and storage may require a simple representation of metadata.
+* bandwidth constraints may require firmware compression or partial update support.
+* bootloader complexity constraints may require simple selection between two bootable images.
+* small internal storage may require external storage support.
+* multiple processors may require coordinated update of all applications.
+* large storage and complex functionality may require parallel update of many software components.
+* mesh networks may require multicast distribution.
+
+Supporting the requirements introduced by the constraints on IoT devices requires the flexibility to represent a diverse set of possible metadata, but also requires that the encoding is kept simple.
+
+##  Update Workflow Model
+
+There are several fundamental assumptions that inform the model of the firmware update workflow:
+
+* Compatibility must be checked before any other operation is performed
+* All dependency manifests should be present before any payload is fetched
+* In some applications, payloads must be fetched and validated prior to installation
+
+There are several fundamental assumptions that inform the model of the secure boot workflow:
+
+* Compatibility must be checked before any other operation is performed
+* All dependencies and payloads must be validated prior to loading
+* All loaded images must be validated prior to execution
+
+Based on these assumptions, the manifest is structured to work with a pull parser, where each section of the manifest is used in sequence. The expected workflow for a device installing an update can be broken down into 5 steps:
 
 1. Verify the signature of the manifest
 2. Verify the applicability of the manifest
@@ -123,18 +139,21 @@ The manifest is designed to work with a pull parser, where each section of the m
 4. Fetch payload(s)
 5. Install payload(s)
 
-When installation is complete, similar information can be used for validating and running images in a further three steps:
+When installation is complete, similar information can be used for validating and running images in a further 3 steps:
 
 6. Verify image(s)
 7. Load image(s)
 8. Run image(s)
 
+If verification and running is implemented in bootloader, then the
+
 When multiple manifests are used for an update, each manifest's steps occur in a lockstep fashion; all manifests have dependency resolution performed before any manifest performs a payload fetch, etc.
 
-# SUIT manifest goals
+##  SUIT Manifest goals
+
 The manifest described in this document is intended to meet several goals, as described below.
 
-1. Meet the requirements defined in {{Information}}.
+1. Meet the requirements defined in {{I-D.ietf-suit-information-model}}.
 2. Simple to parse on a constrained node
 3. Simple to process on a constrained node
 4. Compact encoding
@@ -156,7 +175,7 @@ The SUIT manifest can be used for a variety of purposes throughout its lifecycle
 
 Each of these uses happens at a different stage of the manifest lifecycle, so each has different requirements.
 
-# SUIT manifest design overview
+##  SUIT manifest design summary
 In order to provide flexible behaviour to constrained devices, while still allowing more powerful devices to use their full capabilities, the SUIT manifest encodes the required behaviour of a Recipient device. Behaviour is encoded as a specialised byte code, contained in a CBOR list. This promotes a flat encoding, which simplifies the parser. The information encoded by this byte code closely matches the operations that a device will perform, which promotes ease of processing. The core operations used by most update and trusted execution operations are represented in the byte code. The byte code can be extended by registering new operations.
 
 The specialised byte code approach gives benefits equivalent to those provided by a scripting language or conventional byte code, with two substantial differences. First, the language is extremely high level, consisting of only the operations that a device may perform during update and trusted execution of a firmware image. Second, the language specifies behaviours in a linearised form, without reverse branches. Conditional processing is supported, and parallel and out-of-order processing may be performed by sufficiently capable devices.
@@ -173,46 +192,296 @@ Capability reporting is similarly simplified. A Recipient can report the Command
 
 The simplicity of design in the Recipient due to all of these benefits allows even a highly constrained platform to use advanced update capabilities.
 
-## Manifest Design Evaluation
-To evaluate this design, it is compared to the goals stated above.
+# Interpreter Behaviour {#interpreter-behaviour}
 
-Goal evaluation:
+This section describes the behaviour of the manifest interpreter. This section focuses primarily on interpreting commands in the manifest. However, there are several other important behaviours of the interpreter: encoding version detection, rollback protection, and authenticity verification are chief among these.
 
-1. Each command and condition is anchored to a manifest information element in {{Information}}
-2. The use of a byte code encourages flat encoding and reduces nesting depth. This promotes a simple encoding.
-3. The encoded information closely matches the operations that a device will perform, making the format easy to process.
-4. Encoding efficiency exceeds 50% when compared to raw data.
-5. Tooling will be required to reason about the manifest.
-6. The core operations used by most update and trusted execution operations are represented in the byte code. The use cases listed in {{Information}} are enabled.
-7. Registration of new standard byte code identifiers enables extension in a comprehensible way.
+## Interpreter Setup
 
-The manifest described by this document meets the stated goals. Meeting goal 5--comprehensible by intermediate systems--will require additional tooling or a division of metadata.
+Prior to executing any command sequence, the interpreter or its host application MUST inspect the manifest version field and fail when it encounters an unsupported encoding version. Next, the interpreter or its host application MUST extract the manifest sequence number and perform a rollback check using this sequence number. The exact logic of rollback protection may vary by application, but it has the following properties:
 
-## Severable Elements
-Because the manifest can be used by different actors at different times, some parts of the manifest can be removed without affecting later stages of the lifecycle. This is called "Severing." Severing of information is achieved by separating that information from the signed container so that removing it does not affect the signature. This means that ensuring authenticity of severable parts of the manifest is a requirement for the signed portion of the manifest. Severing some parts makes it possible to discard parts of the manifest that are no longer necessary. This is important because it allows the storage used by the manifest to be greatly reduced. For example, no text size limits are needed if text is removed from the manifest prior to delivery to a constrained device.
+* Whenever the interpreter can choose between several manifests, it MUST select the latest valid manifest, authentic manifest.
+* If the latest valid, authentic manifest fails, it MAY select the next latest valid, authentic manifest.
 
-Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 SHOULD never be severable. Elements larger than (Digest Bits)/8 + 4 MAY be severable, while elements that are much larger than (Digest Bits)/8 + 4 SHOULD be severable.
+Here, valid means that a manifest has a supported encoding version AND it has not been excluded for other reasons. Reasons for excluding typically involve first executing the manifest and MAY include:
 
-## Conventions
-The map indices in this encoding are reset to 1 for each map within the structure. This is to keep the indices as small as possible. The goal is to keep the index objects to single bytes (CBOR positive integers 1-23).
+* Test failed (e.g. Vendor ID/Class ID)
+* Unsupported command encountered
+* Unsupported parameter encountered
+* Unsupported component ID encountered
+* Payload not available (update interpreter)
+* Dependency not available (update interpreter)
+* Application crashed when executed (bootloader interpreter)
+* Watchdog timeout occurred (bootloader interpreter)
+* Dependency or Payload verification failed (bootloader interpreter)
 
-Wherever enumerations are used, they are started at 1. This allows detection of several common software errors that are caused by uninitialised variables. Positive numbers in enumerations are reserved for IANA registration. Negative numbers are used to identify application-specific implementations.
+These failure reasons MAY be combined with retry mechanisms prior to marking a manifest as invalid.
 
-CDDL names are hyphenated and CDDL structures follow the convention adopted in COSE {{RFC8152}}: SUIT_Structure_Name.
+Following these initial tests, the interpreter clears all parameter storage. This ensures that the interpreter begins without any leaked data.
 
-## Payloads
-Payloads can take many forms, for example, binary, hex, s-record, elf, binary diff, PEM certificate, CBOR Web Token, serialised configuration. These payloads fall into two broad categories: those that require installation-time unpacking and those that do not. Binary, PEM certificate, and CBOR Web Token do not require installation-time unpacking. Hex, s-record, and serialised configuration require installation-time unpacking. Elf may or may not require unpacking depending on the target.
+## Required Checks {#required-checks}
 
-Some payloads cannot be directly converted to a writable binary stream. Hex, s-record, and elf may contain gaps and they have no guarantee of monotonic increase of address, which makes pre-processing them into a binary stream difficult on constrained platforms. Serialised configuration may be unpacked into a configuration database, which makes it impossible to preprocess into a binary stream, suitable for direct writing.
+Once a valid, authentic manifest has been selected, the interpreter MUST examine the component list and verify that its maximum number of components is not exceeded and that each listed component ID is supported.
 
-Where a specialised unpacking algorithm is needed, a digest is not always calculable over an installed payload. For example, an elf, s-record or hex file may contain gaps that can contain any data, while not changing whether or not an installed payload is valid. Serialised configuration may update only some device data rather than all of it. This means that the digest cannot always be calculated over an installed payload when a specialised installer is used.
+For each listed component, the interpreter MUST provide storage for the supported [parameters](#interpreter-parameters). If the interpreter does not have sufficient temporary storage to process the parameters for all components, it MAY process components serially for each command sequence. See {{serial-processing}} for more details.
 
-This presents two problems for the manifest: first, it must indicate that a specialised installer is needed and, second, it cannot provide a hash of the payload that is checkable after installation. These two problems are resolved in two ways:
+The interpreter SHOULD check that the common section contains at least one vendor ID check and at least one class ID check.
 
-1. Payloads that need a specialised installer must indicate this in suit-payload-info-unpack.
-2. Payloads that need specialised verification must indicate this in the SUIT_Parameter_Image_Digest by indicating a SUIT_Digest algorithm that correctly validates their information.
+If the manifest contains more than one component, each command sequence MUST begin with a Set Current Component command.
+
+If a dependency is specified, then the interpreter MUST perform the following checks:
+
+1. At the beginning of each section in the dependent: all previous sections of each dependency have been executed.
+2. At the end of each section in the dependent: The corresponding section in each dependency has been executed.
+
+If the interpreter does not support dependencies and a manifest specifies a dependency, then the interpreter MUST reject the manifest.
+
+## Interpreter fundamental properties
+
+The interpreter has a small set of design goals:
+
+1. Executing an update MUST either result in an error, or a verifiably correct system state.
+2. Executing a secure boot MUST either result in an error, or a booted system.
+3. Executing the same manifest on multiple devices MUST result in the same system state.
+
+NOTE: when using A/B images, the manifest functions as two (or more) logical manifests, each of which applies to a system in a particular starting state. With that provision, design goal 3 holds.
+
+## Abstract Machine Description
+
+The byte code that forms the bulk of the manifest is processed by an interpreter. This interpreter can be modelled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands. Certain commands also affect the machine's behaviour.
+
+Every command that modifies system state targets a specific component. Components are units of code or data that can be targeted by an update. They are identified by Component identifiers, arrays of binary-strings--effectively a binary path. Each component has a corresponding set of configuration, Parameters. Parameters are used as the inputs to commands.
+
+### Parameters {#interpreter-parameters}
+
+Some parameters are REQUIRED to implement. These parameters allow a device to perform core functions.
+
+* Vendor ID
+* Class ID
+* Image Digest
+
+Some parameters are RECOMMENDED to implement. These parameters are needed for most use-cases.
+
+* Image Size
+* URI
+
+Other parameters are OPTIONAL to implement. These parameters allow a device to implement specific use-cases.
+
+* Strict Order
+* Soft Failure
+* Device ID
+* Encryption Info
+* Unpack Info
+* Source Component
+* URI List
+* Custom Parameters
+
+### Commands
+
+Commands define the behaviour of a device. The commands are divided into two groups: those that modify state (directives) and those that perform tests (conditions). There are also several Control Flow operations.
+
+Some commands are REQUIRED to implement. These commands allow a device to perform core functions
+
+* Check Vendor Identifier (cvid)
+* Check Class Identifier (ccid)
+* Verify Image (cimg)
+* Set Current Component (setc)
+* Override Parameters (ovrp)
+
+NOTE: on systems that support only a single component, Set Current Component has no effect.
+
+Some commands are RECOMMENDED to implement. These commands are needed for most use-cases
+
+* Set Current Dependency (setd)
+* Set Parameters (setp)
+* Process Dependency (pdep)
+* Run (run)
+* Fetch (getc)
+
+Other commands are OPTIONAL to implement. These commands allow a device to implement specific use-cases.
+
+* Use Before (ubf)
+* Check Component Offset  (cco)
+* Check Device Identifier (cdid)
+* Check Image Not Match (nimg)
+* Check Minimum Battery (minb)
+* Check Update Authorised (auth)
+* Check Version (cver)
+* Abort (abrt)
+* Try Each (try)
+* Copy (copy)
+* Swap (swap)
+* Wait For Event (wfe)
+* Run Sequence (srun) mandatory component set
+* Run with Arguments (arun)
+
+### Command Behaviour
+
+The following table describes the behaviour of each command. "params"
+represents the parameters for the current component or dependency.
+
+| Code | Operation
+|------|----
+| cvid | binary-match(component, params\[vendor-id\])
+| ccid | binary-match(component, params\[class-id\])
+| cimg | binary-match(digest(component), params\[digest\])
+| setc | component := components\[arg\]
+| ovrp | params\[k\] := v for k,v in arg
+| setd | dependency := dependencies\[arg\]
+| setp | params\[k\] := v if not k in params for k,v in arg
+| pdep | exec(dependency\[common\]); exec(dependency\[current-segment\])
+| run  | run(component)
+| getc | store(component, fetch(params\[uri\]))
+| ubf  | assert(now() < arg)
+| cco  | assert(offsetof(component) == arg)
+| cdid | binary-match(component, params\[device-id\])
+| nimg | not binary-match(digest(component), params\[digest\])
+| minb | assert(battery >= arg)
+| auth | assert(isAuthorised())
+| cver | assert(version_check(component, arg))
+| abrt | assert(0)
+| try  | break if exec(seq) is not error for seq in arg
+| copy | store(component, params\[src-component\])
+| swap | swap(component, params\[src-component\])
+| wfe  | until event(arg), wait
+| srun | exec(arg)
+| arun | run(component, arg)
+
+
+## Serialized Processing Interpreter {#serial-processing}
+
+Because each manifest has a list of components and a list of components defined by its dependencies, it is possible for the manifest processor to handle one component at a time, traversing the manifest tree once for each listed component. In this mode, the interpreter ignores any commands executed while the component index is not the current component. This reduces the overall volatile storage required to process the update so that the only limit on number of components is the size of the manifest. However, this approach requires additional processing power.
+
+## Parallel Processing Interpreter
+
+Advanced devices may make use of the Strict Order parameter and enable parallel processing of some segments, or it may reorder some segments. To perform parallel processing, once the Strict Order parameter is set to False, the device may fork a process for each command until the Strict Order parameter is returned to True or the command sequence ends. Then, it joins all forked processes before continuing processing of commands. To perform out-of-order processing, a similar approach is used, except the device consumes all commands after the Strict Order parameter is set to False, then it sorts these commands into its preferred order, invokes them all, then continues processing.
+
+Under each of these scenarios the parallel processing must halt:
+
+* Set Parameters
+* Override Parameters
+* Set Strict Order = True
+* Set Dependency Index
+* Set Component Index
+
+To perform more useful parallel operations, sequences of commands may be collected in a suit-directive-run-sequence. Then, each of these sequences may be run in parallel. Each sequence defaults to Strict Order = True. To isolate each sequence from each other sequence, each sequence must declare a single target component. Set Component Index is not permitted inside this sequence.
+
+## Processing Dependencies
+
+As described in {{required-checks}}, each manifest must invoke each of its dependencies sections from the corresponding section of the dependent. Any changes made to parameters by the dependency persist in the dependent.
+
+When a Process Depdendency command is encountered, the interpreter loads the dependency identified by the Current Dependency Index. The interpreter first executes the common-sequence section of the identified dependency, then it executes the section of the dependency that corresponds to the currently executing section of the dependent.
+
+The interpreter also performs the checks described in {{required-checks}} to ensure that the dependent is processing the dependency correctly.
+
+# Creating Manifests {#creating-manifests}
+
+Manifests are created using tools for constructing COSE structures, calculating cryptographic values and compiling desired system state into a sequence of operations required to achieve that state. The process of constructing COSE structures is covered in {{RFC8152}} and the calculation of cryptographic values is beyond the scope of this document.
+
+Compiling desired system state into a sequence of operations can be accomplished in many ways, however several templates are provided here to cover common use-cases. Many of these templates can be aggregated to produce more complex behaviour.
+
+NOTE: On systems that support only a single component, Set Current Component has no effect and can be omitted.
+
+NOTE: Digest should always be set using Override Parameters, since this prevents a less-privileged dependent from replacing the digest.
+
+## Manifest Source Material
+
+When a manifest is constructed from a descriptive document, the descriptive document SHOULD be included in the severable text section. This section MAY be pruned from the manifest prior to distribution to a device. The inclusion of text source material enables several use-cases on unconstrained intermediate systems, where small manifest size, low parser complexity, and pull parsing are not required.
+
+An unconstrained system that makes decisions based on the manifest can use the source material instead so that it does not need to execute the manifest.
+
+An unconstrained system that presents data to a user can do so according to typical usage patterns without first executing the manifest, and can trust that information with the same level of confidence as the manifest itself.
+
+A verifier can be constructed to emulate execution the manifest and compare the results of that execution to the source material, providing a check that the manifest performs its stated objectives and that the manifest does not exceed the capabilities of the target device.
+
+## Required Template: Compatibility Check
+
+The compatibility check ensures that devices only install compatible images.
+
+Common:
+Set Current Component
+Check Vendor Identifier
+Check Class Identifier
+
+All manifests MUST contain the compatibility check template, except as outlined below.
+
+If a device class has a unique trust anchor, and every element in its trust chain is unique--different from every element in any other device class, then it MAY include the compatibility check.
+
+If a manifest includes a dependency that performs a compatibility check, then the dependent manifest MAY include the compatibility check.
+
+The compatibility check template contains a data dependency: Vendor Identifier and Class Identifier MUST be set prior to executing the template. One examples of the full template is included below, however Parameters may be set within a Try-Each block as well. They may also be inherited from a dependent manifest.
+
+* Common:
+    * Set Current Component
+    * Set Parameters:
+        * Vendor ID
+        * Class ID
+    * Check Vendor Identifier
+    * Check Class Identifier
+
+## Use Case Template: XIP Secure Boot
+
+* Common:
+    * Set Current Component
+    * Override Parameters:
+        * Digest
+        * Size
+* Run:
+    * Set Current Component
+    * Check Image Match
+    * Directive Run
+
+## Use Case Template: Firmware Download
+
+* Common:
+    * Set Current Component
+    * Override Parameters:
+        * Digest
+        * Size
+* Install:
+    * Set Current Component
+    * Set Parameters:
+        * URI
+    * Fetch
+
+## Use Case Template: Load from External Storage
+
+* Load:
+    * Set Current Component
+    * Set Parameters:
+        * Source Index
+    * Copy
+
+## Use Case Template Load & Decompress from External Storage
+
+* Load:
+    * Set Current Component
+    * Set Parameters:
+        * Source Index
+        * Compression Info
+    * Copy
+
+## Use Case Template: Dependency
+
+* Dependency Resolution:
+    * Set Current Dependency
+    * Set Parameters:
+        * URI
+    * Fetch
+    * Check Image Match
+    * Process Dependency
+
+* Validate:
+    * Set Current Dependency
+    * Check Image Match
+    * Process Dependency
+
+For any other section that the dependency has, the dependent MUST invoke Process Dependency.
+
+NOTE: Any changes made to parameters in a dependency persist in the dependent.
 
 # Manifest Structure {#manifest-structure}
+
 The manifest is divided into several sections in a hierarchy as follows:
 
 1. The outer wrapper
@@ -240,7 +509,16 @@ The manifest is divided into several sections in a hierarchy as follows:
     8. Intermediate Certificate(s) / CWTs
     9. Inline Payload(s)
 
+## Severable Elements
+
+Because the manifest can be used by different actors at different times, some parts of the manifest can be removed without affecting later stages of the lifecycle. This is called "Severing." Severing of information is achieved by separating that information from the signed container so that removing it does not affect the signature. This means that ensuring authenticity of severable parts of the manifest is a requirement for the signed portion of the manifest. Severing some parts makes it possible to discard parts of the manifest that are no longer necessary. This is important because it allows the storage used by the manifest to be greatly reduced. For example, no text size limits are needed if text is removed from the manifest prior to delivery to a constrained device.
+
+Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 SHOULD never be severable. Elements larger than (Digest Bits)/8 + 4 MAY be severable, while elements that are much larger than (Digest Bits)/8 + 4 SHOULD be severable.
+
+Because of this, all command sequences in the manifest are encoded in a bstr so that there is a single code path needed for all command sequences
+
 ## Outer wrapper
+
 This object is a container for the other pieces of the manifest to provide a common mechanism to find each of the parts. All elements of the outer wrapper are contained in bstr objects. Wherever the manifest references an object in the outer wrapper, the bstr is included in the digest calculation.
 
 The CDDL that describes the wrapper is below
@@ -253,8 +531,8 @@ SUIT_Outer_Wrapper = {
     ? suit-dependency-resolution  => bstr .cbor SUIT_Command_Sequence,
     ? suit-payload-fetch          => bstr .cbor SUIT_Command_Sequence,
     ? suit-install                => bstr .cbor SUIT_Command_Sequence,
-    ? suit-text-external          => bstr .cbor SUIT_Text_Info,
-    ? suit-coswid-external        => bstr .cbor COSWID
+    ? suit-text                   => bstr .cbor SUIT_Text_Map,
+    ? suit-coswid                 => bstr .cbor COSWID
 }
 
 SUIT_Authentication_Wrapper = [ + (COSE_Mac_Tagged / COSE_Sign_Tagged /
@@ -270,7 +548,7 @@ SUIT_Manifest_Wrapped //= (
 
 All elements of the outer wrapper must be wrapped in a bstr to minimize the complexity of the code that evaluates the cryptographic integrity of the element and to ensure correct serialisation for integrity and authenticity checks.
 
-The suit-authentication-wrapper contains a list of 1 or more cryptographic authentication wrappers for the core part of the manifest. These are implemented as  COSE_Mac_Tagged or COSE_Sign_Tagged blocks. The Manifest is authenticated by these blocks in "detached payload" mode. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}} and are beyond the scope of this document. The suit-authentication-wrapper MUST come first in the SUIT_Outer_Wrapper, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Outer_Wrapper that begins with any element other than a suit-authentication-wrapper.
+The suit-authentication-wrapper contains a list of 1 or more cryptographic authentication wrappers for the core part of the manifest. These are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged blocks. The Manifest is authenticated by these blocks in "detached payload" mode. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}} and are beyond the scope of this document. The suit-authentication-wrapper MUST come first in the SUIT_Outer_Wrapper, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Outer_Wrapper that begins with any element other than a suit-authentication-wrapper.
 
 A manifest that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be nil.
 
@@ -314,12 +592,12 @@ SUIT_Manifest = {
     suit-common                   => bstr .cbor SUIT_Common,
     ? suit-dependency-resolution  => Digest / bstr .cbor SUIT_Command_Sequence,
     ? suit-payload-fetch          => Digest / bstr .cbor SUIT_Command_Sequence,
-    ? suit-install                => Digest / bstr .cbor SUIT_Command_Sequence
-    ? suit-validate               => bstr .cbor SUIT_Command_Sequence
-    ? suit-load                   => bstr .cbor SUIT_Command_Sequence
-    ? suit-run                    => bstr .cbor SUIT_Command_Sequence
-    ? suit-text-info              => Digest / bstr .cbor SUIT_Text_Map
-    ? suit-coswid                 => Digest / bstr .cbor COSWID
+    ? suit-install                => Digest / bstr .cbor SUIT_Command_Sequence,
+    ? suit-validate               => bstr .cbor SUIT_Command_Sequence,
+    ? suit-load                   => bstr .cbor SUIT_Command_Sequence,
+    ? suit-run                    => bstr .cbor SUIT_Command_Sequence,
+    ? suit-text                   => Digest,
+    ? suit-coswid                 => Digest / bstr .cbor concise-software-identity,
 }
 
 SUIT_Common = {
@@ -360,7 +638,7 @@ suit-load is a SUIT_Command_Sequence to execute in order to prepare a payload fo
 
 suit-run is a SUIT_Command_Sequence to execute in order to run an image. suit-run typically contains a single instruction: either the "run" directive for the bootable manifest or the "process dependencies" directive for any dependents of the bootable manifest. suit-run is OPTIONAL. Only one manifest in an update may contain the "run" directive.
 
-suit-text-info is a digest that uniquely identifies the content of the Text that is packaged in the OuterWrapper. text is OPTIONAL.
+suit-text is a digest that uniquely identifies the content of the Text that is packaged in the OuterWrapper. text is OPTIONAL.
 
 suit-coswid is a digest that uniquely identifies the content of the concise-software-identifier that is packaged in the OuterWrapper. coswid is OPTIONAL.
 
@@ -394,33 +672,27 @@ SUIT_Component_Reference = {
 
 ## Manifest Parameters {#secparameters}
 
-Many conditions and directives require additional information. That information is contained within parameters that can be set in a consistent way. Parameters MUST only be:
-
-    1. Integers
-    2. Byte strings
-    3. Booleans
-
-This allows reduction of manifest size and replacement of parameters from one manifest to the next. Byte strings MAY contain CBOR-encoded objects.
+Many conditions and directives require additional information. That information is contained within parameters that can be set in a consistent way. This allows reduction of manifest size and replacement of parameters from one manifest to the next.
 
 The defined manifest parameters are described below.
 
-Parameter Code | CBOR Type | Default | Scope | Name | Description
----|---|---|---|---|---
-1 | boolean | True | Global | Strict Order | Requires that the manifest is processed in a strictly linear fashion. Set to 0 to enable parallel handling of manifest directives.
-2 | boolean | False | Command Segment | Coerce Condition Failure | Coerces the success code of a command segment to success even when aborted due to a condition failure.
-3 | bstr | nil | Component/Global | Vendor ID | A RFC4122 UUID representing the vendor of the device or component
-4 | bstr | nil | Component/Global | Class ID | A RFC4122 UUID representing the class of the device or component
-5 | bstr | nil | Component/Global | Device ID | A RFC4122 UUID representing the device or component
-6 | bstr | nil | Component/Dependency | URI | A URI from which to fetch a resource
-7 | bstr | nil | Component/Dependency | Encryption Info | A COSE object defining the encryption mode of a resource
-8 | bstr | nil | Component | Compression Info | A SUIT_Compression_Info object
-9 | bstr | nil | Component | Unpack Info | A SUIT_Unpack_Info object
-10 | uint | nil | Component | Source Component | A Component Index
-11 | bstr | nil | Component/Dependency | Image Digest | A SUIT_Digest
-12 | bstr | nil | Component/Dependency | Image Size | Integer size
-24 | bstr | nil | Component/Dependency | URI List | A CBOR encoded list of ranked URIs
-25 | boolean | False | Component/Dependency | URI List Append | A CBOR encoded list of ranked URIs
-nint | int/bstr | nil | Custom | Custom Parameter | Application-defined parameter
+ID | CBOR Type | Scope | Name | Description
+---|---|---|---|---
+1 | boolean | Global | Strict Order | Requires that the manifest is processed in a strictly linear fashion. Set to 0 to enable parallel handling of manifest directives.
+2 | boolean | Command Segment | Soft Failure | Condition failures only terminate the current command segment.
+3 | bstr | Component/Global | Vendor ID | A RFC4122 UUID representing the vendor of the device or component
+4 | bstr | Component/Global | Class ID | A RFC4122 UUID representing the class of the device or component
+5 | bstr | Component/Global | Device ID | A RFC4122 UUID representing the device or component
+6 | tstr | Component/Dependency | URI | A URI from which to fetch a resource
+7 | bstr | Component/Dependency | Encryption Info | A COSE object defining the encryption mode of a resource
+8 | bstr | Component | Compression Info | The information required to decompress the image
+9 | bstr | Component | Unpack Info | The information required to unpack the image
+10 | uint | Component | Source Component | A Component Index
+11 | bstr | Component/Dependency | Image Digest | A SUIT_Digest
+12 | uint | Component/Dependency | Image Size | Integer size
+24 | bstr | Component/Dependency | URI List | A CBOR encoded list of ranked URIs
+25 | boolean | Component/Dependency | URI List Append | A CBOR encoded list of ranked URIs
+nint | int/bstr | Custom | Custom Parameter | Application-defined parameter
 
 CBOR-encoded object parameters are still wrapped in a bstr. This is because it allows a parser that is aggregating parameters to reference the object with a single pointer and traverse it without understanding the contents. This is important for modularisation and division of responsibility within a pull parser. The same consideration does not apply to Conditions and Directives because those elements are invoked with their arguments immediately
 
@@ -428,9 +700,9 @@ CBOR-encoded object parameters are still wrapped in a bstr. This is because it a
 
 The Strict Order Parameter allows a manifest to govern when directives can be executed out-of-order. This allows for systems that have a sensitivity to order of updates to choose the order in which they are executed. It also allows for more advanced systems to parallelise their handling of updates. Strict Order defaults to True. It MAY be set to False when the order of operations does not matter. When arriving at the end of a command sequence, ALL commands MUST have completed, regardless of the state of SUIT_Parameter_Strict_Order. If SUIT_Parameter_Strict_Order is returned to True, ALL preceding commands MUST complete before the next command is executed.
 
-### SUIT_Parameter_Coerce_Condition_Failure
+### SUIT_Parameter_Soft_Failure
 
-When executing a command sequence inside SUIT_Run_Sequence and a condition failure occurs, the manifest processor aborts the sequence. If Coerce Condition Failure is True, it returns Success. Otherwise, it returns the original condition failure. SUIT_Parameter_Coerce_Condition_Failure is scoped to the enclosing SUIT_Directive_Run_Sequence. Its value is discarded when SUIT_Directive_Run_Sequence terminates.
+When executing a command sequence inside SUIT_Directive_Try_Each and a condition failure occurs, the manifest processor aborts the sequence. If Soft Failure is True, it returns Success. Otherwise, it returns the original condition failure. SUIT_Parameter_Soft_Failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates.
 
 ## SUIT_Parameter_Encryption_Info
 
@@ -479,21 +751,21 @@ The following CDDL describes all SUIT_Parameters.
 
 ~~~ CDDL
 SUIT_Parameters //= (suit-parameter-strict-order => bool)
-SUIT_Parameters //= (suit-parameter-coerce-condition-failure => bool)
+SUIT_Parameters //= (suit-parameter-soft-failure => bool)
 SUIT_Parameters //= (suit-parameter-vendor-id => bstr)
 SUIT_Parameters //= (suit-parameter-class-id => bstr)
 SUIT_Parameters //= (suit-parameter-device-id => bstr)
-SUIT_Parameters //= (suit-parameter-uri => bstr)
+SUIT_Parameters //= (suit-parameter-uri => tstr)
 SUIT_Parameters //= (suit-parameter-encryption-info => bstr .cbor SUIT_Encryption_Info)
 SUIT_Parameters //= (suit-parameter-compression-info => bstr .cbor SUIT_Compression_Info)
 SUIT_Parameters //= (suit-parameter-unpack-info => bstr .cbor SUIT_Unpack_Info)
-SUIT_Parameters //= (suit-parameter-source-component => bstr .cbor SUIT_Component_Identifier)
+SUIT_Parameters //= (suit-parameter-source-component => uint)
 SUIT_Parameters //= (suit-parameter-image-digest => bstr .cbor SUIT_Digest)
 SUIT_Parameters //= (suit-parameter-image-size => uint)
-SUIT_Parameters //= (suit-parameter-uri-list => bstr .cbor SUIT_URI_List)
-SUIT_Parameters //= (suit-parameter_custom => int/bool/bstr)
+SUIT_Parameters //= (suit-parameter-uri-list => bstr .cbor SUIT_Component_URI_List)
+SUIT_Parameters //= (suit-parameter-custom => int/bool/tstr/bstr)
 
-SUIT_URI_List = [ + [priority: int, uri: tstr] ]
+SUIT_Component_URI_List = [ + [priority: int, uri: tstr] ]
 
 SUIT_Encryption_Info= COSE_Encrypt_Tagged/COSE_Encrypt0_Tagged
 SUIT_Compression_Info = {
@@ -619,7 +891,7 @@ suit-condition-version allows comparing versions of firmware. Verifying image di
 * Lesser or Equal
 * Lesser
 
-Versions are encoded as a CBOR list of integers. Comparisons are done on each integer in sequence. Comparison stops after all integers in the list defined by the manifest have been consumed OR after a non-equal match has occured. For example, if the manifest defines a comparison, "Equal [1]", then this will match all version sequences starting with 1. If a manifest defines both "Greater or Equal [1,0]" and "Lesser [1,10]", then it will match versions 1.0.x up to, but not including 1.10.
+Versions are encoded as a CBOR list of integers. Comparisons are done on each integer in sequence. Comparison stops after all integers in the list defined by the manifest have been consumed OR after a non-equal match has occured. For example, if the manifest defines a comparison, "Equal \[1\]", then this will match all version sequences starting with 1. If a manifest defines both "Greater or Equal \[1,0\]" and "Lesser \[1,10\]", then it will match versions 1.0.x up to, but not including 1.10.
 
 The following CDDL describes SUIT_Condition_Version_Argument
 
@@ -644,11 +916,11 @@ SUIT_Condition_Version_Comparison_Value = [+int]
 
 While the exact encoding of versions is application-defined, semantic versions map conveniently. For example,
 
-* 1.2.3 = [1,2,3]
-* 1.2-rc3 = [1,2,-1,3]
-* 1.2-beta = [1,2,-2]
-* 1.2-alpha = [1,2,-3]
-* 1.2-alpha4 = [1,2,-3,4]
+* 1.2.3 = \[1,2,3\]
+* 1.2-rc3 = \[1,2,-1,3\]
+* 1.2-beta = \[1,2,-2\]
+* 1.2-alpha = \[1,2,-3\]
+* 1.2-alpha4 = \[1,2,-3,4\]
 
 suit-condition-version is OPTIONAL to implement.
 
@@ -684,7 +956,7 @@ This allows the OS, WiFi module, and application to be updated independently. To
 
 This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.
 
-#### Creating UUIDs:
+#### Creating UUIDs: {#creating-uuids}
 
 UUIDs MUST be created according to RFC 4122 {{RFC4122}}. UUIDs SHOULD use versions 3, 4, or 5, as described in RFC4122. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
 
@@ -792,15 +1064,15 @@ The following CDDL describes the SUIT_Run_Sequence argument.
 SUIT_Directive_Run_Sequence_Argument = bstr .cbor SUIT_Command_Sequence
 ~~~
 
-When suit-directive-run-sequence completes, it forwards the last status code that occurred in the sequence. If the Coerce on Condition Failure parameter is true, then suit-directive-run-sequence only fails when a directive in the argument sequence fails.
+When suit-directive-run-sequence completes, it forwards the last status code that occurred in the sequence. If the Soft Failure parameter is true, then suit-directive-run-sequence only fails when a directive in the argument sequence fails.
 
-SUIT_Parameter_Coerce_Condition_Failure defaults to False when suit-directive-run-sequence begins. Its value is discarded when suit-directive-run-sequence terminates.
+SUIT_Parameter_Soft_Failure defaults to False when suit-directive-run-sequence begins. Its value is discarded when suit-directive-run-sequence terminates.
 
 ### suit-directive-try-each
 
-This command runs several suit-directive-run-sequence one after another, in a strict order. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.
+This command runs several SUIT_Command_Sequence, one after another, in a strict order. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.
 
-SUIT_Parameter_Coerce_Condition_Failure is initialised to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.
+SUIT_Parameter_Soft_Failure is initialised to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.
 
 The following CDDL describes the SUIT_Try_Each argument.
 
@@ -997,25 +1269,23 @@ SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 
 ~~~
 
-# Dependency processing
+## SUIT_Text_Map
+The SUIT_Text_Map contains all text descriptions needed for this manifest. The text section is typically severable, allowing manifests to be distributed without the text, since end-nodes do not require text. The meaning of each field is described below.
 
-Dependencies need careful handling on constrained systems. A dependency tree that is too deep can cause recursive handling to overflow stack space. Systems that parse all dependencies into an object tree can easily fill up available memory. Too many dependencies can overrun available storage space.
+Each section MAY be present. If present, each section MUST be as described. Negative integer IDs are reserved for application-specific text values.
 
-The dependency handling system in this document is designed to address as many of these problems as possible.
-
-Dependencies MAY be addressed in one of three ways:
-
-1. Iterate by component
-2. Iterate by manifest
-3. Out-of-order
-
-Because each manifest has a list of components and a list of components defined by its dependencies, it is possible for the manifest processor to handle one component at a time, traversing the manifest tree once for each listed component. This, however consumes significant processing power.
-
-Alternatively, it is possible for a device with sufficient memory to accumulate all parameters for all listed component IDs. This will naturally consume more memory, but it allows the device to process the manifests in a single pass.
-
-It is expected that the simplest and most power sensitive devices will use option 2, with a fixed maximum number of components.
-
-Advanced devices may make use of the Strict Order parameter and enable parallel processing of some segments, or it may reorder some segments. To perform parallel processing, once the Strict Order parameter is set to False, the device may fork a process for each command until the Strict Order parameter is returned to True or the command sequence ends. Then, it joins all forked processes before continuing processing of commands. To perform out-of-order processing, a similar approach is used, except the device consumes all commands after the Strict Order parameter is set to False, then it sorts these commands into its preferred order, invokes them all, then continues processing.
+ID | Name | Summary
+---|---|---
+1 | manifest-description | Free text description of the manifest
+2 | update-description | Free text description of the update
+3 | vendor-name | Free text vendor name
+4 | model-name | Free text model name
+5 | vendor-domain | The domain used to create the [vendor-id](#creating-uuids)
+6 | model-info | The information used to create the [class-id](#creating-uuids)
+7 | component-description | Free text description of each component in the manifest
+8 | json-source | The JSON-formated document that was used to create the manifest
+9 | yaml-source | The yaml-formated document that was used to create the manifest
+10 | version-dependencies | List of component versions required by the manifest
 
 # Access Control Lists
 
@@ -1135,325 +1405,32 @@ The following JSON representation of a manifest demonstrates how this would be r
 In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL data definition.
 
 ~~~ CDDL
-SUIT_Outer_Wrapper = {
-    suit-authentication-wrapper => bstr .cbor SUIT_Authentication_Wrapper / nil,
-    $$SUIT_Manifest_Wrapped,
-    suit-dependency-resolution  => bstr .cbor SUIT_Command_Sequence,
-    suit-payload-fetch          => bstr .cbor SUIT_Command_Sequence,
-    suit-install                => bstr .cbor SUIT_Command_Sequence,
-    suit-text                   => bstr .cbor SUIT_Text_Map,
-    suit-coswid                 => bstr .cbor concise-software-identity
-}
-
-SUIT_Authentication_Wrapper = [ + (
-    COSE_Mac_Tagged /
-    COSE_Sign_Tagged /
-    COSE_Mac0_Tagged /
-    COSE_Sign1_Tagged)
-]
-
-SUIT_Encryption_Wrapper = COSE_Encrypt_Tagged / COSE_Encrypt0_Tagged
-
-$$SUIT_Manifest_Wrapped //= (suit-manifest  => bstr .cbor SUIT_Manifest)
-$$SUIT_Manifest_Wrapped //= (
-    suit-manifest-encryption-info => bstr .cbor SUIT_Encryption_Wrapper,
-    suit-manifest-encrypted       => bstr
-)
-
-COSE_Mac_Tagged = any
-COSE_Sign_Tagged = any
-COSE_Mac0_Tagged = any
-COSE_Sign1_Tagged = any
-COSE_Encrypt_Tagged = any
-COSE_Encrypt0_Tagged = any
-
-SUIT_Digest = [
-  suit-digest-algorithm-id : $suit-digest-algorithm-ids,
-  suit-digest-bytes : bytes,
-  ? suit-digest-parameters : any
-]
-
-; Named Information Hash Algorithm Identifiers
-suit-digest-algorithm-ids /= algorithm-id-sha224
-suit-digest-algorithm-ids /= algorithm-id-sha256
-suit-digest-algorithm-ids /= algorithm-id-sha384
-suit-digest-algorithm-ids /= algorithm-id-sha512
-suit-digest-algorithm-ids /= algorithm-id-sha3-224
-suit-digest-algorithm-ids /= algorithm-id-sha3-256
-suit-digest-algorithm-ids /= algorithm-id-sha3-384
-suit-digest-algorithm-ids /= algorithm-id-sha3-512
-
-SUIT_Manifest = {
-    suit-manifest-version         => 1,
-    suit-manifest-sequence-number => uint,
-    ? suit-common                 => bstr .cbor SUIT_Common,
-    ? suit-dependency-resolution  => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
-    ? suit-payload-fetch          => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
-    ? suit-install                => SUIT_Digest / bstr .cbor SUIT_Command_Sequence
-    ? suit-validate               => bstr .cbor SUIT_Command_Sequence
-    ? suit-load                   => bstr .cbor SUIT_Command_Sequence
-    ? suit-run                    => bstr .cbor SUIT_Command_Sequence
-    ? suit-text                   => SUIT_Digest / bstr .cbor SUIT_Text_Map
-    ? suit-coswid                 => SUIT_Digest / bstr .cbor concise-software-identity
-}
-
-SUIT_Common = {
-    ? suit-dependencies           => bstr .cbor SUIT_Dependencies,
-    ? suit-components             => bstr .cbor SUIT_Components,
-    ? suit-dependency-components  => bstr .cbor SUIT_Component_References,
-    ? suit-common-sequence        => bstr .cbor SUIT_Command_Sequence,
-}
-
-SUIT_Dependencies         = [ + SUIT_Dependency ]
-SUIT_Components           = [ + SUIT_Component_Identifier ]
-SUIT_Component_References = [ + SUIT_Component_Reference ]
-
-concise-software-identity = any
-
-SUIT_Dependency = {
-    suit-dependency-digest => SUIT_Digest,
-    suit-dependency-prefix => SUIT_Component_Identifier,
-}
-
-SUIT_Component_Identifier =  [* bstr]
-
-
-SUIT_Component_Reference = {
-    suit-component-identifier => SUIT_Component_Identifier,
-    suit-component-dependency-index => uint
-}
-
-
-SUIT_Command_Sequence = [ + (SUIT_Condition // SUIT_Directive // SUIT_Command_Custom) ]
-
-SUIT_Command_Custom = (nint, bstr)
-SUIT_Condition //= (suit-condition-vendor-identifier, nil)
-SUIT_Condition //= (suit-condition-class-identifier,  nil)
-SUIT_Condition //= (suit-condition-device-identifier, nil)
-SUIT_Condition //= (suit-condition-image-match,       nil)
-SUIT_Condition //= (suit-condition-image-not-match,   nil)
-SUIT_Condition //= (suit-condition-use-before,        uint)
-SUIT_Condition //= (suit-condition-minimum-battery,   uint)
-SUIT_Condition //= (suit-condition-update-authorised, int)
-SUIT_Condition //= (suit-condition-version,           SUIT_Condition_Version_Argument)
-SUIT_Condition //= (suit-condition-component-offset,  uint)
-SUIT_Condition //= (suit-condition-custom,            bstr)
-
-RFC4122_UUID = bstr .size 16
-
-SUIT_Condition_Version_Argument = [
-    suit-condition-version-comparison: SUIT_Condition_Version_Comparison_Types,
-    suit-condition-version-comparison: SUIT_Condition_Version_Comparison_Value
-]
-SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-greater
-SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-greater-equal
-SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-equal
-SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-lesser-equal
-SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-lesser
-
-suit-condition-version-comparison-greater = 1
-suit-condition-version-comparison-greater-equal = 2
-suit-condition-version-comparison-equal = 3
-suit-condition-version-comparison-lesser-equal = 4
-suit-condition-version-comparison-lesser = 5
-
-SUIT_Condition_Version_Comparison_Value = [+int]
-
-SUIT_Directive //= (suit-directive-set-component-index,      uint/bool)
-SUIT_Directive //= (suit-directive-set-dependency-index,     uint/bool)
-SUIT_Directive //= (suit-directive-run-sequence,             bstr .cbor SUIT_Command_Sequence)
-SUIT_Directive //= (suit-directive-try-each,                 SUIT_Directive_Try_Each_Argument)
-SUIT_Directive //= (suit-directive-process-dependency,       nil)
-SUIT_Directive //= (suit-directive-set-parameters,           {+ SUIT_Parameters})
-SUIT_Directive //= (suit-directive-override-parameters,      {+ SUIT_Parameters})
-SUIT_Directive //= (suit-directive-fetch,                    nil)
-SUIT_Directive //= (suit-directive-copy,                     nil)
-SUIT_Directive //= (suit-directive-swap,                     nil)
-SUIT_Directive //= (suit-directive-run,                      nil)
-SUIT_Directive //= (suit-directive-wait,                     { + SUIT_Wait_Events })
-SUIT_Directive //= (suit-directive-run-with-arguments,       bstr)
-
-SUIT_Directive_Try_Each_Argument = [
-    + bstr .cbor SUIT_Command_Sequence,
-    nil / bstr .cbor SUIT_Command_Sequence
-]
-
-SUIT_Wait_Events //= (suit-wait-event-authorisation => int)
-SUIT_Wait_Events //= (suit-wait-event-power => int)
-SUIT_Wait_Events //= (suit-wait-event-network => int)
-SUIT_Wait_Events //= (suit-wait-event-other-device-version
-    => SUIT_Wait_Event_Argument_Other_Device_Version)
-SUIT_Wait_Events //= (suit-wait-event-time => uint); Timestamp
-SUIT_Wait_Events //= (suit-wait-event-time-of-day
-    => uint); Time of Day (seconds since 00:00:00)
-SUIT_Wait_Events //= (suit-wait-event-day-of-week
-    => uint); Days since Sunday
-
-
-SUIT_Wait_Event_Argument_Authorisation = int ; priority
-SUIT_Wait_Event_Argument_Power = int ; Power Level
-SUIT_Wait_Event_Argument_Network = int ; Network State
-SUIT_Wait_Event_Argument_Other_Device_Version = [
-    other-device: bstr,
-    other-device-version: [+int]
-]
-SUIT_Wait_Event_Argument_Time = uint ; Timestamp
-SUIT_Wait_Event_Argument_Time_Of_Day = uint ; Time of Day (seconds since 00:00:00)
-SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
-
-SUIT_Parameters //= (suit-parameter-strict-order => bool)
-SUIT_Parameters //= (suit-parameter-coerce-condition-failure => bool)
-SUIT_Parameters //= (suit-parameter-vendor-id => bstr)
-SUIT_Parameters //= (suit-parameter-class-id => bstr)
-SUIT_Parameters //= (suit-parameter-device-id => bstr)
-SUIT_Parameters //= (suit-parameter-uri => bstr)
-SUIT_Parameters //= (suit-parameter-encryption-info => bstr .cbor SUIT_Encryption_Info)
-SUIT_Parameters //= (suit-parameter-compression-info => bstr .cbor SUIT_Compression_Info)
-SUIT_Parameters //= (suit-parameter-unpack-info => bstr .cbor SUIT_Unpack_Info)
-SUIT_Parameters //= (suit-parameter-source-component => bstr .cbor SUIT_Component_Identifier)
-SUIT_Parameters //= (suit-parameter-image-digest => bstr .cbor SUIT_Digest)
-SUIT_Parameters //= (suit-parameter-image-size => uint)
-SUIT_Parameters //= (suit-parameter-uri-list => bstr .cbor SUIT_Component_URI_List)
-SUIT_Parameters //= (suit-parameter-custom => int/bool/bstr)
-
-SUIT_Component_URI_List = [ + [priority: int, uri: tstr] ]
-SUIT_Priority_Parameter_List = [ + [priority: int, parameters: { + SUIT_Parameters }] ]
-
-SUIT_Encryption_Info = COSE_Encrypt_Tagged/COSE_Encrypt0_Tagged
-SUIT_Compression_Info = {
-    suit-compression-algorithm => SUIT_Compression_Algorithms
-    ? suit-compression-parameters => bstr
-}
-
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_gzip
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_bzip2
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_lz4
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_lzma
-
-SUIT_Compression_Algorithm_gzip = 1
-SUIT_Compression_Algorithm_bzip2 = 2
-SUIT_Compression_Algorithm_deflate = 3
-SUIT_Compression_Algorithm_lz4 = 4
-SUIT_Compression_Algorithm_lzma = 7
-
-SUIT_Unpack_Info = {
-    suit-unpack-algorithm => SUIT_Unpack_Algorithms
-    ? suit-unpack-parameters => bstr
-}
-
-SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Delta
-SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Hex
-SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Elf
-
-SUIT_Unpack_Algorithm_Delta = 1
-SUIT_Unpack_Algorithm_Hex = 2
-SUIT_Unpack_Algorithm_Elf = 3
-
-SUIT_Text_Map = {int => tstr}
-
-suit-authentication-wrapper = 1
-suit-manifest = 2
-
-suit-manifest-encryption-info = 3
-suit-manifest-encrypted       = 4
-
-suit-manifest-version = 1
-suit-manifest-sequence-number = 2
-suit-common = 3
-suit-dependency-resolution = 7
-suit-payload-fetch = 8
-suit-install = 9
-suit-validate = 10
-suit-load = 11
-suit-run = 12
-suit-text = 13
-suit-coswid = 14
-
-suit-dependencies = 1
-suit-components = 2
-suit-dependency-components = 3
-suit-common-sequence = 4
-
-suit-dependency-digest = 1
-suit-dependency-prefix = 2
-
-suit-component-identifier = 1
-suit-component-dependency-index = 2
-
-suit-command-custom = nint
-
-suit-condition-vendor-identifier = 1
-suit-condition-class-identifier  = 2
-suit-condition-image-match       = 3
-suit-condition-use-before        = 4
-suit-condition-component-offset  = 5
-suit-condition-custom = 6
-
-suit-condition-device-identifier        = 24
-suit-condition-image-not-match          = 25
-suit-condition-minimum-battery          = 26
-suit-condition-update-authorised        = 27
-suit-condition-version                  = 28
-
-suit-directive-set-component-index      = 12
-suit-directive-set-dependency-index     = 13
-suit-directive-abort                    = 14
-suit-directive-try-each                 = 15
-suit-directive-do-each                  = 16 ; TBD
-suit-directive-map-filter               = 17 ; TBD
-suit-directive-process-dependency       = 18
-suit-directive-set-parameters           = 19
-suit-directive-override-parameters      = 20
-suit-directive-fetch                    = 21
-suit-directive-copy                     = 22
-suit-directive-run                      = 23
-
-suit-directive-wait                     = 29
-suit-directive-run-sequence             = 30
-suit-directive-run-with-arguments       = 31
-suit-directive-swap                     = 32
-
-suit-wait-event-argument-authorisation = 1
-suit-wait-event-power = 2
-suit-wait-event-network = 3
-suit-wait-event-other-device-version = 4
-suit-wait-event-time = 5
-suit-wait-event-time-of-day = 6
-suit-wait-event-day-of-week = 7
-suit-wait-event-authorisation = 8
-
-suit-parameter-strict-order = 1
-suit-parameter-coerce-condition-failure = 2
-suit-parameter-vendor-id = 3
-suit-parameter-class-id = 4
-suit-parameter-device-id = 5
-suit-parameter-uri = 6
-suit-parameter-encryption-info = 7
-suit-parameter-compression-info = 8
-suit-parameter-unpack-info = 9
-suit-parameter-source-component = 10
-suit-parameter-image-digest = 11
-suit-parameter-image-size = 12
-
-suit-parameter-uri-list = 24
-suit-parameter-uri-list-append = 25
-suit-parameter-prioritised-parameters = 26
-
-suit-parameter-custom = nint
-
-suit-compression-algorithm = 1
-suit-compression-parameters = 2
-
-suit-unpack-algorithm  = 1
-suit-unpack-parameters = 2
-
+{::include draft-ietf-suit-manifest-02.cddl}
 ~~~
 
-# Examples
+#  Examples
 
 The following examples demonstrate a small subset of the functionality of the manifest. However, despite this, even a simple manifest processor can execute most of these manifests.
 
-None of these examples include authentication. This is provided via RFC 8152 {{RFC8152}}, and is omitted for clarity.
+The examples are signed using the following ECDSA secp256r1 key:
+
+~~~
+-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgApZYjZCUGLM50VBC
+CjYStX+09jGmnyJPrpDLTz/hiXOhRANCAASEloEarguqq9JhVxie7NomvqqL8Rtv
+P+bitWWchdvArTsfKktsCYExwKNtrNHXi9OB3N+wnAUtszmR23M4tKiW
+-----END PRIVATE KEY-----
+~~~
+
+The corresponding public key can be used to verify these examples:
+
+~~~
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEhJaBGq4LqqvSYVcYnuzaJr6qi/Eb
+bz/m4rVlnIXbwK07HypLbAmBMcCjbazR14vTgdzfsJwFLbM5kdtzOLSolg==
+-----END PUBLIC KEY-----
+~~~
+
 
 ## Example 0:
 
@@ -1495,31 +1472,33 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : h'd28443a10126a1044874657374206b6579f658405e5f'
-                        h'b84f9e9729a4d74096ad485921e842b4e320cc3fa177'
-                        h'8c2807377e1969e42449b3261109d273df4b3ceb9a61'
-                        h'06a46f0a7938de9a8441ab515b82463b39ee',
-    / manifest / 2 : h'a40101020103583ea2024c818245466c6173684300340104'
-                     h'582c8213a20b8202582000112233445566778899aabbccdd'
-                     h'eeff0123456789abcdeffedcba98765432100c1987d00c47'
-                     h'860c0003f617f6' \
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f65840ebec'
+                        h'b66cbecb19dcedacf8459c1a22a1453781ba98d8ffb9'
+                        h'd4e2912f29d23bac5ae3d51f1ff0c1b1df05e207ca17'
+                        h'483a57ede914cf826b73599137881c8364c8',
+    / manifest / 2 : h'a401010201035840a2024c818245466c6173684300340104'
+                     h'582e8213a20b58248202582000112233445566778899aabb'
+                     h'ccddeeff0123456789abcdeffedcba98765432100c1987d0'
+                     h'0c47860c0003f617f6' \
     {
         / structure-version / 1 : 1,
         / sequence-number / 2 : 1,
-        / common / 3 : h'a2024c818245466c6173684300340104582c8213a20b82'
-                       h'02582000112233445566778899aabbccddeeff01234567'
-                       h'89abcdeffedcba98765432100c1987d0' \ {
+        / common / 3 : h'a2024c818245466c6173684300340104582e8213a20b58'
+                       h'248202582000112233445566778899aabbccddeeff0123'
+                       h'456789abcdeffedcba98765432100c1987d0' \ {
             / components / 2 : h'818245466c61736843003401' \
             [
                 [h'466c617368', h'003401'],
             ],
-            / common-sequence / 4 : h'8213a20b820258200011223344556677'
-                                    h'8899aabbccddeeff0123456789abcdef'
-                                    h'fedcba98765432100c1987d0' \ [
+            / common-sequence / 4 : h'8213a20b582482025820001122334455'
+                                    h'66778899aabbccddeeff0123456789ab'
+                                    h'cdeffedcba98765432100c1987d0' \ [
                 / set-vars / 19, {
-                    / digest / 11 : [ 2,
-                        h'00112233445566778899aabbccddeeff0123456789ab'
-                        h'cdeffedcba9876543210' ],
+                    / digest / 11 : h'8202582000112233445566778899aabb'
+                                    h'ccddeeff0123456789abcdeffedcba98'
+                                    h'76543210' \
+                        [ 2, h'00112233445566778899aabbccddeeff01234567'
+                             h'89abcdeffedcba9876543210' ],
                     / size / 12 : 34768,
                 },
             ],
@@ -1535,28 +1514,28 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 85
+Total size of outer wrapper without COSE authentication object: 87
 
 Outer:
 
 ~~~
-a201f602584fa40101020103583ea2024c818245466c6173684300340104582c8213a20b
-8202582000112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210
-0c1987d00c47860c0003f617f6
+a201f6025851a401010201035840a2024c818245466c6173684300340104582e8213a20b
+58248202582000112233445566778899aabbccddeeff0123456789abcdeffedcba987654
+32100c1987d00c47860c0003f617f6
 ~~~
 
 
 
-Total size of outer wrapper with COSE authentication object: 170
+Total size of outer wrapper with COSE authentication object: 172
 
 Signed Outer:
 
 ~~~
-a2015854d28443a10126a1044874657374206b6579f658405e5fb84f9e9729a4d74096ad
-485921e842b4e320cc3fa1778c2807377e1969e42449b3261109d273df4b3ceb9a6106a4
-6f0a7938de9a8441ab515b82463b39ee02584fa40101020103583ea2024c818245466c61
-73684300340104582c8213a20b8202582000112233445566778899aabbccddeeff012345
-6789abcdeffedcba98765432100c1987d00c47860c0003f617f6
+a2015854d28443a10126a1044874657374206b6579f65840ebecb66cbecb19dcedacf845
+9c1a22a1453781ba98d8ffb9d4e2912f29d23bac5ae3d51f1ff0c1b1df05e207ca17483a
+57ede914cf826b73599137881c8364c8025851a401010201035840a2024c818245466c61
+73684300340104582e8213a20b58248202582000112233445566778899aabbccddeeff01
+23456789abcdeffedcba98765432100c1987d00c47860c0003f617f6
 ~~~
 
 ## Example 1:
@@ -1603,32 +1582,34 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : h'd28443a10126a1044874657374206b6579f658403d4e'
-                        h'9ff1ca8803a81ae1e2b13df28c527a4d6975e860035e'
-                        h'e9a88576b5e6f2bf12f33017e88157bcff58d712e7f8'
-                        h'010821ae0f82f78eb681b61697345e655cf4',
-    / manifest / 2 : h'a40101020203583ea2024c818245466c6173684300340104'
-                     h'582c8213a20b8202582000112233445566778899aabbccdd'
-                     h'eeff0123456789abcdeffedcba98765432100c1987d00958'
-                     h'25860c0013a106781b687474703a2f2f6578616d706c652e'
-                     h'636f6d2f66696c652e62696e15f6' \
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f65840b531'
+                        h'42132ebddbf0c523378d16fc904badc56553e41c6713'
+                        h'b758dbd39f47effec5e7a583c418129f456d0aaaa3c4'
+                        h'3fe06dd30d664b709edf0ad05b70dad38bc2',
+    / manifest / 2 : h'a401010202035840a2024c818245466c6173684300340104'
+                     h'582e8213a20b58248202582000112233445566778899aabb'
+                     h'ccddeeff0123456789abcdeffedcba98765432100c1987d0'
+                     h'095825860c0013a106781b687474703a2f2f6578616d706c'
+                     h'652e636f6d2f66696c652e62696e15f6' \
     {
         / structure-version / 1 : 1,
         / sequence-number / 2 : 2,
-        / common / 3 : h'a2024c818245466c6173684300340104582c8213a20b82'
-                       h'02582000112233445566778899aabbccddeeff01234567'
-                       h'89abcdeffedcba98765432100c1987d0' \ {
+        / common / 3 : h'a2024c818245466c6173684300340104582e8213a20b58'
+                       h'248202582000112233445566778899aabbccddeeff0123'
+                       h'456789abcdeffedcba98765432100c1987d0' \ {
             / components / 2 : h'818245466c61736843003401' \
             [
                 [h'466c617368', h'003401'],
             ],
-            / common-sequence / 4 : h'8213a20b820258200011223344556677'
-                                    h'8899aabbccddeeff0123456789abcdef'
-                                    h'fedcba98765432100c1987d0' \ [
+            / common-sequence / 4 : h'8213a20b582482025820001122334455'
+                                    h'66778899aabbccddeeff0123456789ab'
+                                    h'cdeffedcba98765432100c1987d0' \ [
                 / set-vars / 19, {
-                    / digest / 11 : [ 2,
-                        h'00112233445566778899aabbccddeeff0123456789ab'
-                        h'cdeffedcba9876543210' ],
+                    / digest / 11 : h'8202582000112233445566778899aabb'
+                                    h'ccddeeff0123456789abcdeffedcba98'
+                                    h'76543210' \
+                        [ 2, h'00112233445566778899aabbccddeeff01234567'
+                             h'89abcdeffedcba9876543210' ],
                     / size / 12 : 34768,
                 },
             ],
@@ -1647,30 +1628,30 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 116
+Total size of outer wrapper without COSE authentication object: 118
 
 Outer:
 
 ~~~
-a201f602586ea40101020203583ea2024c818245466c6173684300340104582c8213a20b
-8202582000112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210
-0c1987d0095825860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f6669
-6c652e62696e15f6
+a201f6025870a401010202035840a2024c818245466c6173684300340104582e8213a20b
+58248202582000112233445566778899aabbccddeeff0123456789abcdeffedcba987654
+32100c1987d0095825860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f
+66696c652e62696e15f6
 ~~~
 
 
 
-Total size of outer wrapper with COSE authentication object: 201
+Total size of outer wrapper with COSE authentication object: 203
 
 Signed Outer:
 
 ~~~
-a2015854d28443a10126a1044874657374206b6579f658403d4e9ff1ca8803a81ae1e2b1
-3df28c527a4d6975e860035ee9a88576b5e6f2bf12f33017e88157bcff58d712e7f80108
-21ae0f82f78eb681b61697345e655cf402586ea40101020203583ea2024c818245466c61
-73684300340104582c8213a20b8202582000112233445566778899aabbccddeeff012345
-6789abcdeffedcba98765432100c1987d0095825860c0013a106781b687474703a2f2f65
-78616d706c652e636f6d2f66696c652e62696e15f6
+a2015854d28443a10126a1044874657374206b6579f65840b53142132ebddbf0c523378d
+16fc904badc56553e41c6713b758dbd39f47effec5e7a583c418129f456d0aaaa3c43fe0
+6dd30d664b709edf0ad05b70dad38bc2025870a401010202035840a2024c818245466c61
+73684300340104582e8213a20b58248202582000112233445566778899aabbccddeeff01
+23456789abcdeffedcba98765432100c1987d0095825860c0013a106781b687474703a2f
+2f6578616d706c652e636f6d2f66696c652e62696e15f6
 ~~~
 
 ## Example 2:
@@ -1726,42 +1707,44 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : h'd28443a10126a1044874657374206b6579f65840e637'
-                        h'5a57596cb4a35a90a30b4099bccf7e2352a9829bf7bb'
-                        h'1b56cfc0e713955be4fd360e366c94e32dfc344695b1'
-                        h'20b2c59732b2e3f079fc2693c5a459d9ce44',
-    / manifest / 2 : h'a501010203035866a2024c818245466c6173684300340104'
-                     h'58548613a40350fa6b4a53d5ad5fdfbe9de663e4d41ffe04'
-                     h'501492af1425695e48bf429b2d51f2ab450b820258200011'
-                     h'2233445566778899aabbccddeeff0123456789abcdeffedc'
-                     h'ba98765432100c1987d001f602f6095825860c0013a10678'
-                     h'1b687474703a2f2f6578616d706c652e636f6d2f66696c65'
-                     h'2e62696e15f60c47860c0003f617f6' \
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f658400014'
+                        h'750c013f7e1cdbec6f14b99b49195e081d1030508a6b'
+                        h'8d271bd99dfb382a7767dc45f20c9943ed22a1eaac9d'
+                        h'07a041ec1acfc10ad7e45e6424629ff3e3e5',
+    / manifest / 2 : h'a501010203035868a2024c818245466c6173684300340104'
+                     h'58568613a40350fa6b4a53d5ad5fdfbe9de663e4d41ffe04'
+                     h'501492af1425695e48bf429b2d51f2ab450b582482025820'
+                     h'00112233445566778899aabbccddeeff0123456789abcdef'
+                     h'fedcba98765432100c1987d001f602f6095825860c0013a1'
+                     h'06781b687474703a2f2f6578616d706c652e636f6d2f6669'
+                     h'6c652e62696e15f60c47860c0003f617f6' \
     {
         / structure-version / 1 : 1,
         / sequence-number / 2 : 3,
-        / common / 3 : h'a2024c818245466c617368430034010458548613a40350'
+        / common / 3 : h'a2024c818245466c617368430034010458568613a40350'
                        h'fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425'
-                       h'695e48bf429b2d51f2ab450b8202582000112233445566'
-                       h'778899aabbccddeeff0123456789abcdeffedcba987654'
-                       h'32100c1987d001f602f6' \ {
+                       h'695e48bf429b2d51f2ab450b5824820258200011223344'
+                       h'5566778899aabbccddeeff0123456789abcdeffedcba98'
+                       h'765432100c1987d001f602f6' \ {
             / components / 2 : h'818245466c61736843003401' \
             [
                 [h'466c617368', h'003401'],
             ],
             / common-sequence / 4 : h'8613a40350fa6b4a53d5ad5fdfbe9de6'
                                     h'63e4d41ffe04501492af1425695e48bf'
-                                    h'429b2d51f2ab450b8202582000112233'
-                                    h'445566778899aabbccddeeff01234567'
-                                    h'89abcdeffedcba98765432100c1987d0'
-                                    h'01f602f6' \ [
+                                    h'429b2d51f2ab450b5824820258200011'
+                                    h'2233445566778899aabbccddeeff0123'
+                                    h'456789abcdeffedcba98765432100c19'
+                                    h'87d001f602f6' \ [
                 / set-vars / 19, {
                     / vendor-id / 3 : h'fa6b4a53d5ad5fdfbe9de663e4d41f'
                                       h'fe',
                     / class-id / 4 : h'1492af1425695e48bf429b2d51f2ab45',
-                    / digest / 11 : [ 2,
-                        h'00112233445566778899aabbccddeeff0123456789ab'
-                        h'cdeffedcba9876543210' ],
+                    / digest / 11 : h'8202582000112233445566778899aabb'
+                                    h'ccddeeff0123456789abcdeffedcba98'
+                                    h'76543210' \
+                        [ 2, h'00112233445566778899aabbccddeeff01234567'
+                             h'89abcdeffedcba9876543210' ],
                     / size / 12 : 34768,
                 },
                 / condition-vendor-id / 1, None,
@@ -1787,32 +1770,32 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 165
+Total size of outer wrapper without COSE authentication object: 167
 
 Outer:
 
 ~~~
-a201f602589fa501010203035866a2024c818245466c617368430034010458548613a403
+a201f60258a1a501010203035868a2024c818245466c617368430034010458568613a403
 50fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425695e48bf429b2d51f2ab450b
-8202582000112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210
-0c1987d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e636f
-6d2f66696c652e62696e15f60c47860c0003f617f6
+58248202582000112233445566778899aabbccddeeff0123456789abcdeffedcba987654
+32100c1987d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e
+636f6d2f66696c652e62696e15f60c47860c0003f617f6
 ~~~
 
 
 
-Total size of outer wrapper with COSE authentication object: 250
+Total size of outer wrapper with COSE authentication object: 252
 
 Signed Outer:
 
 ~~~
-a2015854d28443a10126a1044874657374206b6579f65840e6375a57596cb4a35a90a30b
-4099bccf7e2352a9829bf7bb1b56cfc0e713955be4fd360e366c94e32dfc344695b120b2
-c59732b2e3f079fc2693c5a459d9ce4402589fa501010203035866a2024c818245466c61
-7368430034010458548613a40350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af14
-25695e48bf429b2d51f2ab450b8202582000112233445566778899aabbccddeeff012345
-6789abcdeffedcba98765432100c1987d001f602f6095825860c0013a106781b68747470
-3a2f2f6578616d706c652e636f6d2f66696c652e62696e15f60c47860c0003f617f6
+a2015854d28443a10126a1044874657374206b6579f658400014750c013f7e1cdbec6f14
+b99b49195e081d1030508a6b8d271bd99dfb382a7767dc45f20c9943ed22a1eaac9d07a0
+41ec1acfc10ad7e45e6424629ff3e3e50258a1a501010203035868a2024c818245466c61
+7368430034010458568613a40350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af14
+25695e48bf429b2d51f2ab450b58248202582000112233445566778899aabbccddeeff01
+23456789abcdeffedcba98765432100c1987d001f602f6095825860c0013a106781b6874
+74703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f60c47860c0003f617f6
 ~~~
 
 ## Example 3:
@@ -1893,30 +1876,31 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : h'd28443a10126a1044874657374206b6579f65840ef4b'
-                        h'399c55131a51bebafb46da6e6b79c59417fdefea7b87'
-                        h'e4234bf8f978094e3092c8506d8a912fbacaec5ba365'
-                        h'24ae0e4bb1aa14197e4d0afe10ba47e29e5a',
-    / manifest / 2 : h'a50101020403589fa20254828245466c6173684300340182'
-                     h'4352414d4200040458858e13a20350fa6b4a53d5ad5fdfbe'
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f6584070eb'
+                        h'70f2552533fc954e934f50f42bdd9b6f7d4fd7e11463'
+                        h'6b9cdbef2a065f9640243a7857f66c4389aea906c4f3'
+                        h'b45150c8e55461e9bfda945904033fc70a84',
+    / manifest / 2 : h'a5010102040358a3a20254828245466c6173684300340182'
+                     h'4352414d4200040458898e13a20350fa6b4a53d5ad5fdfbe'
                      h'9de663e4d41ffe04501492af1425695e48bf429b2d51f2ab'
-                     h'450c0013a20b8202582000112233445566778899aabbccdd'
-                     h'eeff0123456789abcdeffedcba98765432100c1987d00c01'
-                     h'13a20b8202582000112233445566778899aabbccddeeff01'
-                     h'23456789abcdeffedcba98765432100c1987d001f602f609'
-                     h'5825860c0013a106781b687474703a2f2f6578616d706c65'
-                     h'2e636f6d2f66696c652e62696e15f60c518e0c0003f60c01'
-                     h'13a10a0015f603f617f6' \
+                     h'450c0013a20b58248202582000112233445566778899aabb'
+                     h'ccddeeff0123456789abcdeffedcba98765432100c1987d0'
+                     h'0c0113a20b58248202582000112233445566778899aabbcc'
+                     h'ddeeff0123456789abcdeffedcba98765432100c1987d001'
+                     h'f602f6095825860c0013a106781b687474703a2f2f657861'
+                     h'6d706c652e636f6d2f66696c652e62696e15f60c518e0c00'
+                     h'03f60c0113a10a0015f603f617f6' \
     {
         / structure-version / 1 : 1,
         / sequence-number / 2 : 4,
         / common / 3 : h'a20254828245466c61736843003401824352414d420004'
-                       h'0458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d41f'
+                       h'0458898e13a20350fa6b4a53d5ad5fdfbe9de663e4d41f'
                        h'fe04501492af1425695e48bf429b2d51f2ab450c0013a2'
-                       h'0b8202582000112233445566778899aabbccddeeff0123'
-                       h'456789abcdeffedcba98765432100c1987d00c0113a20b'
-                       h'8202582000112233445566778899aabbccddeeff012345'
-                       h'6789abcdeffedcba98765432100c1987d001f602f6' \ {
+                       h'0b58248202582000112233445566778899aabbccddeeff'
+                       h'0123456789abcdeffedcba98765432100c1987d00c0113'
+                       h'a20b58248202582000112233445566778899aabbccddee'
+                       h'ff0123456789abcdeffedcba98765432100c1987d001f6'
+                       h'02f6' \ {
             / components / 2 : h'828245466c61736843003401824352414d4200'
                                h'04' \
             [
@@ -1925,13 +1909,13 @@ Converted into the SUIT manifest, this produces:
             ],
             / common-sequence / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de6'
                                     h'63e4d41ffe04501492af1425695e48bf'
-                                    h'429b2d51f2ab450c0013a20b82025820'
-                                    h'00112233445566778899aabbccddeeff'
-                                    h'0123456789abcdeffedcba9876543210'
-                                    h'0c1987d00c0113a20b82025820001122'
-                                    h'33445566778899aabbccddeeff012345'
-                                    h'6789abcdeffedcba98765432100c1987'
-                                    h'd001f602f6' \ [
+                                    h'429b2d51f2ab450c0013a20b58248202'
+                                    h'582000112233445566778899aabbccdd'
+                                    h'eeff0123456789abcdeffedcba987654'
+                                    h'32100c1987d00c0113a20b5824820258'
+                                    h'2000112233445566778899aabbccddee'
+                                    h'ff0123456789abcdeffedcba98765432'
+                                    h'100c1987d001f602f6' \ [
                 / set-vars / 19, {
                     / vendor-id / 3 : h'fa6b4a53d5ad5fdfbe9de663e4d41f'
                                       h'fe',
@@ -1939,16 +1923,20 @@ Converted into the SUIT manifest, this produces:
                 },
                 / set-component-index / 12, 0,
                 / set-vars / 19, {
-                    / digest / 11 : [ 2,
-                        h'00112233445566778899aabbccddeeff0123456789ab'
-                        h'cdeffedcba9876543210' ],
+                    / digest / 11 : h'8202582000112233445566778899aabb'
+                                    h'ccddeeff0123456789abcdeffedcba98'
+                                    h'76543210' \
+                        [ 2, h'00112233445566778899aabbccddeeff01234567'
+                             h'89abcdeffedcba9876543210' ],
                     / size / 12 : 34768,
                 },
                 / set-component-index / 12, 1,
                 / set-vars / 19, {
-                    / digest / 11 : [ 2,
-                        h'00112233445566778899aabbccddeeff0123456789ab'
-                        h'cdeffedcba9876543210' ],
+                    / digest / 11 : h'8202582000112233445566778899aabb'
+                                    h'ccddeeff0123456789abcdeffedcba98'
+                                    h'76543210' \
+                        [ 2, h'00112233445566778899aabbccddeeff01234567'
+                             h'89abcdeffedcba9876543210' ],
                     / size / 12 : 34768,
                 },
                 / condition-vendor-id / 1, None,
@@ -1980,36 +1968,36 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 232
+Total size of outer wrapper without COSE authentication object: 236
 
 Outer:
 
 ~~~
-a201f60258e2a50101020403589fa20254828245466c61736843003401824352414d4200
-040458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425695e48bf
-429b2d51f2ab450c0013a20b8202582000112233445566778899aabbccddeeff01234567
-89abcdeffedcba98765432100c1987d00c0113a20b8202582000112233445566778899aa
-bbccddeeff0123456789abcdeffedcba98765432100c1987d001f602f6095825860c0013
-a106781b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f60c518e
-0c0003f60c0113a10a0015f603f617f6
+a201f60258e6a5010102040358a3a20254828245466c61736843003401824352414d4200
+040458898e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425695e48bf
+429b2d51f2ab450c0013a20b58248202582000112233445566778899aabbccddeeff0123
+456789abcdeffedcba98765432100c1987d00c0113a20b58248202582000112233445566
+778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d001f602f6095825
+860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e15
+f60c518e0c0003f60c0113a10a0015f603f617f6
 ~~~
 
 
 
-Total size of outer wrapper with COSE authentication object: 317
+Total size of outer wrapper with COSE authentication object: 321
 
 Signed Outer:
 
 ~~~
-a2015854d28443a10126a1044874657374206b6579f65840ef4b399c55131a51bebafb46
-da6e6b79c59417fdefea7b87e4234bf8f978094e3092c8506d8a912fbacaec5ba36524ae
-0e4bb1aa14197e4d0afe10ba47e29e5a0258e2a50101020403589fa20254828245466c61
-736843003401824352414d4200040458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d4
-1ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b8202582000112233445566
-778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c0113a20b8202
-582000112233445566778899aabbccddeeff0123456789abcdeffedcba98765432100c19
-87d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f
-66696c652e62696e15f60c518e0c0003f60c0113a10a0015f603f617f6
+a2015854d28443a10126a1044874657374206b6579f6584070eb70f2552533fc954e934f
+50f42bdd9b6f7d4fd7e114636b9cdbef2a065f9640243a7857f66c4389aea906c4f3b451
+50c8e55461e9bfda945904033fc70a840258e6a5010102040358a3a20254828245466c61
+736843003401824352414d4200040458898e13a20350fa6b4a53d5ad5fdfbe9de663e4d4
+1ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b5824820258200011223344
+5566778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c0113a20b
+58248202582000112233445566778899aabbccddeeff0123456789abcdeffedcba987654
+32100c1987d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e
+636f6d2f66696c652e62696e15f60c518e0c0003f60c0113a10a0015f603f617f6
 ~~~
 
 ## Example 4:
@@ -2095,30 +2083,31 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : h'd28443a10126a1044874657374206b6579f65840e90d'
-                        h'ab6e502bad8132adf86b4d78defaebac64fa6c6b2882'
-                        h'd12b36f492b14ce75819ed3524de4d66ddfd5e1d80a5'
-                        h'984004c1ac9b003b2da32589583a93c541dd',
-    / manifest / 2 : h'a60101020503589fa20254828245466c6173684300340182'
-                     h'4352414d4200040458858e13a20350fa6b4a53d5ad5fdfbe'
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f658403491'
+                        h'5619c1ef02b4a7ffbbb69083e8b3fb82febd9ecd6feb'
+                        h'f666d700fb981b208ec6d3df8735f36fd4a0a84e0189'
+                        h'43ef80e25f57fc130a43e57c6634f337b7fa',
+    / manifest / 2 : h'a6010102050358a3a20254828245466c6173684300340182'
+                     h'4352414d4200040458898e13a20350fa6b4a53d5ad5fdfbe'
                      h'9de663e4d41ffe04501492af1425695e48bf429b2d51f2ab'
-                     h'450c0013a20b8202582000112233445566778899aabbccdd'
-                     h'eeff0123456789abcdeffedcba98765432100c1987d00c01'
-                     h'13a20b820258200123456789abcdeffedcba987654321000'
-                     h'112233445566778899aabbccddeeff0c1987d001f602f609'
-                     h'5825860c0013a106781b687474703a2f2f6578616d706c65'
-                     h'2e636f6d2f66696c652e62696e15f60b528a0c0003f60c01'
-                     h'13a20843a101010a0016f60c458403f617f6' \
+                     h'450c0013a20b58248202582000112233445566778899aabb'
+                     h'ccddeeff0123456789abcdeffedcba98765432100c1987d0'
+                     h'0c0113a20b5824820258200123456789abcdeffedcba9876'
+                     h'54321000112233445566778899aabbccddeeff0c1987d001'
+                     h'f602f6095825860c0013a106781b687474703a2f2f657861'
+                     h'6d706c652e636f6d2f66696c652e62696e15f60b528a0c00'
+                     h'03f60c0113a20843a101010a0016f60c458403f617f6' \
     {
         / structure-version / 1 : 1,
         / sequence-number / 2 : 5,
         / common / 3 : h'a20254828245466c61736843003401824352414d420004'
-                       h'0458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d41f'
+                       h'0458898e13a20350fa6b4a53d5ad5fdfbe9de663e4d41f'
                        h'fe04501492af1425695e48bf429b2d51f2ab450c0013a2'
-                       h'0b8202582000112233445566778899aabbccddeeff0123'
-                       h'456789abcdeffedcba98765432100c1987d00c0113a20b'
-                       h'820258200123456789abcdeffedcba9876543210001122'
-                       h'33445566778899aabbccddeeff0c1987d001f602f6' \ {
+                       h'0b58248202582000112233445566778899aabbccddeeff'
+                       h'0123456789abcdeffedcba98765432100c1987d00c0113'
+                       h'a20b5824820258200123456789abcdeffedcba98765432'
+                       h'1000112233445566778899aabbccddeeff0c1987d001f6'
+                       h'02f6' \ {
             / components / 2 : h'828245466c61736843003401824352414d4200'
                                h'04' \
             [
@@ -2127,13 +2116,13 @@ Converted into the SUIT manifest, this produces:
             ],
             / common-sequence / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de6'
                                     h'63e4d41ffe04501492af1425695e48bf'
-                                    h'429b2d51f2ab450c0013a20b82025820'
-                                    h'00112233445566778899aabbccddeeff'
-                                    h'0123456789abcdeffedcba9876543210'
-                                    h'0c1987d00c0113a20b82025820012345'
-                                    h'6789abcdeffedcba9876543210001122'
-                                    h'33445566778899aabbccddeeff0c1987'
-                                    h'd001f602f6' \ [
+                                    h'429b2d51f2ab450c0013a20b58248202'
+                                    h'582000112233445566778899aabbccdd'
+                                    h'eeff0123456789abcdeffedcba987654'
+                                    h'32100c1987d00c0113a20b5824820258'
+                                    h'200123456789abcdeffedcba98765432'
+                                    h'1000112233445566778899aabbccddee'
+                                    h'ff0c1987d001f602f6' \ [
                 / set-vars / 19, {
                     / vendor-id / 3 : h'fa6b4a53d5ad5fdfbe9de663e4d41f'
                                       h'fe',
@@ -2141,16 +2130,20 @@ Converted into the SUIT manifest, this produces:
                 },
                 / set-component-index / 12, 0,
                 / set-vars / 19, {
-                    / digest / 11 : [ 2,
-                        h'00112233445566778899aabbccddeeff0123456789ab'
-                        h'cdeffedcba9876543210' ]
-                    / size / 12 : 34768
+                    / digest / 11 : h'8202582000112233445566778899aabb'
+                                    h'ccddeeff0123456789abcdeffedcba98'
+                                    h'76543210' \
+                        [ 2, h'00112233445566778899aabbccddeeff01234567'
+                             h'89abcdeffedcba9876543210' ],
+                    / size / 12 : 34768,
                 },
                 / set-component-index / 12, 1,
                 / set-vars / 19, {
-                    / digest / 11 : [ 2,
-                        h'0123456789abcdeffedcba9876543210001122334455'
-                        h'66778899aabbccddeeff' ],
+                    / digest / 11 : h'820258200123456789abcdeffedcba98'
+                                    h'7654321000112233445566778899aabb'
+                                    h'ccddeeff' \
+                        [ 2, h'0123456789abcdeffedcba987654321000112233'
+                             h'445566778899aabbccddeeff' ],
                     / size / 12 : 34768,
                 },
                 / condition-vendor-id / 1, None,
@@ -2185,37 +2178,37 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 240
+Total size of outer wrapper without COSE authentication object: 244
 
 Outer:
 
 ~~~
-a201f60258eaa60101020503589fa20254828245466c61736843003401824352414d4200
-040458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425695e48bf
-429b2d51f2ab450c0013a20b8202582000112233445566778899aabbccddeeff01234567
-89abcdeffedcba98765432100c1987d00c0113a20b820258200123456789abcdeffedcba
-987654321000112233445566778899aabbccddeeff0c1987d001f602f6095825860c0013
-a106781b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f60b528a
-0c0003f60c0113a20843a101010a0016f60c458403f617f6
+a201f60258eea6010102050358a3a20254828245466c61736843003401824352414d4200
+040458898e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425695e48bf
+429b2d51f2ab450c0013a20b58248202582000112233445566778899aabbccddeeff0123
+456789abcdeffedcba98765432100c1987d00c0113a20b5824820258200123456789abcd
+effedcba987654321000112233445566778899aabbccddeeff0c1987d001f602f6095825
+860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e15
+f60b528a0c0003f60c0113a20843a101010a0016f60c458403f617f6
 ~~~
 
 
 
-Total size of outer wrapper with COSE authentication object: 325
+Total size of outer wrapper with COSE authentication object: 329
 
 Signed Outer:
 
 ~~~
-a2015854d28443a10126a1044874657374206b6579f65840e90dab6e502bad8132adf86b
-4d78defaebac64fa6c6b2882d12b36f492b14ce75819ed3524de4d66ddfd5e1d80a59840
-04c1ac9b003b2da32589583a93c541dd0258eaa60101020503589fa20254828245466c61
-736843003401824352414d4200040458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d4
-1ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b8202582000112233445566
-778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c0113a20b8202
-58200123456789abcdeffedcba987654321000112233445566778899aabbccddeeff0c19
-87d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f
-66696c652e62696e15f60b528a0c0003f60c0113a20843a101010a0016f60c458403f617
-f6
+a2015854d28443a10126a1044874657374206b6579f6584034915619c1ef02b4a7ffbbb6
+9083e8b3fb82febd9ecd6febf666d700fb981b208ec6d3df8735f36fd4a0a84e018943ef
+80e25f57fc130a43e57c6634f337b7fa0258eea6010102050358a3a20254828245466c61
+736843003401824352414d4200040458898e13a20350fa6b4a53d5ad5fdfbe9de663e4d4
+1ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b5824820258200011223344
+5566778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c0113a20b
+5824820258200123456789abcdeffedcba987654321000112233445566778899aabbccdd
+eeff0c1987d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e
+636f6d2f66696c652e62696e15f60b528a0c0003f60c0113a20843a101010a0016f60c45
+8403f617f6
 ~~~
 
 ## Example 5:
@@ -2301,31 +2294,32 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : h'd28443a10126a1044874657374206b6579f658402282'
-                        h'c1e7770b1806afb0cf78e74003af39166b9db14b0a7c'
-                        h'172d18598c8be16e3cec48770fb8471675a5b3bab05a'
-                        h'22e370a03320a7346f252f9629c3417ed153',
-    / manifest / 2 : h'a6010102060358a2a202578282467b1b4595ab2143003401'
-                     h'8245466c6173684200040458858e13a20350fa6b4a53d5ad'
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f65840a516'
+                        h'466c62602aa017422f23d1469339e40c5cf06f9090da'
+                        h'09bd9939ecfc4c1ffe3e6ce50e0620fe9948f76552da'
+                        h'703a4c0bf2532d073be2d1f215ec83483f46',
+    / manifest / 2 : h'a6010102060358a6a202578282467b1b4595ab2143003401'
+                     h'8245466c6173684200040458898e13a20350fa6b4a53d5ad'
                      h'5fdfbe9de663e4d41ffe04501492af1425695e48bf429b2d'
-                     h'51f2ab450c0013a20b8202582000112233445566778899aa'
-                     h'bbccddeeff0123456789abcdeffedcba98765432100c1987'
-                     h'd00c0113a20b820258200123456789abcdeffedcba987654'
-                     h'321000112233445566778899aabbccddeeff0c1987d001f6'
-                     h'02f6095825860c0013a106781b687474703a2f2f6578616d'
-                     h'706c652e636f6d2f66696c652e62696e15f60b528e0c0118'
-                     h'19f60c0003f60c0113a10a0015f60c47860c0103f617f6' \
+                     h'51f2ab450c0013a20b582482025820001122334455667788'
+                     h'99aabbccddeeff0123456789abcdeffedcba98765432100c'
+                     h'1987d00c0113a20b5824820258200123456789abcdeffedc'
+                     h'ba987654321000112233445566778899aabbccddeeff0c19'
+                     h'87d001f602f6095825860c0013a106781b687474703a2f2f'
+                     h'6578616d706c652e636f6d2f66696c652e62696e15f60b52'
+                     h'8e0c011819f60c0003f60c0113a10a0015f60c47860c0103'
+                     h'f617f6' \
     {
         / structure-version / 1 : 1,
         / sequence-number / 2 : 6,
         / common / 3 : h'a202578282467b1b4595ab21430034018245466c617368'
-                       h'4200040458858e13a20350fa6b4a53d5ad5fdfbe9de663'
+                       h'4200040458898e13a20350fa6b4a53d5ad5fdfbe9de663'
                        h'e4d41ffe04501492af1425695e48bf429b2d51f2ab450c'
-                       h'0013a20b8202582000112233445566778899aabbccddee'
-                       h'ff0123456789abcdeffedcba98765432100c1987d00c01'
-                       h'13a20b820258200123456789abcdeffedcba9876543210'
-                       h'00112233445566778899aabbccddeeff0c1987d001f602'
-                       h'f6' \ {
+                       h'0013a20b58248202582000112233445566778899aabbcc'
+                       h'ddeeff0123456789abcdeffedcba98765432100c1987d0'
+                       h'0c0113a20b5824820258200123456789abcdeffedcba98'
+                       h'7654321000112233445566778899aabbccddeeff0c1987'
+                       h'd001f602f6' \ {
             / components / 2 : h'8282467b1b4595ab21430034018245466c6173'
                                h'68420004' \
             [
@@ -2334,13 +2328,13 @@ Converted into the SUIT manifest, this produces:
             ],
             / common-sequence / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de6'
                                     h'63e4d41ffe04501492af1425695e48bf'
-                                    h'429b2d51f2ab450c0013a20b82025820'
-                                    h'00112233445566778899aabbccddeeff'
-                                    h'0123456789abcdeffedcba9876543210'
-                                    h'0c1987d00c0113a20b82025820012345'
-                                    h'6789abcdeffedcba9876543210001122'
-                                    h'33445566778899aabbccddeeff0c1987'
-                                    h'd001f602f6' \ [
+                                    h'429b2d51f2ab450c0013a20b58248202'
+                                    h'582000112233445566778899aabbccdd'
+                                    h'eeff0123456789abcdeffedcba987654'
+                                    h'32100c1987d00c0113a20b5824820258'
+                                    h'200123456789abcdeffedcba98765432'
+                                    h'1000112233445566778899aabbccddee'
+                                    h'ff0c1987d001f602f6' \ [
                 / set-vars / 19, {
                     / vendor-id / 3 : h'fa6b4a53d5ad5fdfbe9de663e4d41f'
                                       h'fe',
@@ -2348,16 +2342,20 @@ Converted into the SUIT manifest, this produces:
                 },
                 / set-component-index / 12, 0,
                 / set-vars / 19, {
-                    / digest / 11 : [ 2,
-                        h'00112233445566778899aabbccddeeff0123456789ab'
-                        h'cdeffedcba9876543210' ],
+                    / digest / 11 : h'8202582000112233445566778899aabb'
+                                    h'ccddeeff0123456789abcdeffedcba98'
+                                    h'76543210' \
+                        [ 2, h'00112233445566778899aabbccddeeff01234567'
+                             h'89abcdeffedcba9876543210' ],
                     / size / 12 : 34768,
                 },
                 / set-component-index / 12, 1,
                 / set-vars / 19, {
-                    / digest / 11 : [ 2,
-                        h'0123456789abcdeffedcba9876543210001122334455'
-                        h'66778899aabbccddeeff' ],
+                    / digest / 11 : h'820258200123456789abcdeffedcba98'
+                                    h'7654321000112233445566778899aabb'
+                                    h'ccddeeff' \
+                        [ 2, h'0123456789abcdeffedcba987654321000112233'
+                             h'445566778899aabbccddeeff' ],
                     / size / 12 : 34768,
                 },
                 / condition-vendor-id / 1, None,
@@ -2394,37 +2392,37 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 245
+Total size of outer wrapper without COSE authentication object: 249
 
 Outer:
 
 ~~~
-a201f60258efa6010102060358a2a202578282467b1b4595ab21430034018245466c6173
-684200040458858e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af142569
-5e48bf429b2d51f2ab450c0013a20b8202582000112233445566778899aabbccddeeff01
-23456789abcdeffedcba98765432100c1987d00c0113a20b820258200123456789abcdef
-fedcba987654321000112233445566778899aabbccddeeff0c1987d001f602f609582586
-0c0013a106781b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f6
-0b528e0c011819f60c0003f60c0113a10a0015f60c47860c0103f617f6
+a201f60258f3a6010102060358a6a202578282467b1b4595ab21430034018245466c6173
+684200040458898e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af142569
+5e48bf429b2d51f2ab450c0013a20b58248202582000112233445566778899aabbccddee
+ff0123456789abcdeffedcba98765432100c1987d00c0113a20b58248202582001234567
+89abcdeffedcba987654321000112233445566778899aabbccddeeff0c1987d001f602f6
+095825860c0013a106781b687474703a2f2f6578616d706c652e636f6d2f66696c652e62
+696e15f60b528e0c011819f60c0003f60c0113a10a0015f60c47860c0103f617f6
 ~~~
 
 
 
-Total size of outer wrapper with COSE authentication object: 330
+Total size of outer wrapper with COSE authentication object: 334
 
 Signed Outer:
 
 ~~~
-a2015854d28443a10126a1044874657374206b6579f658402282c1e7770b1806afb0cf78
-e74003af39166b9db14b0a7c172d18598c8be16e3cec48770fb8471675a5b3bab05a22e3
-70a03320a7346f252f9629c3417ed1530258efa6010102060358a2a202578282467b1b45
-95ab21430034018245466c6173684200040458858e13a20350fa6b4a53d5ad5fdfbe9de6
-63e4d41ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b8202582000112233
-445566778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c0113a2
-0b820258200123456789abcdeffedcba987654321000112233445566778899aabbccddee
-ff0c1987d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e63
-6f6d2f66696c652e62696e15f60b528e0c011819f60c0003f60c0113a10a0015f60c4786
-0c0103f617f6
+a2015854d28443a10126a1044874657374206b6579f65840a516466c62602aa017422f23
+d1469339e40c5cf06f9090da09bd9939ecfc4c1ffe3e6ce50e0620fe9948f76552da703a
+4c0bf2532d073be2d1f215ec83483f460258f3a6010102060358a6a202578282467b1b45
+95ab21430034018245466c6173684200040458898e13a20350fa6b4a53d5ad5fdfbe9de6
+63e4d41ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b5824820258200011
+2233445566778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c01
+13a20b5824820258200123456789abcdeffedcba987654321000112233445566778899aa
+bbccddeeff0c1987d001f602f6095825860c0013a106781b687474703a2f2f6578616d70
+6c652e636f6d2f66696c652e62696e15f60b528e0c011819f60c0003f60c0113a10a0015
+f60c47860c0103f617f6
 ~~~
 
 ## Example 6:
@@ -2505,32 +2503,33 @@ Converted into the SUIT manifest, this produces:
 
 ~~~
 {
-    / auth object / 1 : h'd28443a10126a1044874657374206b6579f65840d00c'
-                        h'd62be643247904621f2956b11b97fcbcd22f87701dd9'
-                        h'008e949f8c801f55d7095b545d6db0060bd47c5f78ee'
-                        h'5cb1fea17c875a36a599aec4e8b876cfdae7',
-    / manifest / 2 : h'a5010102070358a4a20257828245466c6173684300340182'
-                     h'45466c617368430004020458878e13a20350fa6b4a53d5ad'
+    / auth object / 1 : h'd28443a10126a1044874657374206b6579f658400d44'
+                        h'c766566a88c5bbe61b544edd14effa7d53c9a6d43221'
+                        h'99c6285490460b910c8e96c6a1065cc1be9cfa438f7b'
+                        h'eeaffa9922e2ae440d6c8d0b9cb26bed2ffe',
+    / manifest / 2 : h'a5010102070358a8a20257828245466c6173684300340182'
+                     h'45466c6173684300040204588b8e13a20350fa6b4a53d5ad'
                      h'5fdfbe9de663e4d41ffe04501492af1425695e48bf429b2d'
-                     h'51f2ab450c0013a20b8202582000112233445566778899aa'
-                     h'bbccddeeff0123456789abcdeffedcba98765432100c1987'
-                     h'd00c0113a20b820258200123456789abcdeffedcba987654'
-                     h'321000112233445566778899aabbccddeeff0c1a00012c22'
-                     h'01f602f609584b8c0c0013a106781c687474703a2f2f6578'
-                     h'616d706c652e636f6d2f66696c65312e62696e0c0113a106'
-                     h'781c687474703a2f2f6578616d706c652e636f6d2f66696c'
-                     h'65322e62696e0cf515f60c49880cf503f60c0017f6' \
+                     h'51f2ab450c0013a20b582482025820001122334455667788'
+                     h'99aabbccddeeff0123456789abcdeffedcba98765432100c'
+                     h'1987d00c0113a20b5824820258200123456789abcdeffedc'
+                     h'ba987654321000112233445566778899aabbccddeeff0c1a'
+                     h'00012c2201f602f609584b8c0c0013a106781c687474703a'
+                     h'2f2f6578616d706c652e636f6d2f66696c65312e62696e0c'
+                     h'0113a106781c687474703a2f2f6578616d706c652e636f6d'
+                     h'2f66696c65322e62696e0cf515f60c49880cf503f60c0017'
+                     h'f6' \
     {
         / structure-version / 1 : 1,
         / sequence-number / 2 : 7,
         / common / 3 : h'a20257828245466c617368430034018245466c61736843'
-                       h'0004020458878e13a20350fa6b4a53d5ad5fdfbe9de663'
+                       h'00040204588b8e13a20350fa6b4a53d5ad5fdfbe9de663'
                        h'e4d41ffe04501492af1425695e48bf429b2d51f2ab450c'
-                       h'0013a20b8202582000112233445566778899aabbccddee'
-                       h'ff0123456789abcdeffedcba98765432100c1987d00c01'
-                       h'13a20b820258200123456789abcdeffedcba9876543210'
-                       h'00112233445566778899aabbccddeeff0c1a00012c2201'
-                       h'f602f6' \ {
+                       h'0013a20b58248202582000112233445566778899aabbcc'
+                       h'ddeeff0123456789abcdeffedcba98765432100c1987d0'
+                       h'0c0113a20b5824820258200123456789abcdeffedcba98'
+                       h'7654321000112233445566778899aabbccddeeff0c1a00'
+                       h'012c2201f602f6' \ {
             / components / 2 : h'828245466c617368430034018245466c617368'
                                h'43000402' \
             [
@@ -2539,13 +2538,13 @@ Converted into the SUIT manifest, this produces:
             ],
             / common-sequence / 4 : h'8e13a20350fa6b4a53d5ad5fdfbe9de6'
                                     h'63e4d41ffe04501492af1425695e48bf'
-                                    h'429b2d51f2ab450c0013a20b82025820'
-                                    h'00112233445566778899aabbccddeeff'
-                                    h'0123456789abcdeffedcba9876543210'
-                                    h'0c1987d00c0113a20b82025820012345'
-                                    h'6789abcdeffedcba9876543210001122'
-                                    h'33445566778899aabbccddeeff0c1a00'
-                                    h'012c2201f602f6' \ [
+                                    h'429b2d51f2ab450c0013a20b58248202'
+                                    h'582000112233445566778899aabbccdd'
+                                    h'eeff0123456789abcdeffedcba987654'
+                                    h'32100c1987d00c0113a20b5824820258'
+                                    h'200123456789abcdeffedcba98765432'
+                                    h'1000112233445566778899aabbccddee'
+                                    h'ff0c1a00012c2201f602f6' \ [
                 / set-vars / 19, {
                     / vendor-id / 3 : h'fa6b4a53d5ad5fdfbe9de663e4d41f'
                                       h'fe',
@@ -2553,16 +2552,20 @@ Converted into the SUIT manifest, this produces:
                 },
                 / set-component-index / 12, 0,
                 / set-vars / 19, {
-                    / digest / 11 : [ 2,
-                        h'00112233445566778899aabbccddeeff0123456789ab'
-                        h'cdeffedcba9876543210' ],
+                    / digest / 11 : h'8202582000112233445566778899aabb'
+                                    h'ccddeeff0123456789abcdeffedcba98'
+                                    h'76543210' \
+                        [ 2, h'00112233445566778899aabbccddeeff01234567'
+                             h'89abcdeffedcba9876543210' ],
                     / size / 12 : 34768,
                 },
                 / set-component-index / 12, 1,
                 / set-vars / 19, {
-                    / digest / 11 : [ 2,
-                        h'0123456789abcdeffedcba9876543210001122334455'
-                        h'66778899aabbccddeeff' ],
+                    / digest / 11 : h'820258200123456789abcdeffedcba98'
+                                    h'7654321000112233445566778899aabb'
+                                    h'ccddeeff' \
+                        [ 2, h'0123456789abcdeffedcba987654321000112233'
+                             h'445566778899aabbccddeeff' ],
                     / size / 12 : 76834,
                 },
                 / condition-vendor-id / 1, None,
@@ -2575,11 +2578,11 @@ Converted into the SUIT manifest, this produces:
                             h'6d2f66696c65322e62696e0cf515f6' \ [
             / set-component-index / 12, 0,
             / set-vars / 19, {
-                / uri / 6 : http://example.com/file1.bin
+                / uri / 6 : http://example.com/file1.bin,
             },
             / set-component-index / 12, 1,
             / set-vars / 19, {
-                / uri / 6 : http://example.com/file2.bin
+                / uri / 6 : http://example.com/file2.bin,
             },
             / set-component-index / 12, True,
             / fetch / 21, None,
@@ -2596,39 +2599,40 @@ Converted into the SUIT manifest, this produces:
 
 
 
-Total size of outer wrapper without COSE authentication object: 268
+Total size of outer wrapper without COSE authentication object: 272
 
 Outer:
 
 ~~~
-a201f602590105a5010102070358a4a20257828245466c617368430034018245466c6173
-68430004020458878e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425
-695e48bf429b2d51f2ab450c0013a20b8202582000112233445566778899aabbccddeeff
-0123456789abcdeffedcba98765432100c1987d00c0113a20b820258200123456789abcd
-effedcba987654321000112233445566778899aabbccddeeff0c1a00012c2201f602f609
-584b8c0c0013a106781c687474703a2f2f6578616d706c652e636f6d2f66696c65312e62
-696e0c0113a106781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e6269
-6e0cf515f60c49880cf503f60c0017f6
+a201f602590109a5010102070358a8a20257828245466c617368430034018245466c6173
+684300040204588b8e13a20350fa6b4a53d5ad5fdfbe9de663e4d41ffe04501492af1425
+695e48bf429b2d51f2ab450c0013a20b58248202582000112233445566778899aabbccdd
+eeff0123456789abcdeffedcba98765432100c1987d00c0113a20b582482025820012345
+6789abcdeffedcba987654321000112233445566778899aabbccddeeff0c1a00012c2201
+f602f609584b8c0c0013a106781c687474703a2f2f6578616d706c652e636f6d2f66696c
+65312e62696e0c0113a106781c687474703a2f2f6578616d706c652e636f6d2f66696c65
+322e62696e0cf515f60c49880cf503f60c0017f6
 ~~~
 
 
 
-Total size of outer wrapper with COSE authentication object: 353
+Total size of outer wrapper with COSE authentication object: 357
 
 Signed Outer:
 
 ~~~
-a2015854d28443a10126a1044874657374206b6579f65840d00cd62be643247904621f29
-56b11b97fcbcd22f87701dd9008e949f8c801f55d7095b545d6db0060bd47c5f78ee5cb1
-fea17c875a36a599aec4e8b876cfdae702590105a5010102070358a4a20257828245466c
-617368430034018245466c617368430004020458878e13a20350fa6b4a53d5ad5fdfbe9d
-e663e4d41ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b82025820001122
-33445566778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c0113
-a20b820258200123456789abcdeffedcba987654321000112233445566778899aabbccdd
-eeff0c1a00012c2201f602f609584b8c0c0013a106781c687474703a2f2f6578616d706c
-652e636f6d2f66696c65312e62696e0c0113a106781c687474703a2f2f6578616d706c65
-2e636f6d2f66696c65322e62696e0cf515f60c49880cf503f60c0017f6
+a2015854d28443a10126a1044874657374206b6579f658400d44c766566a88c5bbe61b54
+4edd14effa7d53c9a6d4322199c6285490460b910c8e96c6a1065cc1be9cfa438f7beeaf
+fa9922e2ae440d6c8d0b9cb26bed2ffe02590109a5010102070358a8a20257828245466c
+617368430034018245466c6173684300040204588b8e13a20350fa6b4a53d5ad5fdfbe9d
+e663e4d41ffe04501492af1425695e48bf429b2d51f2ab450c0013a20b58248202582000
+112233445566778899aabbccddeeff0123456789abcdeffedcba98765432100c1987d00c
+0113a20b5824820258200123456789abcdeffedcba987654321000112233445566778899
+aabbccddeeff0c1a00012c2201f602f609584b8c0c0013a106781c687474703a2f2f6578
+616d706c652e636f6d2f66696c65312e62696e0c0113a106781c687474703a2f2f657861
+6d706c652e636f6d2f66696c65322e62696e0cf515f60c49880cf503f60c0017f6
 ~~~
+
 
 #  IANA Considerations
 
@@ -2642,7 +2646,7 @@ Several registries will be required for:
 
 #  Security Considerations
 
-This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A more detailed discussion about security can be found in the architecture document {{Architecture}} and in {{Information}}.
+This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A more detailed discussion about security can be found in the architecture document {{I-D.ietf-suit-architecture}} and in {{I-D.ietf-suit-information-model}}.
 
 # Mailing List Information
 

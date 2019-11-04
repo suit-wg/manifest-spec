@@ -32,7 +32,7 @@ COSE_Encrypt0_Tagged = any
 
 SUIT_Digest = [
   suit-digest-algorithm-id : $suit-digest-algorithm-ids,
-  suit-digest-bytes : bytes,
+  suit-digest-bytes : bstr,
   ? suit-digest-parameters : any
 ]
 
@@ -46,18 +46,27 @@ suit-digest-algorithm-ids /= algorithm-id-sha3-256
 suit-digest-algorithm-ids /= algorithm-id-sha3-384
 suit-digest-algorithm-ids /= algorithm-id-sha3-512
 
+algorithm-id-sha224 = 1
+algorithm-id-sha256 = 2
+algorithm-id-sha384 = 3
+algorithm-id-sha512 = 4
+algorithm-id-sha3-224 = 5
+algorithm-id-sha3-256 = 6
+algorithm-id-sha3-384 = 7
+algorithm-id-sha3-512 = 8
+
 SUIT_Manifest = {
     suit-manifest-version         => 1,
     suit-manifest-sequence-number => uint,
     ? suit-common                 => bstr .cbor SUIT_Common,
     ? suit-dependency-resolution  => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
     ? suit-payload-fetch          => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
-    ? suit-install                => SUIT_Digest / bstr .cbor SUIT_Command_Sequence
-    ? suit-validate               => bstr .cbor SUIT_Command_Sequence
-    ? suit-load                   => bstr .cbor SUIT_Command_Sequence
-    ? suit-run                    => bstr .cbor SUIT_Command_Sequence
-    ? suit-text                   => SUIT_Digest / bstr .cbor SUIT_Text_Map
-    ? suit-coswid                 => SUIT_Digest / bstr .cbor concise-software-identity
+    ? suit-install                => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
+    ? suit-validate               => bstr .cbor SUIT_Command_Sequence,
+    ? suit-load                   => bstr .cbor SUIT_Command_Sequence,
+    ? suit-run                    => bstr .cbor SUIT_Command_Sequence,
+    ? suit-text                   => SUIT_Digest,
+    ? suit-coswid                 => SUIT_Digest / bstr .cbor concise-software-identity,
 }
 
 SUIT_Common = {
@@ -105,8 +114,8 @@ SUIT_Condition //= (suit-condition-custom,            bstr)
 RFC4122_UUID = bstr .size 16
 
 SUIT_Condition_Version_Argument = [
-    suit-condition-version-comparison: SUIT_Condition_Version_Comparison_Types,
-    suit-condition-version-comparison: SUIT_Condition_Version_Comparison_Value
+    suit-condition-version-comparison-type: SUIT_Condition_Version_Comparison_Types,
+    suit-condition-version-comparison-value: SUIT_Condition_Version_Comparison_Value
 ]
 SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-greater
 SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-greater-equal
@@ -165,26 +174,26 @@ SUIT_Wait_Event_Argument_Time_Of_Day = uint ; Time of Day (seconds since 00:00:0
 SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 
 SUIT_Parameters //= (suit-parameter-strict-order => bool)
-SUIT_Parameters //= (suit-parameter-coerce-condition-failure => bool)
+SUIT_Parameters //= (suit-parameter-soft-failure => bool)
 SUIT_Parameters //= (suit-parameter-vendor-id => bstr)
 SUIT_Parameters //= (suit-parameter-class-id => bstr)
 SUIT_Parameters //= (suit-parameter-device-id => bstr)
-SUIT_Parameters //= (suit-parameter-uri => bstr)
+SUIT_Parameters //= (suit-parameter-uri => tstr)
 SUIT_Parameters //= (suit-parameter-encryption-info => bstr .cbor SUIT_Encryption_Info)
 SUIT_Parameters //= (suit-parameter-compression-info => bstr .cbor SUIT_Compression_Info)
 SUIT_Parameters //= (suit-parameter-unpack-info => bstr .cbor SUIT_Unpack_Info)
-SUIT_Parameters //= (suit-parameter-source-component => bstr .cbor SUIT_Component_Identifier)
+SUIT_Parameters //= (suit-parameter-source-component => uint)
 SUIT_Parameters //= (suit-parameter-image-digest => bstr .cbor SUIT_Digest)
 SUIT_Parameters //= (suit-parameter-image-size => uint)
 SUIT_Parameters //= (suit-parameter-uri-list => bstr .cbor SUIT_Component_URI_List)
-SUIT_Parameters //= (suit-parameter-custom => int/bool/bstr)
+SUIT_Parameters //= (suit-parameter-custom => int/bool/tstr/bstr)
 
 SUIT_Component_URI_List = [ + [priority: int, uri: tstr] ]
 SUIT_Priority_Parameter_List = [ + [priority: int, parameters: { + SUIT_Parameters }] ]
 
 SUIT_Encryption_Info = COSE_Encrypt_Tagged/COSE_Encrypt0_Tagged
 SUIT_Compression_Info = {
-    suit-compression-algorithm => SUIT_Compression_Algorithms
+    suit-compression-algorithm => SUIT_Compression_Algorithms,
     ? suit-compression-parameters => bstr
 }
 
@@ -200,7 +209,7 @@ SUIT_Compression_Algorithm_lz4 = 4
 SUIT_Compression_Algorithm_lzma = 7
 
 SUIT_Unpack_Info = {
-    suit-unpack-algorithm => SUIT_Unpack_Algorithms
+    suit-unpack-algorithm => SUIT_Unpack_Algorithms,
     ? suit-unpack-parameters => bstr
 }
 
@@ -286,7 +295,7 @@ suit-wait-event-day-of-week = 7
 suit-wait-event-authorisation = 8
 
 suit-parameter-strict-order = 1
-suit-parameter-coerce-condition-failure = 2
+suit-parameter-soft-failure = 2
 suit-parameter-vendor-id = 3
 suit-parameter-class-id = 4
 suit-parameter-device-id = 5
@@ -309,3 +318,14 @@ suit-compression-parameters = 2
 
 suit-unpack-algorithm  = 1
 suit-unpack-parameters = 2
+
+suit-text-manifest-description  = 1
+suit-text-update-description    = 2
+suit-text-vendor-name           = 3
+suit-text-model-name            = 4
+suit-text-vendor-domain         = 5
+suit-text-model-info            = 6
+suit-text-component-description = 7
+suit-text-manifest-json-source  = 8
+suit-text-manifest-yaml-source  = 9
+suit-text-version-dependencies  = 10
