@@ -5,7 +5,7 @@
 <head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 
-  <title>SUIT CBOR manifest serialisation format</title>
+  <title>A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest</title>
 
   <style type="text/css" title="Xml2Rfc (sans serif)">
   /*<![CDATA[*/
@@ -489,7 +489,7 @@
 <td class="right">H. Tschofenig</td>
 </tr>
 <tr>
-<td class="left">Intended status: Informational</td>
+<td class="left">Intended status: Standards Track</td>
 <td class="right">Arm Limited</td>
 </tr>
 <tr>
@@ -509,7 +509,7 @@
     </tbody>
   </table>
 
-  <p class="title">SUIT CBOR manifest serialisation format<br />
+  <p class="title">A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest<br />
   <span class="filename">draft-ietf-suit-manifest-02</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
@@ -713,9 +713,9 @@
 <a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
 </h1>
 <p id="rfc.section.1.p.1">A firmware update mechanism is an essential security feature for IoT devices to deal with vulnerabilities. While the transport of firmware images to the devices themselves is important there are already various techniques available, such as the Lightweight Machine-to-Machine (LwM2M) protocol offering device management of IoT devices. Equally important is the inclusion of meta-data about the conveyed firmware image (in the form of a manifest) and the use of end-to-end security protection to detect modifications and (optionally) to make reverse engineering more difficult. End-to-end security allows the author, who builds the firmware image, to be sure that no other party (including potential adversaries) can install firmware updates on IoT devices without adequate privileges. This authorization process is ensured by the use of dedicated symmetric or asymmetric keys installed on the IoT device: for use cases where only integrity protection is required it is sufficient to install a trust anchor on the IoT device. For confidentiality protected firmware images it is additionally required to install either one or multiple symmetric or asymmetric keys on the IoT device. Starting security protection at the author is a risk mitigation technique so firmware images and manifests can be stored on untrusted respositories; it also reduces the scope of a compromise of any repository or intermediate system to be no worse than a denial of service.</p>
-<p id="rfc.section.1.p.2">It is assumed that the reader is familiar with the high-level firmware update architecture <a href="#Architecture" class="xref">[Architecture]</a>.</p>
+<p id="rfc.section.1.p.2">It is assumed that the reader is familiar with the high-level firmware update architecture <a href="#I-D.ietf-suit-architecture" class="xref">[I-D.ietf-suit-architecture]</a>.</p>
 <p id="rfc.section.1.p.3">The SUIT manifest is heavily optimised for consumption by constrained devices. This means that it is not constructed as a conventional descriptive document. Instead, of describing what an update IS, it describes what a recipient should DO.</p>
-<p id="rfc.section.1.p.4">While the SUIT manifest is informed by and optimised for firmware update use cases, there is nothing in the <a href="#Information" class="xref">[Information]</a> that restricts its use to only firmware use cases. Software update and delivery of arbitrary data can equally be managed by SUIT-based metadata.</p>
+<p id="rfc.section.1.p.4">While the SUIT manifest is informed by and optimised for firmware update use cases, there is nothing in the <a href="#I-D.ietf-suit-information-model" class="xref">[I-D.ietf-suit-information-model]</a> that restricts its use to only firmware use cases. Software update and delivery of arbitrary data can equally be managed by SUIT-based metadata.</p>
 <h1 id="rfc.section.2">
 <a href="#rfc.section.2">2.</a> <a href="#conventions-and-terminology" id="conventions-and-terminology">Conventions and Terminology</a>
 </h1>
@@ -746,7 +746,7 @@
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#background" id="background">Background</a>
 </h1>
-<p id="rfc.section.4.p.1">Distributing firmware updates to diverse devices with diverse trust anchors in a coordinated system presents unique challenges. Devices have a broad set of constraints, requiring different metadata to make appropriate decisions. There may be many actors in production IoT systems, each of whom has some authority. Distributing firmware in such a multi-party environment presents additional challenges. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in <a href="#Architecture" class="xref">[Architecture]</a>.</p>
+<p id="rfc.section.4.p.1">Distributing firmware updates to diverse devices with diverse trust anchors in a coordinated system presents unique challenges. Devices have a broad set of constraints, requiring different metadata to make appropriate decisions. There may be many actors in production IoT systems, each of whom has some authority. Distributing firmware in such a multi-party environment presents additional challenges. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in <a href="#I-D.ietf-suit-architecture" class="xref">[I-D.ietf-suit-architecture]</a>.</p>
 <h2 id="rfc.section.4.1">
 <a href="#rfc.section.4.1">4.1.</a> <a href="#landscape" id="landscape">Landscape</a>
 </h2>
@@ -809,7 +809,7 @@
 <p></p>
 
 <ol>
-<li>Meet the requirements defined in <a href="#Information" class="xref">[Information]</a>.</li>
+<li>Meet the requirements defined in <a href="#I-D.ietf-suit-information-model" class="xref">[I-D.ietf-suit-information-model]</a>.</li>
 <li>Simple to parse on a constrained node</li>
 <li>Simple to process on a constrained node</li>
 <li>Compact encoding</li>
@@ -2452,7 +2452,6 @@ SUIT_Directive //= (suit-directive-set-component-index,      uint/bool)
 SUIT_Directive //= (suit-directive-set-dependency-index,     uint/bool)
 SUIT_Directive //= (suit-directive-run-sequence,             bstr .cbor SUIT_Command_Sequence)
 SUIT_Directive //= (suit-directive-try-each,                 SUIT_Directive_Try_Each_Argument)
-SUIT_Directive //= (suit-directive-for-each-component,       SUIT_Directive_For_Each_Component_Argument)
 SUIT_Directive //= (suit-directive-process-dependency,       nil)
 SUIT_Directive //= (suit-directive-set-parameters,           {+ SUIT_Parameters})
 SUIT_Directive //= (suit-directive-override-parameters,      {+ SUIT_Parameters})
@@ -3778,7 +3777,7 @@ aabbccddeeff0c1a00012c2201f602f609584b8c0c0013a106781c687474703a2f2f6578
 <h1 id="rfc.section.14">
 <a href="#rfc.section.14">14.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
-<p id="rfc.section.14.p.1">This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A more detailed discussion about security can be found in the architecture document <a href="#Architecture" class="xref">[Architecture]</a> and in <a href="#Information" class="xref">[Information]</a>.</p>
+<p id="rfc.section.14.p.1">This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A more detailed discussion about security can be found in the architecture document <a href="#I-D.ietf-suit-architecture" class="xref">[I-D.ietf-suit-architecture]</a> and in <a href="#I-D.ietf-suit-information-model" class="xref">[I-D.ietf-suit-information-model]</a>.</p>
 <h1 id="rfc.section.15">
 <a href="#rfc.section.15">15.</a> <a href="#mailing-list-information" id="mailing-list-information">Mailing List Information</a>
 </h1>
@@ -3835,14 +3834,14 @@ aabbccddeeff0c1a00012c2201f602f609584b8c0c0013a106781c687474703a2f2f6578
 <a href="#rfc.references.2">17.2.</a> Informative References</h2>
 <table><tbody>
 <tr>
-<td class="reference"><b id="Architecture">[Architecture]</b></td>
+<td class="reference"><b id="I-D.ietf-suit-architecture">[I-D.ietf-suit-architecture]</b></td>
 <td class="top">
-<a title="ARM Limited">Moran, B.</a>, "<a href="https://tools.ietf.org/html/draft-ietf-suit-architecture-02">A Firmware Update Architecture for Internet of Things Devices</a>", January 2019.</td>
+<a>Moran, B.</a>, <a>Meriac, M.</a>, <a>Tschofenig, H.</a> and <a>D. Brown</a>, "<a href="https://tools.ietf.org/html/draft-ietf-suit-architecture-07">A Firmware Update Architecture for Internet of Things Devices</a>", Internet-Draft draft-ietf-suit-architecture-07, October 2019.</td>
 </tr>
 <tr>
-<td class="reference"><b id="Information">[Information]</b></td>
+<td class="reference"><b id="I-D.ietf-suit-information-model">[I-D.ietf-suit-information-model]</b></td>
 <td class="top">
-<a title="ARM Limited">Moran, B.</a>, "<a href="https://tools.ietf.org/html/draft-ietf-suit-information-model-02">Firmware Updates for Internet of Things Devices - An Information Model for Manifests</a>", January 2019.</td>
+<a>Moran, B.</a>, <a>Tschofenig, H.</a> and <a>H. Birkholz</a>, "<a href="https://tools.ietf.org/html/draft-ietf-suit-information-model-04">An Information Model for Firmware Updates in IoT Devices</a>", Internet-Draft draft-ietf-suit-information-model-04, October 2019.</td>
 </tr>
 </tbody></table>
 <h1 id="rfc.authors"><a href="#rfc.authors">Authors' Addresses</a></h1>

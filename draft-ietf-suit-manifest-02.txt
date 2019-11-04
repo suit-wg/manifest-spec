@@ -4,13 +4,14 @@
 
 SUIT                                                            B. Moran
 Internet-Draft                                             H. Tschofenig
-Intended status: Informational                               Arm Limited
+Intended status: Standards Track                             Arm Limited
 Expires: 7 May 2020                                          H. Birkholz
                                                           Fraunhofer SIT
                                                          4 November 2019
 
 
-                SUIT CBOR manifest serialisation format
+A Concise Binary Object Representation (CBOR)-based Serialization Format
+    for the Software Updates for Internet of Things (SUIT) Manifest
                       draft-ietf-suit-manifest-02
 
 Abstract
@@ -181,7 +182,7 @@ Table of Contents
    intermediate system to be no worse than a denial of service.
 
    It is assumed that the reader is familiar with the high-level
-   firmware update architecture [Architecture].
+   firmware update architecture [I-D.ietf-suit-architecture].
 
    The SUIT manifest is heavily optimised for consumption by constrained
    devices.  This means that it is not constructed as a conventional
@@ -189,10 +190,10 @@ Table of Contents
    describes what a recipient should DO.
 
    While the SUIT manifest is informed by and optimised for firmware
-   update use cases, there is nothing in the [Information] that
-   restricts its use to only firmware use cases.  Software update and
-   delivery of arbitrary data can equally be managed by SUIT-based
-   metadata.
+   update use cases, there is nothing in the [I-D.ietf-suit-information-
+   model] that restricts its use to only firmware use cases.  Software
+   update and delivery of arbitrary data can equally be managed by SUIT-
+   based metadata.
 
 2.  Conventions and Terminology
 
@@ -269,7 +270,7 @@ Table of Contents
    party requires a different subset of data.  Some data may not be
    accessible to all parties.  Multiple signatures may be required from
    parties with different authorities.  This topic is covered in more
-   depth in [Architecture].
+   depth in [I-D.ietf-suit-architecture].
 
 4.1.  Landscape
 
@@ -359,7 +360,8 @@ Table of Contents
    The manifest described in this document is intended to meet several
    goals, as described below.
 
-   1.  Meet the requirements defined in [Information].
+   1.  Meet the requirements defined in [I-D.ietf-suit-information-
+       model].
 
    2.  Simple to parse on a constrained node
 
@@ -2568,7 +2570,6 @@ Table of Contents
    SUIT_Directive //= (suit-directive-set-dependency-index,     uint/bool)
    SUIT_Directive //= (suit-directive-run-sequence,             bstr .cbor SUIT_Command_Sequence)
    SUIT_Directive //= (suit-directive-try-each,                 SUIT_Directive_Try_Each_Argument)
-   SUIT_Directive //= (suit-directive-for-each-component,       SUIT_Directive_For_Each_Component_Argument)
    SUIT_Directive //= (suit-directive-process-dependency,       nil)
    SUIT_Directive //= (suit-directive-set-parameters,           {+ SUIT_Parameters})
    SUIT_Directive //= (suit-directive-override-parameters,      {+ SUIT_Parameters})
@@ -3917,7 +3918,8 @@ Table of Contents
    firmware images and as such it is part of a larger solution for
    offering a standardized way of delivering firmware updates to IoT
    devices.  A more detailed discussion about security can be found in
-   the architecture document [Architecture] and in [Information].
+   the architecture document [I-D.ietf-suit-architecture] and in [I-
+   D.ietf-suit-information-model].
 
 15.  Mailing List Information
 
@@ -3986,18 +3988,21 @@ Table of Contents
 
 17.2.  Informative References
 
-   [Architecture]
-              Moran, B., "A Firmware Update Architecture for Internet of
-              Things Devices", January 2019,
-              <https://tools.ietf.org/html/draft-ietf-suit-architecture-
-              02>.
+   [I-D.ietf-suit-architecture]
+              Moran, B., Meriac, M., Tschofenig, H., and D. Brown, "A
+              Firmware Update Architecture for Internet of Things
+              Devices", draft-ietf-suit-architecture-07 (work in
+              progress), 21 October 2019,
+              <http://www.ietf.org/internet-drafts/draft-ietf-suit-
+              architecture-07.txt>.
 
-   [Information]
-              Moran, B., "Firmware Updates for Internet of Things
-              Devices - An Information Model for Manifests", January
-              2019,
-              <https://tools.ietf.org/html/draft-ietf-suit-information-
-              model-02>.
+   [I-D.ietf-suit-information-model]
+              Moran, B., Tschofenig, H., and H. Birkholz, "An
+              Information Model for Firmware Updates in IoT Devices",
+              draft-ietf-suit-information-model-04 (work in progress),
+              30 October 2019,
+              <http://www.ietf.org/internet-drafts/draft-ietf-suit-
+              information-model-04.txt>.
 
 Authors' Addresses
 
