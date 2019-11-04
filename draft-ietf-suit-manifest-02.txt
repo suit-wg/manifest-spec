@@ -2476,7 +2476,7 @@ Table of Contents
 
    SUIT_Digest = [
      suit-digest-algorithm-id : $suit-digest-algorithm-ids,
-     suit-digest-bytes : bytes,
+     suit-digest-bytes : bstr,
      ? suit-digest-parameters : any
    ]
 
@@ -2489,6 +2489,15 @@ Table of Contents
    suit-digest-algorithm-ids /= algorithm-id-sha3-256
    suit-digest-algorithm-ids /= algorithm-id-sha3-384
    suit-digest-algorithm-ids /= algorithm-id-sha3-512
+
+   algorithm-id-sha224 = 1
+   algorithm-id-sha256 = 2
+   algorithm-id-sha384 = 3
+   algorithm-id-sha512 = 4
+   algorithm-id-sha3-224 = 5
+   algorithm-id-sha3-256 = 6
+   algorithm-id-sha3-384 = 7
+   algorithm-id-sha3-512 = 8
 
    SUIT_Manifest = {
        suit-manifest-version         => 1,
@@ -2549,8 +2558,8 @@ Table of Contents
    RFC4122_UUID = bstr .size 16
 
    SUIT_Condition_Version_Argument = [
-       suit-condition-version-comparison: SUIT_Condition_Version_Comparison_Types,
-       suit-condition-version-comparison: SUIT_Condition_Version_Comparison_Value
+       suit-condition-version-comparison-type: SUIT_Condition_Version_Comparison_Types,
+       suit-condition-version-comparison-value: SUIT_Condition_Version_Comparison_Value
    ]
    SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-greater
    SUIT_Condition_Version_Comparison_Types /= suit-condition-version-comparison-greater-equal
@@ -2628,7 +2637,7 @@ Table of Contents
 
    SUIT_Encryption_Info = COSE_Encrypt_Tagged/COSE_Encrypt0_Tagged
    SUIT_Compression_Info = {
-       suit-compression-algorithm => SUIT_Compression_Algorithms
+       suit-compression-algorithm => SUIT_Compression_Algorithms,
        ? suit-compression-parameters => bstr
    }
 
@@ -2644,7 +2653,7 @@ Table of Contents
    SUIT_Compression_Algorithm_lzma = 7
 
    SUIT_Unpack_Info = {
-       suit-unpack-algorithm => SUIT_Unpack_Algorithms
+       suit-unpack-algorithm => SUIT_Unpack_Algorithms,
        ? suit-unpack-parameters => bstr
    }
 
