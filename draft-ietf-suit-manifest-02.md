@@ -531,8 +531,8 @@ SUIT_Outer_Wrapper = {
     ? suit-dependency-resolution  => bstr .cbor SUIT_Command_Sequence,
     ? suit-payload-fetch          => bstr .cbor SUIT_Command_Sequence,
     ? suit-install                => bstr .cbor SUIT_Command_Sequence,
-    ? suit-text-external          => bstr .cbor SUIT_Text_Info,
-    ? suit-coswid-external        => bstr .cbor COSWID
+    ? suit-text                   => bstr .cbor SUIT_Text_Map,
+    ? suit-coswid                 => bstr .cbor COSWID
 }
 
 SUIT_Authentication_Wrapper = [ + (COSE_Mac_Tagged / COSE_Sign_Tagged /
@@ -592,12 +592,12 @@ SUIT_Manifest = {
     suit-common                   => bstr .cbor SUIT_Common,
     ? suit-dependency-resolution  => Digest / bstr .cbor SUIT_Command_Sequence,
     ? suit-payload-fetch          => Digest / bstr .cbor SUIT_Command_Sequence,
-    ? suit-install                => Digest / bstr .cbor SUIT_Command_Sequence
-    ? suit-validate               => bstr .cbor SUIT_Command_Sequence
-    ? suit-load                   => bstr .cbor SUIT_Command_Sequence
-    ? suit-run                    => bstr .cbor SUIT_Command_Sequence
-    ? suit-text-info              => Digest / bstr .cbor SUIT_Text_Map
-    ? suit-coswid                 => Digest / bstr .cbor COSWID
+    ? suit-install                => Digest / bstr .cbor SUIT_Command_Sequence,
+    ? suit-validate               => bstr .cbor SUIT_Command_Sequence,
+    ? suit-load                   => bstr .cbor SUIT_Command_Sequence,
+    ? suit-run                    => bstr .cbor SUIT_Command_Sequence,
+    ? suit-text                   => Digest,
+    ? suit-coswid                 => Digest / bstr .cbor concise-software-identity,
 }
 
 SUIT_Common = {
@@ -638,7 +638,7 @@ suit-load is a SUIT_Command_Sequence to execute in order to prepare a payload fo
 
 suit-run is a SUIT_Command_Sequence to execute in order to run an image. suit-run typically contains a single instruction: either the "run" directive for the bootable manifest or the "process dependencies" directive for any dependents of the bootable manifest. suit-run is OPTIONAL. Only one manifest in an update may contain the "run" directive.
 
-suit-text-info is a digest that uniquely identifies the content of the Text that is packaged in the OuterWrapper. text is OPTIONAL.
+suit-text is a digest that uniquely identifies the content of the Text that is packaged in the OuterWrapper. text is OPTIONAL.
 
 suit-coswid is a digest that uniquely identifies the content of the concise-software-identifier that is packaged in the OuterWrapper. coswid is OPTIONAL.
 
@@ -676,23 +676,23 @@ Many conditions and directives require additional information. That information 
 
 The defined manifest parameters are described below.
 
-Parameter Code | CBOR Type | Default | Scope | Name | Description
----|---|---|---|---|---
-1 | boolean | True | Global | Strict Order | Requires that the manifest is processed in a strictly linear fashion. Set to 0 to enable parallel handling of manifest directives.
-2 | boolean | False | Command Segment | Coerce Condition Failure | Coerces the success code of a command segment to success even when aborted due to a condition failure.
-3 | bstr | nil | Component/Global | Vendor ID | A RFC4122 UUID representing the vendor of the device or component
-4 | bstr | nil | Component/Global | Class ID | A RFC4122 UUID representing the class of the device or component
-5 | bstr | nil | Component/Global | Device ID | A RFC4122 UUID representing the device or component
-6 | tstr | nil | Component/Dependency | URI | A URI from which to fetch a resource
-7 | bstr | nil | Component/Dependency | Encryption Info | A COSE object defining the encryption mode of a resource
-8 | bstr | nil | Component | Compression Info | The information required to decompress the image
-9 | bstr | nil | Component | Unpack Info | The information required to unpack the image
-10 | uint | nil | Component | Source Component | A Component Index
-11 | bstr | nil | Component/Dependency | Image Digest | A SUIT_Digest
-12 | uint | nil | Component/Dependency | Image Size | Integer size
-24 | bstr | nil | Component/Dependency | URI List | A CBOR encoded list of ranked URIs
-25 | boolean | False | Component/Dependency | URI List Append | A CBOR encoded list of ranked URIs
-nint | int/bstr | nil | Custom | Custom Parameter | Application-defined parameter
+ID | CBOR Type | Scope | Name | Description
+---|---|---|---|---
+1 | boolean | Global | Strict Order | Requires that the manifest is processed in a strictly linear fashion. Set to 0 to enable parallel handling of manifest directives.
+2 | boolean | Command Segment | Soft Failure | Condition failures only terminate the current command segment.
+3 | bstr | Component/Global | Vendor ID | A RFC4122 UUID representing the vendor of the device or component
+4 | bstr | Component/Global | Class ID | A RFC4122 UUID representing the class of the device or component
+5 | bstr | Component/Global | Device ID | A RFC4122 UUID representing the device or component
+6 | tstr | Component/Dependency | URI | A URI from which to fetch a resource
+7 | bstr | Component/Dependency | Encryption Info | A COSE object defining the encryption mode of a resource
+8 | bstr | Component | Compression Info | The information required to decompress the image
+9 | bstr | Component | Unpack Info | The information required to unpack the image
+10 | uint | Component | Source Component | A Component Index
+11 | bstr | Component/Dependency | Image Digest | A SUIT_Digest
+12 | uint | Component/Dependency | Image Size | Integer size
+24 | bstr | Component/Dependency | URI List | A CBOR encoded list of ranked URIs
+25 | boolean | Component/Dependency | URI List Append | A CBOR encoded list of ranked URIs
+nint | int/bstr | Custom | Custom Parameter | Application-defined parameter
 
 CBOR-encoded object parameters are still wrapped in a bstr. This is because it allows a parser that is aggregating parameters to reference the object with a single pointer and traverse it without understanding the contents. This is important for modularisation and division of responsibility within a pull parser. The same consideration does not apply to Conditions and Directives because those elements are invoked with their arguments immediately
 
@@ -700,9 +700,9 @@ CBOR-encoded object parameters are still wrapped in a bstr. This is because it a
 
 The Strict Order Parameter allows a manifest to govern when directives can be executed out-of-order. This allows for systems that have a sensitivity to order of updates to choose the order in which they are executed. It also allows for more advanced systems to parallelise their handling of updates. Strict Order defaults to True. It MAY be set to False when the order of operations does not matter. When arriving at the end of a command sequence, ALL commands MUST have completed, regardless of the state of SUIT_Parameter_Strict_Order. If SUIT_Parameter_Strict_Order is returned to True, ALL preceding commands MUST complete before the next command is executed.
 
-### SUIT_Parameter_Coerce_Condition_Failure
+### SUIT_Parameter_Soft_Failure
 
-When executing a command sequence inside SUIT_Run_Sequence and a condition failure occurs, the manifest processor aborts the sequence. If Coerce Condition Failure is True, it returns Success. Otherwise, it returns the original condition failure. SUIT_Parameter_Coerce_Condition_Failure is scoped to the enclosing SUIT_Directive_Run_Sequence. Its value is discarded when SUIT_Directive_Run_Sequence terminates.
+When executing a command sequence inside SUIT_Directive_Try_Each and a condition failure occurs, the manifest processor aborts the sequence. If Soft Failure is True, it returns Success. Otherwise, it returns the original condition failure. SUIT_Parameter_Soft_Failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates.
 
 ## SUIT_Parameter_Encryption_Info
 
@@ -751,7 +751,7 @@ The following CDDL describes all SUIT_Parameters.
 
 ~~~ CDDL
 SUIT_Parameters //= (suit-parameter-strict-order => bool)
-SUIT_Parameters //= (suit-parameter-coerce-condition-failure => bool)
+SUIT_Parameters //= (suit-parameter-soft-failure => bool)
 SUIT_Parameters //= (suit-parameter-vendor-id => bstr)
 SUIT_Parameters //= (suit-parameter-class-id => bstr)
 SUIT_Parameters //= (suit-parameter-device-id => bstr)
@@ -956,7 +956,7 @@ This allows the OS, WiFi module, and application to be updated independently. To
 
 This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.
 
-#### Creating UUIDs:
+#### Creating UUIDs: {#creating-uuids}
 
 UUIDs MUST be created according to RFC 4122 {{RFC4122}}. UUIDs SHOULD use versions 3, 4, or 5, as described in RFC4122. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
 
@@ -1064,15 +1064,15 @@ The following CDDL describes the SUIT_Run_Sequence argument.
 SUIT_Directive_Run_Sequence_Argument = bstr .cbor SUIT_Command_Sequence
 ~~~
 
-When suit-directive-run-sequence completes, it forwards the last status code that occurred in the sequence. If the Coerce on Condition Failure parameter is true, then suit-directive-run-sequence only fails when a directive in the argument sequence fails.
+When suit-directive-run-sequence completes, it forwards the last status code that occurred in the sequence. If the Soft Failure parameter is true, then suit-directive-run-sequence only fails when a directive in the argument sequence fails.
 
-SUIT_Parameter_Coerce_Condition_Failure defaults to False when suit-directive-run-sequence begins. Its value is discarded when suit-directive-run-sequence terminates.
+SUIT_Parameter_Soft_Failure defaults to False when suit-directive-run-sequence begins. Its value is discarded when suit-directive-run-sequence terminates.
 
 ### suit-directive-try-each
 
-This command runs several suit-directive-run-sequence one after another, in a strict order. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.
+This command runs several SUIT_Command_Sequence, one after another, in a strict order. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.
 
-SUIT_Parameter_Coerce_Condition_Failure is initialised to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.
+SUIT_Parameter_Soft_Failure is initialised to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.
 
 The following CDDL describes the SUIT_Try_Each argument.
 
@@ -1268,6 +1268,24 @@ SUIT_Wait_Event_Argument_Time_Of_Day = uint ; Time of Day (seconds since 00:00:0
 SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 
 ~~~
+
+## SUIT_Text_Map
+The SUIT_Text_Map contains all text descriptions needed for this manifest. The text section is typically severable, allowing manifests to be distributed without the text, since end-nodes do not require text. The meaning of each field is described below.
+
+Each section MAY be present. If present, each section MUST be as described. Negative integer IDs are reserved for application-specific text values.
+
+ID | Name | Summary
+---|---|---
+1 | manifest-description | Free text description of the manifest
+2 | update-description | Free text description of the update
+3 | vendor-name | Free text vendor name
+4 | model-name | Free text model name
+5 | vendor-domain | The domain used to create the [vendor-id](#creating-uuids)
+6 | model-info | The information used to create the [class-id](#creating-uuids)
+7 | component-description | Free text description of each component in the manifest
+8 | json-source | The JSON-formated document that was used to create the manifest
+9 | yaml-source | The yaml-formated document that was used to create the manifest
+10 | version-dependencies | List of component versions required by the manifest
 
 # Access Control Lists
 

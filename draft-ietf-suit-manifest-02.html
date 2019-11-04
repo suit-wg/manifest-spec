@@ -409,7 +409,7 @@
 <link href="#rfc.section.7.5" rel="Chapter" title="7.5 SUIT_Component_Reference">
 <link href="#rfc.section.7.6" rel="Chapter" title="7.6 Manifest Parameters">
 <link href="#rfc.section.7.6.1" rel="Chapter" title="7.6.1 SUIT_Parameter_Strict_Order">
-<link href="#rfc.section.7.6.2" rel="Chapter" title="7.6.2 SUIT_Parameter_Coerce_Condition_Failure">
+<link href="#rfc.section.7.6.2" rel="Chapter" title="7.6.2 SUIT_Parameter_Soft_Failure">
 <link href="#rfc.section.7.7" rel="Chapter" title="7.7 SUIT_Parameter_Encryption_Info">
 <link href="#rfc.section.7.8" rel="Chapter" title="7.8 SUIT_Parameter_Compression_Info">
 <link href="#rfc.section.7.9" rel="Chapter" title="7.9 SUIT_Parameter_Unpack_Info">
@@ -441,6 +441,7 @@
 <link href="#rfc.section.7.13.12" rel="Chapter" title="7.13.12 suit-directive-run">
 <link href="#rfc.section.7.13.13" rel="Chapter" title="7.13.13 suit-directive-wait">
 <link href="#rfc.section.7.13.14" rel="Chapter" title="7.13.14 SUIT_Directive CDDL">
+<link href="#rfc.section.7.14" rel="Chapter" title="7.14 SUIT_Text_Map">
 <link href="#rfc.section.8" rel="Chapter" title="8 Access Control Lists">
 <link href="#rfc.section.9" rel="Chapter" title="9 SUIT digest container">
 <link href="#rfc.section.10" rel="Chapter" title="10 Creating conditional sequences">
@@ -598,7 +599,7 @@
 </li>
 <ul><li>7.6.1.   <a href="#rfc.section.7.6.1">SUIT_Parameter_Strict_Order</a>
 </li>
-<li>7.6.2.   <a href="#rfc.section.7.6.2">SUIT_Parameter_Coerce_Condition_Failure</a>
+<li>7.6.2.   <a href="#rfc.section.7.6.2">SUIT_Parameter_Soft_Failure</a>
 </li>
 </ul><li>7.7.   <a href="#rfc.section.7.7">SUIT_Parameter_Encryption_Info</a>
 </li>
@@ -662,7 +663,9 @@
 </li>
 <li>7.13.14.   <a href="#rfc.section.7.13.14">SUIT_Directive CDDL</a>
 </li>
-</ul></ul><li>8.   <a href="#rfc.section.8">Access Control Lists</a>
+</ul><li>7.14.   <a href="#rfc.section.7.14">SUIT_Text_Map</a>
+</li>
+</ul><li>8.   <a href="#rfc.section.8">Access Control Lists</a>
 </li>
 <li>9.   <a href="#rfc.section.9">SUIT digest container</a>
 </li>
@@ -1297,8 +1300,8 @@ SUIT_Outer_Wrapper = {
     ? suit-dependency-resolution  =&gt; bstr .cbor SUIT_Command_Sequence,
     ? suit-payload-fetch          =&gt; bstr .cbor SUIT_Command_Sequence,
     ? suit-install                =&gt; bstr .cbor SUIT_Command_Sequence,
-    ? suit-text-external          =&gt; bstr .cbor SUIT_Text_Info,
-    ? suit-coswid-external        =&gt; bstr .cbor COSWID
+    ? suit-text                   =&gt; bstr .cbor SUIT_Text_Map,
+    ? suit-coswid                 =&gt; bstr .cbor COSWID
 }
 
 SUIT_Authentication_Wrapper = [ + (COSE_Mac_Tagged / COSE_Sign_Tagged /
@@ -1351,12 +1354,12 @@ SUIT_Manifest = {
     suit-common                   =&gt; bstr .cbor SUIT_Common,
     ? suit-dependency-resolution  =&gt; Digest / bstr .cbor SUIT_Command_Sequence,
     ? suit-payload-fetch          =&gt; Digest / bstr .cbor SUIT_Command_Sequence,
-    ? suit-install                =&gt; Digest / bstr .cbor SUIT_Command_Sequence
-    ? suit-validate               =&gt; bstr .cbor SUIT_Command_Sequence
-    ? suit-load                   =&gt; bstr .cbor SUIT_Command_Sequence
-    ? suit-run                    =&gt; bstr .cbor SUIT_Command_Sequence
-    ? suit-text-info              =&gt; Digest / bstr .cbor SUIT_Text_Map
-    ? suit-coswid                 =&gt; Digest / bstr .cbor COSWID
+    ? suit-install                =&gt; Digest / bstr .cbor SUIT_Command_Sequence,
+    ? suit-validate               =&gt; bstr .cbor SUIT_Command_Sequence,
+    ? suit-load                   =&gt; bstr .cbor SUIT_Command_Sequence,
+    ? suit-run                    =&gt; bstr .cbor SUIT_Command_Sequence,
+    ? suit-text                   =&gt; Digest,
+    ? suit-coswid                 =&gt; Digest / bstr .cbor concise-software-identity,
 }
 
 SUIT_Common = {
@@ -1381,7 +1384,7 @@ SUIT_Common = {
 <p id="rfc.section.7.3.p.16">suit-validate is a SUIT_Command_Sequence to execute in order to validate that the result of applying the update is correct. Typical actions involve image validation and manifest validation. suit-validate is REQUIRED. If the manifest contains dependencies, one process-dependency invocation per dependency or one process-dependency invocation targeting all dependencies SHOULD be present in validate.</p>
 <p id="rfc.section.7.3.p.17">suit-load is a SUIT_Command_Sequence to execute in order to prepare a payload for execution. Typical actions include copying an image from permanent storage into RAM, optionally including actions such as decryption or decompression. suit-load is OPTIONAL.</p>
 <p id="rfc.section.7.3.p.18">suit-run is a SUIT_Command_Sequence to execute in order to run an image. suit-run typically contains a single instruction: either the &#8220;run&#8221; directive for the bootable manifest or the &#8220;process dependencies&#8221; directive for any dependents of the bootable manifest. suit-run is OPTIONAL. Only one manifest in an update may contain the &#8220;run&#8221; directive.</p>
-<p id="rfc.section.7.3.p.19">suit-text-info is a digest that uniquely identifies the content of the Text that is packaged in the OuterWrapper. text is OPTIONAL.</p>
+<p id="rfc.section.7.3.p.19">suit-text is a digest that uniquely identifies the content of the Text that is packaged in the OuterWrapper. text is OPTIONAL.</p>
 <p id="rfc.section.7.3.p.20">suit-coswid is a digest that uniquely identifies the content of the concise-software-identifier that is packaged in the OuterWrapper. coswid is OPTIONAL.</p>
 <h2 id="rfc.section.7.4">
 <a href="#rfc.section.7.4">7.4.</a> <a href="#suitdependency" id="suitdependency">SUIT_Dependency</a>
@@ -1413,9 +1416,8 @@ SUIT_Component_Reference = {
 <p id="rfc.section.7.6.p.2">The defined manifest parameters are described below.</p>
 <table cellpadding="3" cellspacing="0" class="tt full center">
 <thead><tr>
-<th class="left">Parameter Code</th>
+<th class="left">ID</th>
 <th class="left">CBOR Type</th>
-<th class="left">Default</th>
 <th class="left">Scope</th>
 <th class="left">Name</th>
 <th class="left">Description</th>
@@ -1424,7 +1426,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">1</td>
 <td class="left">boolean</td>
-<td class="left">True</td>
 <td class="left">Global</td>
 <td class="left">Strict Order</td>
 <td class="left">Requires that the manifest is processed in a strictly linear fashion. Set to 0 to enable parallel handling of manifest directives.</td>
@@ -1432,15 +1433,13 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">2</td>
 <td class="left">boolean</td>
-<td class="left">False</td>
 <td class="left">Command Segment</td>
-<td class="left">Coerce Condition Failure</td>
-<td class="left">Coerces the success code of a command segment to success even when aborted due to a condition failure.</td>
+<td class="left">Soft Failure</td>
+<td class="left">Condition failures only terminate the current command segment.</td>
 </tr>
 <tr>
 <td class="left">3</td>
 <td class="left">bstr</td>
-<td class="left">nil</td>
 <td class="left">Component/Global</td>
 <td class="left">Vendor ID</td>
 <td class="left">A RFC4122 UUID representing the vendor of the device or component</td>
@@ -1448,7 +1447,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">4</td>
 <td class="left">bstr</td>
-<td class="left">nil</td>
 <td class="left">Component/Global</td>
 <td class="left">Class ID</td>
 <td class="left">A RFC4122 UUID representing the class of the device or component</td>
@@ -1456,7 +1454,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">5</td>
 <td class="left">bstr</td>
-<td class="left">nil</td>
 <td class="left">Component/Global</td>
 <td class="left">Device ID</td>
 <td class="left">A RFC4122 UUID representing the device or component</td>
@@ -1464,7 +1461,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">6</td>
 <td class="left">tstr</td>
-<td class="left">nil</td>
 <td class="left">Component/Dependency</td>
 <td class="left">URI</td>
 <td class="left">A URI from which to fetch a resource</td>
@@ -1472,7 +1468,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">7</td>
 <td class="left">bstr</td>
-<td class="left">nil</td>
 <td class="left">Component/Dependency</td>
 <td class="left">Encryption Info</td>
 <td class="left">A COSE object defining the encryption mode of a resource</td>
@@ -1480,7 +1475,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">8</td>
 <td class="left">bstr</td>
-<td class="left">nil</td>
 <td class="left">Component</td>
 <td class="left">Compression Info</td>
 <td class="left">The information required to decompress the image</td>
@@ -1488,7 +1482,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">9</td>
 <td class="left">bstr</td>
-<td class="left">nil</td>
 <td class="left">Component</td>
 <td class="left">Unpack Info</td>
 <td class="left">The information required to unpack the image</td>
@@ -1496,7 +1489,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">10</td>
 <td class="left">uint</td>
-<td class="left">nil</td>
 <td class="left">Component</td>
 <td class="left">Source Component</td>
 <td class="left">A Component Index</td>
@@ -1504,7 +1496,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">11</td>
 <td class="left">bstr</td>
-<td class="left">nil</td>
 <td class="left">Component/Dependency</td>
 <td class="left">Image Digest</td>
 <td class="left">A SUIT_Digest</td>
@@ -1512,7 +1503,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">12</td>
 <td class="left">uint</td>
-<td class="left">nil</td>
 <td class="left">Component/Dependency</td>
 <td class="left">Image Size</td>
 <td class="left">Integer size</td>
@@ -1520,7 +1510,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">24</td>
 <td class="left">bstr</td>
-<td class="left">nil</td>
 <td class="left">Component/Dependency</td>
 <td class="left">URI List</td>
 <td class="left">A CBOR encoded list of ranked URIs</td>
@@ -1528,7 +1517,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">25</td>
 <td class="left">boolean</td>
-<td class="left">False</td>
 <td class="left">Component/Dependency</td>
 <td class="left">URI List Append</td>
 <td class="left">A CBOR encoded list of ranked URIs</td>
@@ -1536,7 +1524,6 @@ SUIT_Component_Reference = {
 <tr>
 <td class="left">nint</td>
 <td class="left">int/bstr</td>
-<td class="left">nil</td>
 <td class="left">Custom</td>
 <td class="left">Custom Parameter</td>
 <td class="left">Application-defined parameter</td>
@@ -1549,9 +1536,9 @@ SUIT_Component_Reference = {
 </h3>
 <p id="rfc.section.7.6.1.p.1">The Strict Order Parameter allows a manifest to govern when directives can be executed out-of-order. This allows for systems that have a sensitivity to order of updates to choose the order in which they are executed. It also allows for more advanced systems to parallelise their handling of updates. Strict Order defaults to True. It MAY be set to False when the order of operations does not matter. When arriving at the end of a command sequence, ALL commands MUST have completed, regardless of the state of SUIT_Parameter_Strict_Order. If SUIT_Parameter_Strict_Order is returned to True, ALL preceding commands MUST complete before the next command is executed.</p>
 <h3 id="rfc.section.7.6.2">
-<a href="#rfc.section.7.6.2">7.6.2.</a> <a href="#suitparametercoerceconditionfailure" id="suitparametercoerceconditionfailure">SUIT_Parameter_Coerce_Condition_Failure</a>
+<a href="#rfc.section.7.6.2">7.6.2.</a> <a href="#suitparametersoftfailure" id="suitparametersoftfailure">SUIT_Parameter_Soft_Failure</a>
 </h3>
-<p id="rfc.section.7.6.2.p.1">When executing a command sequence inside SUIT_Run_Sequence and a condition failure occurs, the manifest processor aborts the sequence. If Coerce Condition Failure is True, it returns Success. Otherwise, it returns the original condition failure. SUIT_Parameter_Coerce_Condition_Failure is scoped to the enclosing SUIT_Directive_Run_Sequence. Its value is discarded when SUIT_Directive_Run_Sequence terminates.</p>
+<p id="rfc.section.7.6.2.p.1">When executing a command sequence inside SUIT_Directive_Try_Each and a condition failure occurs, the manifest processor aborts the sequence. If Soft Failure is True, it returns Success. Otherwise, it returns the original condition failure. SUIT_Parameter_Soft_Failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates.</p>
 <h2 id="rfc.section.7.7">
 <a href="#rfc.section.7.7">7.7.</a> <a href="#suitparameterencryptioninfo" id="suitparameterencryptioninfo">SUIT_Parameter_Encryption_Info</a>
 </h2>
@@ -1596,7 +1583,7 @@ SUIT_Unpack_Algorithms //= SUIT_Unpack_Algorithm_Elf
 <p id="rfc.section.7.10.p.1">The following CDDL describes all SUIT_Parameters.</p>
 <pre>
 SUIT_Parameters //= (suit-parameter-strict-order =&gt; bool)
-SUIT_Parameters //= (suit-parameter-coerce-condition-failure =&gt; bool)
+SUIT_Parameters //= (suit-parameter-soft-failure =&gt; bool)
 SUIT_Parameters //= (suit-parameter-vendor-id =&gt; bstr)
 SUIT_Parameters //= (suit-parameter-class-id =&gt; bstr)
 SUIT_Parameters //= (suit-parameter-device-id =&gt; bstr)
@@ -1987,13 +1974,13 @@ SUIT_Directive_Set_Manifest_Index_Argument = uint/bool
 <pre>
 SUIT_Directive_Run_Sequence_Argument = bstr .cbor SUIT_Command_Sequence
 </pre>
-<p id="rfc.section.7.13.4.p.4">When suit-directive-run-sequence completes, it forwards the last status code that occurred in the sequence. If the Coerce on Condition Failure parameter is true, then suit-directive-run-sequence only fails when a directive in the argument sequence fails.</p>
-<p id="rfc.section.7.13.4.p.5">SUIT_Parameter_Coerce_Condition_Failure defaults to False when suit-directive-run-sequence begins. Its value is discarded when suit-directive-run-sequence terminates.</p>
+<p id="rfc.section.7.13.4.p.4">When suit-directive-run-sequence completes, it forwards the last status code that occurred in the sequence. If the Soft Failure parameter is true, then suit-directive-run-sequence only fails when a directive in the argument sequence fails.</p>
+<p id="rfc.section.7.13.4.p.5">SUIT_Parameter_Soft_Failure defaults to False when suit-directive-run-sequence begins. Its value is discarded when suit-directive-run-sequence terminates.</p>
 <h3 id="rfc.section.7.13.5">
 <a href="#rfc.section.7.13.5">7.13.5.</a> <a href="#suit-directive-try-each" id="suit-directive-try-each">suit-directive-try-each</a>
 </h3>
-<p id="rfc.section.7.13.5.p.1">This command runs several suit-directive-run-sequence one after another, in a strict order. Use this command to implement a &#8220;try/catch-try/catch&#8221; sequence. Manifest processors MAY implement this command.</p>
-<p id="rfc.section.7.13.5.p.2">SUIT_Parameter_Coerce_Condition_Failure is initialised to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.</p>
+<p id="rfc.section.7.13.5.p.1">This command runs several SUIT_Command_Sequence, one after another, in a strict order. Use this command to implement a &#8220;try/catch-try/catch&#8221; sequence. Manifest processors MAY implement this command.</p>
+<p id="rfc.section.7.13.5.p.2">SUIT_Parameter_Soft_Failure is initialised to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.</p>
 <p id="rfc.section.7.13.5.p.3">The following CDDL describes the SUIT_Try_Each argument.</p>
 <pre>
 SUIT_Directive_Try_Each_Argument = [
@@ -2160,6 +2147,72 @@ SUIT_Wait_Event_Argument_Time_Of_Day = uint ; Time of Day (seconds since 00:00:0
 SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 
 </pre>
+<h2 id="rfc.section.7.14">
+<a href="#rfc.section.7.14">7.14.</a> <a href="#suittextmap" id="suittextmap">SUIT_Text_Map</a>
+</h2>
+<p id="rfc.section.7.14.p.1">The SUIT_Text_Map contains all text descriptions needed for this manifest. The text section is typically severable, allowing manifests to be distributed without the text, since end-nodes do not require text. The meaning of each field is described below.</p>
+<p id="rfc.section.7.14.p.2">Each section MAY be present. If present, each section MUST be as described. Negative integer IDs are reserved for application-specific text values.</p>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+<thead><tr>
+<th class="left">ID</th>
+<th class="left">Name</th>
+<th class="left">Summary</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="left">1</td>
+<td class="left">manifest-description</td>
+<td class="left">Free text description of the manifest</td>
+</tr>
+<tr>
+<td class="left">2</td>
+<td class="left">update-description</td>
+<td class="left">Free text description of the update</td>
+</tr>
+<tr>
+<td class="left">3</td>
+<td class="left">vendor-name</td>
+<td class="left">Free text vendor name</td>
+</tr>
+<tr>
+<td class="left">4</td>
+<td class="left">model-name</td>
+<td class="left">Free text model name</td>
+</tr>
+<tr>
+<td class="left">5</td>
+<td class="left">vendor-domain</td>
+<td class="left">The domain used to create the <a href="#creating-uuids" class="xref">vendor-id</a>
+</td>
+</tr>
+<tr>
+<td class="left">6</td>
+<td class="left">model-info</td>
+<td class="left">The information used to create the <a href="#creating-uuids" class="xref">class-id</a>
+</td>
+</tr>
+<tr>
+<td class="left">7</td>
+<td class="left">component-description</td>
+<td class="left">Free text description of each component in the manifest</td>
+</tr>
+<tr>
+<td class="left">8</td>
+<td class="left">json-source</td>
+<td class="left">The JSON-formated document that was used to create the manifest</td>
+</tr>
+<tr>
+<td class="left">9</td>
+<td class="left">yaml-source</td>
+<td class="left">The yaml-formated document that was used to create the manifest</td>
+</tr>
+<tr>
+<td class="left">10</td>
+<td class="left">version-dependencies</td>
+<td class="left">List of component versions required by the manifest</td>
+</tr>
+</tbody>
+</table>
 <h1 id="rfc.section.8">
 <a href="#rfc.section.8">8.</a> <a href="#access-control-lists" id="access-control-lists">Access Control Lists</a>
 </h1>
@@ -2325,12 +2378,12 @@ SUIT_Manifest = {
     ? suit-common                 =&gt; bstr .cbor SUIT_Common,
     ? suit-dependency-resolution  =&gt; SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
     ? suit-payload-fetch          =&gt; SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
-    ? suit-install                =&gt; SUIT_Digest / bstr .cbor SUIT_Command_Sequence
-    ? suit-validate               =&gt; bstr .cbor SUIT_Command_Sequence
-    ? suit-load                   =&gt; bstr .cbor SUIT_Command_Sequence
-    ? suit-run                    =&gt; bstr .cbor SUIT_Command_Sequence
-    ? suit-text                   =&gt; SUIT_Digest / bstr .cbor SUIT_Text_Map
-    ? suit-coswid                 =&gt; SUIT_Digest / bstr .cbor concise-software-identity
+    ? suit-install                =&gt; SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
+    ? suit-validate               =&gt; bstr .cbor SUIT_Command_Sequence,
+    ? suit-load                   =&gt; bstr .cbor SUIT_Command_Sequence,
+    ? suit-run                    =&gt; bstr .cbor SUIT_Command_Sequence,
+    ? suit-text                   =&gt; SUIT_Digest,
+    ? suit-coswid                 =&gt; SUIT_Digest / bstr .cbor concise-software-identity,
 }
 
 SUIT_Common = {
@@ -2439,7 +2492,7 @@ SUIT_Wait_Event_Argument_Time_Of_Day = uint ; Time of Day (seconds since 00:00:0
 SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 
 SUIT_Parameters //= (suit-parameter-strict-order =&gt; bool)
-SUIT_Parameters //= (suit-parameter-coerce-condition-failure =&gt; bool)
+SUIT_Parameters //= (suit-parameter-soft-failure =&gt; bool)
 SUIT_Parameters //= (suit-parameter-vendor-id =&gt; bstr)
 SUIT_Parameters //= (suit-parameter-class-id =&gt; bstr)
 SUIT_Parameters //= (suit-parameter-device-id =&gt; bstr)
@@ -2560,7 +2613,7 @@ suit-wait-event-day-of-week = 7
 suit-wait-event-authorisation = 8
 
 suit-parameter-strict-order = 1
-suit-parameter-coerce-condition-failure = 2
+suit-parameter-soft-failure = 2
 suit-parameter-vendor-id = 3
 suit-parameter-class-id = 4
 suit-parameter-device-id = 5
@@ -2586,13 +2639,14 @@ suit-unpack-parameters = 2
 
 suit-text-manifest-description  = 1
 suit-text-update-description    = 2
-suit-text-vendor-domain         = 3
-suit-text-vendor-name           = 4
-suit-text-model-name            = 5
+suit-text-vendor-name           = 3
+suit-text-model-name            = 4
+suit-text-vendor-domain         = 5
 suit-text-model-info            = 6
 suit-text-component-description = 7
 suit-text-manifest-json-source  = 8
 suit-text-manifest-yaml-source  = 9
+suit-text-version-dependencies  = 10
 </pre>
 <h1 id="rfc.section.12">
 <a href="#rfc.section.12">12.</a> <a href="#examples" id="examples">Examples</a>

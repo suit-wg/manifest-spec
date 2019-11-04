@@ -101,7 +101,7 @@ Table of Contents
        7.5.  SUIT_Component_Reference
        7.6.  Manifest Parameters
              7.6.1.  SUIT_Parameter_Strict_Order
-             7.6.2.  SUIT_Parameter_Coerce_Condition_Failure
+             7.6.2.  SUIT_Parameter_Soft_Failure
        7.7.  SUIT_Parameter_Encryption_Info
        7.8.  SUIT_Parameter_Compression_Info
        7.9.  SUIT_Parameter_Unpack_Info
@@ -133,6 +133,7 @@ Table of Contents
              7.13.12.  suit-directive-run
              7.13.13.  suit-directive-wait
              7.13.14.  SUIT_Directive CDDL
+       7.14.  SUIT_Text_Map
    8.  Access Control Lists
    9.  SUIT digest container
    10.  Creating conditional sequences
@@ -1082,8 +1083,8 @@ Table of Contents
        ? suit-dependency-resolution  => bstr .cbor SUIT_Command_Sequence,
        ? suit-payload-fetch          => bstr .cbor SUIT_Command_Sequence,
        ? suit-install                => bstr .cbor SUIT_Command_Sequence,
-       ? suit-text-external          => bstr .cbor SUIT_Text_Info,
-       ? suit-coswid-external        => bstr .cbor COSWID
+       ? suit-text                   => bstr .cbor SUIT_Text_Map,
+       ? suit-coswid                 => bstr .cbor COSWID
    }
 
    SUIT_Authentication_Wrapper = [ + (COSE_Mac_Tagged / COSE_Sign_Tagged /
@@ -1175,12 +1176,12 @@ Table of Contents
        suit-common                   => bstr .cbor SUIT_Common,
        ? suit-dependency-resolution  => Digest / bstr .cbor SUIT_Command_Sequence,
        ? suit-payload-fetch          => Digest / bstr .cbor SUIT_Command_Sequence,
-       ? suit-install                => Digest / bstr .cbor SUIT_Command_Sequence
-       ? suit-validate               => bstr .cbor SUIT_Command_Sequence
-       ? suit-load                   => bstr .cbor SUIT_Command_Sequence
-       ? suit-run                    => bstr .cbor SUIT_Command_Sequence
-       ? suit-text-info              => Digest / bstr .cbor SUIT_Text_Map
-       ? suit-coswid                 => Digest / bstr .cbor COSWID
+       ? suit-install                => Digest / bstr .cbor SUIT_Command_Sequence,
+       ? suit-validate               => bstr .cbor SUIT_Command_Sequence,
+       ? suit-load                   => bstr .cbor SUIT_Command_Sequence,
+       ? suit-run                    => bstr .cbor SUIT_Command_Sequence,
+       ? suit-text                   => Digest,
+       ? suit-coswid                 => Digest / bstr .cbor concise-software-identity,
    }
 
    SUIT_Common = {
@@ -1286,8 +1287,8 @@ Table of Contents
    suit-run is OPTIONAL.  Only one manifest in an update may contain the
    “run” directive.
 
-   suit-text-info is a digest that uniquely identifies the content of
-   the Text that is packaged in the OuterWrapper. text is OPTIONAL.
+   suit-text is a digest that uniquely identifies the content of the
+   Text that is packaged in the OuterWrapper. text is OPTIONAL.
 
    suit-coswid is a digest that uniquely identifies the content of the
    concise-software-identifier that is packaged in the OuterWrapper.
@@ -1347,75 +1348,73 @@ Table of Contents
 
    The defined manifest parameters are described below.
 
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |Parameter|CBOR    |Default|Scope               |Name       |Description        |
-   |Code     |Type    |       |                    |           |                   |
-   +=========+========+=======+====================+===========+===================+
-   |1        |boolean |True   |Global              |Strict     |Requires that the  |
-   |         |        |       |                    |Order      |manifest is        |
-   |         |        |       |                    |           |processed in a     |
-   |         |        |       |                    |           |strictly linear    |
-   |         |        |       |                    |           |fashion.  Set to 0 |
-   |         |        |       |                    |           |to enable parallel |
-   |         |        |       |                    |           |handling of        |
-   |         |        |       |                    |           |manifest           |
-   |         |        |       |                    |           |directives.        |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |2        |boolean |False  |Command Segment     |Coerce     |Coerces the success|
-   |         |        |       |                    |Condition  |code of a command  |
-   |         |        |       |                    |Failure    |segment to success |
-   |         |        |       |                    |           |even when aborted  |
-   |         |        |       |                    |           |due to a condition |
-   |         |        |       |                    |           |failure.           |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |3        |bstr    |nil    |Component/Global    |Vendor ID  |A RFC4122 UUID     |
-   |         |        |       |                    |           |representing the   |
-   |         |        |       |                    |           |vendor of the      |
-   |         |        |       |                    |           |device or component|
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |4        |bstr    |nil    |Component/Global    |Class ID   |A RFC4122 UUID     |
-   |         |        |       |                    |           |representing the   |
-   |         |        |       |                    |           |class of the device|
-   |         |        |       |                    |           |or component       |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |5        |bstr    |nil    |Component/Global    |Device ID  |A RFC4122 UUID     |
-   |         |        |       |                    |           |representing the   |
-   |         |        |       |                    |           |device or component|
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |6        |tstr    |nil    |Component/Dependency|URI        |A URI from which to|
-   |         |        |       |                    |           |fetch a resource   |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |7        |bstr    |nil    |Component/Dependency|Encryption |A COSE object      |
-   |         |        |       |                    |Info       |defining the       |
-   |         |        |       |                    |           |encryption mode of |
-   |         |        |       |                    |           |a resource         |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |8        |bstr    |nil    |Component           |Compression|The information    |
-   |         |        |       |                    |Info       |required to        |
-   |         |        |       |                    |           |decompress the     |
-   |         |        |       |                    |           |image              |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |9        |bstr    |nil    |Component           |Unpack Info|The information    |
-   |         |        |       |                    |           |required to unpack |
-   |         |        |       |                    |           |the image          |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |10       |uint    |nil    |Component           |Source     |A Component Index  |
-   |         |        |       |                    |Component  |                   |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |11       |bstr    |nil    |Component/Dependency|Image      |A SUIT_Digest      |
-   |         |        |       |                    |Digest     |                   |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |12       |uint    |nil    |Component/Dependency|Image Size |Integer size       |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |24       |bstr    |nil    |Component/Dependency|URI List   |A CBOR encoded list|
-   |         |        |       |                    |           |of ranked URIs     |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |25       |boolean |False  |Component/Dependency|URI List   |A CBOR encoded list|
-   |         |        |       |                    |Append     |of ranked URIs     |
-   +---------+--------+-------+--------------------+-----------+-------------------+
-   |nint     |int/bstr|nil    |Custom              |Custom     |Application-defined|
-   |         |        |       |                    |Parameter  |parameter          |
-   +---------+--------+-------+--------------------+-----------+-------------------+
+   +----+--------+---------------------+-----------+-------------------+
+   |ID  |CBOR    | Scope               |Name       |Description        |
+   |    |Type    |                     |           |                   |
+   +====+========+=====================+===========+===================+
+   |1   |boolean | Global              |Strict     |Requires that the  |
+   |    |        |                     |Order      |manifest is        |
+   |    |        |                     |           |processed in a     |
+   |    |        |                     |           |strictly linear    |
+   |    |        |                     |           |fashion.  Set to 0 |
+   |    |        |                     |           |to enable parallel |
+   |    |        |                     |           |handling of        |
+   |    |        |                     |           |manifest           |
+   |    |        |                     |           |directives.        |
+   +----+--------+---------------------+-----------+-------------------+
+   |2   |boolean | Command Segment     |Soft       |Condition failures |
+   |    |        |                     |Failure    |only terminate the |
+   |    |        |                     |           |current command    |
+   |    |        |                     |           |segment.           |
+   +----+--------+---------------------+-----------+-------------------+
+   |3   |bstr    | Component/Global    |Vendor ID  |A RFC4122 UUID     |
+   |    |        |                     |           |representing the   |
+   |    |        |                     |           |vendor of the      |
+   |    |        |                     |           |device or component|
+   +----+--------+---------------------+-----------+-------------------+
+   |4   |bstr    | Component/Global    |Class ID   |A RFC4122 UUID     |
+   |    |        |                     |           |representing the   |
+   |    |        |                     |           |class of the device|
+   |    |        |                     |           |or component       |
+   +----+--------+---------------------+-----------+-------------------+
+   |5   |bstr    | Component/Global    |Device ID  |A RFC4122 UUID     |
+   |    |        |                     |           |representing the   |
+   |    |        |                     |           |device or component|
+   +----+--------+---------------------+-----------+-------------------+
+   |6   |tstr    | Component/Dependency|URI        |A URI from which to|
+   |    |        |                     |           |fetch a resource   |
+   +----+--------+---------------------+-----------+-------------------+
+   |7   |bstr    | Component/Dependency|Encryption |A COSE object      |
+   |    |        |                     |Info       |defining the       |
+   |    |        |                     |           |encryption mode of |
+   |    |        |                     |           |a resource         |
+   +----+--------+---------------------+-----------+-------------------+
+   |8   |bstr    | Component           |Compression|The information    |
+   |    |        |                     |Info       |required to        |
+   |    |        |                     |           |decompress the     |
+   |    |        |                     |           |image              |
+   +----+--------+---------------------+-----------+-------------------+
+   |9   |bstr    | Component           |Unpack Info|The information    |
+   |    |        |                     |           |required to unpack |
+   |    |        |                     |           |the image          |
+   +----+--------+---------------------+-----------+-------------------+
+   |10  |uint    | Component           |Source     |A Component Index  |
+   |    |        |                     |Component  |                   |
+   +----+--------+---------------------+-----------+-------------------+
+   |11  |bstr    | Component/Dependency|Image      |A SUIT_Digest      |
+   |    |        |                     |Digest     |                   |
+   +----+--------+---------------------+-----------+-------------------+
+   |12  |uint    | Component/Dependency|Image Size |Integer size       |
+   +----+--------+---------------------+-----------+-------------------+
+   |24  |bstr    | Component/Dependency|URI List   |A CBOR encoded list|
+   |    |        |                     |           |of ranked URIs     |
+   +----+--------+---------------------+-----------+-------------------+
+   |25  |boolean | Component/Dependency|URI List   |A CBOR encoded list|
+   |    |        |                     |Append     |of ranked URIs     |
+   +----+--------+---------------------+-----------+-------------------+
+   |nint|int/bstr| Custom              |Custom     |Application-defined|
+   |    |        |                     |Parameter  |parameter          |
+   +----+--------+---------------------+-----------+-------------------+
 
                                   Table 2
 
@@ -1441,15 +1440,15 @@ Table of Contents
    returned to True, ALL preceding commands MUST complete before the
    next command is executed.
 
-7.6.2.  SUIT_Parameter_Coerce_Condition_Failure
+7.6.2.  SUIT_Parameter_Soft_Failure
 
-   When executing a command sequence inside SUIT_Run_Sequence and a
-   condition failure occurs, the manifest processor aborts the sequence.
-   If Coerce Condition Failure is True, it returns Success.  Otherwise,
+   When executing a command sequence inside SUIT_Directive_Try_Each and
+   a condition failure occurs, the manifest processor aborts the
+   sequence.  If Soft Failure is True, it returns Success.  Otherwise,
    it returns the original condition failure.
-   SUIT_Parameter_Coerce_Condition_Failure is scoped to the enclosing
-   SUIT_Directive_Run_Sequence.  Its value is discarded when
-   SUIT_Directive_Run_Sequence terminates.
+   SUIT_Parameter_Soft_Failure is scoped to the enclosing
+   SUIT_Command_Sequence.  Its value is discarded when
+   SUIT_Command_Sequence terminates.
 
 7.7.  SUIT_Parameter_Encryption_Info
 
@@ -1498,7 +1497,7 @@ Table of Contents
    The following CDDL describes all SUIT_Parameters.
 
    SUIT_Parameters //= (suit-parameter-strict-order => bool)
-   SUIT_Parameters //= (suit-parameter-coerce-condition-failure => bool)
+   SUIT_Parameters //= (suit-parameter-soft-failure => bool)
    SUIT_Parameters //= (suit-parameter-vendor-id => bstr)
    SUIT_Parameters //= (suit-parameter-class-id => bstr)
    SUIT_Parameters //= (suit-parameter-device-id => bstr)
@@ -1970,28 +1969,27 @@ Table of Contents
    SUIT_Directive_Run_Sequence_Argument = bstr .cbor SUIT_Command_Sequence
 
    When suit-directive-run-sequence completes, it forwards the last
-   status code that occurred in the sequence.  If the Coerce on
-   Condition Failure parameter is true, then suit-directive-run-sequence
-   only fails when a directive in the argument sequence fails.
+   status code that occurred in the sequence.  If the Soft Failure
+   parameter is true, then suit-directive-run-sequence only fails when a
+   directive in the argument sequence fails.
 
-   SUIT_Parameter_Coerce_Condition_Failure defaults to False when suit-
-   directive-run-sequence begins.  Its value is discarded when suit-
-   directive-run-sequence terminates.
+   SUIT_Parameter_Soft_Failure defaults to False when suit-directive-
+   run-sequence begins.  Its value is discarded when suit-directive-run-
+   sequence terminates.
 
 7.13.5.  suit-directive-try-each
 
-   This command runs several suit-directive-run-sequence one after
-   another, in a strict order.  Use this command to implement a “try/
-   catch-try/catch” sequence.  Manifest processors MAY implement this
-   command.
+   This command runs several SUIT_Command_Sequence, one after another,
+   in a strict order.  Use this command to implement a “try/catch-try/
+   catch” sequence.  Manifest processors MAY implement this command.
 
-   SUIT_Parameter_Coerce_Condition_Failure is initialised to True at the
-   beginning of each sequence.  If one sequence aborts due to a
-   condition failure, the next is started.  If no sequence completes
-   without condition failure, then suit-directive-try-each returns an
-   error.  If a particular application calls for all sequences to fail
-   and still continue, then an empty sequence (nil) can be added to the
-   Try Each Argument.
+   SUIT_Parameter_Soft_Failure is initialised to True at the beginning
+   of each sequence.  If one sequence aborts due to a condition failure,
+   the next is started.  If no sequence completes without condition
+   failure, then suit-directive-try-each returns an error.  If a
+   particular application calls for all sequences to fail and still
+   continue, then an empty sequence (nil) can be added to the Try Each
+   Argument.
 
    The following CDDL describes the SUIT_Try_Each argument.
 
@@ -2252,6 +2250,51 @@ Table of Contents
    SUIT_Wait_Event_Argument_Time_Of_Day = uint ; Time of Day (seconds since 00:00:00)
    SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 
+7.14.  SUIT_Text_Map
+
+   The SUIT_Text_Map contains all text descriptions needed for this
+   manifest.  The text section is typically severable, allowing
+   manifests to be distributed without the text, since end-nodes do not
+   require text.  The meaning of each field is described below.
+
+   Each section MAY be present.  If present, each section MUST be as
+   described.  Negative integer IDs are reserved for application-
+   specific text values.
+
+     +----+-----------------------+---------------------------------+
+     | ID | Name                  | Summary                         |
+     +====+=======================+=================================+
+     | 1  | manifest-description  | Free text description of the    |
+     |    |                       | manifest                        |
+     +----+-----------------------+---------------------------------+
+     | 2  | update-description    | Free text description of the    |
+     |    |                       | update                          |
+     +----+-----------------------+---------------------------------+
+     | 3  | vendor-name           | Free text vendor name           |
+     +----+-----------------------+---------------------------------+
+     | 4  | model-name            | Free text model name            |
+     +----+-----------------------+---------------------------------+
+     | 5  | vendor-domain         | The domain used to create the   |
+     |    |                       | vendor-id (Section 7.12.9.1)    |
+     +----+-----------------------+---------------------------------+
+     | 6  | model-info            | The information used to create  |
+     |    |                       | the class-id (Section 7.12.9.1) |
+     +----+-----------------------+---------------------------------+
+     | 7  | component-description | Free text description of each   |
+     |    |                       | component in the manifest       |
+     +----+-----------------------+---------------------------------+
+     | 8  | json-source           | The JSON-formated document that |
+     |    |                       | was used to create the manifest |
+     +----+-----------------------+---------------------------------+
+     | 9  | yaml-source           | The yaml-formated document that |
+     |    |                       | was used to create the manifest |
+     +----+-----------------------+---------------------------------+
+     | 10 | version-dependencies  | List of component versions      |
+     |    |                       | required by the manifest        |
+     +----+-----------------------+---------------------------------+
+
+                                 Table 5
+
 8.  Access Control Lists
 
    To manage permissions in the manifest, there are three models that
@@ -2451,12 +2494,12 @@ Table of Contents
        ? suit-common                 => bstr .cbor SUIT_Common,
        ? suit-dependency-resolution  => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
        ? suit-payload-fetch          => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
-       ? suit-install                => SUIT_Digest / bstr .cbor SUIT_Command_Sequence
-       ? suit-validate               => bstr .cbor SUIT_Command_Sequence
-       ? suit-load                   => bstr .cbor SUIT_Command_Sequence
-       ? suit-run                    => bstr .cbor SUIT_Command_Sequence
-       ? suit-text                   => SUIT_Digest / bstr .cbor SUIT_Text_Map
-       ? suit-coswid                 => SUIT_Digest / bstr .cbor concise-software-identity
+       ? suit-install                => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
+       ? suit-validate               => bstr .cbor SUIT_Command_Sequence,
+       ? suit-load                   => bstr .cbor SUIT_Command_Sequence,
+       ? suit-run                    => bstr .cbor SUIT_Command_Sequence,
+       ? suit-text                   => SUIT_Digest,
+       ? suit-coswid                 => SUIT_Digest / bstr .cbor concise-software-identity,
    }
 
    SUIT_Common = {
@@ -2565,7 +2608,7 @@ Table of Contents
    SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 
    SUIT_Parameters //= (suit-parameter-strict-order => bool)
-   SUIT_Parameters //= (suit-parameter-coerce-condition-failure => bool)
+   SUIT_Parameters //= (suit-parameter-soft-failure => bool)
    SUIT_Parameters //= (suit-parameter-vendor-id => bstr)
    SUIT_Parameters //= (suit-parameter-class-id => bstr)
    SUIT_Parameters //= (suit-parameter-device-id => bstr)
@@ -2686,7 +2729,7 @@ Table of Contents
    suit-wait-event-authorisation = 8
 
    suit-parameter-strict-order = 1
-   suit-parameter-coerce-condition-failure = 2
+   suit-parameter-soft-failure = 2
    suit-parameter-vendor-id = 3
    suit-parameter-class-id = 4
    suit-parameter-device-id = 5
@@ -2712,13 +2755,14 @@ Table of Contents
 
    suit-text-manifest-description  = 1
    suit-text-update-description    = 2
-   suit-text-vendor-domain         = 3
-   suit-text-vendor-name           = 4
-   suit-text-model-name            = 5
+   suit-text-vendor-name           = 3
+   suit-text-model-name            = 4
+   suit-text-vendor-domain         = 5
    suit-text-model-info            = 6
    suit-text-component-description = 7
    suit-text-manifest-json-source  = 8
    suit-text-manifest-yaml-source  = 9
+   suit-text-version-dependencies  = 10
 
 12.  Examples
 

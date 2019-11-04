@@ -52,12 +52,12 @@ SUIT_Manifest = {
     ? suit-common                 => bstr .cbor SUIT_Common,
     ? suit-dependency-resolution  => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
     ? suit-payload-fetch          => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
-    ? suit-install                => SUIT_Digest / bstr .cbor SUIT_Command_Sequence
-    ? suit-validate               => bstr .cbor SUIT_Command_Sequence
-    ? suit-load                   => bstr .cbor SUIT_Command_Sequence
-    ? suit-run                    => bstr .cbor SUIT_Command_Sequence
-    ? suit-text                   => SUIT_Digest / bstr .cbor SUIT_Text_Map
-    ? suit-coswid                 => SUIT_Digest / bstr .cbor concise-software-identity
+    ? suit-install                => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
+    ? suit-validate               => bstr .cbor SUIT_Command_Sequence,
+    ? suit-load                   => bstr .cbor SUIT_Command_Sequence,
+    ? suit-run                    => bstr .cbor SUIT_Command_Sequence,
+    ? suit-text                   => SUIT_Digest,
+    ? suit-coswid                 => SUIT_Digest / bstr .cbor concise-software-identity,
 }
 
 SUIT_Common = {
@@ -166,7 +166,7 @@ SUIT_Wait_Event_Argument_Time_Of_Day = uint ; Time of Day (seconds since 00:00:0
 SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 
 SUIT_Parameters //= (suit-parameter-strict-order => bool)
-SUIT_Parameters //= (suit-parameter-coerce-condition-failure => bool)
+SUIT_Parameters //= (suit-parameter-soft-failure => bool)
 SUIT_Parameters //= (suit-parameter-vendor-id => bstr)
 SUIT_Parameters //= (suit-parameter-class-id => bstr)
 SUIT_Parameters //= (suit-parameter-device-id => bstr)
@@ -287,7 +287,7 @@ suit-wait-event-day-of-week = 7
 suit-wait-event-authorisation = 8
 
 suit-parameter-strict-order = 1
-suit-parameter-coerce-condition-failure = 2
+suit-parameter-soft-failure = 2
 suit-parameter-vendor-id = 3
 suit-parameter-class-id = 4
 suit-parameter-device-id = 5
@@ -313,10 +313,11 @@ suit-unpack-parameters = 2
 
 suit-text-manifest-description  = 1
 suit-text-update-description    = 2
-suit-text-vendor-domain         = 3
-suit-text-vendor-name           = 4
-suit-text-model-name            = 5
+suit-text-vendor-name           = 3
+suit-text-model-name            = 4
+suit-text-vendor-domain         = 5
 suit-text-model-info            = 6
 suit-text-component-description = 7
 suit-text-manifest-json-source  = 8
 suit-text-manifest-yaml-source  = 9
+suit-text-version-dependencies  = 10
