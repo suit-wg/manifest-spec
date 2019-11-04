@@ -64,11 +64,11 @@ information protecting the manifest.
 
 A firmware update mechanism is an essential security feature for IoT devices to deal with vulnerabilities. While the transport of firmware images to the devices themselves is important there are already various techniques available, such as the Lightweight Machine-to-Machine (LwM2M) protocol offering device management of IoT devices. Equally important is the inclusion of meta-data about the conveyed firmware image (in the form of a manifest) and the use of end-to-end security protection to detect modifications and (optionally) to make reverse engineering more difficult. End-to-end security allows the author, who builds the firmware image, to be sure that no other party (including potential adversaries) can install firmware updates on IoT devices without adequate privileges. This authorization process is ensured by the use of dedicated symmetric or asymmetric keys installed on the IoT device: for use cases where only integrity protection is required it is sufficient to install a trust anchor on the IoT device. For confidentiality protected firmware images it is additionally required to install either one or multiple symmetric or asymmetric keys on the IoT device. Starting security protection at the author is a risk mitigation technique so firmware images and manifests can be stored on untrusted respositories; it also reduces the scope of a compromise of any repository or intermediate system to be no worse than a denial of service.
 
-It is assumed that the reader is familiar with the high-level firmware update architecture {{Architecture}}.
+It is assumed that the reader is familiar with the high-level firmware update architecture {{I-D.ietf-suit-architecture}}.
 
 The SUIT manifest is heavily optimised for consumption by constrained devices. This means that it is not constructed as a conventional descriptive document. Instead, of describing what an update IS, it describes what a recipient should DO.
 
-While the SUIT manifest is informed by and optimised for firmware update use cases, there is nothing in the {{Information}} that restricts its use to only firmware use cases. Software update and delivery of arbitrary data can equally be managed by SUIT-based metadata.
+While the SUIT manifest is informed by and optimised for firmware update use cases, there is nothing in the {{I-D.ietf-suit-information-model}} that restricts its use to only firmware use cases. Software update and delivery of arbitrary data can equally be managed by SUIT-based metadata.
 
 #  Conventions and Terminology
 
@@ -101,7 +101,7 @@ To implement a tool that generates updates, see {{creating-manifests}} and {{man
 
 # Background {#background}
 
-Distributing firmware updates to diverse devices with diverse trust anchors in a coordinated system presents unique challenges. Devices have a broad set of constraints, requiring different metadata to make appropriate decisions. There may be many actors in production IoT systems, each of whom has some authority. Distributing firmware in such a multi-party environment presents additional challenges. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in {{Architecture}}.
+Distributing firmware updates to diverse devices with diverse trust anchors in a coordinated system presents unique challenges. Devices have a broad set of constraints, requiring different metadata to make appropriate decisions. There may be many actors in production IoT systems, each of whom has some authority. Distributing firmware in such a multi-party environment presents additional challenges. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in {{I-D.ietf-suit-architecture}}.
 
 ## Landscape
 
@@ -153,7 +153,7 @@ When multiple manifests are used for an update, each manifest's steps occur in a
 
 The manifest described in this document is intended to meet several goals, as described below.
 
-1. Meet the requirements defined in {{Information}}.
+1. Meet the requirements defined in {{I-D.ietf-suit-information-model}}.
 2. Simple to parse on a constrained node
 3. Simple to process on a constrained node
 4. Compact encoding
@@ -2628,7 +2628,7 @@ Several registries will be required for:
 
 #  Security Considerations
 
-This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A more detailed discussion about security can be found in the architecture document {{Architecture}} and in {{Information}}.
+This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A more detailed discussion about security can be found in the architecture document {{I-D.ietf-suit-architecture}} and in {{I-D.ietf-suit-information-model}}.
 
 # Mailing List Information
 
