@@ -1,8 +1,8 @@
 ---
-title: SUIT CBOR manifest serialisation format
-abbrev: Firmware Manifest Format
+title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest 
+abbrev: SUIT CBOR Manifest
 docname: draft-ietf-suit-manifest-02
-category: info
+category: std
 
 ipr: pre5378Trust200902
 area: Security
@@ -48,27 +48,8 @@ normative:
 
 
 informative:
-  Architecture:
-    target: https://tools.ietf.org/html/draft-ietf-suit-architecture-02
-    title: A Firmware Update Architecture for Internet of Things Devices
-    author:
-      ins: B. Moran
-      name:  Brendan Moran
-      org: ARM Limited
-    date: January 2019
-    format:
-        HTML: https://tools.ietf.org/html/draft-ietf-suit-architecture-02
-  Information:
-    target: https://tools.ietf.org/html/draft-ietf-suit-information-model-02
-    title: Firmware Updates for Internet of Things Devices - An Information Model for Manifests
-    author:
-      ins: B. Moran
-      name:  Brendan Moran
-      org: ARM Limited
-    date: January 2019
-    format:
-        HTML: https://tools.ietf.org/html/draft-ietf-suit-information-model-02
-
+  I-D.ietf-suit-architecture: 
+  I-D.ietf-suit-information-model:
 
 
 --- abstract
