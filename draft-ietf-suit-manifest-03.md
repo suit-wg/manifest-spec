@@ -89,13 +89,13 @@ While the SUIT manifest is informed by and optimised for firmware update use cas
 
 The map indices in this encoding are reset to 1 for each map within the structure. This is to keep the indices as small as possible. The goal is to keep the index objects to single bytes (CBOR positive integers 1-23).
 
-Wherever enumerations are used, they are started at 1. This allows detection of several common software errors that are caused by uninitialised variables. Positive numbers in enumerations are reserved for IANA registration. Negative numbers are used to identify application-specific implementations.
+Wherever enumerations are used, they are started at 1. This allows detection of several common software errors that are caused by uninitialised variables. Positive numbers in enumerations are reserved for IANA registration. Negative numbers are used to identify vendor-specific implementations.
 
 CDDL names are hyphenated and CDDL structures follow the convention adopted in COSE {{RFC8152}}: SUIT_Structure_Name.
 
 # How to use this document
 
-For information about firmware update in general and the background of the suit manifest, see {{background}}.
+For information about firmware update in general and the background of the manifest, see {{background}}.
 To implement an updatable device, see {{interpreter-behaviour}} and {{manifest-structure}}.
 To implement a tool that generates updates, see {{creating-manifests}} and {{manifest-structure}}.
 
@@ -108,12 +108,12 @@ Distributing firmware updates to diverse devices with diverse trust anchors in a
 The various constraints on IoT devices creates a broad set of use-case requirements. For example, devices with:
 
 * limited processing power and storage may require a simple representation of metadata.
-* bandwidth constraints may require firmware compression or partial update support.
+* bandwidth constraints may require firmware compression or differential update support.
 * bootloader complexity constraints may require simple selection between two bootable images.
 * small internal storage may require external storage support.
 * multiple processors may require coordinated update of all applications.
 * large storage and complex functionality may require parallel update of many software components.
-* mesh networks may require multicast distribution.
+* scalable updates for a large number of devices may require multicast distribution.
 
 Supporting the requirements introduced by the constraints on IoT devices requires the flexibility to represent a diverse set of possible metadata, but also requires that the encoding is kept simple.
 
@@ -144,8 +144,6 @@ When installation is complete, similar information can be used for validating an
 6. Verify image(s)
 7. Load image(s)
 8. Run image(s)
-
-If verification and running is implemented in bootloader, then the
 
 When multiple manifests are used for an update, each manifest's steps occur in a lockstep fashion; all manifests have dependency resolution performed before any manifest performs a payload fetch, etc.
 
