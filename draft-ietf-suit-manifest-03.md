@@ -93,7 +93,7 @@ Wherever enumerations are used, they are started at 1. This allows detection of 
 
 CDDL names are hyphenated and CDDL structures follow the convention adopted in COSE {{RFC8152}}: SUIT_Structure_Name.
 
-# How to use this document
+# How to use this Document
 
 For information about firmware update in general and the background of the suit manifest, see {{background}}.
 To implement an updatable device, see {{interpreter-behaviour}} and {{manifest-structure}}.
@@ -149,7 +149,7 @@ If verification and running is implemented in bootloader, then the
 
 When multiple manifests are used for an update, each manifest's steps occur in a lockstep fashion; all manifests have dependency resolution performed before any manifest performs a payload fetch, etc.
 
-##  SUIT Manifest goals
+##  SUIT Manifest Goals
 
 The manifest described in this document is intended to meet several goals, as described below.
 
@@ -175,7 +175,8 @@ The SUIT manifest can be used for a variety of purposes throughout its lifecycle
 
 Each of these uses happens at a different stage of the manifest lifecycle, so each has different requirements.
 
-##  SUIT manifest design summary
+##  SUIT Manifest Design Summary
+
 In order to provide flexible behaviour to constrained devices, while still allowing more powerful devices to use their full capabilities, the SUIT manifest encodes the required behaviour of a Recipient. Behaviour is encoded as a specialised byte code, contained in a CBOR list. This promotes a flat encoding, which simplifies the parser. The information encoded by this byte code closely matches the operations that a device will perform, which promotes ease of processing. The core operations used by most update and trusted execution operations are represented in the byte code. The byte code can be extended by registering new operations.
 
 The specialised byte code approach gives benefits equivalent to those provided by a scripting language or conventional byte code, with two substantial differences. First, the language is extremely high level, consisting of only the operations that a device may perform during update and trusted execution of a firmware image. Second, the language specifies behaviours in a linearised form, without reverse branches. Conditional processing is supported, and parallel and out-of-order processing may be performed by sufficiently capable devices.
@@ -236,7 +237,7 @@ If a dependency is specified, then the interpreter MUST perform the following ch
 
 If the interpreter does not support dependencies and a manifest specifies a dependency, then the interpreter MUST reject the manifest.
 
-## Interpreter fundamental properties
+## Interpreter Fundamental Properties
 
 The interpreter has a small set of design goals:
 
@@ -517,7 +518,7 @@ Elements are made severable by removing them from the manifest, encoding them in
 
 Because of this, all command sequences in the manifest are encoded in a bstr so that there is a single code path needed for all command sequences
 
-## Outer wrapper
+## Outer Wrapper
 
 This object is a container for the other pieces of the manifest to provide a common mechanism to find each of the parts. All elements of the outer wrapper are contained in bstr objects. Wherever the manifest references an object in the outer wrapper, the bstr is included in the digest calculation.
 
@@ -1330,7 +1331,7 @@ algorithm-id-sha3-384 = 7
 algorithm-id-sha3-512 = 8
 ~~~
 
-# Creating conditional sequences {#secconditional}
+# Creating Conditional Sequences {#secconditional}
 
 For some use cases, it is important to provide a sequence that can fail without terminating an update. For example, a dual-image XIP MCU may require an update that can be placed at one of two offsets. This has two implications, first, the digest of each offset will be different. Second, the image fetched for each offset will have a different URI. Conditional sequences allow this to be resolved in a simple way.
 
@@ -1432,9 +1433,7 @@ bz/m4rVlnIXbwK07HypLbAmBMcCjbazR14vTgdzfsJwFLbM5kdtzOLSolg==
 ~~~
 
 
-## Example 0:
-
-Secure boot only.
+## Example 0: Secure Boot
 
 The following JSON shows the intended behaviour of the manifest.
 
@@ -1538,9 +1537,7 @@ a2015854d28443a10126a1044874657374206b6579f65840ebecb66cbecb19dcedacf845
 23456789abcdeffedcba98765432100c1987d00c47860c0003f617f6
 ~~~
 
-## Example 1:
-
-Simultaneous download and installation of payload.
+## Example 1: Simultaneous Download and Installation of Payload
 
 The following JSON shows the intended behaviour of the manifest.
 
@@ -1654,7 +1651,7 @@ a2015854d28443a10126a1044874657374206b6579f65840b53142132ebddbf0c523378d
 2f6578616d706c652e636f6d2f66696c652e62696e15f6
 ~~~
 
-## Example 2:
+## Example 2: Compatibility Test Included
 
 Compatibility test, simultaneous download and installation, and secure boot.
 
@@ -1798,7 +1795,7 @@ b99b49195e081d1030508a6b8d271bd99dfb382a7767dc45f20c9943ed22a1eaac9d07a0
 74703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f60c47860c0003f617f6
 ~~~
 
-## Example 3:
+## Example 3: Load from External Storage
 
 Compatibility test, simultaneous download and installation, load from external storage, and secure boot.
 
@@ -2000,7 +1997,7 @@ a2015854d28443a10126a1044874657374206b6579f6584070eb70f2552533fc954e934f
 636f6d2f66696c652e62696e15f60c518e0c0003f60c0113a10a0015f603f617f6
 ~~~
 
-## Example 4:
+## Example 4: Load and Decompress from External Storage
 
 Compatibility test, simultaneous download and installation, load and decompress from external storage, and secure boot.
 
@@ -2211,9 +2208,7 @@ eeff0c1987d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e
 8403f617f6
 ~~~
 
-## Example 5:
-
-Compatibility test, download, installation, and secure boot.
+## Example 5: Compatibility Test, Download, Installation, and Secure Boot
 
 The following JSON shows the intended behaviour of the manifest.
 
@@ -2425,7 +2420,7 @@ bbccddeeff0c1987d001f602f6095825860c0013a106781b687474703a2f2f6578616d70
 f60c47860c0103f617f6
 ~~~
 
-## Example 6:
+## Example 6: Two Images
 
 Compatibility test, 2 images, simultaneous download and installation, and secure boot.
 
