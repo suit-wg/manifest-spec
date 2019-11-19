@@ -708,7 +708,7 @@ When executing a command sequence inside SUIT_Directive_Try_Each and a condition
 
 Encryption Info defines the mechanism that Fetch or Copy should use to decrypt the data they transfer. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged or a COSE_Encrypt0_Tagged, wrapped in a bstr
 
-## SUIT_Parameter_Compression_Info
+### SUIT_Parameter_Compression_Info
 
 Compression Info defines any information that is required for a device to perform decompression operations. Typically, this includes the algorithm identifier.
 
@@ -729,7 +729,7 @@ SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_lzma
 
 ~~~
 
-## SUIT_Parameter_Unpack_Info
+### SUIT_Parameter_Unpack_Info
 
 SUIT_Unpack_Info defines the information required for a device to interpret a packed format, such as elf, hex, or binary diff. SUIT_Unpack_Info is defined by the following CDDL:
 
@@ -745,7 +745,7 @@ SUIT_Unpack_Algorithms //= SUIT_Unpack_Algorithm_Elf
 
 ~~~
 
-## SUIT_Parameters CDDL
+### SUIT_Parameters CDDL
 
 The following CDDL describes all SUIT_Parameters.
 
