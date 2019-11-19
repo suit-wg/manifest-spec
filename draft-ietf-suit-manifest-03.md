@@ -66,7 +66,7 @@ A firmware update mechanism is an essential security feature for IoT devices to 
 
 It is assumed that the reader is familiar with the high-level firmware update architecture {{I-D.ietf-suit-architecture}}.
 
-The SUIT manifest is heavily optimised for consumption by constrained devices. This means that it is not constructed as a conventional descriptive document. Instead, of describing what an update IS, it describes what a recipient should DO.
+The SUIT manifest is heavily optimised for consumption by constrained devices. This means that it is not constructed as a conventional descriptive document. Instead, of describing what an update IS, it describes what a Recipient should DO.
 
 While the SUIT manifest is informed by and optimised for firmware update use cases, there is nothing in the {{I-D.ietf-suit-information-model}} that restricts its use to only firmware use cases. Software update and delivery of arbitrary data can equally be managed by SUIT-based metadata.
 
@@ -79,7 +79,7 @@ While the SUIT manifest is informed by and optimised for firmware update use cas
 * Resource: A piece of information that is used to construct a payload.
 * Manifest: A piece of information that describes one or more payloads, one or more resources, and the processors needed to transform resources into payloads.
 * Update: One or more manifests that describe one or more payloads.
-* Update Authority: The owner of a cryptographic key used to sign updates, trusted by recipient devices.
+* Update Authority: The owner of a cryptographic key used to sign updates, trusted by Recipients.
 * Recipient: The system, typically an IoT device, that receives a manifest.
 * Condition: A test for a property of the Recipient or its components.
 * Directive: An action for the Recipient to perform.
@@ -570,7 +570,7 @@ Each of suit-dependency-resolution, suit-payload-fetch, and suit-payload-install
 
 suit-text contains all the human-readable information that describes any and all parts of the manifest, its payload(s) and its resource(s).
 
-suit-coswid contains a Concise Software Identifier. This may be discarded by the recipient if not needed.
+suit-coswid contains a Concise Software Identifier. This may be discarded by the Recipient if not needed.
 
 ## Manifest {#secmanifest}
 
@@ -582,7 +582,7 @@ The manifest describes the critical metadata for the referenced payload(s). In a
 4. a list of components affected
 5. a list of components affected by dependencies
 6. a reference for each of the severable blocks.
-7. a list of actions that the recipient should perform.
+7. a list of actions that the Recipient should perform.
 
 The following CDDL fragment defines the manifest.
 
@@ -609,11 +609,11 @@ SUIT_Common = {
 }
 ~~~
 
-Several fields in the Manifest can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable field. Severable fields are RECOMMENDED to implement. In particular, text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by recipient devices. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a recipient to determine whether an element is been severable. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Outer_Wrapper so that a recipient can easily identify the correct data in the outer wrapper.
+Several fields in the Manifest can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable field. Severable fields are RECOMMENDED to implement. In particular, text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element is been severable. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Outer_Wrapper so that a Recipient can easily identify the correct data in the outer wrapper.
 
 The suit-manifest-version indicates the version of serialisation used to encode the manifest. Version 1 is the version described in this document. suit-manifest-version is REQUIRED.
 
-The suit-manifest-sequence-number is a monotonically increasing anti-rollback counter. It also helps devices to determine which in a set of manifests is the "root" manifest in a given update. Each manifest MUST have a sequence number higher than each of its dependencies. Each recipient MUST reject any manifest that has a sequence number lower than its current sequence number. It MAY be convenient to use a UTC timestamp in seconds as the sequence number. suit-manifest-sequence-number is REQUIRED.
+The suit-manifest-sequence-number is a monotonically increasing anti-rollback counter. It also helps devices to determine which in a set of manifests is the "root" manifest in a given update. Each manifest MUST have a sequence number higher than each of its dependencies. Each Recipient MUST reject any manifest that has a sequence number lower than its current sequence number. It MAY be convenient to use a UTC timestamp in seconds as the sequence number. suit-manifest-sequence-number is REQUIRED.
 
 suit-common encodes all the information that is shared between each of the command sequences, including: suit-dependencies, suit-components, suit-dependency-components, and suit-common-sequence. suit-common is REQUIRED to implement.
 
@@ -662,7 +662,7 @@ The suit-dependency-prefix element contains a SUIT_Component_Identifier. This sp
 
 ## SUIT_Component_Reference
 
-The SUIT_Component_Reference describes an image that is defined by another manifest. This is useful for overriding the behaviour of another manifest, for example by directing the recipient to look at a different URI for the image or by changing the expected format, such as when a gateway performs decryption on behalf of a constrained device. The following CDDL describes the SUIT_Component_Reference.
+The SUIT_Component_Reference describes an image that is defined by another manifest. This is useful for overriding the behaviour of another manifest, for example by directing the Recipient to look at a different URI for the image or by changing the expected format, such as when a gateway performs decryption on behalf of a constrained device. The following CDDL describes the SUIT_Component_Reference.
 
 ~~~
 SUIT_Component_Reference = {
@@ -709,7 +709,7 @@ When executing a command sequence inside SUIT_Directive_Try_Each and a condition
 
 Encryption Info defines the mechanism that Fetch or Copy should use to decrypt the data they transfer. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged or a COSE_Encrypt0_Tagged, wrapped in a bstr
 
-## SUIT_Parameter_Compression_Info
+### SUIT_Parameter_Compression_Info
 
 Compression Info defines any information that is required for a device to perform decompression operations. Typically, this includes the algorithm identifier.
 
@@ -730,7 +730,7 @@ SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_lzma
 
 ~~~
 
-## SUIT_Parameter_Unpack_Info
+### SUIT_Parameter_Unpack_Info
 
 SUIT_Unpack_Info defines the information required for a device to interpret a packed format, such as elf, hex, or binary diff. SUIT_Unpack_Info is defined by the following CDDL:
 
@@ -746,7 +746,7 @@ SUIT_Unpack_Algorithms //= SUIT_Unpack_Algorithm_Elf
 
 ~~~
 
-## SUIT_Parameters CDDL
+### SUIT_Parameters CDDL
 
 The following CDDL describes all SUIT_Parameters.
 
@@ -792,7 +792,7 @@ SUIT_Unpack_Algorithms //= SUIT_Unpack_Algorithm_Elf
 
 ## SUIT_Command_Sequence
 
-A SUIT_Command_Sequence defines a series of actions that the recipient MUST take to accomplish a particular goal. These goals are defined in the manifest and include:
+A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take to accomplish a particular goal. These goals are defined in the manifest and include:
 
 1. Dependency Resolution
 2. Payload Fetch
@@ -852,7 +852,7 @@ Condition Code | Condition Name | Argument Type
 28 | Version | List of Integers
 nint | Custom Condition | bstr
 
-Each condition MUST report a success code on completion. If a condition reports failure, then the current sequence of commands MUST terminate. If a recipient encounters an unknown Condition Code, it MUST report a failure.
+Each condition MUST report a success code on completion. If a condition reports failure, then the current sequence of commands MUST terminate. If a Recipient encounters an unknown Condition Code, it MUST report a failure.
 
 Positive Condition numbers are reserved for IANA registration. Negative numbers are reserved for proprietary, application-specific directives.
 
@@ -860,7 +860,7 @@ Positive Condition numbers are reserved for IANA registration. Negative numbers 
 
 There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a RFC 4122 {{RFC4122}} UUID that MUST have already been set as a parameter. The installing device MUST match the specified UUID in order to consider the manifest valid. These identifiers MAY be scoped by component.
 
-The recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.
+The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.
 
 ### suit-condition-image-match
 
@@ -932,7 +932,7 @@ SUIT_Condition_Custom is OPTIONAL to implement.
 
 ### Identifiers
 
-Many conditions use identifiers to determine whether a manifest matches a given recipient or not. These identifiers are defined to be RFC 4122 {{RFC4122}} UUIDs. These UUIDs are explicitly NOT human-readable. They are for machine-based matching only.
+Many conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 {{RFC4122}} UUIDs. These UUIDs are explicitly NOT human-readable. They are for machine-based matching only.
 
 A device may match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a device that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This device might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.
 
@@ -1004,7 +1004,7 @@ SUIT_Condition_Version_Comparison_Value = [+int]
 ~~~
 
 ## SUIT_Directive
-Directives are used to define the behaviour of the recipient. Directives include:
+Directives are used to define the behaviour of the Recipient. Directives include:
 
 Directive Code | Directive Name
 ---|---
