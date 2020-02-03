@@ -1,4 +1,5 @@
 SUIT_Outer_Wrapper = {
+    suit-delegation             => bstr .cbor SUIT_Delegation
     suit-authentication-wrapper => bstr .cbor SUIT_Authentication_Wrapper / nil,
     $$SUIT_Manifest_Wrapped,
     suit-dependency-resolution  => bstr .cbor SUIT_Command_Sequence,
@@ -106,7 +107,7 @@ SUIT_Condition //= (suit-condition-image-match,       nil)
 SUIT_Condition //= (suit-condition-image-not-match,   nil)
 SUIT_Condition //= (suit-condition-use-before,        uint)
 SUIT_Condition //= (suit-condition-minimum-battery,   uint)
-SUIT_Condition //= (suit-condition-update-authorised, int)
+SUIT_Condition //= (suit-condition-update-authorized, int)
 SUIT_Condition //= (suit-condition-version,           SUIT_Condition_Version_Argument)
 SUIT_Condition //= (suit-condition-component-offset,  uint)
 SUIT_Condition //= (suit-condition-custom,            bstr)
@@ -150,7 +151,7 @@ SUIT_Directive_Try_Each_Argument = [
     nil / bstr .cbor SUIT_Command_Sequence
 ]
 
-SUIT_Wait_Events //= (suit-wait-event-authorisation => int)
+SUIT_Wait_Events //= (suit-wait-event-authorization => int)
 SUIT_Wait_Events //= (suit-wait-event-power => int)
 SUIT_Wait_Events //= (suit-wait-event-network => int)
 SUIT_Wait_Events //= (suit-wait-event-other-device-version
@@ -162,7 +163,7 @@ SUIT_Wait_Events //= (suit-wait-event-day-of-week
     => uint); Days since Sunday
 
 
-SUIT_Wait_Event_Argument_Authorisation = int ; priority
+SUIT_Wait_Event_Argument_Authorization = int ; priority
 SUIT_Wait_Event_Argument_Power = int ; Power Level
 SUIT_Wait_Event_Argument_Network = int ; Network State
 SUIT_Wait_Event_Argument_Other_Device_Version = [
@@ -264,7 +265,7 @@ suit-condition-custom = 6
 suit-condition-device-identifier        = 24
 suit-condition-image-not-match          = 25
 suit-condition-minimum-battery          = 26
-suit-condition-update-authorised        = 27
+suit-condition-update-authorized        = 27
 suit-condition-version                  = 28
 
 suit-directive-set-component-index      = 12
@@ -285,14 +286,14 @@ suit-directive-run-sequence             = 30
 suit-directive-run-with-arguments       = 31
 suit-directive-swap                     = 32
 
-suit-wait-event-argument-authorisation = 1
+suit-wait-event-argument-authorization = 1
 suit-wait-event-power = 2
 suit-wait-event-network = 3
 suit-wait-event-other-device-version = 4
 suit-wait-event-time = 5
 suit-wait-event-time-of-day = 6
 suit-wait-event-day-of-week = 7
-suit-wait-event-authorisation = 8
+suit-wait-event-authorization = 8
 
 suit-parameter-strict-order = 1
 suit-parameter-soft-failure = 2
@@ -309,7 +310,7 @@ suit-parameter-image-size = 12
 
 suit-parameter-uri-list = 24
 suit-parameter-uri-list-append = 25
-suit-parameter-prioritised-parameters = 26
+suit-parameter-prioritized-parameters = 26
 
 suit-parameter-custom = nint
 

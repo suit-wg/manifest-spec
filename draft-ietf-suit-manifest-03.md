@@ -1,7 +1,7 @@
 ---
-title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest 
+title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: SUIT CBOR Manifest
-docname: draft-ietf-suit-manifest-02
+docname: draft-ietf-suit-manifest-03
 category: std
 
 ipr: pre5378Trust200902
@@ -48,7 +48,7 @@ normative:
 
 
 informative:
-  I-D.ietf-suit-architecture: 
+  I-D.ietf-suit-architecture:
   I-D.ietf-suit-information-model:
 
 
@@ -66,13 +66,15 @@ A firmware update mechanism is an essential security feature for IoT devices to 
 
 It is assumed that the reader is familiar with the high-level firmware update architecture {{I-D.ietf-suit-architecture}}.
 
-The SUIT manifest is heavily optimised for consumption by constrained devices. This means that it is not constructed as a conventional descriptive document. Instead, of describing what an update IS, it describes what a Recipient should DO.
+The SUIT manifest is heavily optimized for consumption by constrained devices. This means that it is not constructed as a conventional descriptive document. Instead, of describing what an update IS, it describes what a recipient should DO.
 
-While the SUIT manifest is informed by and optimised for firmware update use cases, there is nothing in the {{I-D.ietf-suit-information-model}} that restricts its use to only firmware use cases. Software update and delivery of arbitrary data can equally be managed by SUIT-based metadata.
+While the SUIT manifest is informed by and optimized for firmware update use cases, there is nothing in the {{I-D.ietf-suit-information-model}} that restricts its use to only firmware use cases. Software update and delivery of arbitrary data can equally be managed by SUIT-based metadata.
 
 #  Conventions and Terminology
 
 {::boilerplate bcp14}
+
+The following terminology is used throughout this document.
 
 * SUIT: Software Update for the Internet of Things, the IETF working group for this standard.
 * Payload: A piece of information to be delivered. Typically Firmware for the purposes of SUIT.
@@ -96,7 +98,7 @@ CDDL names are hyphenated and CDDL structures follow the convention adopted in C
 # How to use this Document
 
 For information about firmware update in general and the background of the suit manifest, see {{background}}.
-To implement an updatable device, see {{interpreter-behaviour}} and {{manifest-structure}}.
+To implement an updatable device, see {{interpreter-behavior}} and {{manifest-structure}}.
 To implement a tool that generates updates, see {{creating-manifests}} and {{manifest-structure}}.
 
 # Background {#background}
@@ -176,16 +178,15 @@ The SUIT manifest can be used for a variety of purposes throughout its lifecycle
 Each of these uses happens at a different stage of the manifest lifecycle, so each has different requirements.
 
 ##  SUIT Manifest Design Summary
+In order to provide flexible behavior to constrained devices, while still allowing more powerful devices to use their full capabilities, the SUIT manifest encodes the required behavior of a Recipient device. Behavior is encoded as a specialized byte code, contained in a CBOR list. This promotes a flat encoding, which simplifies the parser. The information encoded by this byte code closely matches the operations that a device will perform, which promotes ease of processing. The core operations used by most update and trusted execution operations are represented in the byte code. The byte code can be extended by registering new operations.
 
-In order to provide flexible behaviour to constrained devices, while still allowing more powerful devices to use their full capabilities, the SUIT manifest encodes the required behaviour of a Recipient. Behaviour is encoded as a specialised byte code, contained in a CBOR list. This promotes a flat encoding, which simplifies the parser. The information encoded by this byte code closely matches the operations that a device will perform, which promotes ease of processing. The core operations used by most update and trusted execution operations are represented in the byte code. The byte code can be extended by registering new operations.
-
-The specialised byte code approach gives benefits equivalent to those provided by a scripting language or conventional byte code, with two substantial differences. First, the language is extremely high level, consisting of only the operations that a device may perform during update and trusted execution of a firmware image. Second, the language specifies behaviours in a linearised form, without reverse branches. Conditional processing is supported, and parallel and out-of-order processing may be performed by sufficiently capable devices.
+The specialized byte code approach gives benefits equivalent to those provided by a scripting language or conventional byte code, with two substantial differences. First, the language is extremely high level, consisting of only the operations that a device may perform during update and trusted execution of a firmware image. Second, the language specifies behaviors in a linearized form, without reverse branches. Conditional processing is supported, and parallel and out-of-order processing may be performed by sufficiently capable devices.
 
 By structuring the data in this way, the manifest processor becomes a very simple engine that uses a pull parser to interpret the manifest. This pull parser invokes a series of command handlers that evaluate a Condition or execute a Directive. Most data is structured in a highly regular pattern, which simplifies the parser.
 
 The results of this allow a Recipient to implement a very small parser for constrained applications. If needed, such a parser also allows the Recipient to perform complex updates with reduced overhead. Conditional execution of commands allows a simple device to perform important decisions at validation-time.
 
-Dependency handling is vastly simplified as well. Dependencies function like subroutines of the language. When a manifest has a dependency, it can invoke that dependency's commands and modify their behaviour by setting parameters. Because some parameters come with security implications, the dependencies also have a mechanism to reject modifications to parameters on a fine-grained level.
+Dependency handling is vastly simplified as well. Dependencies function like subroutines of the language. When a manifest has a dependency, it can invoke that dependency's commands and modify their behavior by setting parameters. Because some parameters come with security implications, the dependencies also have a mechanism to reject modifications to parameters on a fine-grained level.
 
 Developing a robust permissions system works in this model too. The Recipient can use a simple ACL that is a table of Identities and Component Identifier permissions to ensure that only manifests authenticated by the appropriate identity have access to operate on a component.
 
@@ -193,9 +194,9 @@ Capability reporting is similarly simplified. A Recipient can report the Command
 
 The simplicity of design in the Recipient due to all of these benefits allows even a highly constrained platform to use advanced update capabilities.
 
-# Interpreter Behaviour {#interpreter-behaviour}
+# Interpreter Behavior {#interpreter-behavior}
 
-This section describes the behaviour of the manifest interpreter. This section focuses primarily on interpreting commands in the manifest. However, there are several other important behaviours of the interpreter: encoding version detection, rollback protection, and authenticity verification are chief among these.
+This section describes the behavior of the manifest interpreter. This section focuses primarily on interpreting commands in the manifest. However, there are several other important behaviors of the interpreter: encoding version detection, rollback protection, and authenticity verification are chief among these.
 
 ## Interpreter Setup
 
@@ -249,7 +250,7 @@ NOTE: when using A/B images, the manifest functions as two (or more) logical man
 
 ## Abstract Machine Description
 
-The byte code that forms the bulk of the manifest is processed by an interpreter. This interpreter can be modelled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands. Certain commands also affect the machine's behaviour.
+The byte code that forms the bulk of the manifest is processed by an interpreter. This interpreter can be modeled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands. Certain commands also affect the machine's behavior.
 
 Every command that modifies system state targets a specific component. Components are units of code or data that can be targeted by an update. They are identified by Component identifiers, arrays of binary-strings--effectively a binary path. Each component has a corresponding set of configuration, Parameters. Parameters are used as the inputs to commands.
 
@@ -279,7 +280,7 @@ Other parameters are OPTIONAL to implement. These parameters allow a device to i
 
 ### Commands
 
-Commands define the behaviour of a device. The commands are divided into two groups: those that modify state (directives) and those that perform tests (conditions). There are also several Control Flow operations.
+Commands define the behavior of a device. The commands are divided into two groups: those that modify state (directives) and those that perform tests (conditions). There are also several Control Flow operations.
 
 Some commands are REQUIRED to implement. These commands allow a device to perform core functions
 
@@ -306,7 +307,7 @@ Other commands are OPTIONAL to implement. These commands allow a device to imple
 * Check Device Identifier (cdid)
 * Check Image Not Match (nimg)
 * Check Minimum Battery (minb)
-* Check Update Authorised (auth)
+* Check Update Authorized (auth)
 * Check Version (cver)
 * Abort (abrt)
 * Try Each (try)
@@ -316,9 +317,9 @@ Other commands are OPTIONAL to implement. These commands allow a device to imple
 * Run Sequence (srun) mandatory component set
 * Run with Arguments (arun)
 
-### Command Behaviour
+### Command Behavior
 
-The following table describes the behaviour of each command. "params"
+The following table describes the behavior of each command. "params"
 represents the parameters for the current component or dependency.
 
 | Code | Operation
@@ -338,7 +339,7 @@ represents the parameters for the current component or dependency.
 | cdid | binary-match(component, params\[device-id\])
 | nimg | not binary-match(digest(component), params\[digest\])
 | minb | assert(battery >= arg)
-| auth | assert(isAuthorised())
+| auth | assert(isAuthorized())
 | cver | assert(version_check(component, arg))
 | abrt | assert(0)
 | try  | break if exec(seq) is not error for seq in arg
@@ -379,7 +380,7 @@ The interpreter also performs the checks described in {{required-checks}} to ens
 
 Manifests are created using tools for constructing COSE structures, calculating cryptographic values and compiling desired system state into a sequence of operations required to achieve that state. The process of constructing COSE structures is covered in {{RFC8152}} and the calculation of cryptographic values is beyond the scope of this document.
 
-Compiling desired system state into a sequence of operations can be accomplished in many ways, however several templates are provided here to cover common use-cases. Many of these templates can be aggregated to produce more complex behaviour.
+Compiling desired system state into a sequence of operations can be accomplished in many ways, however several templates are provided here to cover common use-cases. Many of these templates can be aggregated to produce more complex behavior.
 
 NOTE: On systems that support only a single component, Set Current Component has no effect and can be omitted.
 
@@ -410,7 +411,7 @@ If a device class has a unique trust anchor, and every element in its trust chai
 
 If a manifest includes a dependency that performs a compatibility check, then the dependent manifest MAY include the compatibility check.
 
-The compatibility check template contains a data dependency: Vendor Identifier and Class Identifier MUST be set prior to executing the template. One examples of the full template is included below, however Parameters may be set within a Try-Each block as well. They may also be inherited from a dependent manifest.
+The compatibility check template contains a data dependency: Vendor Identifier and Class Identifier MUST be set prior to executing the template. One example of the full template is included below, however Parameters may be set within a Try-Each block as well. They may also be inherited from a dependent manifest.
 
 * Common:
     * Set Current Component
@@ -486,6 +487,7 @@ NOTE: Any changes made to parameters in a dependency persist in the dependent.
 The manifest is divided into several sections in a hierarchy as follows:
 
 1. The outer wrapper
+    1. Authentication delegation chain(s)
     1. The authentication wrapper
     2. The manifest
         1. Critical Information
@@ -526,6 +528,7 @@ The CDDL that describes the wrapper is below
 
 ~~~
 SUIT_Outer_Wrapper = {
+    suit-delegation               => bstr .cbor SUIT_Delegation
     suit-authentication-wrapper   => bstr .cbor
                                      SUIT_Authentication_Wrapper / nil,
     $SUIT_Manifest_Wrapped,
@@ -535,6 +538,8 @@ SUIT_Outer_Wrapper = {
     ? suit-text                   => bstr .cbor SUIT_Text_Map,
     ? suit-coswid                 => bstr .cbor COSWID
 }
+
+SUIT_Delegation = [ + [ + CWT ] ]
 
 SUIT_Authentication_Wrapper = [ + (COSE_Mac_Tagged / COSE_Sign_Tagged /
                                   COSE_Mac0_Tagged / COSE_Sign1_Tagged)]
@@ -547,7 +552,7 @@ SUIT_Manifest_Wrapped //= (
 )
 ~~~
 
-All elements of the outer wrapper must be wrapped in a bstr to minimize the complexity of the code that evaluates the cryptographic integrity of the element and to ensure correct serialisation for integrity and authenticity checks.
+All elements of the outer wrapper must be wrapped in a bstr to minimize the complexity of the code that evaluates the cryptographic integrity of the element and to ensure correct serialization for integrity and authenticity checks.
 
 The suit-authentication-wrapper contains a list of 1 or more cryptographic authentication wrappers for the core part of the manifest. These are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged blocks. The Manifest is authenticated by these blocks in "detached payload" mode. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}} and are beyond the scope of this document. The suit-authentication-wrapper MUST come first in the SUIT_Outer_Wrapper, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Outer_Wrapper that begins with any element other than a suit-authentication-wrapper.
 
@@ -611,7 +616,7 @@ SUIT_Common = {
 
 Several fields in the Manifest can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable field. Severable fields are RECOMMENDED to implement. In particular, text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element is been severable. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Outer_Wrapper so that a Recipient can easily identify the correct data in the outer wrapper.
 
-The suit-manifest-version indicates the version of serialisation used to encode the manifest. Version 1 is the version described in this document. suit-manifest-version is REQUIRED.
+The suit-manifest-version indicates the version of serialization used to encode the manifest. Version 1 is the version described in this document. suit-manifest-version is REQUIRED.
 
 The suit-manifest-sequence-number is a monotonically increasing anti-rollback counter. It also helps devices to determine which in a set of manifests is the "root" manifest in a given update. Each manifest MUST have a sequence number higher than each of its dependencies. Each Recipient MUST reject any manifest that has a sequence number lower than its current sequence number. It MAY be convenient to use a UTC timestamp in seconds as the sequence number. suit-manifest-sequence-number is REQUIRED.
 
@@ -662,7 +667,7 @@ The suit-dependency-prefix element contains a SUIT_Component_Identifier. This sp
 
 ## SUIT_Component_Reference
 
-The SUIT_Component_Reference describes an image that is defined by another manifest. This is useful for overriding the behaviour of another manifest, for example by directing the Recipient to look at a different URI for the image or by changing the expected format, such as when a gateway performs decryption on behalf of a constrained device. The following CDDL describes the SUIT_Component_Reference.
+The SUIT_Component_Reference describes an image that is defined by another manifest. This is useful for overriding the behavior of another manifest, for example by directing the recipient to look at a different URI for the image or by changing the expected format, such as when a gateway performs decryption on behalf of a constrained device. The following CDDL describes the SUIT_Component_Reference.
 
 ~~~
 SUIT_Component_Reference = {
@@ -695,11 +700,11 @@ ID | CBOR Type | Scope | Name | Description
 25 | boolean | Component/Dependency | URI List Append | A CBOR encoded list of ranked URIs
 nint | int/bstr | Custom | Custom Parameter | Application-defined parameter
 
-CBOR-encoded object parameters are still wrapped in a bstr. This is because it allows a parser that is aggregating parameters to reference the object with a single pointer and traverse it without understanding the contents. This is important for modularisation and division of responsibility within a pull parser. The same consideration does not apply to Conditions and Directives because those elements are invoked with their arguments immediately
+CBOR-encoded object parameters are still wrapped in a bstr. This is because it allows a parser that is aggregating parameters to reference the object with a single pointer and traverse it without understanding the contents. This is important for modularization and division of responsibility within a pull parser. The same consideration does not apply to Conditions and Directives because those elements are invoked with their arguments immediately
 
 ### SUIT_Parameter_Strict_Order
 
-The Strict Order Parameter allows a manifest to govern when directives can be executed out-of-order. This allows for systems that have a sensitivity to order of updates to choose the order in which they are executed. It also allows for more advanced systems to parallelise their handling of updates. Strict Order defaults to True. It MAY be set to False when the order of operations does not matter. When arriving at the end of a command sequence, ALL commands MUST have completed, regardless of the state of SUIT_Parameter_Strict_Order. If SUIT_Parameter_Strict_Order is returned to True, ALL preceding commands MUST complete before the next command is executed.
+The Strict Order Parameter allows a manifest to govern when directives can be executed out-of-order. This allows for systems that have a sensitivity to order of updates to choose the order in which they are executed. It also allows for more advanced systems to parallelize their handling of updates. Strict Order defaults to True. It MAY be set to False when the order of operations does not matter. When arriving at the end of a command sequence, ALL commands MUST have completed, regardless of the state of SUIT_Parameter_Strict_Order. If SUIT_Parameter_Strict_Order is returned to True, ALL preceding commands MUST complete before the next command is executed.
 
 ### SUIT_Parameter_Soft_Failure
 
@@ -707,7 +712,7 @@ When executing a command sequence inside SUIT_Directive_Try_Each and a condition
 
 ## SUIT_Parameter_Encryption_Info
 
-Encryption Info defines the mechanism that Fetch or Copy should use to decrypt the data they transfer. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged or a COSE_Encrypt0_Tagged, wrapped in a bstr
+Encryption Info defines the mechanism that Fetch or Copy should use to decrypt the data they transfer. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged or a COSE_Encrypt0_Tagged, wrapped in a bstr.
 
 ### SUIT_Parameter_Compression_Info
 
@@ -832,7 +837,7 @@ Argument blocks are defined for each type of command.
 
 Many conditions and directives apply to a given component, and these generally grouped together. Therefore, a special command to set the current component index is provided with a matching command to set the current dependency index. This index is a numeric index into the component ID tables defined at the beginning of the document. For the purpose of setting the index, the two component ID tables are considered to be concatenated together.
 
-To facilitate optional conditions, a special directive is provided. It runs several new lists of conditions/directives, one after another, that are contained as an argument to the directive. By default, it assumes that a failure of a condition should not indicate a failure of the update/boot, but a parameter is provided to override this behaviour.
+To facilitate optional conditions, a special directive is provided. It runs several new lists of conditions/directives, one after another, that are contained as an argument to the directive. By default, it assumes that a failure of a condition should not indicate a failure of the update/boot, but a parameter is provided to override this behavior.
 
 ## SUIT_Condition
 
@@ -848,7 +853,7 @@ Condition Code | Condition Name | Argument Type
 24 | Device Identifier | nil
 25 | Image Not Match | nil
 26 | Minimum Battery | Unsigned Integer
-27 | Update Authorised | Integer
+27 | Update Authorized | Integer
 28 | Version | List of Integers
 nint | Custom Condition | bstr
 
@@ -878,9 +883,9 @@ Verify that the current time is BEFORE the specified time. suit-condition-use-be
 
 suit-condition-minimum-battery provides a mechanism to test a device's battery level before installing an update. This condition is for use in primary-cell applications, where the battery is only ever discharged. For batteries that are charged, suit-directive-wait is more appropriate, since it defines a "wait" until the battery level is sufficient to install the update. suit-condition-minimum-battery is specified in mWh. suit-condition-minimum-battery is OPTIONAL to implement.
 
-### suit-condition-update-authorised
+### suit-condition-update-authorized
 
-Request Authorisation from the application and fail if not authorised. This can allow a user to decline an update. Argument is an integer priority level. Priorities are application defined. suit-condition-update-authorised is OPTIONAL to implement.
+Request Authorization from the application and fail if not authorized. This can allow a user to decline an update. Argument is an integer priority level. Priorities are application defined. suit-condition-update-authorized is OPTIONAL to implement.
 
 ### suit-condition-version
 
@@ -985,7 +990,7 @@ SUIT_Condition //= (suit-condition-image-match,       nil)
 SUIT_Condition //= (suit-condition-image-not-match,   nil)
 SUIT_Condition //= (suit-condition-use-before,        uint)
 SUIT_Condition //= (suit-condition-minimum-battery,   uint)
-SUIT_Condition //= (suit-condition-update-authorised, int)
+SUIT_Condition //= (suit-condition-update-authorized, int)
 SUIT_Condition //= (suit-condition-version,           SUIT_Condition_Version_Argument)
 SUIT_Condition //= (suit-condition-component-offset,  uint)
 SUIT_Condition //= (suit-condition-custom,            bstr)
@@ -1004,7 +1009,7 @@ SUIT_Condition_Version_Comparison_Value = [+int]
 ~~~
 
 ## SUIT_Directive
-Directives are used to define the behaviour of the Recipient. Directives include:
+Directives are used to define the behavior of the recipient. Directives include:
 
 Directive Code | Directive Name
 ---|---
@@ -1073,7 +1078,7 @@ SUIT_Parameter_Soft_Failure defaults to False when suit-directive-run-sequence b
 
 This command runs several SUIT_Command_Sequence, one after another, in a strict order. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.
 
-SUIT_Parameter_Soft_Failure is initialised to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.
+SUIT_Parameter_Soft_Failure is initialized to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.
 
 The following CDDL describes the SUIT_Try_Each argument.
 
@@ -1100,11 +1105,11 @@ SUIT_Directive_Process_Dependency_Argument = nil
 
 ### suit-directive-set-parameters
 
-suit-directive-set-parameters allows the manifest to configure behaviour of future directives by changing parameters that are read by those directives. When dependencies are used, suit-directive-set-parameters also allows a manifest to modify the behaviour of its dependencies.
+suit-directive-set-parameters allows the manifest to configure behavior of future directives by changing parameters that are read by those directives. When dependencies are used, suit-directive-set-parameters also allows a manifest to modify the behavior of its dependencies.
 
 Available parameters are defined in {{secparameters}}.
 
-If a parameter is already set, suit-directive-set-parameters will skip setting the parameter to its argument. This provides the core of the override mechanism, allowing dependent manifests to change the behaviour of a manifest.
+If a parameter is already set, suit-directive-set-parameters will skip setting the parameter to its argument. This provides the core of the override mechanism, allowing dependent manifests to change the behavior of a manifest.
 
 The argument to suit-directive-set-parameters is defined in the following CDDL.
 
@@ -1112,7 +1117,7 @@ The argument to suit-directive-set-parameters is defined in the following CDDL.
 SUIT_Directive_Set_Parameters_Argument = {+ SUIT_Parameters}
 ~~~
 
-N.B.: A directive code is reserved for an optimisation: a way to set a parameter to the contents of another parameter, optionally with another component ID.
+N.B.: A directive code is reserved for an optimization: a way to set a parameter to the contents of another parameter, optionally with another component ID.
 
 
 ### suit-directive-override-parameters
@@ -1133,11 +1138,11 @@ suit-directive-fetch instructs the manifest processor to obtain one or more mani
 
 suit-directive-fetch can target one or more manifests and one or more payloads. suit-directive-fetch retrieves each component and each manifest listed in component-index and manifest-index, respectively. If component-index or manifest-index is True, instead of an integer, then all current manifest components/manifests are fetched. The current manifest's dependent-components are not automatically fetched. In order to pre-fetch these, they MUST be specified in a component-index integer.
 
-suit-directive-fetch typically takes no arguments unless one is needed to modify fetch behaviour. If an argument is needed, it must be wrapped in a bstr.
+suit-directive-fetch typically takes no arguments unless one is needed to modify fetch behavior. If an argument is needed, it must be wrapped in a bstr.
 
 suit-directive-fetch reads the URI or URI List parameter to find the source of the fetch it performs.
 
-The behaviour of suit-directive-fetch can be modified by setting one or more of SUIT_Parameter_Encryption_Info, SUIT_Parameter_Compression_Info, SUIT_Parameter_Unpack_Info. These three parameters each activate and configure a processing step that can be applied to the data that is transferred during suit-directive-fetch.
+The behavior of suit-directive-fetch can be modified by setting one or more of SUIT_Parameter_Encryption_Info, SUIT_Parameter_Compression_Info, SUIT_Parameter_Unpack_Info. These three parameters each activate and configure a processing step that can be applied to the data that is transferred during suit-directive-fetch.
 
 The argument to suit-directive-fetch is defined in the following CDDL.
 
@@ -1149,7 +1154,7 @@ SUIT_Directive_Fetch_Argument = nil/bstr
 
 suit-directive-copy instructs the manifest processor to obtain one or more payloads, as specified by the component index. suit-directive-copy retrieves each component listed in component-index, respectively. If component-index is True, instead of an integer, then all current manifest components are copied. The current manifest's dependent-components are not automatically copied. In order to copy these, they MUST be specified in a component-index integer.
 
-The behaviour of suit-directive-copy can be modified by setting one or more of SUIT_Parameter_Encryption_Info, SUIT_Parameter_Compression_Info, SUIT_Parameter_Unpack_Info. These three parameters each activate and configure a processing step that can be applied to the data that is transferred during suit-directive-copy.
+The behavior of suit-directive-copy can be modified by setting one or more of SUIT_Parameter_Encryption_Info, SUIT_Parameter_Compression_Info, SUIT_Parameter_Unpack_Info. These three parameters each activate and configure a processing step that can be applied to the data that is transferred during suit-directive-copy.
 
 **N.B.** Fetch and Copy are very similar. Merging them into one command may be appropriate.
 
@@ -1181,7 +1186,7 @@ SUIT_Directive_Run_Argument = nil/bstr
 
 suit-directive-wait directs the manifest processor to pause until a specified event occurs. Some possible events include:
 
-1. Authorisation
+1. Authorization
 2. External Power
 3. Network availability
 4. Other Device Firmware Version
@@ -1192,7 +1197,7 @@ suit-directive-wait directs the manifest processor to pause until a specified ev
 The following CDDL defines the encoding of these events.
 
 ~~~
-SUIT_Wait_Events //= (suit-wait-event-authorisation => int)
+SUIT_Wait_Events //= (suit-wait-event-authorization => int)
 SUIT_Wait_Events //= (suit-wait-event-power => int)
 SUIT_Wait_Events //= (suit-wait-event-network => int)
 SUIT_Wait_Events //= (suit-wait-event-other-device-version
@@ -1204,7 +1209,7 @@ SUIT_Wait_Events //= (suit-wait-event-day-of-week
     => uint); Days since Sunday
 
 
-SUIT_Wait_Event_Argument_Authorisation = int ; priority
+SUIT_Wait_Event_Argument_Authorization = int ; priority
 SUIT_Wait_Event_Argument_Power = int ; Power Level
 SUIT_Wait_Event_Argument_Network = int ; Network State
 SUIT_Wait_Event_Argument_Other_Device_Version = [
@@ -1245,7 +1250,7 @@ SUIT_Directive_Try_Each_Argument = [
     nil / bstr .cbor SUIT_Command_Sequence
 ]
 
-SUIT_Wait_Events //= (suit-wait-event-authorisation => int)
+SUIT_Wait_Events //= (suit-wait-event-authorization => int)
 SUIT_Wait_Events //= (suit-wait-event-power => int)
 SUIT_Wait_Events //= (suit-wait-event-network => int)
 SUIT_Wait_Events //= (suit-wait-event-other-device-version
@@ -1257,7 +1262,7 @@ SUIT_Wait_Events //= (suit-wait-event-day-of-week
     => uint); Days since Sunday
 
 
-SUIT_Wait_Event_Argument_Authorisation = int ; priority
+SUIT_Wait_Event_Argument_Authorization = int ; priority
 SUIT_Wait_Event_Argument_Power = int ; Power Level
 SUIT_Wait_Event_Argument_Network = int ; Network State
 SUIT_Wait_Event_Argument_Other_Device_Version = [
@@ -1435,7 +1440,9 @@ bz/m4rVlnIXbwK07HypLbAmBMcCjbazR14vTgdzfsJwFLbM5kdtzOLSolg==
 
 ## Example 0: Secure Boot
 
-The following JSON shows the intended behaviour of the manifest.
+Secure boot only.
+
+The following JSON shows the intended behavior of the manifest.
 
 ~~~ JSON
 
@@ -1539,7 +1546,9 @@ a2015854d28443a10126a1044874657374206b6579f65840ebecb66cbecb19dcedacf845
 
 ## Example 1: Simultaneous Download and Installation of Payload
 
-The following JSON shows the intended behaviour of the manifest.
+Simultaneous download and installation of payload.
+
+The following JSON shows the intended behavior of the manifest.
 
 ~~~ JSON
 
@@ -1655,7 +1664,7 @@ a2015854d28443a10126a1044874657374206b6579f65840b53142132ebddbf0c523378d
 
 Compatibility test, simultaneous download and installation, and secure boot.
 
-The following JSON shows the intended behaviour of the manifest.
+The following JSON shows the intended behavior of the manifest.
 
 ~~~ JSON
 
@@ -1799,7 +1808,7 @@ b99b49195e081d1030508a6b8d271bd99dfb382a7767dc45f20c9943ed22a1eaac9d07a0
 
 Compatibility test, simultaneous download and installation, load from external storage, and secure boot.
 
-The following JSON shows the intended behaviour of the manifest.
+The following JSON shows the intended behavior of the manifest.
 
 ~~~ JSON
 
@@ -2001,7 +2010,7 @@ a2015854d28443a10126a1044874657374206b6579f6584070eb70f2552533fc954e934f
 
 Compatibility test, simultaneous download and installation, load and decompress from external storage, and secure boot.
 
-The following JSON shows the intended behaviour of the manifest.
+The following JSON shows the intended behavior of the manifest.
 
 ~~~ JSON
 
@@ -2210,7 +2219,9 @@ eeff0c1987d001f602f6095825860c0013a106781b687474703a2f2f6578616d706c652e
 
 ## Example 5: Compatibility Test, Download, Installation, and Secure Boot
 
-The following JSON shows the intended behaviour of the manifest.
+Compatibility test, download, installation, and secure boot.
+
+The following JSON shows the intended behavior of the manifest.
 
 ~~~ JSON
 
@@ -2424,7 +2435,7 @@ f60c47860c0103f617f6
 
 Compatibility test, 2 images, simultaneous download and installation, and secure boot.
 
-The following JSON shows the intended behaviour of the manifest.
+The following JSON shows the intended behavior of the manifest.
 
 ~~~ JSON
 
