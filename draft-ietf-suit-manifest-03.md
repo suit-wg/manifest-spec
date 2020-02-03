@@ -123,29 +123,29 @@ Supporting the requirements introduced by the constraints on IoT devices require
 
 There are several fundamental assumptions that inform the model of the firmware update workflow:
 
-* Compatibility must be checked before any other operation is performed
-* All dependency manifests should be present before any payload is fetched
-* In some applications, payloads must be fetched and validated prior to installation
+* Compatibility must be checked before any other operation is performed.
+* All dependency manifests should be present before any payload is fetched.
+* In some applications, payloads must be fetched and validated prior to installation.
 
 There are several fundamental assumptions that inform the model of the secure boot workflow:
 
-* Compatibility must be checked before any other operation is performed
-* All dependencies and payloads must be validated prior to loading
-* All loaded images must be validated prior to execution
+* Compatibility must be checked before any other operation is performed.
+* All dependencies and payloads must be validated prior to loading.
+* All loaded images must be validated prior to execution.
 
 Based on these assumptions, the manifest is structured to work with a pull parser, where each section of the manifest is used in sequence. The expected workflow for a device installing an update can be broken down into 5 steps:
 
-1. Verify the signature of the manifest
-2. Verify the applicability of the manifest
-3. Resolve dependencies
-4. Fetch payload(s)
-5. Install payload(s)
+1. Verify the signature of the manifest.
+2. Verify the applicability of the manifest.
+3. Resolve dependencies.
+4. Fetch payload(s).
+5. Install payload(s).
 
 When installation is complete, similar information can be used for validating and running images in a further 3 steps:
 
-6. Verify image(s)
-7. Load image(s)
-8. Run image(s)
+6. Verify image(s).
+7. Load image(s).
+8. Run image(s).
 
 If verification and running is implemented in bootloader, then the
 
@@ -207,15 +207,15 @@ Prior to executing any command sequence, the interpreter or its host application
 
 Here, valid means that a manifest has a supported encoding version AND it has not been excluded for other reasons. Reasons for excluding typically involve first executing the manifest and MAY include:
 
-* Test failed (e.g. Vendor ID/Class ID)
-* Unsupported command encountered
-* Unsupported parameter encountered
-* Unsupported component ID encountered
-* Payload not available (update interpreter)
-* Dependency not available (update interpreter)
-* Application crashed when executed (bootloader interpreter)
-* Watchdog timeout occurred (bootloader interpreter)
-* Dependency or Payload verification failed (bootloader interpreter)
+* Test failed (e.g. Vendor ID/Class ID).
+* Unsupported command encountered.
+* Unsupported parameter encountered.
+* Unsupported component ID encountered.
+* Payload not available (update interpreter).
+* Dependency not available (update interpreter).
+* Application crashed when executed (bootloader interpreter).
+* Watchdog timeout occurred (bootloader interpreter).
+* Dependency or Payload verification failed (bootloader interpreter).
 
 These failure reasons MAY be combined with retry mechanisms prior to marking a manifest as invalid.
 
@@ -258,25 +258,25 @@ Every command that modifies system state targets a specific component. Component
 
 Some parameters are REQUIRED to implement. These parameters allow a device to perform core functions.
 
-* Vendor ID
-* Class ID
-* Image Digest
+* Vendor ID.
+* Class ID.
+* Image Digest.
 
 Some parameters are RECOMMENDED to implement. These parameters are needed for most use-cases.
 
-* Image Size
-* URI
+* Image Size.
+* URI.
 
 Other parameters are OPTIONAL to implement. These parameters allow a device to implement specific use-cases.
 
-* Strict Order
-* Soft Failure
-* Device ID
-* Encryption Info
-* Unpack Info
-* Source Component
-* URI List
-* Custom Parameters
+* Strict Order.
+* Soft Failure.
+* Device ID.
+* Encryption Info.
+* Unpack Info.
+* Source Component.
+* URI List.
+* Custom Parameters.
 
 ### Commands
 
@@ -284,38 +284,38 @@ Commands define the behavior of a device. The commands are divided into two grou
 
 Some commands are REQUIRED to implement. These commands allow a device to perform core functions
 
-* Check Vendor Identifier (cvid)
-* Check Class Identifier (ccid)
-* Verify Image (cimg)
-* Set Current Component (setc)
-* Override Parameters (ovrp)
+* Check Vendor Identifier (cvid).
+* Check Class Identifier (ccid).
+* Verify Image (cimg).
+* Set Current Component (setc).
+* Override Parameters (ovrp).
 
 NOTE: on systems that support only a single component, Set Current Component has no effect.
 
 Some commands are RECOMMENDED to implement. These commands are needed for most use-cases
 
-* Set Current Dependency (setd)
-* Set Parameters (setp)
-* Process Dependency (pdep)
-* Run (run)
-* Fetch (getc)
+* Set Current Dependency (setd).
+* Set Parameters (setp).
+* Process Dependency (pdep).
+* Run (run).
+* Fetch (getc).
 
 Other commands are OPTIONAL to implement. These commands allow a device to implement specific use-cases.
 
-* Use Before (ubf)
-* Check Component Offset  (cco)
-* Check Device Identifier (cdid)
-* Check Image Not Match (nimg)
-* Check Minimum Battery (minb)
-* Check Update Authorized (auth)
-* Check Version (cver)
-* Abort (abrt)
-* Try Each (try)
-* Copy (copy)
-* Swap (swap)
-* Wait For Event (wfe)
-* Run Sequence (srun) mandatory component set
-* Run with Arguments (arun)
+* Use Before (ubf).
+* Check Component Offset  (cco).
+* Check Device Identifier (cdid).
+* Check Image Not Match (nimg).
+* Check Minimum Battery (minb).
+* Check Update Authorized (auth).
+* Check Version (cver).
+* Abort (abrt).
+* Try Each (try).
+* Copy (copy).
+* Swap (swap).
+* Wait For Event (wfe).
+* Run Sequence (srun) mandatory component set.
+* Run with Arguments (arun).
 
 ### Command Behavior
 
@@ -360,11 +360,11 @@ Advanced devices may make use of the Strict Order parameter and enable parallel 
 
 Under each of these scenarios the parallel processing must halt:
 
-* Set Parameters
-* Override Parameters
-* Set Strict Order = True
-* Set Dependency Index
-* Set Component Index
+* Set Parameters.
+* Override Parameters.
+* Set Strict Order = True.
+* Set Dependency Index.
+* Set Component Index.
 
 To perform more useful parallel operations, sequences of commands may be collected in a suit-directive-run-sequence. Then, each of these sequences may be run in parallel. Each sequence defaults to Strict Order = True. To isolate each sequence from each other sequence, each sequence must declare a single target component. Set Component Index is not permitted inside this sequence.
 
@@ -414,69 +414,69 @@ If a manifest includes a dependency that performs a compatibility check, then th
 The compatibility check template contains a data dependency: Vendor Identifier and Class Identifier MUST be set prior to executing the template. One example of the full template is included below, however Parameters may be set within a Try-Each block as well. They may also be inherited from a dependent manifest.
 
 * Common:
-    * Set Current Component
+    * Set Current Component.
     * Set Parameters:
-        * Vendor ID
-        * Class ID
-    * Check Vendor Identifier
-    * Check Class Identifier
+        * Vendor ID.
+        * Class ID.
+    * Check Vendor Identifier.
+    * Check Class Identifier.
 
 ## Use Case Template: XIP Secure Boot
 
 * Common:
-    * Set Current Component
+    * Set Current Component.
     * Override Parameters:
-        * Digest
-        * Size
+        * Digest.
+        * Size.
 * Run:
-    * Set Current Component
-    * Check Image Match
-    * Directive Run
+    * Set Current Component.
+    * Check Image Match.
+    * Directive Run.
 
 ## Use Case Template: Firmware Download
 
 * Common:
-    * Set Current Component
+    * Set Current Component.
     * Override Parameters:
-        * Digest
-        * Size
+        * Digest.
+        * Size.
 * Install:
-    * Set Current Component
+    * Set Current Component.
     * Set Parameters:
-        * URI
-    * Fetch
+        * URI.
+    * Fetch.
 
 ## Use Case Template: Load from External Storage
 
 * Load:
-    * Set Current Component
+    * Set Current Component.
     * Set Parameters:
-        * Source Index
-    * Copy
+        * Source Index.
+    * Copy.
 
 ## Use Case Template Load & Decompress from External Storage
 
 * Load:
-    * Set Current Component
+    * Set Current Component.
     * Set Parameters:
-        * Source Index
-        * Compression Info
-    * Copy
+        * Source Index.
+        * Compression Info.
+    * Copy.
 
 ## Use Case Template: Dependency
 
 * Dependency Resolution:
-    * Set Current Dependency
+    * Set Current Dependency.
     * Set Parameters:
-        * URI
-    * Fetch
-    * Check Image Match
-    * Process Dependency
+        * URI.
+    * Fetch.
+    * Check Image Match.
+    * Process Dependency.
 
 * Validate:
-    * Set Current Dependency
-    * Check Image Match
-    * Process Dependency
+    * Set Current Dependency.
+    * Check Image Match.
+    * Process Dependency.
 
 For any other section that the dependency has, the dependent MUST invoke Process Dependency.
 
@@ -560,7 +560,7 @@ A manifest that has not had authentication information added MUST still contain 
 
 The outer wrapper MUST contain only one of
 
-* a plaintext manifest: SUIT_Manifest
+* a plaintext manifest: SUIT_Manifest.
 * an encrypted manifest: both a SUIT_Encryption_Wrapper and the ciphertext of a manifest.
 
 When the outer wrapper contains SUIT_Encryption_Wrapper, the suit-authentication-wrapper MUST authenticate the plaintext of suit-manifest-encrypted.
@@ -891,11 +891,11 @@ Request Authorization from the application and fail if not authorized. This can 
 
 suit-condition-version allows comparing versions of firmware. Verifying image digests is preferred to version checks because digests are more precise. The image can be compared as:
 
-* Greater
-* Greater or Equal
-* Equal
-* Lesser or Equal
-* Lesser
+* Greater.
+* Greater or Equal.
+* Equal.
+* Lesser or Equal.
+* Lesser.
 
 Versions are encoded as a CBOR list of integers. Comparisons are done on each integer in sequence. Comparison stops after all integers in the list defined by the manifest have been consumed OR after a non-equal match has occurred. For example, if the manifest defines a comparison, "Equal \[1\]", then this will match all version sequences starting with 1. If a manifest defines both "Greater or Equal \[1,0\]" and "Lesser \[1,10\]", then it will match versions 1.0.x up to, but not including 1.10.
 
@@ -922,11 +922,11 @@ SUIT_Condition_Version_Comparison_Value = [+int]
 
 While the exact encoding of versions is application-defined, semantic versions map conveniently. For example,
 
-* 1.2.3 = \[1,2,3\]
-* 1.2-rc3 = \[1,2,-1,3\]
-* 1.2-beta = \[1,2,-2\]
-* 1.2-alpha = \[1,2,-3\]
-* 1.2-alpha4 = \[1,2,-3,4\]
+* 1.2.3 = \[1,2,3\].
+* 1.2-rc3 = \[1,2,-1,3\].
+* 1.2-beta = \[1,2,-2\].
+* 1.2-alpha = \[1,2,-3\].
+* 1.2-alpha4 = \[1,2,-3,4\].
 
 suit-condition-version is OPTIONAL to implement.
 
@@ -974,9 +974,9 @@ Class ID = UUID5(Vendor ID, Class-Specific-Information)
 
 Class-specific information is composed of a variety of data, for example:
 
-* Model number
-* Hardware revision
-* Bootloader version (for immutable bootloaders)
+* Model number.
+* Hardware revision.
+* Bootloader version (for immutable bootloaders).
 
 ### SUIT_Condition CDDL
 
@@ -2644,10 +2644,10 @@ aabbccddeeff0c1a00012c2201f602f609584b8c0c0013a106781c687474703a2f2f6578
 
 Several registries will be required for:
 
-* standard Commands
-* standard Parameters
-* standard Algorithm identifiers
-* standard text values
+* standard Commands.
+* standard Parameters.
+* standard Algorithm identifiers.
+* standard text values.
 
 
 #  Security Considerations
