@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: SUIT CBOR Manifest
-docname: draft-ietf-suit-manifest-03
+docname: draft-ietf-suit-manifest-04
 category: std
 
 ipr: pre5378Trust200902
@@ -1447,7 +1447,7 @@ The following JSON representation of a manifest demonstrates how this would be r
 In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL data definition.
 
 ~~~ CDDL
-{::include draft-ietf-suit-manifest-03.cddl}
+{::include draft-ietf-suit-manifest.cddl}
 ~~~
 
 #  Examples
