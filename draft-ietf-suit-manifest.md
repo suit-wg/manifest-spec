@@ -161,18 +161,6 @@ If verification and running is implemented in a bootloader, then the bootloader 
 
 When multiple manifests are used for an update, each manifest's steps occur in a lockstep fashion; all manifests have dependency resolution performed before any manifest performs a payload fetch, etc.
 
-### Pre-Authentication Compatibility Checks
-
-The RECOMMENDED process is to verify the signature of the manifest prior to parsing/executing any section of the manifest. This guards the parser against arbitrary input by unauthenticated third parties, but it costs extra energy when a device receives an incompatible manifest.
-
-If a device:
-
-1. expects to receive many incompatible manifests.
-2. expects to receive few manifests with failing signatures--for example if it is behind a gateway that checks signatures.
-3. has a power budget that makes signature verification undesirable.
-
-Then, the device MAY choose to parse and execute only the SUIT_Common section of the manifest prior to signature verification. The guidelines in [Creating Manifests](#creating-manifests) require that the common section contain the applicability checks, so this section is sufficient for applicability verification. The manifest parser MUST NOT execute any command with side-effects outside the parser (for example, Run, Copy, Swap, or Fetch commands) prior to authentication and any such command MUST result in an error.
-
 ##  SUIT Manifest Goals
 
 The manifest described in this document is intended to meet several goals, as described below.
@@ -244,6 +232,16 @@ These failure reasons MAY be combined with retry mechanisms prior to marking a m
 Following these initial tests, the interpreter clears all parameter storage. This ensures that the interpreter begins without any leaked data.
 
 ## Required Checks {#required-checks}
+
+The RECOMMENDED process is to verify the signature of the manifest prior to parsing/executing any section of the manifest. This guards the parser against arbitrary input by unauthenticated third parties, but it costs extra energy when a device receives an incompatible manifest.
+
+If a device:
+
+1. expects to receive many incompatible manifests.
+2. expects to receive few manifests with failing signatures--for example if it is behind a gateway that checks signatures.
+3. has a power budget that makes signature verification undesirable.
+
+Then, the device MAY choose to parse and execute only the SUIT_Common section of the manifest prior to signature verification. The guidelines in [Creating Manifests](#creating-manifests) require that the common section contain the applicability checks, so this section is sufficient for applicability verification. The manifest parser MUST NOT execute any command with side-effects outside the parser (for example, Run, Copy, Swap, or Fetch commands) prior to authentication and any such command MUST result in an error.
 
 Once a valid, authentic manifest has been selected, the interpreter MUST examine the component list and verify that its maximum number of components is not exceeded and that each listed component ID is supported.
 
@@ -806,7 +804,7 @@ When executing a command sequence inside SUIT_Directive_Try_Each and a condition
 
 Encryption Info defines the mechanism that Fetch or Copy should use to decrypt the data they transfer. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged or a COSE_Encrypt0_Tagged, wrapped in a bstr.
 
-### SUIT_Parameter_Compression_Info
+## SUIT_Parameter_Compression_Info
 
 Compression Info defines any information that is required for a device to perform decompression operations. Typically, this includes the algorithm identifier.
 
@@ -827,7 +825,7 @@ SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_lzma
 
 ~~~
 
-### SUIT_Parameter_Unpack_Info
+## SUIT_Parameter_Unpack_Info
 
 SUIT_Unpack_Info defines the information required for a device to interpret a packed format, such as elf, hex, or binary diff. SUIT_Unpack_Info is defined by the following CDDL:
 
@@ -843,7 +841,7 @@ SUIT_Unpack_Algorithms //= SUIT_Unpack_Algorithm_Elf
 
 ~~~
 
-### SUIT_Parameters CDDL
+## SUIT_Parameters CDDL
 
 The following CDDL describes all SUIT_Parameters.
 
@@ -953,7 +951,7 @@ Many conditions and directives apply to a given component, and these generally g
 
 To facilitate optional conditions, a special directive is provided. It runs several new lists of conditions/directives, one after another, that are contained as an argument to the directive. By default, it assumes that a failure of a condition should not indicate a failure of the update/boot, but a parameter is provided to override this behavior.
 
-## SUIT_Condition
+### SUIT_Condition
 
 Conditions are used to define mandatory properties of a system in order for an update to be applied. They can be pre-conditions or post-conditions of any directive or series of directives, depending on where they are placed in the list. Conditions never take arguments; conditions should test using parameters instead. Conditions include:
 
@@ -975,33 +973,72 @@ Each condition MUST report a success code on completion. If a condition reports 
 
 Positive Condition numbers are reserved for IANA registration. Negative numbers are reserved for proprietary, application-specific directives.
 
-### Identifier Conditions
+Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 {{RFC4122}} UUIDs. These UUIDs are explicitly NOT human-readable. They are for machine-based matching only.
+
+A device may match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a device that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This device might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.
+
+A more complete example:
+A device has the following physical components:
+1. A host MCU
+2. A WiFi module
+
+This same device has three software modules:
+1. An operating system
+2. A WiFi module interface driver
+3. An application
+
+Suppose that the WiFi module's firmware has a proprietary update mechanism and doesn't support manifest processing. This device can report four class IDs:
+
+1. hardware model/revision
+2. OS
+3. WiFi module model/revision
+4. Application
+
+This allows the OS, WiFi module, and application to be updated independently. To combat possible incompatibilities, the OS class ID can be changed each time the OS has a change to its API.
+
+This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.
+
+UUIDs MUST be created according to RFC 4122 {{RFC4122}}. UUIDs SHOULD use versions 3, 4, or 5, as described in RFC4122. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
+
+The RECOMMENDED method to create a vendor ID is:
+Vendor ID = UUID5(DNS_PREFIX, vendor domain name)
+
+The RECOMMENDED method to create a class ID is:
+Class ID = UUID5(Vendor ID, Class-Specific-Information)
+
+Class-specific information is composed of a variety of data, for example:
+
+* Model number.
+* Hardware revision.
+* Bootloader version (for immutable bootloaders).
+
+#### suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier
 
 There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a RFC 4122 {{RFC4122}} UUID that MUST have already been set as a parameter. The installing device MUST match the specified UUID in order to consider the manifest valid. These identifiers MAY be scoped by component.
 
 The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.
 
-### suit-condition-image-match
+#### suit-condition-image-match
 
 Verify that the current component matches the digest parameter for the current component. The digest is verified against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-match is REQUIRED to implement.
 
-### suit-condition-image-not-match
+#### suit-condition-image-not-match
 
 Verify that the current component does not match the supplied digest. If no digest is specified, then the digest is compared against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-not-match is OPTIONAL to implement.
 
-### suit-condition-use-before
+#### suit-condition-use-before
 
 Verify that the current time is BEFORE the specified time. suit-condition-use-before is used to specify the last time at which an update should be installed. The recipient evaluates the current time against the suit-parameter-use-before parameter, which must have already been set as a parameter, encoded as a POSIX timestamp, that is seconds after 1970-01-01 00:00:00. Timestamp conditions MUST be evaluated in 64 bits, regardless of encoded CBOR size. suit-condition-use-before is OPTIONAL to implement.
 
-### suit-condition-minimum-battery
+#### suit-condition-minimum-battery
 
 suit-condition-minimum-battery provides a mechanism to test a device's battery level before installing an update. This condition is for use in primary-cell applications, where the battery is only ever discharged. For batteries that are charged, suit-directive-wait is more appropriate, since it defines a "wait" until the battery level is sufficient to install the update. suit-condition-minimum-battery is specified in mWh. suit-condition-minimum-battery is OPTIONAL to implement.
 
-### suit-condition-update-authorized
+#### suit-condition-update-authorized
 
 Request Authorization from the application and fail if not authorized. This can allow a user to decline an update. Argument is an integer priority level. Priorities are application defined. suit-condition-update-authorized is OPTIONAL to implement.
 
-### suit-condition-version
+#### suit-condition-version
 
 suit-condition-version allows comparing versions of firmware. Verifying image digests is preferred to version checks because digests are more precise. The image can be compared as:
 
@@ -1047,54 +1084,11 @@ While the exact encoding of versions is application-defined, semantic versions m
 
 suit-condition-version is OPTIONAL to implement.
 
-### SUIT_Condition_Custom
+#### SUIT_Condition_Custom
 
 SUIT_Condition_Custom describes any proprietary, application specific condition. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided to the condition, it should be encoded in a custom parameter (a nint) as described in {{secparameters}}. SUIT_Condition_Custom is OPTIONAL to implement.
 
-### Identifiers
-
-Many conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 {{RFC4122}} UUIDs. These UUIDs are explicitly NOT human-readable. They are for machine-based matching only.
-
-A device may match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a device that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This device might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.
-
-A more complete example:
-A device has the following physical components:
-1. A host MCU
-2. A WiFi module
-
-This same device has three software modules:
-1. An operating system
-2. A WiFi module interface driver
-3. An application
-
-Suppose that the WiFi module's firmware has a proprietary update mechanism and doesn't support manifest processing. This device can report four class IDs:
-
-1. hardware model/revision
-2. OS
-3. WiFi module model/revision
-4. Application
-
-This allows the OS, WiFi module, and application to be updated independently. To combat possible incompatibilities, the OS class ID can be changed each time the OS has a change to its API.
-
-This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.
-
-#### Creating UUIDs: {#creating-uuids}
-
-UUIDs MUST be created according to RFC 4122 {{RFC4122}}. UUIDs SHOULD use versions 3, 4, or 5, as described in RFC4122. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
-
-The RECOMMENDED method to create a vendor ID is:
-Vendor ID = UUID5(DNS_PREFIX, vendor domain name)
-
-The RECOMMENDED method to create a class ID is:
-Class ID = UUID5(Vendor ID, Class-Specific-Information)
-
-Class-specific information is composed of a variety of data, for example:
-
-* Model number.
-* Hardware revision.
-* Bootloader version (for immutable bootloaders).
-
-### SUIT_Condition CDDL
+#### SUIT_Condition CDDL
 
 The following CDDL describes SUIT_Condition:
 
@@ -1111,7 +1105,7 @@ SUIT_Condition //= (suit-condition-version,           nil)
 SUIT_Condition //= (suit-condition-component-offset,  nil)
 ~~~
 
-## SUIT_Directive
+### SUIT_Directive
 Directives are used to define the behavior of the recipient. Directives include:
 
 Directive Code | Directive Name | Implementation
@@ -1134,7 +1128,7 @@ Directive Code | Directive Name | Implementation
 
 When a Recipient executes a Directive, it MUST report a success code. If the Directive reports failure, then the current Command Sequence MUST terminate.
 
-### suit-directive-set-component-index
+#### suit-directive-set-component-index
 
 Set Component Index defines the component to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into the concatenation of suit-components and suit-dependency-components. If the following directives apply to ALL components, then the boolean value "True" is used instead of an index. True does not apply to dependency components. If the following directives apply to NO components, then the boolean value "False" is used. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied.
 
@@ -1144,7 +1138,7 @@ The following CDDL describes the argument to suit-directive-set-component-index.
 SUIT_Directive_Set_Component_Index_Argument = uint/bool
 ~~~
 
-### suit-directive-set-dependency-index
+#### suit-directive-set-dependency-index
 
 Set Dependency Index defines the manifest to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into the dependencies. If the following directives apply to ALL dependencies, then the boolean value "True" is used instead of an index. If the following directives apply to NO dependencies, then the boolean value "False" is used. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied.
 
@@ -1156,11 +1150,11 @@ The following CDDL describes the argument to suit-directive-set-dependency-index
 SUIT_Directive_Set_Manifest_Index_Argument = uint/bool
 ~~~
 
-### suit-directive-abort
+#### suit-directive-abort
 
 Unconditionally fail. This operation is typically used in conjunction with suit-directive-try-each.
 
-### suit-directive-run-sequence
+#### suit-directive-run-sequence
 
 To enable conditional commands, and to allow several strictly ordered sequences to be executed out-of-order, suit-directive-run-sequence allows the manifest processor to execute its argument as a SUIT_Command_Sequence. The argument must be wrapped in a bstr.
 
@@ -1176,7 +1170,7 @@ When suit-directive-run-sequence completes, it forwards the last status code tha
 
 SUIT_Parameter_Soft_Failure defaults to False when suit-directive-run-sequence begins. Its value is discarded when suit-directive-run-sequence terminates.
 
-### suit-directive-try-each
+#### suit-directive-try-each
 
 This command runs several SUIT_Command_Sequence, one after another, in a strict order. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.
 
@@ -1191,7 +1185,7 @@ SUIT_Directive_Try_Each_Argument = [
 ]
 ~~~
 
-### suit-directive-process-dependency
+#### suit-directive-process-dependency
 
 Execute the commands in the common section of the current dependency, followed by the commands in the equivalent section of the current dependency. For example, if the current section is "fetch payload," this will execute "common" in the current dependency, then "fetch payload" in the current dependency. Once this is complete, the command following suit-directive-process-dependency will be processed.
 
@@ -1205,7 +1199,7 @@ The argument to suit-directive-process-dependency is defined in the following CD
 SUIT_Directive_Process_Dependency_Argument = nil
 ~~~
 
-### suit-directive-set-parameters
+#### suit-directive-set-parameters
 
 suit-directive-set-parameters allows the manifest to configure behavior of future directives by changing parameters that are read by those directives. When dependencies are used, suit-directive-set-parameters also allows a manifest to modify the behavior of its dependencies.
 
@@ -1222,7 +1216,7 @@ SUIT_Directive_Set_Parameters_Argument = {+ SUIT_Parameters}
 N.B.: A directive code is reserved for an optimization: a way to set a parameter to the contents of another parameter, optionally with another component ID.
 
 
-### suit-directive-override-parameters
+#### suit-directive-override-parameters
 
 suit-directive-override-parameters replaces any listed parameters that are already set with the values that are provided in its argument. This allows a manifest to prevent replacement of critical parameters.
 
@@ -1234,7 +1228,7 @@ The argument to suit-directive-override-parameters is defined in the following C
 SUIT_Directive_Override_Parameters_Argument = {+ SUIT_Parameters}
 ~~~
 
-### suit-directive-fetch
+#### suit-directive-fetch
 
 suit-directive-fetch instructs the manifest processor to obtain one or more manifests or payloads, as specified by the manifest index and component index, respectively.
 
@@ -1252,7 +1246,7 @@ The argument to suit-directive-fetch is defined in the following CDDL.
 SUIT_Directive_Fetch_Argument = nil/bstr
 ~~~
 
-### suit-directive-copy
+#### suit-directive-copy
 
 suit-directive-copy instructs the manifest processor to obtain one or more payloads, as specified by the component index. suit-directive-copy retrieves each component listed in component-index, respectively. If component-index is True, instead of an integer, then all current manifest components are copied. The current manifest's dependent-components are not automatically copied. In order to copy these, they MUST be specified in a component-index integer.
 
@@ -1268,11 +1262,11 @@ The argument to suit-directive-copy is defined in the following CDDL.
 SUIT_Directive_Copy_Argument = nil
 ~~~
 
-### suit-directive-swap
+#### suit-directive-swap
 
 suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they must be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.
 
-### suit-directive-run
+#### suit-directive-run
 
 suit-directive-run directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor MAY be unloaded and execution continues in the Component Index. Arguments provided to Run are forwarded to the executable code located in Component Index, in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.
 
@@ -1284,7 +1278,7 @@ The argument to suit-directive-run is defined in the following CDDL.
 SUIT_Directive_Run_Argument = nil/bstr
 ~~~
 
-### suit-directive-wait
+#### suit-directive-wait
 
 suit-directive-wait directs the manifest processor to pause until a specified event occurs. Some possible events include:
 
@@ -1325,7 +1319,7 @@ SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 
 ~~~
 
-### SUIT_Directive CDDL
+#### SUIT_Directive CDDL
 
 The following CDDL describes SUIT_Directive:
 
@@ -1408,7 +1402,8 @@ A second model requires an ACL to be presented to the device, authenticated by a
 
 A third model allows a device to provide even more fine-grained controls: The ACL lists the component ID or component ID prefix that an identity may use, and also lists the commands that the identity may use in combination with that component ID.
 
-#  SUIT digest container
+#  SUIT Digest Container
+
 RFC 8152 {{RFC8152}} provides containers for signature, MAC, and encryption, but no basic digest container. The container needed for a digest requires a type identifier and a container for the raw digest data. Some forms of digest may require additional parameters. These can be added following the digest. This structure is described by the following CDDL.
 
 The algorithms listed are sufficient for verifying integrity of Firmware Updates as of this writing, however this may change over time.
