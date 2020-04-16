@@ -90,9 +90,9 @@ The following terminology is used throughout this document.
 * Update: One or more manifests that describe one or more payloads.
 * Update Authority: The owner of a cryptographic key used to sign updates, trusted by Recipients.
 * Recipient: The system, typically an IoT device, that receives a manifest.
+* Command: A Condition or a Directive.
 * Condition: A test for a property of the Recipient or its components.
 * Directive: An action for the Recipient to perform.
-* Command: A Condition or a Directive.
 * Trusted Execution: A process by which a system ensures that only trusted code is executed, for example secure boot.
 * A/B images: Dividing a device's storage into two or more bootable images, at different offsets, such that the active image can write to the inactive image(s).
 
@@ -344,7 +344,7 @@ Other commands are OPTIONAL to implement. These commands allow a device to imple
 The following table describes the behavior of each command. "params"
 represents the parameters for the current component or dependency.
 
-| Code | Operation
+| Code | Semantic of the Operation
 |------|----
 | cvid | binary-match(component, params\[vendor-id\])
 | ccid | binary-match(component, params\[class-id\])
