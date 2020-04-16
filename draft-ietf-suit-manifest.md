@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: SUIT CBOR Manifest
-docname: draft-ietf-suit-manifest-04
+docname: draft-ietf-suit-manifest-05
 category: std
 
 ipr: pre5378Trust200902
@@ -955,30 +955,29 @@ To facilitate optional conditions, a special directive is provided. It runs seve
 
 Conditions are used to define mandatory properties of a system in order for an update to be applied. They can be pre-conditions or post-conditions of any directive or series of directives, depending on where they are placed in the list. Conditions never take arguments; conditions should test using parameters instead. Conditions include:
 
-Condition Code | Condition Name | Implementation
----|---|---
-1 | Vendor Identifier | REQUIRED
-2 | Class Identifier | REQUIRED
-3 | Image Match | REQUIRED
-4 | Use Before | OPTIONAL
-5 | Component Offset | OPTIONAL
-24 | Device Identifier | OPTIONAL
-25 | Image Not Match | OPTIONAL
-26 | Minimum Battery | OPTIONAL
-27 | Update Authorized | OPTIONAL
-28 | Version | OPTIONAL
-nint | Custom Condition | OPTIONAL
+Label | Name | CDDL Structure | Reference
+---|---|---|---
+1 | Vendor Identifier | suit-condition-vendor-identifier | {{identifiers}} 
+2 | Class Identifier | suit-condition-class-identifier | {{identifiers}} 
+24 | Device Identifier | suit-condition-device-identifier | {{identifiers}} 
+3 | Image Match | suit-condition-image-match | {{image-match}} 
+25 | Image Not Match |suit-condition-image-not-match | {{image-not-match}}
+4 | Use Before | suit-condition-use-before | {{use-before}} 
+5 | Component Offset | suit-condition-component-offset | {{component-offset}}
+26 | Minimum Battery | suit-condition-minimum-battery | {{minimum-battery}}
+27 | Update Authorized |  suit-condition-update-authorized | {{update-authorized}}
+28 | Version | suit-condition-version | {{version}}
+nint | Custom Condition | SUIT_Condition_Custom | {{custom}}
 
-Each condition MUST report a success code on completion. If a condition reports failure, then the current sequence of commands MUST terminate. If a condition requires additional information, this MUST be specified in one or more parameters before the condition is executed. If a Recipient attempts to process a condition that expects additional information and that information has not been set, it MUST report a failure. If a Recipient encounters an unknown Condition Code, it MUST report a failure.
+Each condition MUST report a success code on completion. If a condition reports failure, then the current sequence of commands MUST terminate. If a condition requires additional information, this MUST be specified in one or more parameters before the condition is executed. If a Recipient attempts to process a condition that expects additional information and that information has not been set, it MUST report a failure. If a Recipient encounters an unknown condition, it MUST report a failure.
 
-Positive Condition numbers are reserved for IANA registration. Negative numbers are reserved for proprietary, application-specific directives.
+Condition labels in the positive number range are reserved for IANA registration while those in the negative range are reserved for proprietary use.
 
-Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 {{RFC4122}} UUIDs. These UUIDs are explicitly NOT human-readable. They are for machine-based matching only.
+Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 {{RFC4122}} UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.
 
 A device may match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a device that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This device might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.
 
-A more complete example:
-A device has the following physical components:
+A more complete example: Imagine a device has the following physical components:
 1. A host MCU
 2. A WiFi module
 
@@ -1012,33 +1011,37 @@ Class-specific information is composed of a variety of data, for example:
 * Hardware revision.
 * Bootloader version (for immutable bootloaders).
 
-#### suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier
+#### suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier {#identifiers}
 
 There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a RFC 4122 {{RFC4122}} UUID that MUST have already been set as a parameter. The installing device MUST match the specified UUID in order to consider the manifest valid. These identifiers MAY be scoped by component.
 
 The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.
 
-#### suit-condition-image-match
+#### suit-condition-image-match {#image-match}
 
 Verify that the current component matches the digest parameter for the current component. The digest is verified against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-match is REQUIRED to implement.
 
-#### suit-condition-image-not-match
+#### suit-condition-image-not-match {#image-not-match}
 
 Verify that the current component does not match the supplied digest. If no digest is specified, then the digest is compared against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-not-match is OPTIONAL to implement.
 
-#### suit-condition-use-before
+#### suit-condition-use-before {#use-before}
 
 Verify that the current time is BEFORE the specified time. suit-condition-use-before is used to specify the last time at which an update should be installed. The recipient evaluates the current time against the suit-parameter-use-before parameter, which must have already been set as a parameter, encoded as a POSIX timestamp, that is seconds after 1970-01-01 00:00:00. Timestamp conditions MUST be evaluated in 64 bits, regardless of encoded CBOR size. suit-condition-use-before is OPTIONAL to implement.
 
-#### suit-condition-minimum-battery
+#### Component Offset {#component-offset}
+
+TBD. 
+
+#### suit-condition-minimum-battery {#minimum-battery}
 
 suit-condition-minimum-battery provides a mechanism to test a device's battery level before installing an update. This condition is for use in primary-cell applications, where the battery is only ever discharged. For batteries that are charged, suit-directive-wait is more appropriate, since it defines a "wait" until the battery level is sufficient to install the update. suit-condition-minimum-battery is specified in mWh. suit-condition-minimum-battery is OPTIONAL to implement.
 
-#### suit-condition-update-authorized
+#### suit-condition-update-authorized {#update-authorized}
 
 Request Authorization from the application and fail if not authorized. This can allow a user to decline an update. Argument is an integer priority level. Priorities are application defined. suit-condition-update-authorized is OPTIONAL to implement.
 
-#### suit-condition-version
+#### suit-condition-version {#version}
 
 suit-condition-version allows comparing versions of firmware. Verifying image digests is preferred to version checks because digests are more precise. The image can be compared as:
 
@@ -1084,7 +1087,7 @@ While the exact encoding of versions is application-defined, semantic versions m
 
 suit-condition-version is OPTIONAL to implement.
 
-#### SUIT_Condition_Custom
+#### SUIT_Condition_Custom {#custom}
 
 SUIT_Condition_Custom describes any proprietary, application specific condition. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided to the condition, it should be encoded in a custom parameter (a nint) as described in {{secparameters}}. SUIT_Condition_Custom is OPTIONAL to implement.
 
@@ -1627,3 +1630,25 @@ We would like to thank the following persons for their support in designing this
 * Michael Richardson
 * David Brown
 * Emmanuel Baccelli
+
+# Implementation Confirmance Matrix 
+
+This section summarizes the functionality a minimal implementation needs
+to support to claim conformance to this specification. 
+
+## SUIT_Condition
+
+Name | Reference | Implementation
+---|---|---
+Vendor Identifier | {{identifiers}} | REQUIRED
+Class Identifier | {{identifiers}} | REQUIRED
+Device Identifier | {{identifiers}} | OPTIONAL
+Image Match | {{image-match}} | REQUIRED
+Image Not Match | {{image-not-match}} | OPTIONAL
+Use Before | {{use-before}} | OPTIONAL
+Component Offset | {{component-offset}} | OPTIONAL
+Minimum Battery | {{minimum-battery}} | OPTIONAL
+Update Authorized |{{update-authorized}} | OPTIONAL
+Version | {{version}} | OPTIONAL
+Custom Condition | {{custom}} | OPTIONAL
+
