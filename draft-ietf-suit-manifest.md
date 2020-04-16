@@ -339,7 +339,7 @@ Other commands are OPTIONAL to implement. These commands allow a device to imple
 * Run Sequence (srun) mandatory component set.
 * Run with Arguments (arun).
 
-### Command Behavior
+### Command Behavior {#command-behavior}
 
 The following table describes the behavior of each command. "params"
 represents the parameters for the current component or dependency.
@@ -402,11 +402,97 @@ The interpreter also performs the checks described in {{required-checks}} to ens
 
 Manifests are created using tools for constructing COSE structures, calculating cryptographic values and compiling desired system state into a sequence of operations required to achieve that state. The process of constructing COSE structures is covered in {{RFC8152}} and the calculation of cryptographic values is beyond the scope of this document.
 
-Compiling desired system state into a sequence of operations can be accomplished in many ways, however several templates are provided here to cover common use-cases. Many of these templates can be aggregated to produce more complex behavior.
+Compiling desired system state into a sequence of operations can be accomplished in many ways. Several templates are provided below to cover common use-cases. Many of these templates can be aggregated to produce more complex behavior.
 
 NOTE: On systems that support only a single component, Set Current Component has no effect and can be omitted.
 
 NOTE: Digest should always be set using Override Parameters, since this prevents a less-privileged dependent from replacing the digest.
+
+## Compatibility Check Template
+
+The compatibility check ensures that devices only install compatible images.
+In this template all information is contained in the common block and the following sequence of operations are used: 
+
+- Set Component Index directive (see {{suit-directive-set-component-index}})
+- Set Parameters directive (see {{suit-directive-set-parameters}}) for Vendor ID and Class ID (see {{secparameters}})
+- Check Vendor Identifier condition (see {{suit-condition-vendor-identifier}})
+- Check Class Identifier condication (see {{suit-condition-class-identifier}})
+
+## Secure Boot Template
+
+This template performs a secure boot operation. 
+
+The following operations are placed into the common block: 
+
+- Set Component Index directive (see {{suit-directive-set-component-index}})
+- Override Parameters directive (see {{suit-directive-override-parameters}}) for Image Digest and Image Size (see {{secparameters}})
+
+Then, the run block contains the following operations: 
+
+- Set Component Index directive (see {{suit-directive-set-component-index}})
+- Check Image Match condition (see {{suit-condition-image-match}})
+- Run directive (see {{suit-directive-run-sequence}})
+
+According to {{command-behavior}}, the Run directive transfer execution to the current Component Index. Hence, the Set Component Index directive has to be used. 
+
+The Run directive needs to 
+## Firmware Download Template
+
+This template triggers the download of firmware. 
+
+The following operations are placed into the common block: 
+
+- Set Component Index directive (see {{suit-directive-set-component-index}})
+- Override Parameters directive (see {{suit-directive-override-parameters}}) for Image Digest and Image Size (see {{secparameters}})
+        
+Then, the install block contains the following operations: 
+
+- Set Component Index directive (see {{suit-directive-set-component-index}})
+- Set Parameters directive (see {{suit-directive-set-parameters}}) for URI (see {{secparameters}})
+- Fetch directive (see {{suit-directive-fetch}})
+
+The Fetch directive needs the URI parameter to be set to determine where the image is retrieved from. Additionally, the destination of where the component shall be stored has to be configured. The URI is configured via the Set Parameters directive while the destination is configured via the Set Component Index directive. 
+
+## Load from External Storage Template
+
+This directive loads an firmware image from external storage. 
+
+The following operations are placed into the load block: 
+
+- Set Component Index directive (see {{suit-directive-set-component-index}})
+- Set Parameters directive (see {{suit-directive-set-parameters}}) for Component Index (see {{secparameters}})
+- Copy directive (see {{suit-directive-copy}})
+
+As outlined in {{command-behavior}}, the Copy directive needs a source and a destination to be configured. The source is configured via Component Index (with the Set Parameters directive) and the destination is configured via the Set Component Index directive.  
+
+## Load & Decompress from External Storage Template
+
+The following operations are placed into the load block: 
+
+- Set Component Index directive (see {{suit-directive-set-component-index}})
+- Set Parameters directive (see {{suit-directive-set-parameters}}) for Component Index and Compression Info (see {{secparameters}})
+- Copy directive (see {{suit-directive-copy}})
+
+This example is similar to the previous case but additionally performs decompression. Hence, the only difference is in setting the Compression Info parameter. 
+
+## Dependency Template
+
+The following operations are placed into the dependency resolution block: 
+
+- Set Dependency Index directive (see {{suit-directive-set-dependency-index}})
+- Set Parameters directive (see {{suit-directive-set-parameters}}) for URI (see {{secparameters}})
+- Fetch directive (see {{suit-directive-fetch}})
+- Check Image Match condition (see {{suit-condition-image-match}})
+- Process Dependency directive (see {{suit-directive-process-dependency}})
+
+Then, the validate block contains the following operations: 
+
+- Set Dependency Index directive (see {{suit-directive-set-dependency-index}})
+- Check Image Match condition (see {{suit-condition-image-match}})
+- Process Dependency directive (see {{suit-directive-process-dependency}})
+
+
+NOTE: Any changes made to parameters in a dependency persist in the dependent.
 
 ## Manifest Source Material
 
@@ -417,92 +503,6 @@ An unconstrained system that makes decisions based on the manifest can use the s
 An unconstrained system that presents data to a user can do so according to typical usage patterns without first executing the manifest, and can trust that information with the same level of confidence as the manifest itself.
 
 A verifier can be constructed to emulate execution the manifest and compare the results of that execution to the source material, providing a check that the manifest performs its stated objectives and that the manifest does not exceed the capabilities of the target device.
-
-## Required Template: Compatibility Check
-
-The compatibility check ensures that devices only install compatible images.
-
-Common:
-Set Current Component
-Check Vendor Identifier
-Check Class Identifier
-
-All manifests MUST contain the compatibility check template, except as outlined below.
-
-If a device class has a unique trust anchor, and every element in its trust chain is unique--different from every element in any other device class, then it MAY include the compatibility check.
-
-If a manifest includes a dependency that performs a compatibility check, then the dependent manifest MAY include the compatibility check.
-
-The compatibility check template contains a data dependency: Vendor Identifier and Class Identifier MUST be set prior to executing the template. One example of the full template is included below, however Parameters may be set within a Try-Each block as well. They may also be inherited from a dependent manifest.
-
-* Common:
-    * Set Current Component.
-    * Set Parameters:
-        * Vendor ID.
-        * Class ID.
-    * Check Vendor Identifier.
-    * Check Class Identifier.
-
-## Use Case Template: XIP Secure Boot
-
-* Common:
-    * Set Current Component.
-    * Override Parameters:
-        * Digest.
-        * Size.
-* Run:
-    * Set Current Component.
-    * Check Image Match.
-    * Directive Run.
-
-## Use Case Template: Firmware Download
-
-* Common:
-    * Set Current Component.
-    * Override Parameters:
-        * Digest.
-        * Size.
-* Install:
-    * Set Current Component.
-    * Set Parameters:
-        * URI.
-    * Fetch.
-
-## Use Case Template: Load from External Storage
-
-* Load:
-    * Set Current Component.
-    * Set Parameters:
-        * Source Index.
-    * Copy.
-
-## Use Case Template Load & Decompress from External Storage
-
-* Load:
-    * Set Current Component.
-    * Set Parameters:
-        * Source Index.
-        * Compression Info.
-    * Copy.
-
-## Use Case Template: Dependency
-
-* Dependency Resolution:
-    * Set Current Dependency.
-    * Set Parameters:
-        * URI.
-    * Fetch.
-    * Check Image Match.
-    * Process Dependency.
-
-* Validate:
-    * Set Current Dependency.
-    * Check Image Match.
-    * Process Dependency.
-
-For any other section that the dependency has, the dependent MUST invoke Process Dependency.
-
-NOTE: Any changes made to parameters in a dependency persist in the dependent.
 
 # Manifest Structure {#manifest-structure}
 
@@ -785,7 +785,7 @@ ID | CBOR Type | Scope | Name | Description
 19 | bstr | Component | Compression Info | The information required to decompress the image
 20 | bstr | Component | Unpack Info | The information required to unpack the image
 21 | tstr | Component / Dependency | URI | A URI from which to fetch a resource
-22 | uint | Component | Source Component | A Component Index
+22 | uint | Component | Component Index | A Component Index
 23 | bstr / nil | Component | Run Arguments | An encoded set of arguments for Run
 24 | bstr | Component / Global | Device ID | A RFC4122 UUID representing the device or component
 25 | uint | Global | Minimum Battery | A minimum battery level in mWh
