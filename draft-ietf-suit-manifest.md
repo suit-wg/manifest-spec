@@ -969,27 +969,27 @@ There are three identifier-based conditions: suit-condition-vendor-identifier, s
 
 The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.
 
-### suit-condition-image-match
+### suit-condition-image-match {#suit-condition-image-match}
 
 Verify that the current component matches the digest parameter for the current component. The digest is verified against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-match is REQUIRED to implement.
 
-### suit-condition-image-not-match
+### suit-condition-image-not-match {#suit-condition-image-not-match}
 
 Verify that the current component does not match the supplied digest. If no digest is specified, then the digest is compared against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-not-match is OPTIONAL to implement.
 
-### suit-condition-use-before
+### suit-condition-use-before {#suit-condition-use-before}
 
 Verify that the current time is BEFORE the specified time. suit-condition-use-before is used to specify the last time at which an update should be installed. The recipient evaluates the current time against the suit-parameter-use-before parameter, which must have already been set as a parameter, encoded as a POSIX timestamp, that is seconds after 1970-01-01 00:00:00. Timestamp conditions MUST be evaluated in 64 bits, regardless of encoded CBOR size. suit-condition-use-before is OPTIONAL to implement.
 
-### suit-condition-minimum-battery
+### suit-condition-minimum-battery {#suit-condition-minimum-battery}
 
 suit-condition-minimum-battery provides a mechanism to test a device's battery level before installing an update. This condition is for use in primary-cell applications, where the battery is only ever discharged. For batteries that are charged, suit-directive-wait is more appropriate, since it defines a "wait" until the battery level is sufficient to install the update. suit-condition-minimum-battery is specified in mWh. suit-condition-minimum-battery is OPTIONAL to implement.
 
-### suit-condition-update-authorized
+### suit-condition-update-authorized {#suit-condition-update-authorized}
 
 Request Authorization from the application and fail if not authorized. This can allow a user to decline an update. Argument is an integer priority level. Priorities are application defined. suit-condition-update-authorized is OPTIONAL to implement.
 
-### suit-condition-version
+### suit-condition-version {#suit-condition-version}
 
 suit-condition-version allows comparing versions of firmware. Verifying image digests is preferred to version checks because digests are more precise. The image can be compared as:
 
@@ -1122,7 +1122,7 @@ Directive Code | Directive Name | Implementation
 
 When a Recipient executes a Directive, it MUST report a success code. If the Directive reports failure, then the current Command Sequence MUST terminate.
 
-### suit-directive-set-component-index
+### suit-directive-set-component-index {#suit-directive-set-component-index}
 
 Set Component Index defines the component to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into the concatenation of suit-components and suit-dependency-components. If the following directives apply to ALL components, then the boolean value "True" is used instead of an index. True does not apply to dependency components. If the following directives apply to NO components, then the boolean value "False" is used. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied.
 
@@ -1132,7 +1132,7 @@ The following CDDL describes the argument to suit-directive-set-component-index.
 SUIT_Directive_Set_Component_Index_Argument = uint/bool
 ~~~
 
-### suit-directive-set-dependency-index
+### suit-directive-set-dependency-index {#suit-directive-set-dependency-index}
 
 Set Dependency Index defines the manifest to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into the dependencies. If the following directives apply to ALL dependencies, then the boolean value "True" is used instead of an index. If the following directives apply to NO dependencies, then the boolean value "False" is used. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied.
 
@@ -1144,11 +1144,11 @@ The following CDDL describes the argument to suit-directive-set-dependency-index
 SUIT_Directive_Set_Manifest_Index_Argument = uint/bool
 ~~~
 
-### suit-directive-abort
+### suit-directive-abort {#suit-directive-abort}
 
 Unconditionally fail. This operation is typically used in conjunction with suit-directive-try-each.
 
-### suit-directive-run-sequence
+### suit-directive-run-sequence {#suit-directive-run-sequence}
 
 To enable conditional commands, and to allow several strictly ordered sequences to be executed out-of-order, suit-directive-run-sequence allows the manifest processor to execute its argument as a SUIT_Command_Sequence. The argument must be wrapped in a bstr.
 
@@ -1164,7 +1164,7 @@ When suit-directive-run-sequence completes, it forwards the last status code tha
 
 SUIT_Parameter_Soft_Failure defaults to False when suit-directive-run-sequence begins. Its value is discarded when suit-directive-run-sequence terminates.
 
-### suit-directive-try-each
+### suit-directive-try-each {#suit-directive-try-each}
 
 This command runs several SUIT_Command_Sequence, one after another, in a strict order. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.
 
@@ -1179,7 +1179,7 @@ SUIT_Directive_Try_Each_Argument = [
 ]
 ~~~
 
-### suit-directive-process-dependency
+### suit-directive-process-dependency {#suit-directive-process-dependency}
 
 Execute the commands in the common section of the current dependency, followed by the commands in the equivalent section of the current dependency. For example, if the current section is "fetch payload," this will execute "common" in the current dependency, then "fetch payload" in the current dependency. Once this is complete, the command following suit-directive-process-dependency will be processed.
 
@@ -1193,7 +1193,7 @@ The argument to suit-directive-process-dependency is defined in the following CD
 SUIT_Directive_Process_Dependency_Argument = nil
 ~~~
 
-### suit-directive-set-parameters
+### suit-directive-set-parameters {#suit-directive-set-parameters}
 
 suit-directive-set-parameters allows the manifest to configure behavior of future directives by changing parameters that are read by those directives. When dependencies are used, suit-directive-set-parameters also allows a manifest to modify the behavior of its dependencies.
 
@@ -1210,7 +1210,7 @@ SUIT_Directive_Set_Parameters_Argument = {+ SUIT_Parameters}
 N.B.: A directive code is reserved for an optimization: a way to set a parameter to the contents of another parameter, optionally with another component ID.
 
 
-### suit-directive-override-parameters
+### suit-directive-override-parameters {#suit-directive-override-parameters}
 
 suit-directive-override-parameters replaces any listed parameters that are already set with the values that are provided in its argument. This allows a manifest to prevent replacement of critical parameters.
 
@@ -1222,7 +1222,7 @@ The argument to suit-directive-override-parameters is defined in the following C
 SUIT_Directive_Override_Parameters_Argument = {+ SUIT_Parameters}
 ~~~
 
-### suit-directive-fetch
+### suit-directive-fetch {#suit-directive-fetch}
 
 suit-directive-fetch instructs the manifest processor to obtain one or more manifests or payloads, as specified by the manifest index and component index, respectively.
 
@@ -1240,7 +1240,7 @@ The argument to suit-directive-fetch is defined in the following CDDL.
 SUIT_Directive_Fetch_Argument = nil/bstr
 ~~~
 
-### suit-directive-copy
+### suit-directive-copy {#suit-directive-copy}
 
 suit-directive-copy instructs the manifest processor to obtain one or more payloads, as specified by the component index. suit-directive-copy retrieves each component listed in component-index, respectively. If component-index is True, instead of an integer, then all current manifest components are copied. The current manifest's dependent-components are not automatically copied. In order to copy these, they MUST be specified in a component-index integer.
 
@@ -1256,11 +1256,11 @@ The argument to suit-directive-copy is defined in the following CDDL.
 SUIT_Directive_Copy_Argument = nil
 ~~~
 
-### suit-directive-swap
+### suit-directive-swap {#suit-directive-swap}
 
 suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they must be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.
 
-### suit-directive-run
+### suit-directive-run {#suit-directive-run}
 
 suit-directive-run directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor MAY be unloaded and execution continues in the Component Index. Arguments provided to Run are forwarded to the executable code located in Component Index, in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.
 
@@ -1272,7 +1272,7 @@ The argument to suit-directive-run is defined in the following CDDL.
 SUIT_Directive_Run_Argument = nil/bstr
 ~~~
 
-### suit-directive-wait
+### suit-directive-wait {#suit-directive-wait}
 
 suit-directive-wait directs the manifest processor to pause until a specified event occurs. Some possible events include:
 
