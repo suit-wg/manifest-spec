@@ -272,105 +272,38 @@ NOTE: when using A/B images, the manifest functions as two (or more) logical man
 
 ## Abstract Machine Description
 
-The byte code that forms the bulk of the manifest is processed by an interpreter. This interpreter can be modeled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands. Certain commands also affect the machine's behavior.
+The heart of the manifest is the list of commands, which are processed by an interpreter. This interpreter can be modeled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands. There are two types of commands, namely those that modify state (directives) and those that perform tests (conditions). Some directives offer control flow operations. Parameters are used as the inputs to commands. 
 
-Every command that modifies system state targets a specific component. Components are units of code or data that can be targeted by an update. They are identified by Component identifiers, arrays of binary-strings--effectively a binary path. Each component has a corresponding set of configuration, Parameters. Parameters are used as the inputs to commands.
+Directives target a specific component. Components are units of code or data that can be targeted by an update. They are identified by Component Index, which are arrays of binary strings (i.e. effectively a binary path). 
 
-### Parameters {#interpreter-parameters}
+The following table describes the behavior of each command. "params" represents the parameters for the current component or dependency.
 
-Some parameters are REQUIRED to implement. These parameters allow a device to perform core functions.
-
-* Vendor ID.
-* Class ID.
-* Image Digest.
-
-Some parameters are RECOMMENDED to implement. These parameters are needed for most use-cases.
-
-* Image Size.
-* URI.
-
-Other parameters are OPTIONAL to implement. These parameters allow a device to implement specific use-cases.
-
-* Strict Order.
-* Soft Failure.
-* Device ID.
-* Encryption Info.
-* Unpack Info.
-* Source Component.
-* URI List.
-* Custom Parameters.
-
-### Commands
-
-Commands define the behavior of a device. The commands are divided into two groups: those that modify state (directives) and those that perform tests (conditions). There are also several Control Flow operations.
-
-Some commands are REQUIRED to implement. These commands allow a device to perform core functions
-
-* Check Vendor Identifier (cvid).
-* Check Class Identifier (ccid).
-* Verify Image (cimg).
-* Set Current Component (setc).
-* Override Parameters (ovrp).
-
-NOTE: on systems that support only a single component, Set Current Component has no effect.
-
-Some commands are RECOMMENDED to implement. These commands are needed for most use-cases
-
-* Set Current Dependency (setd).
-* Set Parameters (setp).
-* Process Dependency (pdep).
-* Run (run).
-* Fetch (getc).
-
-Other commands are OPTIONAL to implement. These commands allow a device to implement specific use-cases.
-
-* Use Before (ubf).
-* Check Component Offset  (cco).
-* Check Device Identifier (cdid).
-* Check Image Not Match (nimg).
-* Check Minimum Battery (minb).
-* Check Update Authorized (auth).
-* Check Version (cver).
-* Abort (abrt).
-* Try Each (try).
-* Copy (copy).
-* Swap (swap).
-* Wait For Event (wfe).
-* Run Sequence (srun) mandatory component set.
-* Run with Arguments (arun).
-
-### Command Behavior
-
-The following table describes the behavior of each command. "params"
-represents the parameters for the current component or dependency.
-
-| Code | Semantic of the Operation
+| Command Name | Semantic of the Operation
 |------|----
-| cvid | binary-match(component, params\[vendor-id\])
-| ccid | binary-match(component, params\[class-id\])
-| cimg | binary-match(digest(component), params\[digest\])
-| setc | component := components\[arg\]
-| ovrp | params\[k\] := v for k,v in arg
-| setd | dependency := dependencies\[arg\]
-| setp | params\[k\] := v if not k in params for k,v in arg
-| pdep | exec(dependency\[common\]); exec(dependency\[current-segment\])
-| run  | run(component)
-| getc | store(component, fetch(params\[uri\]))
-| ubf  | assert(now() < arg)
-| cco  | assert(offsetof(component) == arg)
-| cdid | binary-match(component, params\[device-id\])
-| nimg | not binary-match(digest(component), params\[digest\])
-| minb | assert(battery >= arg)
-| auth | assert(isAuthorized())
-| cver | assert(version_check(component, arg))
-| abrt | assert(0)
-| try  | break if exec(seq) is not error for seq in arg
-| copy | store(component, params\[src-component\])
-| swap | swap(component, params\[src-component\])
-| wfe  | until event(arg), wait
-| srun | exec(arg)
-| arun | run(component, arg)
-
+| Check Vendor Identifier | binary-match(component, params\[vendor-id\])
+| Check Class Identifier | binary-match(component, params\[class-id\])
+| Verify Image | binary-match(digest(component), params\[digest\])
+| Set Component Index | component := components\[arg\]
+| Override Parameters | params\[k\] := v for k,v in arg
+| Set Dependency Index | dependency := dependencies\[arg\]
+| Set Parameters | params\[k\] := v if not k in params for k,v in arg
+| Process Dependency | exec(dependency\[common\]); exec(dependency\[current-segment\])
+| Run  | run(component)
+| Fetch | store(component, fetch(params\[uri\]))
+| Use Before  | assert(now() < arg)
+| Check Component Offset  | assert(offsetof(component) == arg)
+| Check Device Identifier | binary-match(component, params\[device-id\])
+| Check Image Not Match | not binary-match(digest(component), params\[digest\])
+| Check Minimum Battery | assert(battery >= arg)
+| Check Update Authorized | assert(isAuthorized())
+| Check Version | assert(version_check(component, arg))
+| Abort | assert(0)
+| Try Each  | break if exec(seq) is not error for seq in arg
+| Copy | store(component, params\[src-component\])
+| Swap | swap(component, params\[src-component\])
+| Wait For Event  | until event(arg), wait
+| Run Sequence | exec(arg)
+| Run with Arguments | run(component, arg)
 
 ## Serialized Processing Interpreter {#serial-processing}
 
@@ -1128,7 +1061,7 @@ Directive Code | Directive Name | Implementation
 21 | Fetch | REQUIRED for Updater
 22 | Copy | OPTIONAL
 23 | Run | REQUIRED for Bootloader
-29 | Wait | OPTIONAL
+29 | Wait For Event | OPTIONAL
 30 | Run Sequence | OPTIONAL
 32 | Swap | OPTIONAL
 
