@@ -1,6 +1,6 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
-abbrev: SUIT CBOR Manifest
+abbrev: CBOR-based SUIT Manifest
 docname: draft-ietf-suit-manifest-04
 category: std
 
@@ -61,9 +61,11 @@ informative:
 This specification describes the format of a manifest.  A manifest is
 a bundle of metadata about the firmware for an IoT device, where to
 find the firmware, the devices to which it applies, and cryptographic
-information protecting the manifest. Firmware updates and trusted boot
+information protecting the manifest. Firmware updates and secure boot
 both tend to use sequences of common operations, so the manifest encodes
-those sequences of operations, rather than declaring the metadata.
+those sequences of operations, rather than declaring the metadata. The
+manifest therefore also serves as a building block of a secure boot 
+mechanism. 
 
 --- middle
 
