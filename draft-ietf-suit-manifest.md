@@ -1512,15 +1512,70 @@ The following JSON representation of a manifest demonstrates how this would be r
 }
 ~~~
 
-# Full CDDL {#manifest-cddl}
+#  IANA Considerations
 
+IANA is requested to setup a registry group for SUIT elements.
+
+Within this group, IANA is requested to setup registries for SUIT keys:
+
+* SUIT Envelope Elements
+* SUIT Manifest Elements
+* SUIT Common Elements
+* SUIT Commands
+* SUIT Parameters
+* SUIT Text Values
+* SUIT Algorithm Identifiers
+
+For each registry, values 0-23 are Standards Action, 24-255 are IETF Review, 256-65535 are Expert Review, and 65536 or greater are First Come First Served.
+
+Negative values -23 to 0 are Experimental Use, -24 and lower are Private Use.
+
+#  Security Considerations
+
+This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A detailed discussion about security can be found in the architecture document {{I-D.ietf-suit-architecture}} and in {{I-D.ietf-suit-information-model}}.
+
+# Mailing List Information
+
+RFC EDITOR: PLEASE REMOVE THIS SECTION
+
+The discussion list for this document is located at the e-mail
+address <suit@ietf.org>. Information on the group and information on how to
+subscribe to the list is at <https://www1.ietf.org/mailman/listinfo/suit>
+
+Archives of the list can be found at:
+<https://www.ietf.org/mail-archive/web/suit/current/index.html>
+
+# Acknowledgements
+
+We would like to thank the following persons for their support in designing this mechanism:
+
+* Milosch Meriac
+* Geraint Luff
+* Dan Ros
+* John-Paul Stanford
+* Hugo Vincent
+* Carsten Bormann
+* Øyvind Rønningstad
+* Frank Audun Kvamtrø
+* Krzysztof Chruściński
+* Andrzej Puzdrowski
+* Michael Richardson
+* David Brown
+* Emmanuel Baccelli
+
+
+--- back
+
+# A. Full CDDL {#manifest-cddl}
+{: numbered='no'}
 In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL data definition.
 
 ~~~ CDDL
 {::include draft-ietf-suit-manifest.cddl}
 ~~~
 
-#  Examples
+# B. Examples {#examples}
+{: numbered='no'}
 
 The following examples demonstrate a small subset of the functionality of the manifest. However, despite this, even a simple manifest processor can execute most of these manifests.
 
@@ -1587,51 +1642,3 @@ Compatibility test, 2 images, simultaneous download and installation, and secure
 
 {::include examples/example7.json.txt}
 
-#  IANA Considerations
-
-IANA is requested to setup a registry group for SUIT elements.
-
-Within this group, IANA is requested to setup registries for SUIT keys:
-
-* SUIT Envelope Elements
-* SUIT Manifest Elements
-* SUIT Common Elements
-* SUIT Commands
-* SUIT Parameters
-* SUIT Text Values
-* SUIT Algorithm Identifiers
-
-For each registry, values 0-23 are Standards Action, 24-255 are IETF Review, 256-65535 are Expert Review, and 65536 or greater are First Come First Served.
-
-Negative values -23 to 0 are Experimental Use, -24 and lower are Private Use.
-
-#  Security Considerations
-
-This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A more detailed discussion about security can be found in the architecture document {{I-D.ietf-suit-architecture}} and in {{I-D.ietf-suit-information-model}}.
-
-# Mailing List Information
-
-The discussion list for this document is located at the e-mail
-address <suit@ietf.org>. Information on the group and information on how to
-subscribe to the list is at <https://www1.ietf.org/mailman/listinfo/suit>
-
-Archives of the list can be found at:
-<https://www.ietf.org/mail-archive/web/suit/current/index.html>
-
-# Acknowledgements
-
-We would like to thank the following persons for their support in designing this mechanism:
-
-* Milosch Meriac
-* Geraint Luff
-* Dan Ros
-* John-Paul Stanford
-* Hugo Vincent
-* Carsten Bormann
-* Øyvind Rønningstad
-* Frank Audun Kvamtrø
-* Krzysztof Chruściński
-* Andrzej Puzdrowski
-* Michael Richardson
-* David Brown
-* Emmanuel Baccelli
