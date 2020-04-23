@@ -401,7 +401,7 @@ The interpreter also performs the checks described in {{required-checks}} to ens
 
 # Creating Manifests {#creating-manifests}
 
-Manifests are created using tools for constructing COSE structures, calculating cryptographic values and compiling desired system state into a sequence of operations required to achieve that state. The process of constructing COSE structures is covered in {{RFC8152}} and the calculation of cryptographic values is beyond the scope of this document.
+Manifests are created using tools for constructing COSE structures, calculating cryptographic values and compiling desired system state into a sequence of operations required to achieve that state. The process of constructing COSE structures and the calculation of cryptographic values is covered in {{RFC8152}}.
 
 Compiling desired system state into a sequence of operations can be accomplished in many ways, however several templates are provided here to cover common use-cases. Many of these templates can be aggregated to produce more complex behavior.
 
@@ -505,47 +505,20 @@ For any other section that the dependency has, the dependent MUST invoke Process
 
 NOTE: Any changes made to parameters in a dependency persist in the dependent.
 
-# Manifest Structure {#manifest-structure}
+# SUIT Envelope
 
-The manifest is enveloped in a CBOR map containing:
-
-1. Authentication delegation chain(s)
-2. The authentication wrapper (a list of COSE sign/MAC objects)
-3. The manifest (a map)
-    1. Critical Information
-    2. Information shared by all command sequences
-        1. List of dependencies
-        2. List of payloads
-        3. List of payloads in dependencies
-        4. Common list of conditions, directives
-    3. Reference URI
-    3. Dependency resolution Reference or conditions/directives
-    4. Payload fetch Reference or conditions/directives
-    5. Installation Reference or conditions/directives
-    6. Verification conditions/directives
-    7. Load conditions/directives
-    8. Run conditions/directives
-    9. Text / Reference
-    10. COSWID / Reference
-4. Dependency resolution conditions/directives
-5. Payload fetch conditions/directives
-6. Installation conditions/directives
-7. Text
-8. COSWID
-9. Inline Payload(s)
-
-All elements in the outer map are wrapped in bstr.
+The diagram below shows how the manifest structure is embedded in the SUIT_Envelope structure, the top-level structure. 
 
 ~~~
-+--------------------+
-| Manifest Envelope  |
-+--------------------+
-| Delegation CWTs    |
-| COSE Envelopes     |
++------------------------+
+| SUIT Envelope          |
++------------------------+
+| SUIT Delegation        |
+| Authentication Wrapper |
 | Manifest --------------------> +-----------------------+
-| Severable Elements |           | Manifest (bstr)       |
-+--------------------+           +-----------------------+
-                                 | Structure Version     |
+| Manifest Wrapped       |       | Manifest              |
+| Severable Elements     |       +-----------------------+
++------------------------+       | Structure Version     |
                                  | Sequence Number       |
 +-----------------------+ <------- Common Info           |
 | Common Info (bstr)    |        | Reference URI         |
@@ -571,17 +544,7 @@ Wherever enumerations are used, they are started at 1. This allows detection of 
 
 CDDL names are hyphenated and CDDL structures follow the convention adopted in COSE {{RFC8152}}: SUIT_Structure_Name.
 
-## Severable Elements
-
-Because the manifest can be used by different actors at different times, some parts of the manifest can be removed without affecting later stages of the lifecycle. This is called "Severing." Severing of information is achieved by separating that information from the signed container so that removing it does not affect the signature. This means that ensuring authenticity of severable parts of the manifest is a requirement for the signed portion of the manifest. Severing some parts makes it possible to discard parts of the manifest that are no longer necessary. This is important because it allows the storage used by the manifest to be greatly reduced. For example, no text size limits are needed if text is removed from the manifest prior to delivery to a constrained device.
-
-Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 SHOULD never be severable. Elements larger than (Digest Bits)/8 + 4 MAY be severable, while elements that are much larger than (Digest Bits)/8 + 4 SHOULD be severable.
-
-Because of this, all command sequences in the manifest are encoded in a bstr so that there is a single code path needed for all command sequences
-
-## Envelope
-
-This object is a container for the other pieces of the manifest to provide a common mechanism to find each of the parts. All elements of the envelope are contained in bstr objects. Wherever the manifest references an object in the envelope, the bstr is included in the digest calculation.
+The SUIT_Envelope is a container for the other pieces of the manifest to provide a common mechanism to find each of the parts. All elements of the envelope are contained in bstr objects. Wherever the manifest references an object in the envelope, the bstr is included in the digest calculation.
 
 The CDDL that describes the envelope is below
 
@@ -625,7 +588,7 @@ $$SUIT_Severed_Fields //= (suit-coswid =>
 
 All elements of the envelope must be wrapped in a bstr to minimize the complexity of the code that evaluates the cryptographic integrity of the element and to ensure correct serialization for integrity and authenticity checks.
 
-The suit-authentication-wrapper contains a list of 1 or more cryptographic authentication wrappers for the core part of the manifest. These are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged blocks. Each of these blocks contains a SUIT_Digest of the manifest. This enables modular processing of the manifest. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}} and are beyond the scope of this document. The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, except for the OPTIONAL suit-delegation, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper or suit-delegation.
+The suit-authentication-wrapper contains a list of 1 or more cryptographic authentication wrappers for the core part of the manifest. These are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged blocks. Each of these blocks contains a SUIT_Digest of the manifest. This enables modular processing of the manifest. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}}. The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, except for the OPTIONAL suit-delegation, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper or suit-delegation.
 
 A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be nil.
 
@@ -642,23 +605,83 @@ suit-manifest-encryption-info contains a SUIT_Encryption_Wrapper, a COSE object 
 
 suit-manifest-encrypted contains a ciphertext manifest.
 
-Each of suit-dependency-resolution, suit-payload-fetch, and suit-payload-installation contain the severable contents of the identically named portions of the manifest, described in {{secmanifest}}.
+Each of suit-dependency-resolution, suit-payload-fetch, and suit-payload-installation contain the severable contents of the identically named portions of the manifest, described in {{manifest-structure}}.
 
 suit-text contains all the human-readable information that describes any and all parts of the manifest, its payload(s) and its resource(s).
 
 suit-coswid contains a Concise Software Identifier. This may be discarded by the Recipient if not needed.
 
-## Manifest {#secmanifest}
+## Severed Fields
+
+Because the manifest can be used by different actors at different times, some parts of the manifest can be removed without affecting later stages of the lifecycle. This is called "Severing." Severing of information is achieved by separating that information from the signed container so that removing it does not affect the signature. This means that ensuring authenticity of severable parts of the manifest is a requirement for the signed portion of the manifest. Severing some parts makes it possible to discard parts of the manifest that are no longer necessary. This is important because it allows the storage used by the manifest to be greatly reduced. For example, no text size limits are needed if text is removed from the manifest prior to delivery to a constrained device.
+
+Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 SHOULD never be severable. Elements larger than (Digest Bits)/8 + 4 MAY be severable, while elements that are much larger than (Digest Bits)/8 + 4 SHOULD be severable.
+
+Because of this, all command sequences in the manifest are encoded in a bstr so that there is a single code path needed for all command sequences
+
+# Manifest Structure {#manifest-structure}
 
 The manifest describes the critical metadata for the referenced payload(s). In addition, it contains:
 
-1. a version number for the manifest structure itself
-2. a sequence number
-3. a list of dependencies
-4. a list of components affected
-5. a list of components affected by dependencies
-6. a reference for each of the severable blocks.
-7. a list of actions that the Recipient should perform.
+- a version number (see {{manifest-version}})
+- a sequence number (see {{manifest-seqnr}})
+- a common structure with information that is shared between command sequences (see {{manifest-common}})
+- a list of actions that the Recipient should perform (see {{manifest-commands}})
+- a reference to the full manifest (see {{manifest-reference-uri}})
+- a digest of human-readable text describing the manifest found in the SUIT_Envelope (see {{manifest-digest-text}})
+- a digest of the Concise Software Identifier found in the SUIT_Envelope (see {{manifest-digest-coswid}})
+
+Several fields in the Manifest can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable field. Severable fields are RECOMMENDED to implement. In particular, text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element is been severable. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope.
+
+## suit-manifest-version {#manifest-version}
+
+The suit-manifest-version indicates the version of serialization used to encode the manifest. Version 1 is the version described in this document. suit-manifest-version is REQUIRED to implement.
+
+## suit-manifest-sequence-number {#manifest-seqnr}
+
+The suit-manifest-sequence-number is a monotonically increasing anti-rollback counter. It also helps devices to determine which in a set of manifests is the "root" manifest in a given update. Each manifest MUST have a sequence number higher than each of its dependencies. Each Recipient MUST reject any manifest that has a sequence number lower than its current sequence number. It MAY be convenient to use a UTC timestamp in seconds as the sequence number. suit-manifest-sequence-number is REQUIRED to implement.
+
+## suit-common {#manifest-common}
+
+suit-common encodes all the information that is shared between each of the command sequences, including: suit-dependencies, suit-components, suit-dependency-components, and suit-common-sequence. suit-common is REQUIRED to implement.
+
+suit-dependencies is a list of SUIT_Dependency blocks that specify manifests that must be present before the current manifest can be processed. suit-dependencies is OPTIONAL to implement.
+
+In order to distinguish between components that are affected by the current manifest and components that are affected by a dependency, they are kept in separate lists. Components affected by the current manifest only list the component identifier. Components affected by a dependency include the component identifier and the index of the dependency that defines the component.
+
+suit-components is a list of SUIT_Component blocks that specify the component identifiers that will be affected by the content of the current manifest. suit-components is OPTIONAL to implement, but at least one manifest MUST contain a suit-components block.
+
+suit-dependency-components is a list of SUIT_Component_Reference blocks that specify component identifiers that will be affected by the content of a dependency of the current manifest. suit-dependency-components is OPTIONAL to implement.
+
+suit-common-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-common-sequence include setting expected device identity and image digests when they are conditional (see {{secconditional}} for more information on conditional sequences). suit-common-sequence is RECOMMENDED to implement.
+
+## suit-reference-uri {#manifest-reference-uri}
+
+suit-reference-uri is a text string that encodes a URI where a full version of this manifest can be found. This is convenient for allowing management systems to show the severed elements of a manifest when this URI is reported by a device after installation.
+
+## SUIT_Command_Sequence {#manifest-commands}
+
+suit-dependency-resolution is a SUIT_Command_Sequence to execute in order to perform dependency resolution. Typical actions include configuring URIs of dependency manifests, fetching dependency manifests, and validating dependency manifests' contents. suit-dependency-resolution is REQUIRED to implement and to use when suit-dependencies is present.
+
+suit-payload-fetch is a SUIT_Command_Sequence to execute in order to obtain a payload. Some manifests may include these actions in the suit-install section instead if they operate in a streaming installation mode. This is particularly relevant for constrained devices without any temporary storage for staging the update. suit-payload-fetch is OPTIONAL to implement.
+
+suit-install is a SUIT_Command_Sequence to execute in order to install a payload. Typical actions include verifying a payload stored in temporary storage, copying a staged payload from temporary storage, and unpacking a payload. suit-install is OPTIONAL to implement.
+
+suit-validate is a SUIT_Command_Sequence to execute in order to validate that the result of applying the update is correct. Typical actions involve image validation and manifest validation. suit-validate is REQUIRED to implement. If the manifest contains dependencies, one process-dependency invocation per dependency or one process-dependency invocation targeting all dependencies SHOULD be present in validate.
+
+suit-load is a SUIT_Command_Sequence to execute in order to prepare a payload for execution. Typical actions include copying an image from permanent storage into RAM, optionally including actions such as decryption or decompression. suit-load is OPTIONAL to implement.
+
+suit-run is a SUIT_Command_Sequence to execute in order to run an image. suit-run typically contains a single instruction: either the "run" directive for the bootable manifest or the "process dependencies" directive for any dependents of the bootable manifest. suit-run is OPTIONAL to implement. Only one manifest in an update may contain the "run" directive.
+
+## suit-text {#manifest-digest-text}
+
+suit-text is a digest that uniquely identifies the content of the Text that is packaged in the SUIT_Envelope. text is OPTIONAL to implement.
+
+## suit-coswid {#manifest-digest-coswid}
+
+suit-coswid is a digest that uniquely identifies the content of the concise-software-identifier that is packaged in the SUIT_Envelope. coswid is OPTIONAL to implement.
+
+## Manifest CDDL
 
 The following CDDL fragment defines the manifest.
 
@@ -702,41 +725,6 @@ SUIT_Common = {
 }
 ~~~
 
-Several fields in the Manifest can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable field. Severable fields are RECOMMENDED to implement. In particular, text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element is been severable. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope.
-
-The suit-manifest-version indicates the version of serialization used to encode the manifest. Version 1 is the version described in this document. suit-manifest-version is REQUIRED.
-
-The suit-manifest-sequence-number is a monotonically increasing anti-rollback counter. It also helps devices to determine which in a set of manifests is the "root" manifest in a given update. Each manifest MUST have a sequence number higher than each of its dependencies. Each Recipient MUST reject any manifest that has a sequence number lower than its current sequence number. It MAY be convenient to use a UTC timestamp in seconds as the sequence number. suit-manifest-sequence-number is REQUIRED.
-
-suit-common encodes all the information that is shared between each of the command sequences, including: suit-dependencies, suit-components, suit-dependency-components, and suit-common-sequence. suit-common is REQUIRED to implement.
-
-suit-dependencies is a list of SUIT_Dependency blocks that specify manifests that must be present before the current manifest can be processed. suit-dependencies is OPTIONAL to implement.
-
-In order to distinguish between components that are affected by the current manifest and components that are affected by a dependency, they are kept in separate lists. Components affected by the current manifest only list the component identifier. Components affected by a dependency include the component identifier and the index of the dependency that defines the component.
-
-suit-components is a list of SUIT_Component blocks that specify the component identifiers that will be affected by the content of the current manifest. suit-components is OPTIONAL, but at least one manifest MUST contain a suit-components block.
-
-suit-dependency-components is a list of SUIT_Component_Reference blocks that specify component identifiers that will be affected by the content of a dependency of the current manifest. suit-dependency-components is OPTIONAL.
-
-suit-common-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-common-sequence include setting expected device identity and image digests when they are conditional (see {{secconditional}} for more information on conditional sequences). suit-common-sequence is RECOMMENDED.
-
-suit-reference-uri is a text string that encodes a URI where a full version of this manifest can be found. This is convenient for allowing management systems to show the severed elements of a manifest when this URI is reported by a device after installation.
-
-suit-dependency-resolution is a SUIT_Command_Sequence to execute in order to perform dependency resolution. Typical actions include configuring URIs of dependency manifests, fetching dependency manifests, and validating dependency manifests' contents. suit-dependency-resolution is REQUIRED when suit-dependencies is present.
-
-suit-payload-fetch is a SUIT_Command_Sequence to execute in order to obtain a payload. Some manifests may include these actions in the suit-install section instead if they operate in a streaming installation mode. This is particularly relevant for constrained devices without any temporary storage for staging the update. suit-payload-fetch is OPTIONAL.
-
-suit-install is a SUIT_Command_Sequence to execute in order to install a payload. Typical actions include verifying a payload stored in temporary storage, copying a staged payload from temporary storage, and unpacking a payload. suit-install is OPTIONAL.
-
-suit-validate is a SUIT_Command_Sequence to execute in order to validate that the result of applying the update is correct. Typical actions involve image validation and manifest validation. suit-validate is REQUIRED. If the manifest contains dependencies, one process-dependency invocation per dependency or one process-dependency invocation targeting all dependencies SHOULD be present in validate.
-
-suit-load is a SUIT_Command_Sequence to execute in order to prepare a payload for execution. Typical actions include copying an image from permanent storage into RAM, optionally including actions such as decryption or decompression. suit-load is OPTIONAL.
-
-suit-run is a SUIT_Command_Sequence to execute in order to run an image. suit-run typically contains a single instruction: either the "run" directive for the bootable manifest or the "process dependencies" directive for any dependents of the bootable manifest. suit-run is OPTIONAL. Only one manifest in an update may contain the "run" directive.
-
-suit-text is a digest that uniquely identifies the content of the Text that is packaged in the SUIT_Envelope. text is OPTIONAL.
-
-suit-coswid is a digest that uniquely identifies the content of the concise-software-identifier that is packaged in the SUIT_Envelope. coswid is OPTIONAL.
 
 ## SUIT_Dependency
 
@@ -1032,7 +1020,7 @@ Verify that the current component does not match the supplied digest. If no dige
 
 Verify that the current time is BEFORE the specified time. suit-condition-use-before is used to specify the last time at which an update should be installed. The recipient evaluates the current time against the suit-parameter-use-before parameter, which must have already been set as a parameter, encoded as a POSIX timestamp, that is seconds after 1970-01-01 00:00:00. Timestamp conditions MUST be evaluated in 64 bits, regardless of encoded CBOR size. suit-condition-use-before is OPTIONAL to implement.
 
-#### Component Offset {#component-offset}
+#### suit-condition-component-offset {#component-offset}
 
 TBD. 
 
@@ -1105,6 +1093,7 @@ SUIT_Condition //= (suit-condition-device-identifier, nil)
 SUIT_Condition //= (suit-condition-image-match,       nil)
 SUIT_Condition //= (suit-condition-image-not-match,   nil)
 SUIT_Condition //= (suit-condition-use-before,        nil)
+SUIT_Condition //= (suit-condition-component-offset,  nil)
 SUIT_Condition //= (suit-condition-minimum-battery,   nil)
 SUIT_Condition //= (suit-condition-update-authorized, nil)
 SUIT_Condition //= (suit-condition-version,           nil)
@@ -1134,7 +1123,7 @@ Directive Code | Directive Name | Implementation
 
 When a Recipient executes a Directive, it MUST report a success code. If the Directive reports failure, then the current Command Sequence MUST terminate.
 
-#### suit-directive-set-component-index
+### suit-directive-set-component-index {#suit-directive-set-component-index}
 
 Set Component Index defines the component to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into the concatenation of suit-components and suit-dependency-components. If the following directives apply to ALL components, then the boolean value "True" is used instead of an index. True does not apply to dependency components. If the following directives apply to NO components, then the boolean value "False" is used. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied.
 
@@ -1144,7 +1133,7 @@ The following CDDL describes the argument to suit-directive-set-component-index.
 SUIT_Directive_Set_Component_Index_Argument = uint/bool
 ~~~
 
-#### suit-directive-set-dependency-index
+### suit-directive-set-dependency-index {#suit-directive-set-dependency-index}
 
 Set Dependency Index defines the manifest to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into the dependencies. If the following directives apply to ALL dependencies, then the boolean value "True" is used instead of an index. If the following directives apply to NO dependencies, then the boolean value "False" is used. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied.
 
@@ -1156,11 +1145,12 @@ The following CDDL describes the argument to suit-directive-set-dependency-index
 SUIT_Directive_Set_Manifest_Index_Argument = uint/bool
 ~~~
 
-#### suit-directive-abort
+### suit-directive-abort {#suit-directive-abort}
 
 Unconditionally fail. This operation is typically used in conjunction with suit-directive-try-each.
 
-#### suit-directive-run-sequence
+### suit-directive-run-sequence {#suit-directive-run-sequence}
+
 
 To enable conditional commands, and to allow several strictly ordered sequences to be executed out-of-order, suit-directive-run-sequence allows the manifest processor to execute its argument as a SUIT_Command_Sequence. The argument must be wrapped in a bstr.
 
@@ -1176,7 +1166,7 @@ When suit-directive-run-sequence completes, it forwards the last status code tha
 
 SUIT_Parameter_Soft_Failure defaults to False when suit-directive-run-sequence begins. Its value is discarded when suit-directive-run-sequence terminates.
 
-#### suit-directive-try-each
+### suit-directive-try-each {#suit-directive-try-each}
 
 This command runs several SUIT_Command_Sequence, one after another, in a strict order. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.
 
@@ -1191,7 +1181,7 @@ SUIT_Directive_Try_Each_Argument = [
 ]
 ~~~
 
-#### suit-directive-process-dependency
+### suit-directive-process-dependency {#suit-directive-process-dependency}
 
 Execute the commands in the common section of the current dependency, followed by the commands in the equivalent section of the current dependency. For example, if the current section is "fetch payload," this will execute "common" in the current dependency, then "fetch payload" in the current dependency. Once this is complete, the command following suit-directive-process-dependency will be processed.
 
@@ -1205,7 +1195,7 @@ The argument to suit-directive-process-dependency is defined in the following CD
 SUIT_Directive_Process_Dependency_Argument = nil
 ~~~
 
-#### suit-directive-set-parameters
+### suit-directive-set-parameters {#suit-directive-set-parameters}
 
 suit-directive-set-parameters allows the manifest to configure behavior of future directives by changing parameters that are read by those directives. When dependencies are used, suit-directive-set-parameters also allows a manifest to modify the behavior of its dependencies.
 
@@ -1222,7 +1212,7 @@ SUIT_Directive_Set_Parameters_Argument = {+ SUIT_Parameters}
 N.B.: A directive code is reserved for an optimization: a way to set a parameter to the contents of another parameter, optionally with another component ID.
 
 
-#### suit-directive-override-parameters
+### suit-directive-override-parameters {#suit-directive-override-parameters}
 
 suit-directive-override-parameters replaces any listed parameters that are already set with the values that are provided in its argument. This allows a manifest to prevent replacement of critical parameters.
 
@@ -1234,7 +1224,7 @@ The argument to suit-directive-override-parameters is defined in the following C
 SUIT_Directive_Override_Parameters_Argument = {+ SUIT_Parameters}
 ~~~
 
-#### suit-directive-fetch
+### suit-directive-fetch {#suit-directive-fetch}
 
 suit-directive-fetch instructs the manifest processor to obtain one or more manifests or payloads, as specified by the manifest index and component index, respectively.
 
@@ -1252,7 +1242,7 @@ The argument to suit-directive-fetch is defined in the following CDDL.
 SUIT_Directive_Fetch_Argument = nil/bstr
 ~~~
 
-#### suit-directive-copy
+### suit-directive-copy {#suit-directive-copy}
 
 suit-directive-copy instructs the manifest processor to obtain one or more payloads, as specified by the component index. suit-directive-copy retrieves each component listed in component-index, respectively. If component-index is True, instead of an integer, then all current manifest components are copied. The current manifest's dependent-components are not automatically copied. In order to copy these, they MUST be specified in a component-index integer.
 
@@ -1268,11 +1258,11 @@ The argument to suit-directive-copy is defined in the following CDDL.
 SUIT_Directive_Copy_Argument = nil
 ~~~
 
-#### suit-directive-swap
+### suit-directive-swap {#suit-directive-swap}
 
 suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they must be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.
 
-#### suit-directive-run
+### suit-directive-run {#suit-directive-run}
 
 suit-directive-run directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor MAY be unloaded and execution continues in the Component Index. Arguments provided to Run are forwarded to the executable code located in Component Index, in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.
 
@@ -1284,7 +1274,7 @@ The argument to suit-directive-run is defined in the following CDDL.
 SUIT_Directive_Run_Argument = nil/bstr
 ~~~
 
-#### suit-directive-wait
+### suit-directive-wait {#suit-directive-wait}
 
 suit-directive-wait directs the manifest processor to pause until a specified event occurs. Some possible events include:
 
