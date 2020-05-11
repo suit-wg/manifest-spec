@@ -377,6 +377,7 @@ suit-parameter-minimum-battery   = 26
 suit-parameter-update-priority   = 27
 suit-parameter-version           = 28
 suit-parameter-wait-info         = 29
+suit-parameter-uri-list          = 30
 
 suit-parameter-custom = nint
 
