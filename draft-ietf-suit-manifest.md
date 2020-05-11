@@ -1538,7 +1538,7 @@ nint | Custom
 ## SUIT Text Values
 
 Label | Name 
----|---|---
+---|---
 1 | Manifest Description 
 2 | Update Description
 3 | Vendor Name
