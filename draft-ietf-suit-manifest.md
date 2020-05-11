@@ -686,6 +686,7 @@ Many conditions and directives require additional information. That information 
 The defined manifest parameters are described below.
 
 Name | CDDL Structure | Reference
+---|---|---
 Vendor ID | suit-parameter-vendor-identifier | {{suit-parameter-vendor-identifier}}
 Class ID | suit-parameter-class-identifier | {{suit-parameter-class-identifier}}
 Image Digest | suit-parameter-image-digest | {{suit-parameter-image-digest}}
