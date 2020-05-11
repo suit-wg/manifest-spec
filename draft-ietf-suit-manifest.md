@@ -1694,6 +1694,7 @@ This section summarizes the functionality a minimal implementation needs
 to offer to claim conformance to this specification. 
 
 ## D.1. Conditions
+{: numbered='no'}
 
 Name | Reference | Implementation
 ---|---|---
@@ -1710,6 +1711,7 @@ Version | {{suit-condition-version}} | OPTIONAL
 Custom Condition | {{SUIT_Condition_Custom}} | OPTIONAL
 
 ## D.2. Directives
+{: numbered='no'}
 
 Name | Reference | Implementation
 ---|---|---
@@ -1728,8 +1730,10 @@ Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
 Swap | {{suit-directive-swap}} | OPTIONAL
 
 ## D.3. Parameters 
+{: numbered='no'}
 
 Name | Reference | Implementation 
+---|---|---
 Vendor ID | {{suit-parameter-vendor-identifier}} | TBD
 Class ID | {{suit-parameter-class-identifier}} | TBD
 Image Digest | {{suit-parameter-image-digest}} | TBD
