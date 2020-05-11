@@ -1069,7 +1069,7 @@ Directives are used to define the behavior of the recipient. Directives include:
 Name | CDDL Structure | Reference
 ---|---|---
 Set Component Index | suit-directive-set-component-index | {{suit-directive-set-component-index}}
-Set Dependency Index | suit-directive-set-dependency-index {{suit-directive-set-dependency-index}}
+Set Dependency Index | suit-directive-set-dependency-index | {{suit-directive-set-dependency-index}}
 Abort | suit-directive-abort | {{suit-directive-abort}}
 Try Each | suit-directive-try-each | {{suit-directive-try-each}} 
 Process Dependency | suit-directive-process-dependency | {{suit-directive-process-dependency}}
