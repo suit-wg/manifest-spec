@@ -888,7 +888,7 @@ SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Delta
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Hex
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Elf
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Coff
-SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_srec
+SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Srec
 ~~~
 
 ## SUIT_Command_Sequence
