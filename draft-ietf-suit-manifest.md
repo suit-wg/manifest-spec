@@ -56,7 +56,34 @@ informative:
   I-D.ietf-suit-architecture:
   I-D.ietf-suit-information-model:
   I-D.ietf-teep-architecture: 
-
+  HEX:
+    title: "Intel HEX"
+    author:
+    -
+      ins: "Wikipedia"
+    date: 2020
+    target: https://en.wikipedia.org/wiki/Intel_HEX
+  SREC:
+    title: "SREC (file format)"
+    author:
+    -
+      ins: "Wikipedia"
+    date: 2020
+    target: https://en.wikipedia.org/wiki/SREC_(file_format)
+  ELF:
+    title: "Executable and Linkable Format (ELF)"
+    author:
+    -
+      ins: "Wikipedia"
+    date: 2020
+    target: https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+  COFF:
+    title: "Common Object File Format (COFF)"
+    author:
+    -
+      ins: "Wikipedia"
+    date: 2020
+    target: https://en.wikipedia.org/wiki/COFF
 
 --- abstract
 This specification describes the format of a manifest.  A manifest is
@@ -745,7 +772,9 @@ Compression Info defines any information that is required for a device to perfor
 
 ### suit-parameter-unpack-info
 
-SUIT_Unpack_Info defines the information required for a device to interpret a packed format. This document defines the use of the following binary encodings: Delta, Hex, and ELF. 
+SUIT_Unpack_Info defines the information required for a device to interpret a packed format. This document defines the use of the following binary encodings: Intel HEX \[HEX\], Motorola S-record \[SREC\],  Executable and Linkable Format (ELF) \[ELF\], Common Object File Format (COFF) \[COFF\] and Delta encoding. 
+
+Additional formats can be registered through the IANA-maintained registry.  
  
 ### suit-parameter-uri
 
@@ -858,7 +887,8 @@ SUIT_Unpack_Info = {
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Delta
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Hex
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Elf
-
+SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Coff
+SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_srec
 ~~~
 
 ## SUIT_Command_Sequence
