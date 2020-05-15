@@ -267,10 +267,14 @@ SUIT_Unpack_Info = {
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Delta
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Hex
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Elf
+SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Coff
+SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Srec
 
 SUIT_Unpack_Algorithm_Delta = 1
 SUIT_Unpack_Algorithm_Hex = 2
 SUIT_Unpack_Algorithm_Elf = 3
+SUIT_Unpack_Algorithm_Coff = 4
+SUIT_Unpack_Algorithm_Srec = 5
 
 SUIT_Text_Map = {SUIT_Text_Keys => tstr}
 
