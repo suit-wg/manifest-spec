@@ -1,0 +1,101 @@
+~~~
+{
+    / authentication-wrapper / 2:h'81d28443a10126a0582482025820666b83f
+f51628190387170489535aa9441656d8a24401de6458595c42cb0165d58405cb310acb
+34f7ebb42acfffce430dbda94faa412900ce8e76650445e2c37e4cc132d8bb5f30ecf5
+f8130270bbf8d159f6d36e1cdf97b64229910fdb447538af1' / [
+        18([
+                / protected / h'a10126' / {
+                    / alg / 1:-7 / ES256 /,
+                } /,
+                / unprotected / {
+                },
+                / payload / h'82025820666b83ff51628190387170489535aa94
+41656d8a24401de6458595c42cb0165d' / [
+                    / algorithm-id / 2 / sha256 /,
+                    / digest-bytes /
+h'666b83ff51628190387170489535aa9441656d8a24401de6458595c42cb0165d'
+                ] /,
+                / signature / h'5cb310acb34f7ebb42acfffce430dbda94faa4
+12900ce8e76650445e2c37e4cc132d8bb5f30ecf5f8130270bbf8d159f6d36e1cdf97b
+64229910fdb447538af1'
+            ])
+    ] /,
+    / manifest / 3:h'a50101020203585ea20244818141000458548614a40150fa6
+b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab4503820
+2582000112233445566778899aabbccddeeff0123456789abcdeffedcba98765432100
+e1987d001f602f60958258613a115781b687474703a2f2f6578616d706c652e636f6d2
+f66696c652e62696e15f603f60a438203f6' / {
+        / manifest-version / 1:1,
+        / manifest-sequence-number / 2:2,
+        / common / 3:h'a20244818141000458548614a40150fa6b4a53d5ad5fdfb
+e9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450382025820001122334
+45566778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d001f602f
+6' / {
+            / components / 2:h'81814100' / [
+                [h'00']
+            ] /,
+            / common-sequence / 4:h'8614a40150fa6b4a53d5ad5fdfbe9de663
+e4d41ffe02501492af1425695e48bf429b2d51f2ab4503820258200011223344556677
+8899aabbccddeeff0123456789abcdeffedcba98765432100e1987d001f602f6' / [
+                / directive-override-parameters / 20,{
+                    / vendor-id /
+1:h'fa6b4a53d5ad5fdfbe9de663e4d41ffe' / fa6b4a53-d5ad-5fdf-
+be9d-e663e4d41ffe /,
+                    / class-id / 2:h'1492af1425695e48bf429b2d51f2ab45'
+/ 1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
+                    / image-digest / 3:[
+                        / algorithm-id / 2 / sha256 /,
+                        / digest-bytes /
+h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
+                    ],
+                    / image-size / 14:34768,
+                } ,
+                / condition-vendor-identifier / 1,F6 / nil / ,
+                / condition-class-identifier / 2,F6 / nil /
+            ] /,
+        } /,
+        / install / 9:h'8613a115781b687474703a2f2f6578616d706c652e636f
+6d2f66696c652e62696e15f603f6' / [
+            / directive-set-parameters / 19,{
+                / uri / 21:'http://example.com/file.bin',
+            } ,
+            / directive-fetch / 21,F6 / nil / ,
+            / condition-image-match / 3,F6 / nil /
+        ] /,
+        / validate / 10:h'8203f6' / [
+            / condition-image-match / 3,F6 / nil /
+        ] /,
+    } /,
+}
+~~~
+
+Total size of manifest without COSE authentication object:  151
+
+Manifest:
+
+~~~
+a1035893a50101020203585ea20244818141000458548614a40150fa6b4a
+53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab
+45038202582000112233445566778899aabbccddeeff0123456789abcdef
+fedcba98765432100e1987d001f602f60958258613a115781b687474703a
+2f2f6578616d706c652e636f6d2f66696c652e62696e15f603f60a438203
+f6
+~~~
+
+Total size of manifest with COSE authentication object:  266
+
+Manifest with COSE authentication object:
+
+~~~
+a202587081d28443a10126a0582482025820666b83ff5162819038717048
+9535aa9441656d8a24401de6458595c42cb0165d58405cb310acb34f7ebb
+42acfffce430dbda94faa412900ce8e76650445e2c37e4cc132d8bb5f30e
+cf5f8130270bbf8d159f6d36e1cdf97b64229910fdb447538af1035893a5
+0101020203585ea20244818141000458548614a40150fa6b4a53d5ad5fdf
+be9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab4503820258
+2000112233445566778899aabbccddeeff0123456789abcdeffedcba9876
+5432100e1987d001f602f60958258613a115781b687474703a2f2f657861
+6d706c652e636f6d2f66696c652e62696e15f603f60a438203f6
+~~~
+

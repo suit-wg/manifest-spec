@@ -1,0 +1,148 @@
+~~~
+{
+    / authentication-wrapper / 2:h'81d28443a10126a05824820258201d15a17
+13d3a4510ca392454adff987abb5425348e449618122ffa817012cc315840197a4a3a4
+188fe1dd8baa468ae9a35ac8e5ef462017530116eadd90892c96c6ab00825fcb45edb7
+57547733c14d3b637ea8a085ce7bfc782a0b2cd80d31b1294' / [
+        18([
+                / protected / h'a10126' / {
+                    / alg / 1:-7 / ES256 /,
+                } /,
+                / unprotected / {
+                },
+                / payload / h'820258201d15a1713d3a4510ca392454adff987a
+bb5425348e449618122ffa817012cc31' / [
+                    / algorithm-id / 2 / sha256 /,
+                    / digest-bytes /
+h'1d15a1713d3a4510ca392454adff987abb5425348e449618122ffa817012cc31'
+                ] /,
+                / signature / h'197a4a3a4188fe1dd8baa468ae9a35ac8e5ef4
+62017530116eadd90892c96c6ab00825fcb45edb757547733c14d3b637ea8a085ce7bf
+c782a0b2cd80d31b1294'
+            ])
+    ] /,
+    / manifest / 3:h'a501010203035899a202448181410004588f8814a20150fa6
+b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450f825
+82e8405f614a2038202582000112233445566778899aabbccddeeff0123456789abcde
+ffedcba98765432100e1987d058308405f614a203820258200123456789abcdeffedcb
+a987654321000112233445566778899aabbccddeeff0e1a00012c2201f602f60958538
+60f8258248405f613a115781c687474703a2f2f6578616d706c652e636f6d2f66696c6
+5312e62696e58248405f613a115781c687474703a2f2f6578616d706c652e636f6d2f6
+6696c65322e62696e15f603f60a438203f6' / {
+        / manifest-version / 1:1,
+        / manifest-sequence-number / 2:3,
+        / common / 3:h'a202448181410004588f8814a20150fa6b4a53d5ad5fdfb
+e9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450f82582e8405f614a20
+38202582000112233445566778899aabbccddeeff0123456789abcdeffedcba9876543
+2100e1987d058308405f614a203820258200123456789abcdeffedcba9876543210001
+12233445566778899aabbccddeeff0e1a00012c2201f602f6' / {
+            / components / 2:h'81814100' / [
+                [h'00']
+            ] /,
+            / common-sequence / 4:h'8814a20150fa6b4a53d5ad5fdfbe9de663
+e4d41ffe02501492af1425695e48bf429b2d51f2ab450f82582e8405f614a203820258
+2000112233445566778899aabbccddeeff0123456789abcdeffedcba98765432100e19
+87d058308405f614a203820258200123456789abcdeffedcba98765432100011223344
+5566778899aabbccddeeff0e1a00012c2201f602f6' / [
+                / directive-override-parameters / 20,{
+                    / vendor-id /
+1:h'fa6b4a53d5ad5fdfbe9de663e4d41ffe' / fa6b4a53-d5ad-5fdf-
+be9d-e663e4d41ffe /,
+                    / class-id / 2:h'1492af1425695e48bf429b2d51f2ab45'
+/ 1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
+                } ,
+                / directive-try-each / 15,[
+                    h'8405f614a2038202582000112233445566778899aabbccdd
+eeff0123456789abcdeffedcba98765432100e1987d0' / [
+                        / condition-component-offset / 5,F6 / nil / ,
+                        / directive-override-parameters / 20,{
+                            / image-digest / 3:[
+                                / algorithm-id / 2 / sha256 /,
+                                / digest-bytes /
+h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
+                            ],
+                            / image-size / 14:34768,
+                        }
+                    ] / ,
+                    h'8405f614a203820258200123456789abcdeffedcba987654
+321000112233445566778899aabbccddeeff0e1a00012c22' / [
+                        / condition-component-offset / 5,F6 / nil / ,
+                        / directive-override-parameters / 20,{
+                            / image-digest / 3:[
+                                / algorithm-id / 2 / sha256 /,
+                                / digest-bytes /
+h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
+                            ],
+                            / image-size / 14:76834,
+                        }
+                    ] /
+                ] ,
+                / condition-vendor-identifier / 1,F6 / nil / ,
+                / condition-class-identifier / 2,F6 / nil /
+            ] /,
+        } /,
+        / install / 9:h'860f8258248405f613a115781c687474703a2f2f657861
+6d706c652e636f6d2f66696c65312e62696e58248405f613a115781c687474703a2f2f
+6578616d706c652e636f6d2f66696c65322e62696e15f603f6' / [
+            / directive-try-each / 15,[
+                h'8405f613a115781c687474703a2f2f6578616d706c652e636f6d
+2f66696c65312e62696e' / [
+                    / condition-component-offset / 5,F6 / nil / ,
+                    / directive-set-parameters / 19,{
+                        / uri / 21:'http://example.com/file1.bin',
+                    }
+                ] / ,
+                h'8405f613a115781c687474703a2f2f6578616d706c652e636f6d
+2f66696c65322e62696e' / [
+                    / condition-component-offset / 5,F6 / nil / ,
+                    / directive-set-parameters / 19,{
+                        / uri / 21:'http://example.com/file2.bin',
+                    }
+                ] /
+            ] ,
+            / directive-fetch / 21,F6 / nil / ,
+            / condition-image-match / 3,F6 / nil /
+        ] /,
+        / validate / 10:h'8203f6' / [
+            / condition-image-match / 3,F6 / nil /
+        ] /,
+    } /,
+}
+~~~
+
+Total size of manifest without COSE authentication object:  256
+
+Manifest:
+
+~~~
+a10358fca501010203035899a202448181410004588f8814a20150fa6b4a
+53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab
+450f82582e8405f614a2038202582000112233445566778899aabbccddee
+ff0123456789abcdeffedcba98765432100e1987d058308405f614a20382
+0258200123456789abcdeffedcba987654321000112233445566778899aa
+bbccddeeff0e1a00012c2201f602f6095853860f8258248405f613a11578
+1c687474703a2f2f6578616d706c652e636f6d2f66696c65312e62696e58
+248405f613a115781c687474703a2f2f6578616d706c652e636f6d2f6669
+6c65322e62696e15f603f60a438203f6
+~~~
+
+Total size of manifest with COSE authentication object:  371
+
+Manifest with COSE authentication object:
+
+~~~
+a202587081d28443a10126a05824820258201d15a1713d3a4510ca392454
+adff987abb5425348e449618122ffa817012cc315840197a4a3a4188fe1d
+d8baa468ae9a35ac8e5ef462017530116eadd90892c96c6ab00825fcb45e
+db757547733c14d3b637ea8a085ce7bfc782a0b2cd80d31b12940358fca5
+01010203035899a202448181410004588f8814a20150fa6b4a53d5ad5fdf
+be9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450f82582e
+8405f614a2038202582000112233445566778899aabbccddeeff01234567
+89abcdeffedcba98765432100e1987d058308405f614a203820258200123
+456789abcdeffedcba987654321000112233445566778899aabbccddeeff
+0e1a00012c2201f602f6095853860f8258248405f613a115781c68747470
+3a2f2f6578616d706c652e636f6d2f66696c65312e62696e58248405f613
+a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e62
+696e15f603f60a438203f6
+~~~
+
