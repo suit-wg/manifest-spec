@@ -1,6 +1,6 @@
 SUIT_Envelope = {
-    suit-delegation            => bstr .cbor SUIT_Delegation
-    suit-authentication-wrapper
+    ? suit-delegation            => bstr .cbor SUIT_Delegation
+    ? suit-authentication-wrapper
         => bstr .cbor SUIT_Authentication_Wrapper / nil,
     $$SUIT_Manifest_Wrapped,
     * $$SUIT_Severed_Fields,
