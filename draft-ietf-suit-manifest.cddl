@@ -247,34 +247,28 @@ SUIT_Compression_Info = {
     ? suit-compression-parameters => bstr
 }
 
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_gzip
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_bzip2
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_deflate
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_lz4
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_lzma
+SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_zlib
+SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_brotli
+SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_zstd
 
-SUIT_Compression_Algorithm_gzip = 1
-SUIT_Compression_Algorithm_bzip2 = 2
-SUIT_Compression_Algorithm_deflate = 3
-SUIT_Compression_Algorithm_lz4 = 4
-SUIT_Compression_Algorithm_lzma = 7
+SUIT_Compression_Algorithm_zlib = 1
+SUIT_Compression_Algorithm_brotli = 2
+SUIT_Compression_Algorithm_zstd = 3
 
 SUIT_Unpack_Info = {
     suit-unpack-algorithm => SUIT_Unpack_Algorithms,
     ? suit-unpack-parameters => bstr
 }
 
-SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Delta
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Hex
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Elf
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Coff
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Srec
 
-SUIT_Unpack_Algorithm_Delta = 1
-SUIT_Unpack_Algorithm_Hex = 2
-SUIT_Unpack_Algorithm_Elf = 3
-SUIT_Unpack_Algorithm_Coff = 4
-SUIT_Unpack_Algorithm_Srec = 5
+SUIT_Unpack_Algorithm_Hex = 1
+SUIT_Unpack_Algorithm_Elf = 2
+SUIT_Unpack_Algorithm_Coff = 3
+SUIT_Unpack_Algorithm_Srec = 4
 
 SUIT_Text_Map = {SUIT_Text_Keys => tstr}
 
