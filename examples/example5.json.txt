@@ -1,0 +1,123 @@
+~~~
+{
+    / authentication-wrapper / 2:h'81586fd28443a10126a0582482025820ecc
+95235f2ab00b9912f8189b213b3e4ade42b792f491644e76004cd2ba87dc8584093952
+6b77d63dac2e138bf074aac757c5f010e8b2cf3ae9fcbba4cafc2d0f81c9ae46bc973c
+c0565410a1cb6bf10d2b3d0a2865392255cc4288d0337af3de837' / [
+        h'd28443a10126a0582482025820ecc95235f2ab00b9912f8189b213b3e4ad
+e42b792f491644e76004cd2ba87dc85840939526b77d63dac2e138bf074aac757c5f01
+0e8b2cf3ae9fcbba4cafc2d0f81c9ae46bc973cc0565410a1cb6bf10d2b3d0a2865392
+255cc4288d0337af3de837' / 18([
+                / protected / h'a10126' / {
+                    / alg / 1:-7 / "ES256" /,
+                } /,
+                / unprotected / {
+                },
+                / payload / h'82025820ecc95235f2ab00b9912f8189b213b3e4
+ade42b792f491644e76004cd2ba87dc8' / [
+                    / algorithm-id / 2 / "sha256" /,
+                    / digest-bytes /
+h'"ecc95235f2ab00b9912f8189b213b3e4ade42b792f491644e76004cd2ba87dc8"'
+                ] /,
+                / signature / h'"939526b77d63dac2e138bf074aac757c5f010
+e8b2cf3ae9fcbba4cafc2d0f81c9ae46bc973cc0565410a1cb6bf10d2b3d0a28653922
+55cc4288d0337af3de837"'
+            ]) /
+    ] /,
+    / manifest / 3:h'a701010205035865a2024782814100814101045858880c001
+4a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f
+2ab450358248202582000112233445566778899aabbccddeeff0123456789abcdeffed
+cba98765432100e1987d001f602f6085823840c0113a115781b687474703a2f2f65786
+16d706c652e636f6d2f66696c652e62696e094b880c0013a1160116f603f60a45840c0
+003f60c45840c0017f6' / {
+        / manifest-version / 1:1,
+        / manifest-sequence-number / 2:5,
+        / common / 3:h'a2024782814100814101045858880c0014a40150fa6b4a5
+3d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45035824820
+2582000112233445566778899aabbccddeeff0123456789abcdeffedcba98765432100
+e1987d001f602f6' / {
+            / components / 2:h'82814100814101' / [
+                [h'"00"'] ,
+                [h'"01"']
+            ] /,
+            / common-sequence / 4:h'880c0014a40150fa6b4a53d5ad5fdfbe9d
+e663e4d41ffe02501492af1425695e48bf429b2d51f2ab450358248202582000112233
+445566778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d001f602
+f6' / [
+                / directive-set-component-index / 12,0 ,
+                / directive-override-parameters / 20,{
+                    / vendor-id /
+1:h'"fa6b4a53d5ad5fdfbe9de663e4d41ffe"' / fa6b4a53-d5ad-5fdf-
+be9d-e663e4d41ffe /,
+                    / class-id /
+2:h'"1492af1425695e48bf429b2d51f2ab45"' /
+1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
+                    / image-digest / 3:h'8202582000112233445566778899a
+abbccddeeff0123456789abcdeffedcba9876543210' / [
+                        / algorithm-id / 2 / "sha256" /,
+                        / digest-bytes /
+h'"00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210"'
+                    ] /,
+                    / image-size / 14:34768,
+                } ,
+                / condition-vendor-identifier / 1,F6 / nil / ,
+                / condition-class-identifier / 2,F6 / nil /
+            ] /,
+        } /,
+        / payload-fetch / 8:h'840c0113a115781b687474703a2f2f6578616d70
+6c652e636f6d2f66696c652e62696e' / [
+            / directive-set-component-index / 12,1 ,
+            / directive-set-parameters / 19,{
+                / uri / 21:'http://example.com/file.bin',
+            }
+        ] /,
+        / install / 9:h'880c0013a1160116f603f6' / [
+            / directive-set-component-index / 12,0 ,
+            / directive-set-parameters / 19,{
+                / source-component / 22:1 / [h'"01"'] /,
+            } ,
+            / directive-copy / 22,F6 / nil / ,
+            / condition-image-match / 3,F6 / nil /
+        ] /,
+        / validate / 10:h'840c0003f6' / [
+            / directive-set-component-index / 12,0 ,
+            / condition-image-match / 3,F6 / nil /
+        ] /,
+        / run / 12:h'840c0017f6' / [
+            / directive-set-component-index / 12,0 ,
+            / directive-run / 23,F6 / nil /
+        ] /,
+    } /,
+}
+~~~
+
+Total size of manifest without COSE authentication object:  178
+
+Manifest:
+
+~~~
+a10358aea701010205035865a2024782814100814101045858880c0014a4
+0150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf42
+9b2d51f2ab450358248202582000112233445566778899aabbccddeeff01
+23456789abcdeffedcba98765432100e1987d001f602f6085823840c0113
+a115781b687474703a2f2f6578616d706c652e636f6d2f66696c652e6269
+6e094b880c0013a1160116f603f60a45840c0003f60c45840c0017f6
+~~~
+
+Total size of manifest with COSE authentication object:  295
+
+Manifest with COSE authentication object:
+
+~~~
+a202587281586fd28443a10126a0582482025820ecc95235f2ab00b9912f
+8189b213b3e4ade42b792f491644e76004cd2ba87dc85840939526b77d63
+dac2e138bf074aac757c5f010e8b2cf3ae9fcbba4cafc2d0f81c9ae46bc9
+73cc0565410a1cb6bf10d2b3d0a2865392255cc4288d0337af3de8370358
+aea701010205035865a2024782814100814101045858880c0014a40150fa
+6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51
+f2ab450358248202582000112233445566778899aabbccddeeff01234567
+89abcdeffedcba98765432100e1987d001f602f6085823840c0113a11578
+1b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e094b
+880c0013a1160116f603f60a45840c0003f60c45840c0017f6
+~~~
+

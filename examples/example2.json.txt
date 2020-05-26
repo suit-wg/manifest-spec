@@ -1,0 +1,111 @@
+~~~
+{
+    / authentication-wrapper / 2:h'81586fd28443a10126a0582482025820883
+90f8988639d8a2cfb6da969fce488333ac5ba77aaf0d66b5623009bbf341158401929f
+fd488c455ab40eaf1aa96a7df4a9c16c658221055c3a113232fb81c5751a23a74b5efc
+06c459eb47a07028ef3c6a0d9051185dd78899c654249f9070dea' / [
+        h'd28443a10126a058248202582088390f8988639d8a2cfb6da969fce48833
+3ac5ba77aaf0d66b5623009bbf341158401929ffd488c455ab40eaf1aa96a7df4a9c16
+c658221055c3a113232fb81c5751a23a74b5efc06c459eb47a07028ef3c6a0d9051185
+dd78899c654249f9070dea' / 18([
+                / protected / h'a10126' / {
+                    / alg / 1:-7 / "ES256" /,
+                } /,
+                / unprotected / {
+                },
+                / payload / h'8202582088390f8988639d8a2cfb6da969fce488
+333ac5ba77aaf0d66b5623009bbf3411' / [
+                    / algorithm-id / 2 / "sha256" /,
+                    / digest-bytes /
+h'"88390f8988639d8a2cfb6da969fce488333ac5ba77aaf0d66b5623009bbf3411"'
+                ] /,
+                / signature / h'"1929ffd488c455ab40eaf1aa96a7df4a9c16c
+658221055c3a113232fb81c5751a23a74b5efc06c459eb47a07028ef3c6a0d9051185d
+d78899c654249f9070dea"'
+            ]) /
+    ] /,
+    / manifest / 3:h'a601010203035860a20244818141000458568614a40150fa6
+b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab4503582
+48202582000112233445566778899aabbccddeeff0123456789abcdeffedcba9876543
+2100e1987d001f602f60958258613a115781b687474703a2f2f6578616d706c652e636
+f6d2f66696c652e62696e15f603f60a438203f60c438217f6' / {
+        / manifest-version / 1:1,
+        / manifest-sequence-number / 2:3,
+        / common / 3:h'a20244818141000458568614a40150fa6b4a53d5ad5fdfb
+e9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450358248202582000112
+233445566778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d001f
+602f6' / {
+            / components / 2:h'81814100' / [
+                [h'"00"']
+            ] /,
+            / common-sequence / 4:h'8614a40150fa6b4a53d5ad5fdfbe9de663
+e4d41ffe02501492af1425695e48bf429b2d51f2ab4503582482025820001122334455
+66778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d001f602f6'
+/ [
+                / directive-override-parameters / 20,{
+                    / vendor-id /
+1:h'"fa6b4a53d5ad5fdfbe9de663e4d41ffe"' / fa6b4a53-d5ad-5fdf-
+be9d-e663e4d41ffe /,
+                    / class-id /
+2:h'"1492af1425695e48bf429b2d51f2ab45"' /
+1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
+                    / image-digest / 3:h'8202582000112233445566778899a
+abbccddeeff0123456789abcdeffedcba9876543210' / [
+                        / algorithm-id / 2 / "sha256" /,
+                        / digest-bytes /
+h'"00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210"'
+                    ] /,
+                    / image-size / 14:34768,
+                } ,
+                / condition-vendor-identifier / 1,F6 / nil / ,
+                / condition-class-identifier / 2,F6 / nil /
+            ] /,
+        } /,
+        / install / 9:h'8613a115781b687474703a2f2f6578616d706c652e636f
+6d2f66696c652e62696e15f603f6' / [
+            / directive-set-parameters / 19,{
+                / uri / 21:'http://example.com/file.bin',
+            } ,
+            / directive-fetch / 21,F6 / nil / ,
+            / condition-image-match / 3,F6 / nil /
+        ] /,
+        / validate / 10:h'8203f6' / [
+            / condition-image-match / 3,F6 / nil /
+        ] /,
+        / run / 12:h'8217f6' / [
+            / directive-run / 23,F6 / nil /
+        ] /,
+    } /,
+}
+~~~
+
+Total size of manifest without COSE authentication object:  158
+
+Manifest:
+
+~~~
+a103589aa601010203035860a20244818141000458568614a40150fa6b4a
+53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab
+450358248202582000112233445566778899aabbccddeeff0123456789ab
+cdeffedcba98765432100e1987d001f602f60958258613a115781b687474
+703a2f2f6578616d706c652e636f6d2f66696c652e62696e15f603f60a43
+8203f60c438217f6
+~~~
+
+Total size of manifest with COSE authentication object:  275
+
+Manifest with COSE authentication object:
+
+~~~
+a202587281586fd28443a10126a058248202582088390f8988639d8a2cfb
+6da969fce488333ac5ba77aaf0d66b5623009bbf341158401929ffd488c4
+55ab40eaf1aa96a7df4a9c16c658221055c3a113232fb81c5751a23a74b5
+efc06c459eb47a07028ef3c6a0d9051185dd78899c654249f9070dea0358
+9aa601010203035860a20244818141000458568614a40150fa6b4a53d5ad
+5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450358
+248202582000112233445566778899aabbccddeeff0123456789abcdeffe
+dcba98765432100e1987d001f602f60958258613a115781b687474703a2f
+2f6578616d706c652e636f6d2f66696c652e62696e15f603f60a438203f6
+0c438217f6
+~~~
+
