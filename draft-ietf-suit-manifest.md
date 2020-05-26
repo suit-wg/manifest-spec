@@ -772,7 +772,7 @@ Compression Info defines any information that is required for a device to perfor
 
 ### suit-parameter-unpack-info
 
-SUIT_Unpack_Info defines the information required for a device to interpret a packed format. This document defines the use of the following binary encodings: Intel HEX \[HEX\], Motorola S-record \[SREC\],  Executable and Linkable Format (ELF) \[ELF\], Common Object File Format (COFF) \[COFF\] and Delta encoding. 
+SUIT_Unpack_Info defines the information required for a device to interpret a packed format. This document defines the use of the following binary encodings: Intel HEX \[HEX\], Motorola S-record \[SREC\],  Executable and Linkable Format (ELF) \[ELF\], and Common Object File Format (COFF) \[COFF\]. 
 
 Additional formats can be registered through the IANA-maintained registry.  
  
