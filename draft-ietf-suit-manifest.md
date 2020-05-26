@@ -56,6 +56,9 @@ informative:
   I-D.ietf-suit-architecture:
   I-D.ietf-suit-information-model:
   I-D.ietf-teep-architecture: 
+  RFC7932: 
+  RFC1950:
+  I-D.kucherawy-rfc8478bis: 
   HEX:
     title: "Intel HEX"
     author:
@@ -768,13 +771,15 @@ Encryption Info defines the mechanism that Fetch or Copy should use to decrypt t
 
 ### suit-parameter-compression-info
 
-Compression Info defines any information that is required for a device to perform decompression operations. Typically, this includes the algorithm identifier. This document defines the use of gzip, bzip2, deflate, LZ4, and LZMA. 
+Compression Info defines any information that is required for a device to perform decompression operations. Typically, this includes the algorithm identifier. This document defines the use of ZLIB \[RFC1950\], Brotli \[RFC7932\], and ZSTD \[kucherawy-rfc8478bis\].
+
+Additional compression formats can be registered through the IANA-maintained registry.  
 
 ### suit-parameter-unpack-info
 
 SUIT_Unpack_Info defines the information required for a device to interpret a packed format. This document defines the use of the following binary encodings: Intel HEX \[HEX\], Motorola S-record \[SREC\],  Executable and Linkable Format (ELF) \[ELF\], and Common Object File Format (COFF) \[COFF\]. 
 
-Additional formats can be registered through the IANA-maintained registry.  
+Additional packing formats can be registered through the IANA-maintained registry.  
  
 ### suit-parameter-uri
 
@@ -874,17 +879,15 @@ SUIT_Compression_Info = {
     ? suit-compression-parameters => bstr
 }
 
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_gzip
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_bzip2
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_lz4
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_lzma
+SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_zlib
+SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_brotli
+SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_zstd
 
 SUIT_Unpack_Info = {
     suit-unpack-algorithm => SUIT_Unpack_Algorithms,
     ? suit-unpack-parameters => bstr
 }
 
-SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Delta
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Hex
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Elf
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Coff
