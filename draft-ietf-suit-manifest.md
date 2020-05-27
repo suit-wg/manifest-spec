@@ -174,9 +174,7 @@ To implement a tool that generates updates, see {{creating-manifests}} and {{man
 
 The IANA consideration section, see {{iana}}, provides instructions to IANA to create several registries. This section also provides the CBOR labels for the structures defined in this document. 
 
-Examples are listed in {{examples}} and a design rational is provided in {{design-rational}}. 
-
-Finally, {{implementation-matrix}} summarizes what features of this specification are mandatory to implement. 
+The complete CDDL description is provided in Appendix A, examples are given in Appendix B and a design rational is offered in Appendix C. Finally, Appendix D gives a summarize of the mandatory-to-implement features of this specification. 
 
 # Background {#background}
 
