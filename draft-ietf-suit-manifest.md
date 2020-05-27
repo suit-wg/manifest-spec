@@ -1725,8 +1725,7 @@ The simplicity of design in the Recipient due to all of these benefits allows ev
 This section summarizes the functionality a minimal implementation needs
 to offer to claim conformance to this specification. 
 
-## D.1. Conditions
-{: numbered='no'}
+The subsequent table shows the conditions. 
 
 Name | Reference | Implementation
 ---|---|---
@@ -1742,8 +1741,7 @@ Update Authorized |{{suit-condition-update-authorized}} | OPTIONAL
 Version | {{suit-condition-version}} | OPTIONAL
 Custom Condition | {{SUIT_Condition_Custom}} | OPTIONAL
 
-## D.2. Directives
-{: numbered='no'}
+The subsequent table shows the directives.
 
 Name | Reference | Implementation
 ---|---|---
@@ -1761,8 +1759,7 @@ Wait For Event | {{suit-directive-wait}} | OPTIONAL
 Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
 Swap | {{suit-directive-swap}} | OPTIONAL
 
-## D.3. Parameters 
-{: numbered='no'}
+TThe subsequent table shows the parameters 
 
 Name | Reference | Implementation 
 ---|---|---
