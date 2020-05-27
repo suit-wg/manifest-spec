@@ -769,13 +769,13 @@ Encryption Info defines the mechanism that Fetch or Copy should use to decrypt t
 
 ### suit-parameter-compression-info
 
-Compression Info defines any information that is required for a device to perform decompression operations. Typically, this includes the algorithm identifier. This document defines the use of ZLIB \[RFC1950\], Brotli \[RFC7932\], and ZSTD \[kucherawy-rfc8478bis\].
+Compression Info defines any information that is required for a device to perform decompression operations. Typically, this includes the algorithm identifier. This document defines the use of ZLIB {{RFC1950}}, Brotli {{RFC7932}}, and ZSTD {{I-D.kucherawy-rfc8478bis}}.
 
 Additional compression formats can be registered through the IANA-maintained registry.  
 
 ### suit-parameter-unpack-info
 
-SUIT_Unpack_Info defines the information required for a device to interpret a packed format. This document defines the use of the following binary encodings: Intel HEX \[HEX\], Motorola S-record \[SREC\],  Executable and Linkable Format (ELF) \[ELF\], and Common Object File Format (COFF) \[COFF\]. 
+SUIT_Unpack_Info defines the information required for a device to interpret a packed format. This document defines the use of the following binary encodings: Intel HEX {{HEX}}, Motorola S-record {{SREC}},  Executable and Linkable Format (ELF) {{ELF}}, and Common Object File Format (COFF) {{COFF}}. 
 
 Additional packing formats can be registered through the IANA-maintained registry.  
  
