@@ -753,7 +753,7 @@ Many conditions and directives apply to a given component, and these generally g
 
 To facilitate optional conditions, a special directive is provided. It runs several new lists of conditions/directives, one after another, that are contained as an argument to the directive. By default, it assumes that a failure of a condition should not indicate a failure of the update/boot, but a parameter is provided to override this behavior.
 
-## Parameters {#secparameters}
+### SUIT_Parameters {#secparameters}
 
 Many conditions and directives require additional information. That information is contained within parameters that can be set in a consistent way. This allows reduction of manifest size and replacement of parameters from one manifest to the next.
 
@@ -785,95 +785,95 @@ Custom | suit-parameter-custom | {{suit-parameter-custom}}
 
 CBOR-encoded object parameters are still wrapped in a bstr. This is because it allows a parser that is aggregating parameters to reference the object with a single pointer and traverse it without understanding the contents. This is important for modularization and division of responsibility within a pull parser. The same consideration does not apply to Directives because those elements are invoked with their arguments immediately
 
-### suit-parameter-vendor-identifier
+#### suit-parameter-vendor-identifier
 
 A RFC 4122 UUID representing the vendor of the device or component.
 
-### suit-parameter-class-identifier 
+#### suit-parameter-class-identifier 
 
 A RFC 4122 UUID representing the class of the device or component
 
-### suit-parameter-image-digest
+#### suit-parameter-image-digest
 
 A fingerprint computed over the image itself encoded in the SUIT_Digest structure. 
 
-### suit-parameter-image-size
+#### suit-parameter-image-size
 
 The size of the firmware image in bytes. 
 
-### suit-parameter-use-before
+#### suit-parameter-use-before
 
 An expire date for the use of the manifest encoded as a POSIX timestamp. 
 
-### suit-parameter-component-offset
+#### suit-parameter-component-offset
 
 Offset of the component
 
-### suit-parameter-encryption-info
+#### suit-parameter-encryption-info
 
 Encryption Info defines the mechanism that Fetch or Copy should use to decrypt the data they transfer. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged or a COSE_Encrypt0_Tagged, wrapped in a bstr.
 
-### suit-parameter-compression-info
+#### suit-parameter-compression-info
 
 Compression Info defines any information that is required for a device to perform decompression operations. Typically, this includes the algorithm identifier. This document defines the use of ZLIB {{RFC1950}}, Brotli {{RFC7932}}, and ZSTD {{I-D.kucherawy-rfc8478bis}}.
 
 Additional compression formats can be registered through the IANA-maintained registry.  
 
-### suit-parameter-unpack-info
+#### suit-parameter-unpack-info
 
 SUIT_Unpack_Info defines the information required for a device to interpret a packed format. This document defines the use of the following binary encodings: Intel HEX {{HEX}}, Motorola S-record {{SREC}},  Executable and Linkable Format (ELF) {{ELF}}, and Common Object File Format (COFF) {{COFF}}. 
 
 Additional packing formats can be registered through the IANA-maintained registry.  
  
-### suit-parameter-uri
+#### suit-parameter-uri
 
 A URI from which to fetch a resource
 
-### suit-parameter-source-component
+#### suit-parameter-source-component
 
 A Component Index
 
-### suit-parameter-run-args
+#### suit-parameter-run-args
 
 An encoded set of arguments for Run
 
-### suit-parameter-device-identifier
+#### suit-parameter-device-identifier
 
 A RFC4122 UUID representing the device or component
 
-### suit-parameter-minimum-battery
+#### suit-parameter-minimum-battery
 
 A minimum battery level in mWh
 
-### suit-parameter-update-priority
+#### suit-parameter-update-priority
 
 The priority of the update
 
-### suit-parameter-version
+#### suit-parameter-version
 
 TBD. 
 
-### suit-parameter-wait-info
+#### suit-parameter-wait-info
 
 TBD. 
 
-### suit-parameter-uri-list
+#### suit-parameter-uri-list
 
 TBD. 
 
-### suit-parameter-strict-order
+#### suit-parameter-strict-order
 
 The Strict Order Parameter allows a manifest to govern when directives can be executed out-of-order. This allows for systems that have a sensitivity to order of updates to choose the order in which they are executed. It also allows for more advanced systems to parallelize their handling of updates. Strict Order defaults to True. It MAY be set to False when the order of operations does not matter. When arriving at the end of a command sequence, ALL commands MUST have completed, regardless of the state of SUIT_Parameter_Strict_Order. If SUIT_Parameter_Strict_Order is returned to True, ALL preceding commands MUST complete before the next command is executed.
 
-### suit-parameter-soft-failure
+#### suit-parameter-soft-failure
 
 When executing a command sequence inside SUIT_Directive_Try_Each and a condition failure occurs, the manifest processor aborts the sequence. If Soft Failure is True, it returns Success. Otherwise, it returns the original condition failure. SUIT_Parameter_Soft_Failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates.
 
-### suit-parameter-custom
+#### suit-parameter-custom
 
 TBD. 
 
-### SUIT_Parameters CDDL
+#### SUIT_Parameters CDDL
 
 The following CDDL describes all SUIT_Parameters.
 
