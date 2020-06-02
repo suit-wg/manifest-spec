@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-05
+docname: draft-ietf-suit-manifest-06
 category: std
 
 ipr: pre5378Trust200902
@@ -59,6 +59,7 @@ informative:
   I-D.ietf-teep-architecture: 
   RFC7932: 
   RFC1950:
+  RFC8392: 
   I-D.kucherawy-rfc8478bis: 
   HEX:
     title: "Intel HEX"
@@ -505,7 +506,7 @@ The suit-manifest-encryption-info structure contains information required to dec
 
 ## Delegation Info
 
-The suit-delegation field may carry one or multiple CBOR Web Tokens (CWTs). They can be used to perform enhanced authorization decisions. 
+The suit-delegation field may carry one or multiple CBOR Web Tokens (CWTs) {{RFC8392}}. They can be used to perform enhanced authorization decisions. 
 
 ## Severable Fields 
 
@@ -513,11 +514,27 @@ Each of suit-dependency-resolution, suit-payload-fetch, and suit-payload-install
 
 ## Human-Readable Text
 
-suit-text contains all the human-readable information that describes any and all parts of the manifest, its payload(s) and its resource(s).
+suit-text contains all the human-readable information that describes any and all parts of the manifest, its payload(s) and its resource(s). The text section is typically severable, allowing manifests to be distributed without the text, since end-nodes do not require text. The meaning of each field is described below.
+
+Each section MAY be present. If present, each section MUST be as described. Negative integer IDs are reserved for application-specific text values.
+
+ CDDL Structure | Description
+---|---
+suit-text-manifest-description | Free text description of the manifest
+suit-text-update-description | Free text description of the update
+suit-text-vendor-name | Free text vendor name
+suit-text-model-name | Free text model name
+suit-text-vendor-domain | The domain used to create the vendor-id condition
+suit-text-model-info | The information used to create the class-id condition
+suit-text-component-description | Free text description of each component in the manifest
+suit-text-manifest-json-source | The JSON-formatted document that was used to create the manifest
+suit-text-manifest-yaml-source | The yaml-formatted document that was used to create the manifest
+suit-text-version-dependencies | List of component versions required by the manifest
+
 
 ## COSWID 
 
-suit-coswid contains a Concise Software Identifier. This may be discarded by the Recipient if not needed.
+suit-coswid contains a Concise Software Identifier. This may be discarded by the Recipient, if not needed.
 
 
 ## Encoding Considerations 
@@ -1310,25 +1327,6 @@ SUIT_Wait_Event_Argument_Time_Of_Day = uint ; Time of Day
 SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 
 ~~~
-
-## SUIT_Text_Map
-
-The SUIT_Text_Map contains all text descriptions needed for this manifest. The text section is typically severable, allowing manifests to be distributed without the text, since end-nodes do not require text. The meaning of each field is described below.
-
-Each section MAY be present. If present, each section MUST be as described. Negative integer IDs are reserved for application-specific text values.
-
- CDDL Structure | Description
----|---
-suit-text-manifest-description | Free text description of the manifest
-suit-text-update-description | Free text description of the update
-suit-text-vendor-name | Free text vendor name
-suit-text-model-name | Free text model name
-suit-text-vendor-domain | The domain used to create the vendor-id condition
-suit-text-model-info | The information used to create the class-id condition
-suit-text-component-description | Free text description of each component in the manifest
-suit-text-manifest-json-source | The JSON-formatted document that was used to create the manifest
-suit-text-manifest-yaml-source | The yaml-formatted document that was used to create the manifest
-suit-text-version-dependencies | List of component versions required by the manifest
 
 ## SUIT_Manifest CDDL
 
