@@ -708,6 +708,51 @@ SUIT_Component_Reference = {
 }
 ~~~
 
+
+## SUIT_Command_Sequence
+
+A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take to accomplish a particular goal. These goals are defined in the manifest and include:
+
+1. Dependency Resolution
+2. Payload Fetch
+3. Payload Installation
+4. Image Validation
+5. Image Loading
+6. Run or Boot
+
+Each of these follows exactly the same structure to ensure that the parser is as simple as possible.
+
+Lists of commands are constructed from two kinds of element:
+
+1. Conditions that MUST be true--any failure is treated as a failure of the update/load/boot
+2. Directives that MUST be executed.
+
+The lists of commands are logically structured into sequences of zero or more conditions followed by zero or more directives. The **logical** structure is described by the following CDDL:
+
+~~~
+Command_Sequence = {
+    conditions => [ * Condition],
+    directives => [ * Directive]
+}
+~~~
+
+This introduces significant complexity in the parser, however, so the structure is flattened to make parsing simpler:
+
+~~~
+SUIT_Command_Sequence = [ + (SUIT_Condition/SUIT_Directive) ]
+~~~
+
+Each condition is a command code identifier, followed by Nil. Each directive is composed of:
+
+1. A command code identifier
+2. An argument block or Nil
+
+Argument blocks are defined for each type of directive.
+
+Many conditions and directives apply to a given component, and these generally grouped together. Therefore, a special command to set the current component index is provided with a matching command to set the current dependency index. This index is a numeric index into the component ID tables defined at the beginning of the document. For the purpose of setting the index, the two component ID tables are considered to be concatenated together.
+
+To facilitate optional conditions, a special directive is provided. It runs several new lists of conditions/directives, one after another, that are contained as an argument to the directive. By default, it assumes that a failure of a condition should not indicate a failure of the update/boot, but a parameter is provided to override this behavior.
+
 ## Parameters {#secparameters}
 
 Many conditions and directives require additional information. That information is contained within parameters that can be set in a consistent way. This allows reduction of manifest size and replacement of parameters from one manifest to the next.
@@ -893,49 +938,6 @@ SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Coff
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Srec
 ~~~
 
-## SUIT_Command_Sequence
-
-A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take to accomplish a particular goal. These goals are defined in the manifest and include:
-
-1. Dependency Resolution
-2. Payload Fetch
-3. Payload Installation
-4. Image Validation
-5. Image Loading
-6. Run or Boot
-
-Each of these follows exactly the same structure to ensure that the parser is as simple as possible.
-
-Lists of commands are constructed from two kinds of element:
-
-1. Conditions that MUST be true--any failure is treated as a failure of the update/load/boot
-2. Directives that MUST be executed.
-
-The lists of commands are logically structured into sequences of zero or more conditions followed by zero or more directives. The **logical** structure is described by the following CDDL:
-
-~~~
-Command_Sequence = {
-    conditions => [ * Condition],
-    directives => [ * Directive]
-}
-~~~
-
-This introduces significant complexity in the parser, however, so the structure is flattened to make parsing simpler:
-
-~~~
-SUIT_Command_Sequence = [ + (SUIT_Condition/SUIT_Directive) ]
-~~~
-
-Each condition is a command code identifier, followed by Nil. Each directive is composed of:
-
-1. A command code identifier
-2. An argument block or Nil
-
-Argument blocks are defined for each type of directive.
-
-Many conditions and directives apply to a given component, and these generally grouped together. Therefore, a special command to set the current component index is provided with a matching command to set the current dependency index. This index is a numeric index into the component ID tables defined at the beginning of the document. For the purpose of setting the index, the two component ID tables are considered to be concatenated together.
-
-To facilitate optional conditions, a special directive is provided. It runs several new lists of conditions/directives, one after another, that are contained as an argument to the directive. By default, it assumes that a failure of a condition should not indicate a failure of the update/boot, but a parameter is provided to override this behavior.
 
 ### SUIT_Condition
 
