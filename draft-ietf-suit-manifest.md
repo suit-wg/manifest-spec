@@ -595,37 +595,9 @@ The suit-manifest-version indicates the version of serialization used to encode 
 
 The suit-manifest-sequence-number is a monotonically increasing anti-rollback counter. It also helps devices to determine which in a set of manifests is the "root" manifest in a given update. Each manifest MUST have a sequence number higher than each of its dependencies. Each Recipient MUST reject any manifest that has a sequence number lower than its current sequence number. It MAY be convenient to use a UTC timestamp in seconds as the sequence number. suit-manifest-sequence-number is REQUIRED to implement.
 
-## suit-common {#manifest-common}
-
-suit-common encodes all the information that is shared between each of the command sequences, including: suit-dependencies, suit-components, suit-dependency-components, and suit-common-sequence. suit-common is REQUIRED to implement.
-
-suit-dependencies is a list of SUIT_Dependency blocks that specify manifests that must be present before the current manifest can be processed. suit-dependencies is OPTIONAL to implement.
-
-In order to distinguish between components that are affected by the current manifest and components that are affected by a dependency, they are kept in separate lists. Components affected by the current manifest only list the component identifier. Components affected by a dependency include the component identifier and the index of the dependency that defines the component.
-
-suit-components is a list of SUIT_Component blocks that specify the component identifiers that will be affected by the content of the current manifest. suit-components is OPTIONAL to implement, but at least one manifest MUST contain a suit-components block.
-
-suit-dependency-components is a list of SUIT_Component_Reference blocks that specify component identifiers that will be affected by the content of a dependency of the current manifest. suit-dependency-components is OPTIONAL to implement.
-
-suit-common-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-common-sequence include setting expected device identity and image digests when they are conditional (see {{secconditional}} for more information on conditional sequences). suit-common-sequence is RECOMMENDED to implement.
-
 ## suit-reference-uri {#manifest-reference-uri}
 
 suit-reference-uri is a text string that encodes a URI where a full version of this manifest can be found. This is convenient for allowing management systems to show the severed elements of a manifest when this URI is reported by a device after installation.
-
-## SUIT_Command_Sequence {#manifest-commands}
-
-suit-dependency-resolution is a SUIT_Command_Sequence to execute in order to perform dependency resolution. Typical actions include configuring URIs of dependency manifests, fetching dependency manifests, and validating dependency manifests' contents. suit-dependency-resolution is REQUIRED to implement and to use when suit-dependencies is present.
-
-suit-payload-fetch is a SUIT_Command_Sequence to execute in order to obtain a payload. Some manifests may include these actions in the suit-install section instead if they operate in a streaming installation mode. This is particularly relevant for constrained devices without any temporary storage for staging the update. suit-payload-fetch is OPTIONAL to implement.
-
-suit-install is a SUIT_Command_Sequence to execute in order to install a payload. Typical actions include verifying a payload stored in temporary storage, copying a staged payload from temporary storage, and unpacking a payload. suit-install is OPTIONAL to implement.
-
-suit-validate is a SUIT_Command_Sequence to execute in order to validate that the result of applying the update is correct. Typical actions involve image validation and manifest validation. suit-validate is REQUIRED to implement. If the manifest contains dependencies, one process-dependency invocation per dependency or one process-dependency invocation targeting all dependencies SHOULD be present in validate.
-
-suit-load is a SUIT_Command_Sequence to execute in order to prepare a payload for execution. Typical actions include copying an image from permanent storage into RAM, optionally including actions such as decryption or decompression. suit-load is OPTIONAL to implement.
-
-suit-run is a SUIT_Command_Sequence to execute in order to run an image. suit-run typically contains a single instruction: either the "run" directive for the bootable manifest or the "process dependencies" directive for any dependents of the bootable manifest. suit-run is OPTIONAL to implement. Only one manifest in an update may contain the "run" directive.
 
 ## suit-text {#manifest-digest-text}
 
@@ -634,51 +606,6 @@ suit-text is a digest that uniquely identifies the content of the Text that is p
 ## suit-coswid {#manifest-digest-coswid}
 
 suit-coswid is a digest that uniquely identifies the content of the concise-software-identifier that is packaged in the SUIT_Envelope. suit-coswid is OPTIONAL to implement.
-
-## SUIT_Manifest CDDL
-
-The following CDDL fragment defines the manifest.
-
-~~~
-SUIT_Manifest = {
-    suit-manifest-version         => 1,
-    suit-manifest-sequence-number => uint,
-    suit-common                   => bstr .cbor SUIT_Common,
-    ? suit-reference-uri          => #6.32(tstr),
-    * $$SUIT_Severable_Command_Sequences,
-    * $$SUIT_Command_Sequences,
-    * $$SUIT_Protected_Elements,
-}
-
-$$SUIT_Severable_Command_Sequences //= (suit-dependency-resolution =>
-    SUIT_Severable_Command_Segment)
-$$SUIT_Severable_Command_Segments //= (suit-payload-fetch =>
-    SUIT_Severable_Command_Sequence)
-$$SUIT_Severable_Command_Segments //= (suit-install =>
-    SUIT_Severable_Command_Sequence)
-
-SUIT_Severable_Command_Sequence =
-    SUIT_Digest / bstr .cbor SUIT_Command_Sequence
-
-$$SUIT_Command_Sequences //= ( suit-validate =>
-    bstr .cbor SUIT_Command_Sequence )
-$$SUIT_Command_Sequences //= ( suit-load =>
-    bstr .cbor SUIT_Command_Sequence )
-$$SUIT_Command_Sequences //= ( suit-run =>
-    bstr .cbor SUIT_Command_Sequence )
-
-$$SUIT_Protected_Elements //= ( suit-text => SUIT_Digest )
-$$SUIT_Protected_Elements //= ( suit-coswid => SUIT_Digest )
-
-SUIT_Common = {
-    ? suit-dependencies           => bstr .cbor SUIT_Dependencies,
-    ? suit-components             => bstr .cbor SUIT_Components,
-    ? suit-dependency-components
-        => bstr .cbor SUIT_Component_References,
-    ? suit-common-sequence        => bstr .cbor SUIT_Command_Sequence,
-}
-~~~
-
 
 ## Dependencies {#SUIT_Dependency}
 
@@ -709,16 +636,21 @@ SUIT_Component_Reference = {
 ~~~
 
 
-## SUIT_Command_Sequence
+## SUIT_Command_Sequence {#manifest-commands}
 
 A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take to accomplish a particular goal. These goals are defined in the manifest and include:
 
-1. Dependency Resolution
-2. Payload Fetch
-3. Payload Installation
-4. Image Validation
-5. Image Loading
-6. Run or Boot
+1. Dependency Resolution: suit-dependency-resolution is a SUIT_Command_Sequence to execute in order to perform dependency resolution. Typical actions include configuring URIs of dependency manifests, fetching dependency manifests, and validating dependency manifests' contents. suit-dependency-resolution is REQUIRED to implement and to use when suit-dependencies is present.
+
+2. Payload Fetch: suit-payload-fetch is a SUIT_Command_Sequence to execute in order to obtain a payload. Some manifests may include these actions in the suit-install section instead if they operate in a streaming installation mode. This is particularly relevant for constrained devices without any temporary storage for staging the update. suit-payload-fetch is OPTIONAL to implement.
+
+3. Payload Installation: suit-install is a SUIT_Command_Sequence to execute in order to install a payload. Typical actions include verifying a payload stored in temporary storage, copying a staged payload from temporary storage, and unpacking a payload. suit-install is OPTIONAL to implement.
+
+4. Image Validation: suit-validate is a SUIT_Command_Sequence to execute in order to validate that the result of applying the update is correct. Typical actions involve image validation and manifest validation. suit-validate is REQUIRED to implement. If the manifest contains dependencies, one process-dependency invocation per dependency or one process-dependency invocation targeting all dependencies SHOULD be present in validate.
+
+5. Image Loading: suit-load is a SUIT_Command_Sequence to execute in order to prepare a payload for execution. Typical actions include copying an image from permanent storage into RAM, optionally including actions such as decryption or decompression. suit-load is OPTIONAL to implement.
+
+6. Run or Boot: suit-run is a SUIT_Command_Sequence to execute in order to run an image. suit-run typically contains a single instruction: either the "run" directive for the bootable manifest or the "process dependencies" directive for any dependents of the bootable manifest. suit-run is OPTIONAL to implement. Only one manifest in an update may contain the "run" directive.
 
 Each of these follows exactly the same structure to ensure that the parser is as simple as possible.
 
@@ -752,6 +684,20 @@ Argument blocks are defined for each type of directive.
 Many conditions and directives apply to a given component, and these generally grouped together. Therefore, a special command to set the current component index is provided with a matching command to set the current dependency index. This index is a numeric index into the component ID tables defined at the beginning of the document. For the purpose of setting the index, the two component ID tables are considered to be concatenated together.
 
 To facilitate optional conditions, a special directive is provided. It runs several new lists of conditions/directives, one after another, that are contained as an argument to the directive. By default, it assumes that a failure of a condition should not indicate a failure of the update/boot, but a parameter is provided to override this behavior.
+
+### suit-common {#manifest-common}
+
+suit-common encodes all the information that is shared between each of the command sequences, including: suit-dependencies, suit-components, suit-dependency-components, and suit-common-sequence. suit-common is REQUIRED to implement.
+
+suit-dependencies is a list of SUIT_Dependency blocks that specify manifests that must be present before the current manifest can be processed. suit-dependencies is OPTIONAL to implement.
+
+In order to distinguish between components that are affected by the current manifest and components that are affected by a dependency, they are kept in separate lists. Components affected by the current manifest only list the component identifier. Components affected by a dependency include the component identifier and the index of the dependency that defines the component.
+
+suit-components is a list of SUIT_Component blocks that specify the component identifiers that will be affected by the content of the current manifest. suit-components is OPTIONAL to implement, but at least one manifest MUST contain a suit-components block.
+
+suit-dependency-components is a list of SUIT_Component_Reference blocks that specify component identifiers that will be affected by the content of a dependency of the current manifest. suit-dependency-components is OPTIONAL to implement.
+
+suit-common-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-common-sequence include setting expected device identity and image digests when they are conditional (see {{secconditional}} for more information on conditional sequences). suit-common-sequence is RECOMMENDED to implement.
 
 ### SUIT_Parameters {#secparameters}
 
@@ -1366,6 +1312,7 @@ SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
 ~~~
 
 ## SUIT_Text_Map
+
 The SUIT_Text_Map contains all text descriptions needed for this manifest. The text section is typically severable, allowing manifests to be distributed without the text, since end-nodes do not require text. The meaning of each field is described below.
 
 Each section MAY be present. If present, each section MUST be as described. Negative integer IDs are reserved for application-specific text values.
@@ -1382,6 +1329,50 @@ suit-text-component-description | Free text description of each component in the
 suit-text-manifest-json-source | The JSON-formatted document that was used to create the manifest
 suit-text-manifest-yaml-source | The yaml-formatted document that was used to create the manifest
 suit-text-version-dependencies | List of component versions required by the manifest
+
+## SUIT_Manifest CDDL
+
+The following CDDL fragment defines the manifest.
+
+~~~
+SUIT_Manifest = {
+    suit-manifest-version         => 1,
+    suit-manifest-sequence-number => uint,
+    suit-common                   => bstr .cbor SUIT_Common,
+    ? suit-reference-uri          => #6.32(tstr),
+    * $$SUIT_Severable_Command_Sequences,
+    * $$SUIT_Command_Sequences,
+    * $$SUIT_Protected_Elements,
+}
+
+$$SUIT_Severable_Command_Sequences //= (suit-dependency-resolution =>
+    SUIT_Severable_Command_Segment)
+$$SUIT_Severable_Command_Segments //= (suit-payload-fetch =>
+    SUIT_Severable_Command_Sequence)
+$$SUIT_Severable_Command_Segments //= (suit-install =>
+    SUIT_Severable_Command_Sequence)
+
+SUIT_Severable_Command_Sequence =
+    SUIT_Digest / bstr .cbor SUIT_Command_Sequence
+
+$$SUIT_Command_Sequences //= ( suit-validate =>
+    bstr .cbor SUIT_Command_Sequence )
+$$SUIT_Command_Sequences //= ( suit-load =>
+    bstr .cbor SUIT_Command_Sequence )
+$$SUIT_Command_Sequences //= ( suit-run =>
+    bstr .cbor SUIT_Command_Sequence )
+
+$$SUIT_Protected_Elements //= ( suit-text => SUIT_Digest )
+$$SUIT_Protected_Elements //= ( suit-coswid => SUIT_Digest )
+
+SUIT_Common = {
+    ? suit-dependencies           => bstr .cbor SUIT_Dependencies,
+    ? suit-components             => bstr .cbor SUIT_Components,
+    ? suit-dependency-components
+        => bstr .cbor SUIT_Component_References,
+    ? suit-common-sequence        => bstr .cbor SUIT_Command_Sequence,
+}
+~~~
 
 # Access Control Lists
 
