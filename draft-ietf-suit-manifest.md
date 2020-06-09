@@ -1,10 +1,10 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-06
+docname: draft-ietf-suit-manifest-07
 category: std
 
-ipr: pre5378Trust200902
+ipr: trust200902
 area: Security
 workgroup: SUIT
 keyword: Internet-Draft
@@ -1709,11 +1709,12 @@ Capability reporting is similarly simplified. A Recipient can report the Command
 
 The simplicity of design in the Recipient due to all of these benefits allows even a highly constrained platform to use advanced update capabilities.
 
-# D. Implementation Confirmance Matrix {#implementation-matrix}
+# D. Implementation Conformance Matrix {#implementation-matrix}
 {: numbered='no'}
 
 This section summarizes the functionality a minimal implementation needs
-to offer to claim conformance to this specification. 
+to offer to claim conformance to this specification, in the absence of 
+an application profile standard specifying otherwise. 
 
 The subsequent table shows the conditions. 
 
@@ -1749,28 +1750,28 @@ Wait For Event | {{suit-directive-wait}} | OPTIONAL
 Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
 Swap | {{suit-directive-swap}} | OPTIONAL
 
-TThe subsequent table shows the parameters 
+The subsequent table shows the parameters. 
 
 Name | Reference | Implementation 
 ---|---|---
-Vendor ID | {{suit-parameter-vendor-identifier}} | TBD
-Class ID | {{suit-parameter-class-identifier}} | TBD
-Image Digest | {{suit-parameter-image-digest}} | TBD
-Image Size | {{suit-parameter-image-size}} | TBD
-Use Before | {{suit-parameter-use-before}} | TBD
-Component Offset | {{suit-parameter-component-offset}} | TBD
-Encryption Info | {{suit-parameter-encryption-info}} | TBD
-Compression Info | {{suit-parameter-compression-info}} | TBD
-Unpack Info | {{suit-parameter-unpack-info}}  | TBD
-URI | {{suit-parameter-uri}} | TBD
-Source Component | {{suit-parameter-source-component}} | TBD
-Run Args | {{suit-parameter-run-args}} | TBD
-Device ID | {{suit-parameter-device-identifier}} | TBD
-Minimum Battery | {{suit-parameter-minimum-battery}} | TBD
-Update Priority | {{suit-parameter-update-priority}} | TBD
-Version | {{suit-parameter-version}} | TBD
-Wait Info | {{suit-parameter-wait-info}} | TBD
-URI List | {{suit-parameter-uri-list}} | TBD
-Strict Order | {{suit-parameter-strict-order}} | TBD
-Soft Failure | {{suit-parameter-soft-failure}} | TBD
-Custom | {{suit-parameter-custom}} | TBD
+Vendor ID | {{suit-parameter-vendor-identifier}} | REQUIRED
+Class ID | {{suit-parameter-class-identifier}} | REQUIRED
+Image Digest | {{suit-parameter-image-digest}} | REQUIRED
+Image Size | {{suit-parameter-image-size}} | REQUIRED
+Use Before | {{suit-parameter-use-before}} | OPTIONAL
+Component Offset | {{suit-parameter-component-offset}} | OPTIONAL
+Encryption Info | {{suit-parameter-encryption-info}} | OPTIONAL
+Compression Info | {{suit-parameter-compression-info}} | OPTIONAL
+Unpack Info | {{suit-parameter-unpack-info}}  | OPTIONAL
+URI | {{suit-parameter-uri}} | OPTIONAL
+Source Component | {{suit-parameter-source-component}} | OPTIONAL
+Run Args | {{suit-parameter-run-args}} | OPTIONAL
+Device ID | {{suit-parameter-device-identifier}} | OPTIONAL
+Minimum Battery | {{suit-parameter-minimum-battery}} | OPTIONAL
+Update Priority | {{suit-parameter-update-priority}} | OPTIONAL
+Version | {{suit-parameter-version}} | OPTIONAL
+Wait Info | {{suit-parameter-wait-info}} | OPTIONAL
+URI List | {{suit-parameter-uri-list}} | OPTIONAL
+Strict Order | {{suit-parameter-strict-order}} | OPTIONAL
+Soft Failure | {{suit-parameter-soft-failure}} | OPTIONAL
+Custom | {{suit-parameter-custom}} | OPTIONAL
