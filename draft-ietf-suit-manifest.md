@@ -545,51 +545,6 @@ Wherever enumerations are used, they are started at 1. This allows detection of 
 
 All elements of the envelope must be wrapped in a bstr to minimize the complexity of the code that evaluates the cryptographic integrity of the element and to ensure correct serialization for integrity and authenticity checks.
 
-
-## SUIT_Envelope CDDL
-
-CDDL names are hyphenated and CDDL structures follow the convention adopted in COSE {{RFC8152}}: SUIT_Structure_Name.
-
-The CDDL that describes the envelope is below.
-
-~~~
-SUIT_Envelope = {
-    suit-delegation            => bstr .cbor SUIT_Delegation
-    suit-authentication-wrapper
-        => bstr .cbor SUIT_Authentication_Wrapper / nil,
-    $$SUIT_Manifest_Wrapped,
-    * $$SUIT_Severed_Fields,
-}
-
-SUIT_Delegation = [ + [ + CWT ] ]
-
-SUIT_Authentication_Wrapper = [ + bstr .cbor SUIT_Authentication_Block ]
-
-SUIT_Authentication_Block /= COSE_Mac_Tagged
-SUIT_Authentication_Block /= COSE_Sign_Tagged
-SUIT_Authentication_Block /= COSE_Mac0_Tagged
-SUIT_Authentication_Block /= COSE_Sign1_Tagged
-
-$$SUIT_Manifest_Wrapped //= (suit-manifest  => bstr .cbor SUIT_Manifest)
-$$SUIT_Manifest_Wrapped //= (
-    suit-manifest-encryption-info => bstr .cbor SUIT_Encryption_Wrapper,
-    suit-manifest-encrypted       => bstr
-)
-
-SUIT_Encryption_Wrapper = COSE_Encrypt_Tagged / COSE_Encrypt0_Tagged
-
-$$SUIT_Severed_Fields //= ( suit-dependency-resolution =>
-    bstr .cbor SUIT_Command_Sequence)
-$$SUIT_Severed_Fields //= (suit-payload-fetch =>
-    bstr .cbor SUIT_Command_Sequence)
-$$SUIT_Severed_Fields //= (suit-install =>
-    bstr .cbor SUIT_Command_Sequence)
-$$SUIT_Severed_Fields //= (suit-text =>
-    bstr .cbor SUIT_Text_Map)
-$$SUIT_Severed_Fields //= (suit-coswid =>
-    bstr .cbor concise-software-identity)
-~~~
-
 # Manifest {#manifest-structure}
 
 The manifest contains:
@@ -628,30 +583,13 @@ suit-coswid is a digest that uniquely identifies the content of the concise-soft
 
 SUIT_Dependency specifies a manifest that describes a dependency of the current manifest.
 
-The following CDDL describes the SUIT_Dependency structure.
-
-~~~
-SUIT_Dependency = {
-    suit-dependency-digest => SUIT_Digest,
-    ? suit-dependency-prefix => SUIT_Component_Identifier,
-}
-~~~
-
 The suit-dependency-digest specifies the dependency manifest uniquely by identifying a particular Manifest structure. The digest is calculated over the Manifest structure instead of the COSE Sig_structure or Mac_structure. This means that a digest may need to be calculated more than once, however this is necessary to ensure that removing a signature from a manifest does not break dependencies due to missing signature elements. This is also necessary to support the trusted intermediary use case, where an intermediary re-signs the Manifest, removing the original signature, potentially with a different algorithm, or trading COSE_Sign for COSE_Mac.
 
 The suit-dependency-prefix element contains a SUIT_Component_Identifier. This specifies the scope at which the dependency operates. This allows the dependency to be forwarded on to a component that is capable of parsing its own manifests. It also allows one manifest to be deployed to multiple dependent devices without those devices needing consistent component hierarchy. This element is OPTIONAL.
 
 ## SUIT_Component_Reference
 
-The SUIT_Component_Reference describes an image that is defined by another manifest. This is useful for overriding the behavior of another manifest, for example by directing the recipient to look at a different URI for the image or by changing the expected format, such as when a gateway performs decryption on behalf of a constrained device. The following CDDL describes the SUIT_Component_Reference.
-
-~~~
-SUIT_Component_Reference = {
-    suit-component-identifier => SUIT_Component_Identifier,
-    suit-component-dependency-index => uint
-}
-~~~
-
+The SUIT_Component_Reference describes an image that is defined by another manifest. This is useful for overriding the behavior of another manifest, for example by directing the recipient to look at a different URI for the image or by changing the expected format, such as when a gateway performs decryption on behalf of a constrained device. 
 
 ## SUIT_Command_Sequence {#manifest-commands}
 
@@ -676,22 +614,9 @@ Lists of commands are constructed from two kinds of element:
 1. Conditions that MUST be true--any failure is treated as a failure of the update/load/boot
 2. Directives that MUST be executed.
 
-The lists of commands are logically structured into sequences of zero or more conditions followed by zero or more directives. The **logical** structure is described by the following CDDL:
+Each condition is a command code identifier, followed by Nil. 
 
-~~~
-Command_Sequence = {
-    conditions => [ * Condition],
-    directives => [ * Directive]
-}
-~~~
-
-This introduces significant complexity in the parser, however, so the structure is flattened to make parsing simpler:
-
-~~~
-SUIT_Command_Sequence = [ + (SUIT_Condition/SUIT_Directive) ]
-~~~
-
-Each condition is a command code identifier, followed by Nil. Each directive is composed of:
+Each directive is composed of:
 
 1. A command code identifier
 2. An argument block or Nil
@@ -836,72 +761,6 @@ When executing a command sequence inside SUIT_Directive_Try_Each and a condition
 
 This parameter is an extension point for any proprietary, application specific conditions and directives. 
 
-#### SUIT_Parameters CDDL
-
-The following CDDL describes all SUIT_Parameters.
-
-~~~ CDDL
-SUIT_Parameters //= (suit-parameter-vendor-identifier => RFC4122_UUID)
-SUIT_Parameters //= (suit-parameter-class-identifier => RFC4122_UUID)
-SUIT_Parameters //= (suit-parameter-image-digest
-    => bstr .cbor SUIT_Digest)
-SUIT_Parameters //= (suit-parameter-image-size => uint)
-SUIT_Parameters //= (suit-parameter-use-before => uint)
-SUIT_Parameters //= (suit-parameter-component-offset => uint)
-
-SUIT_Parameters //= (suit-parameter-encryption-info
-    => bstr .cbor SUIT_Encryption_Info)
-SUIT_Parameters //= (suit-parameter-compression-info
-    => bstr .cbor SUIT_Compression_Info)
-SUIT_Parameters //= (suit-parameter-unpack-info
-    => bstr .cbor SUIT_Unpack_Info)
-
-SUIT_Parameters //= (suit-parameter-uri => tstr)
-SUIT_Parameters //= (suit-parameter-source-component => uint)
-SUIT_Parameters //= (suit-parameter-run-args => bstr)
-
-SUIT_Parameters //= (suit-parameter-device-identifier => RFC4122_UUID)
-SUIT_Parameters //= (suit-parameter-minimum-battery => uint)
-SUIT_Parameters //= (suit-parameter-update-priority => uint)
-SUIT_Parameters //= (suit-parameter-version =>
-    SUIT_Parameter_Version_Match)
-SUIT_Parameters //= (suit-parameter-wait-info =>
-    bstr .cbor SUIT_Wait_Events)
-
-
-SUIT_Parameters //= (suit-parameter-uri-list
-    => bstr .cbor SUIT_Component_URI_List)
-SUIT_Parameters //= (suit-parameter-custom => int/bool/tstr/bstr)
-
-SUIT_Parameters //= (suit-parameter-strict-order => bool)
-SUIT_Parameters //= (suit-parameter-soft-failure => bool)
-
-RFC4122_UUID = bstr .size 16
-
-SUIT_Condition_Version_Comparison_Value = [+int]
-
-SUIT_Encryption_Info = COSE_Encrypt_Tagged/COSE_Encrypt0_Tagged
-SUIT_Compression_Info = {
-    suit-compression-algorithm => SUIT_Compression_Algorithms,
-    ? suit-compression-parameters => bstr
-}
-
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_zlib
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_brotli
-SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_zstd
-
-SUIT_Unpack_Info = {
-    suit-unpack-algorithm => SUIT_Unpack_Algorithms,
-    ? suit-unpack-parameters => bstr
-}
-
-SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Hex
-SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Elf
-SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Coff
-SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Srec
-~~~
-
-
 ### SUIT_Condition
 
 Conditions are used to define mandatory properties of a system in order for an update to be applied. They can be pre-conditions or post-conditions of any directive or series of directives, depending on where they are placed in the list. Conditions never take arguments; conditions should test using parameters instead. Conditions include:
@@ -1004,30 +863,6 @@ suit-condition-version allows comparing versions of firmware. Verifying image di
 
 Versions are encoded as a CBOR list of integers. Comparisons are done on each integer in sequence. Comparison stops after all integers in the list defined by the manifest have been consumed OR after a non-equal match has occurred. For example, if the manifest defines a comparison, "Equal \[1\]", then this will match all version sequences starting with 1. If a manifest defines both "Greater or Equal \[1,0\]" and "Lesser \[1,10\]", then it will match versions 1.0.x up to, but not including 1.10.
 
-The following CDDL describes SUIT_Condition_Version_Argument
-
-~~~
-SUIT_Condition_Version_Argument = [
-    suit-condition-version-comparison-type:
-        SUIT_Condition_Version_Comparison_Types,
-    suit-condition-version-comparison-value:
-        SUIT_Condition_Version_Comparison_Value
-]
-
-SUIT_Condition_Version_Comparison_Types /=
-    suit-condition-version-comparison-greater
-SUIT_Condition_Version_Comparison_Types /=
-    suit-condition-version-comparison-greater-equal
-SUIT_Condition_Version_Comparison_Types /=
-    suit-condition-version-comparison-equal
-SUIT_Condition_Version_Comparison_Types /=
-    suit-condition-version-comparison-lesser-equal
-SUIT_Condition_Version_Comparison_Types /=
-    suit-condition-version-comparison-lesser
-
-SUIT_Condition_Version_Comparison_Value = [+int]
-~~~
-
 While the exact encoding of versions is application-defined, semantic versions map conveniently. For example,
 
 * 1.2.3 = \[1,2,3\].
@@ -1041,23 +876,6 @@ suit-condition-version is OPTIONAL to implement.
 #### SUIT_Condition_Custom {#SUIT_Condition_Custom}
 
 SUIT_Condition_Custom describes any proprietary, application specific condition. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided to the condition, it should be encoded in a custom parameter (a nint) as described in {{secparameters}}. SUIT_Condition_Custom is OPTIONAL to implement.
-
-#### SUIT_Condition CDDL
-
-The following CDDL describes SUIT_Condition:
-
-~~~
-SUIT_Condition //= (suit-condition-vendor-identifier, nil)
-SUIT_Condition //= (suit-condition-class-identifier,  nil)
-SUIT_Condition //= (suit-condition-device-identifier, nil)
-SUIT_Condition //= (suit-condition-image-match,       nil)
-SUIT_Condition //= (suit-condition-image-not-match,   nil)
-SUIT_Condition //= (suit-condition-use-before,        nil)
-SUIT_Condition //= (suit-condition-minimum-battery,   nil)
-SUIT_Condition //= (suit-condition-update-authorized, nil)
-SUIT_Condition //= (suit-condition-version,           nil)
-SUIT_Condition //= (suit-condition-component-offset,  nil)
-~~~
 
 ### SUIT_Directive
 Directives are used to define the behavior of the recipient. Directives include:
@@ -1084,11 +902,6 @@ When a Recipient executes a Directive, it MUST report a result code. If the Dire
 
 Set Component Index defines the component to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into the concatenation of suit-components and suit-dependency-components. If the following directives apply to ALL components, then the boolean value "True" is used instead of an index. True does not apply to dependency components. If the following directives apply to NO components, then the boolean value "False" is used. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied.
 
-The following CDDL describes the argument to suit-directive-set-component-index.
-
-~~~
-SUIT_Directive_Set_Component_Index_Argument = uint/bool
-~~~
 
 #### suit-directive-set-dependency-index {#suit-directive-set-dependency-index}
 
@@ -1096,11 +909,6 @@ Set Dependency Index defines the manifest to which successive directives and con
 
 Typical operations that require suit-directive-set-dependency-index include setting a source URI, invoking "Fetch," or invoking "Process Dependency" for an individual dependency.
 
-The following CDDL describes the argument to suit-directive-set-dependency-index.
-
-~~~
-SUIT_Directive_Set_Manifest_Index_Argument = uint/bool
-~~~
 
 #### suit-directive-abort {#suit-directive-abort}
 
@@ -1112,14 +920,6 @@ This command runs several SUIT_Command_Sequence, one after another, in a strict 
 
 SUIT_Parameter_Soft_Failure is initialized to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.
 
-The following CDDL describes the SUIT_Try_Each argument.
-
-~~~
-SUIT_Directive_Try_Each_Argument = [
-    + bstr .cbor SUIT_Command_Sequence,
-    nil / bstr .cbor SUIT_Command_Sequence
-]
-~~~
 
 #### suit-directive-process-dependency {#suit-directive-process-dependency}
 
@@ -1129,12 +929,6 @@ If the current dependency is False, this directive has no effect. If the current
 
 When SUIT_Process_Dependency completes, it forwards the last status code that occurred in the dependency.
 
-The argument to suit-directive-process-dependency is defined in the following CDDL.
-
-~~~
-SUIT_Directive_Process_Dependency_Argument = nil
-~~~
-
 #### suit-directive-set-parameters {#suit-directive-set-parameters}
 
 suit-directive-set-parameters allows the manifest to configure behavior of future directives by changing parameters that are read by those directives. When dependencies are used, suit-directive-set-parameters also allows a manifest to modify the behavior of its dependencies.
@@ -1143,26 +937,11 @@ Available parameters are defined in {{secparameters}}.
 
 If a parameter is already set, suit-directive-set-parameters will skip setting the parameter to its argument. This provides the core of the override mechanism, allowing dependent manifests to change the behavior of a manifest.
 
-The argument to suit-directive-set-parameters is defined in the following CDDL.
-
-~~~
-SUIT_Directive_Set_Parameters_Argument = {+ SUIT_Parameters}
-~~~
-
-N.B.: A directive code is reserved for an optimization: a way to set a parameter to the contents of another parameter, optionally with another component ID.
-
-
 #### suit-directive-override-parameters {#suit-directive-override-parameters}
 
 suit-directive-override-parameters replaces any listed parameters that are already set with the values that are provided in its argument. This allows a manifest to prevent replacement of critical parameters.
 
 Available parameters are defined in {{secparameters}}.
-
-The argument to suit-directive-override-parameters is defined in the following CDDL.
-
-~~~
-SUIT_Directive_Override_Parameters_Argument = {+ SUIT_Parameters}
-~~~
 
 #### suit-directive-fetch {#suit-directive-fetch}
 
@@ -1176,11 +955,6 @@ suit-directive-fetch reads the URI or URI List parameter to find the source of t
 
 The behavior of suit-directive-fetch can be modified by setting one or more of SUIT_Parameter_Encryption_Info, SUIT_Parameter_Compression_Info, SUIT_Parameter_Unpack_Info. These three parameters each activate and configure a processing step that can be applied to the data that is transferred during suit-directive-fetch.
 
-The argument to suit-directive-fetch is defined in the following CDDL.
-
-~~~
-SUIT_Directive_Fetch_Argument = nil/bstr
-~~~
 
 #### suit-directive-copy {#suit-directive-copy}
 
@@ -1192,23 +966,12 @@ The behavior of suit-directive-copy can be modified by setting one or more of SU
 
 suit-directive-copy reads its source from SUIT_Parameter_Source_Component.
 
-The argument to suit-directive-copy is defined in the following CDDL.
-
-~~~
-SUIT_Directive_Copy_Argument = nil
-~~~
 
 #### suit-directive-run {#suit-directive-run}
 
 suit-directive-run directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor MAY be unloaded and execution continues in the Component Index. Arguments provided to Run are forwarded to the executable code located in Component Index, in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.
 
 If the executable code at Component Index is constructed in such a way that it does not unload the manifest processor, then the manifest processor may resume execution after the executable completes. This allows the manifest processor to invoke suitable helpers and to verify them with image conditions.
-
-The argument to suit-directive-run is defined in the following CDDL.
-
-~~~
-SUIT_Directive_Run_Argument = nil/bstr
-~~~
 
 #### suit-directive-wait {#suit-directive-wait}
 
@@ -1222,48 +985,12 @@ suit-directive-wait directs the manifest processor to pause until a specified ev
 6. Time of Day
 7. Day of Week
 
-The following CDDL defines the encoding of these events.
-
-~~~
-SUIT_Wait_Events //= (suit-wait-event-authorization => int)
-SUIT_Wait_Events //= (suit-wait-event-power => int)
-SUIT_Wait_Events //= (suit-wait-event-network => int)
-SUIT_Wait_Events //= (suit-wait-event-other-device-version
-    => SUIT_Wait_Event_Argument_Other_Device_Version)
-SUIT_Wait_Events //= (suit-wait-event-time => uint); Timestamp
-SUIT_Wait_Events //= (suit-wait-event-time-of-day
-    => uint); Time of Day (seconds since 00:00:00)
-SUIT_Wait_Events //= (suit-wait-event-day-of-week
-    => uint); Days since Sunday
-
-
-SUIT_Wait_Event_Argument_Authorization = int ; priority
-SUIT_Wait_Event_Argument_Power = int ; Power Level
-SUIT_Wait_Event_Argument_Network = int ; Network State
-SUIT_Wait_Event_Argument_Other_Device_Version = [
-    other-device: bstr,
-    other-device-version: [+int]
-]
-SUIT_Wait_Event_Argument_Time = uint ; Timestamp
-SUIT_Wait_Event_Argument_Time_Of_Day = uint ; Time of Day
-                                            ; (seconds since 00:00:00)
-SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
-
-~~~
-
-
 #### suit-directive-run-sequence {#suit-directive-run-sequence}
 
 
 To enable conditional commands, and to allow several strictly ordered sequences to be executed out-of-order, suit-directive-run-sequence allows the manifest processor to execute its argument as a SUIT_Command_Sequence. The argument must be wrapped in a bstr.
 
 When a sequence is executed, any failure of a condition causes immediate termination of the sequence.
-
-The following CDDL describes the SUIT_Run_Sequence argument.
-
-~~~
-SUIT_Directive_Run_Sequence_Argument = bstr .cbor SUIT_Command_Sequence
-~~~
 
 When suit-directive-run-sequence completes, it forwards the last status code that occurred in the sequence. If the Soft Failure parameter is true, then suit-directive-run-sequence only fails when a directive in the argument sequence fails.
 
@@ -1272,104 +999,6 @@ SUIT_Parameter_Soft_Failure defaults to False when suit-directive-run-sequence b
 #### suit-directive-swap {#suit-directive-swap}
 
 suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they must be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.
-
-
-#### SUIT_Directive CDDL
-
-The following CDDL describes SUIT_Directive:
-
-~~~
-SUIT_Directive //= (suit-directive-set-component-index,  uint/bool)
-SUIT_Directive //= (suit-directive-set-dependency-index, uint/bool)
-SUIT_Directive //= (suit-directive-run-sequence,         
-                    bstr .cbor SUIT_Command_Sequence)
-SUIT_Directive //= (suit-directive-try-each,             
-                    SUIT_Directive_Try_Each_Argument)
-SUIT_Directive //= (suit-directive-process-dependency,   nil)
-SUIT_Directive //= (suit-directive-set-parameters,       
-                    {+ SUIT_Parameters})
-SUIT_Directive //= (suit-directive-override-parameters,  
-                    {+ SUIT_Parameters})
-SUIT_Directive //= (suit-directive-fetch,                nil)
-SUIT_Directive //= (suit-directive-copy,                 nil)
-SUIT_Directive //= (suit-directive-run,                  nil)
-SUIT_Directive //= (suit-directive-wait,                 
-                    { + SUIT_Wait_Events })
-
-SUIT_Directive_Try_Each_Argument = [
-    + bstr .cbor SUIT_Command_Sequence,
-    nil / bstr .cbor SUIT_Command_Sequence
-]
-
-SUIT_Wait_Events //= (suit-wait-event-authorization => int)
-SUIT_Wait_Events //= (suit-wait-event-power => int)
-SUIT_Wait_Events //= (suit-wait-event-network => int)
-SUIT_Wait_Events //= (suit-wait-event-other-device-version
-    => SUIT_Wait_Event_Argument_Other_Device_Version)
-SUIT_Wait_Events //= (suit-wait-event-time => uint); Timestamp
-SUIT_Wait_Events //= (suit-wait-event-time-of-day
-    => uint); Time of Day (seconds since 00:00:00)
-SUIT_Wait_Events //= (suit-wait-event-day-of-week
-    => uint); Days since Sunday
-
-
-SUIT_Wait_Event_Argument_Authorization = int ; priority
-SUIT_Wait_Event_Argument_Power = int ; Power Level
-SUIT_Wait_Event_Argument_Network = int ; Network State
-SUIT_Wait_Event_Argument_Other_Device_Version = [
-    other-device: bstr,
-    other-device-version: [+int]
-]
-SUIT_Wait_Event_Argument_Time = uint ; Timestamp
-SUIT_Wait_Event_Argument_Time_Of_Day = uint ; Time of Day
-                                            ; (seconds since 00:00:00)
-SUIT_Wait_Event_Argument_Day_Of_Week = uint ; Days since Sunday
-
-~~~
-
-## SUIT_Manifest CDDL
-
-The following CDDL fragment defines the manifest.
-
-~~~
-SUIT_Manifest = {
-    suit-manifest-version         => 1,
-    suit-manifest-sequence-number => uint,
-    suit-common                   => bstr .cbor SUIT_Common,
-    ? suit-reference-uri          => #6.32(tstr),
-    * $$SUIT_Severable_Command_Sequences,
-    * $$SUIT_Command_Sequences,
-    * $$SUIT_Protected_Elements,
-}
-
-$$SUIT_Severable_Command_Sequences //= (suit-dependency-resolution =>
-    SUIT_Severable_Command_Segment)
-$$SUIT_Severable_Command_Segments //= (suit-payload-fetch =>
-    SUIT_Severable_Command_Sequence)
-$$SUIT_Severable_Command_Segments //= (suit-install =>
-    SUIT_Severable_Command_Sequence)
-
-SUIT_Severable_Command_Sequence =
-    SUIT_Digest / bstr .cbor SUIT_Command_Sequence
-
-$$SUIT_Command_Sequences //= ( suit-validate =>
-    bstr .cbor SUIT_Command_Sequence )
-$$SUIT_Command_Sequences //= ( suit-load =>
-    bstr .cbor SUIT_Command_Sequence )
-$$SUIT_Command_Sequences //= ( suit-run =>
-    bstr .cbor SUIT_Command_Sequence )
-
-$$SUIT_Protected_Elements //= ( suit-text => SUIT_Digest )
-$$SUIT_Protected_Elements //= ( suit-coswid => SUIT_Digest )
-
-SUIT_Common = {
-    ? suit-dependencies           => bstr .cbor SUIT_Dependencies,
-    ? suit-components             => bstr .cbor SUIT_Components,
-    ? suit-dependency-components
-        => bstr .cbor SUIT_Component_References,
-    ? suit-common-sequence        => bstr .cbor SUIT_Command_Sequence,
-}
-~~~
 
 # Access Control Lists
 
@@ -1385,35 +1014,9 @@ A third model allows a device to provide even more fine-grained controls: The AC
 
 #  SUIT Digest Container
 
-RFC 8152 {{RFC8152}} provides containers for signature, MAC, and encryption, but no basic digest container. The container needed for a digest requires a type identifier and a container for the raw digest data. Some forms of digest may require additional parameters. These can be added following the digest. This structure is described by the following CDDL.
+RFC 8152 {{RFC8152}} provides containers for signature, MAC, and encryption, but no basic digest container. The container needed for a digest requires a type identifier and a container for the raw digest data. Some forms of digest may require additional parameters. These can be added following the digest. 
 
 The algorithms listed are sufficient for verifying integrity of Firmware Updates as of this writing, however this may change over time.
-
-~~~
-SUIT_Digest = [
- suit-digest-algorithm-id : $suit-digest-algorithm-ids,
- suit-digest-bytes : bytes,
- ? suit-digest-parameters : any
-]
-
-digest-algorithm-ids /= algorithm-id-sha224
-digest-algorithm-ids /= algorithm-id-sha256
-digest-algorithm-ids /= algorithm-id-sha384
-digest-algorithm-ids /= algorithm-id-sha512
-digest-algorithm-ids /= algorithm-id-sha3-224
-digest-algorithm-ids /= algorithm-id-sha3-256
-digest-algorithm-ids /= algorithm-id-sha3-384
-digest-algorithm-ids /= algorithm-id-sha3-512
-
-algorithm-id-sha224 = 1
-algorithm-id-sha256 = 2
-algorithm-id-sha384 = 3
-algorithm-id-sha512 = 4
-algorithm-id-sha3-224 = 5
-algorithm-id-sha3-256 = 6
-algorithm-id-sha3-384 = 7
-algorithm-id-sha3-512 = 8
-~~~
 
 # Creating Conditional Sequences {#secconditional}
 
@@ -1574,7 +1177,27 @@ Label | Name
 
 ## SUIT Algorithm Identifiers
 
-TBD. 
+### Hash Algorithms
+
+Label | Name 
+---|---
+1 | SHA224 
+2 | SHA256
+3 | SHA384
+4 | SHA512
+5 | SHA3-224
+6 | SHA3-256
+7 | SHA3-384
+8 | SHA3-512
+
+### Unpack Algorithms
+
+Label | Name 
+---|---
+1 | HEX 
+2 | ELF
+3 | COFF
+4 | SREC
 
 #  Security Considerations
 
