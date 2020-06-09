@@ -744,7 +744,6 @@ Wait Info | suit-parameter-wait-info | {{suit-parameter-wait-info}}
 URI List | suit-parameter-uri-list | {{suit-parameter-uri-list}}
 Strict Order | suit-parameter-strict-order | {{suit-parameter-strict-order}} 
 Soft Failure | suit-parameter-soft-failure | {{suit-parameter-soft-failure}} 
-Component Index | suit-parameter-component-index | {{suit-parameter-component-index}}
 Custom | suit-parameter-custom | {{suit-parameter-custom}}
 
 CBOR-encoded object parameters are still wrapped in a bstr. This is because it allows a parser that is aggregating parameters to reference the object with a single pointer and traverse it without understanding the contents. This is important for modularization and division of responsibility within a pull parser. The same consideration does not apply to Directives because those elements are invoked with their arguments immediately
@@ -832,10 +831,6 @@ The Strict Order Parameter allows a manifest to govern when directives can be ex
 #### suit-parameter-soft-failure
 
 When executing a command sequence inside SUIT_Directive_Try_Each and a condition failure occurs, the manifest processor aborts the sequence. If Soft Failure is True, it returns Success. Otherwise, it returns the original condition failure. SUIT_Parameter_Soft_Failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates.
-
-#### suit-parameter-component-index
-
-This parameter allows to set the Component Index.
 
 #### suit-parameter-custom
 
