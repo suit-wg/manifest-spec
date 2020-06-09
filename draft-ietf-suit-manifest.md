@@ -1578,18 +1578,7 @@ TBD.
 
 #  Security Considerations
 
-This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A detailed discussion about security can be found in the architecture document {{I-D.ietf-suit-architecture}} and in {{I-D.ietf-suit-information-model}}.
-
-# Mailing List Information
-
-RFC EDITOR: PLEASE REMOVE THIS SECTION
-
-The discussion list for this document is located at the e-mail
-address <suit@ietf.org>. Information on the group and information on how to
-subscribe to the list is at <https://www1.ietf.org/mailman/listinfo/suit>
-
-Archives of the list can be found at:
-<https://www.ietf.org/mail-archive/web/suit/current/index.html>
+This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture {{I-D.ietf-suit-architecture}} and in the information model {{I-D.ietf-suit-information-model}} documents. 
 
 # Acknowledgements
 
