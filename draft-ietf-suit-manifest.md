@@ -744,6 +744,7 @@ Wait Info | suit-parameter-wait-info | {{suit-parameter-wait-info}}
 URI List | suit-parameter-uri-list | {{suit-parameter-uri-list}}
 Strict Order | suit-parameter-strict-order | {{suit-parameter-strict-order}} 
 Soft Failure | suit-parameter-soft-failure | {{suit-parameter-soft-failure}} 
+Component Index | suit-parameter-component-index | {{suit-parameter-component-index}}
 Custom | suit-parameter-custom | {{suit-parameter-custom}}
 
 CBOR-encoded object parameters are still wrapped in a bstr. This is because it allows a parser that is aggregating parameters to reference the object with a single pointer and traverse it without understanding the contents. This is important for modularization and division of responsibility within a pull parser. The same consideration does not apply to Directives because those elements are invoked with their arguments immediately
@@ -770,7 +771,7 @@ An expire date for the use of the manifest encoded as a POSIX timestamp.
 
 #### suit-parameter-component-offset
 
-Offset of the component
+This parameter sets the offset in a component.
 
 #### suit-parameter-encryption-info
 
@@ -790,39 +791,39 @@ Additional packing formats can be registered through the IANA-maintained registr
  
 #### suit-parameter-uri
 
-A URI from which to fetch a resource
+A URI from which to fetch a resource.
 
 #### suit-parameter-source-component
 
-A Component Index
+This parameter sets the source component. 
 
 #### suit-parameter-run-args
 
-An encoded set of arguments for Run
+This parameter contains an encoded set of arguments for Run.
 
 #### suit-parameter-device-identifier
 
-A RFC4122 UUID representing the device or component
+A RFC 4122 UUID representing the device or component. 
 
 #### suit-parameter-minimum-battery
 
-A minimum battery level in mWh
+This parameter sets the minimum battery level in mWh.
 
 #### suit-parameter-update-priority
 
-The priority of the update
+This parameter sets the priority of the update.
 
 #### suit-parameter-version
 
-TBD. 
-
+Allows to indicate the version numbers of firmware to which the manifest applies, either with a list or with range matching.
+   
 #### suit-parameter-wait-info
 
-TBD. 
+suit-directive-wait {{suit-directive-wait}} directs the manifest processor to pause until a specified event occurs. The suit-parameter-wait-info encodes the parameters needed for the directive. 
 
 #### suit-parameter-uri-list
 
-TBD. 
+Indicates a list of URIs from which to fetch a resource. 
 
 #### suit-parameter-strict-order
 
@@ -832,9 +833,13 @@ The Strict Order Parameter allows a manifest to govern when directives can be ex
 
 When executing a command sequence inside SUIT_Directive_Try_Each and a condition failure occurs, the manifest processor aborts the sequence. If Soft Failure is True, it returns Success. Otherwise, it returns the original condition failure. SUIT_Parameter_Soft_Failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates.
 
+#### suit-parameter-component-index
+
+This parameter allows to set the Component Index.
+
 #### suit-parameter-custom
 
-TBD. 
+This parameter is an extension point for any proprietary, application specific conditions and directives. 
 
 #### SUIT_Parameters CDDL
 
@@ -982,7 +987,7 @@ Verify that the current time is BEFORE the specified time. suit-condition-use-be
 
 #### suit-condition-component-offset
 
-TBD. 
+TBD.
 
 #### suit-condition-minimum-battery
 
@@ -1053,7 +1058,6 @@ SUIT_Condition //= (suit-condition-device-identifier, nil)
 SUIT_Condition //= (suit-condition-image-match,       nil)
 SUIT_Condition //= (suit-condition-image-not-match,   nil)
 SUIT_Condition //= (suit-condition-use-before,        nil)
-SUIT_Condition //= (suit-condition-component-offset,  nil)
 SUIT_Condition //= (suit-condition-minimum-battery,   nil)
 SUIT_Condition //= (suit-condition-update-authorized, nil)
 SUIT_Condition //= (suit-condition-version,           nil)
@@ -1555,6 +1559,7 @@ Label | Name
 28 | Version 
 29 | Wait Info 
 30 | URI List
+31 | Component Index
 nint | Custom
 
 ## SUIT Text Values
