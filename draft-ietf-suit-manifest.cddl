@@ -1,9 +1,9 @@
 SUIT_Envelope = {
-    ? suit-delegation            => bstr .cbor SUIT_Delegation
-    ? suit-authentication-wrapper
-        => bstr .cbor SUIT_Authentication_Wrapper / nil,
-    $$SUIT_Manifest_Wrapped,
-    * $$SUIT_Severed_Fields,
+  ? suit-delegation => bstr .cbor SUIT_Delegation,
+  ? suit-authentication-wrapper => bstr .cbor SUIT_Authentication_Wrapper,
+  SUIT_Encrypted_Manifest_Members // SUIT_Unencrypted_Manifest_Members,
+  SUIT_Severable_Manifest_Members,
+  * $$SUIT_Envelope_Extensions
 }
 
 SUIT_Delegation = [ + [ + CWT ] ]
@@ -17,24 +17,25 @@ SUIT_Authentication_Block /= COSE_Sign_Tagged
 SUIT_Authentication_Block /= COSE_Mac0_Tagged
 SUIT_Authentication_Block /= COSE_Sign1_Tagged
 
-$$SUIT_Manifest_Wrapped //= (suit-manifest  => bstr .cbor SUIT_Manifest)
-$$SUIT_Manifest_Wrapped //= (
-    suit-manifest-encryption-info => bstr .cbor SUIT_Encryption_Wrapper,
-    suit-manifest-encrypted       => bstr
+SUIT_Encrypted_Manifest_Members = (
+  suit-manifest-encryption-info => bstr .cbor SUIT_Encryption_Wrapper,
+  suit-manifest-encrypted => bstr,
+)
+
+SUIT_Unencrypted_Manifest_Members = (
+  suit-manifest  => bstr .cbor SUIT_Manifest,
+)
+
+SUIT_Severable_Manifest_Members = (
+  ? suit-dependency-resolution => bstr .cbor SUIT_Command_Sequence,
+  ? suit-payload-fetch => bstr .cbor SUIT_Command_Sequence,
+  ? suit-install => bstr .cbor SUIT_Command_Sequence,
+  ? suit-text => bstr .cbor SUIT_Text_Map,
+  ? suit-coswid => bstr .cbor concise-software-identity,
+  * $$SUIT_severable-members-extensions,
 )
 
 SUIT_Encryption_Wrapper = COSE_Encrypt_Tagged / COSE_Encrypt0_Tagged
-
-$$SUIT_Severed_Fields //= ( suit-dependency-resolution =>
-    bstr .cbor SUIT_Command_Sequence)
-$$SUIT_Severed_Fields //= (suit-payload-fetch =>
-    bstr .cbor SUIT_Command_Sequence)
-$$SUIT_Severed_Fields //= (suit-install =>
-    bstr .cbor SUIT_Command_Sequence)
-$$SUIT_Severed_Fields //= (suit-text =>
-    bstr .cbor SUIT_Text_Map)
-$$SUIT_Severed_Fields //= (suit-coswid =>
-    bstr .cbor concise-software-identity)
 
 COSE_Mac_Tagged = any
 COSE_Sign_Tagged = any
@@ -73,30 +74,27 @@ SUIT_Manifest = {
     suit-manifest-sequence-number => uint,
     suit-common                   => bstr .cbor SUIT_Common,
     ? suit-reference-uri          => #6.32(tstr),
-    * $$SUIT_Severable_Command_Sequences,
-    * $$SUIT_Command_Sequences,
-    * $$SUIT_Protected_Elements,
+    SUIT_Severable_Members,
+    SUIT_Severable_Members_Digests,
+    SUIT_Unseverable_Members,
+    * $$SUIT_Manifest_Extensions,
 }
 
-$$SUIT_Severable_Command_Sequences //= (suit-dependency-resolution =>
-    SUIT_Severable_Command_Sequence)
-$$SUIT_Severable_Command_Sequences //= (suit-payload-fetch =>
-    SUIT_Severable_Command_Sequence)
-$$SUIT_Severable_Command_Sequences //= (suit-install =>
-    SUIT_Severable_Command_Sequence)
+SUIT_Unseverable_Members = (
+  ? suit-validate => bstr .cbor SUIT_Command_Sequence,
+  ? suit-load => bstr .cbor SUIT_Command_Sequence,
+  ? suit-run => bstr .cbor SUIT_Command_Sequence,
+  * $$unserverble-manifest-member-extensions,
+)
 
-SUIT_Severable_Command_Sequence =
-    SUIT_Digest / bstr .cbor SUIT_Command_Sequence
-
-$$SUIT_Command_Sequences //= ( suit-validate =>
-    bstr .cbor SUIT_Command_Sequence )
-$$SUIT_Command_Sequences //= ( suit-load =>
-    bstr .cbor SUIT_Command_Sequence )
-$$SUIT_Command_Sequences //= ( suit-run =>
-    bstr .cbor SUIT_Command_Sequence )
-
-$$SUIT_Protected_Elements //= ( suit-text => SUIT_Digest )
-$$SUIT_Protected_Elements //= ( suit-coswid => SUIT_Digest )
+SUIT_Severable_Members_Digests = (
+  ? suit-dependency-resolution-digest => SUIT_Digest,
+  ? suit-payload-fetch-digest => SUIT_Digest,
+  ? suit-install-digest => SUIT_Digest,
+  ? suit-text-digest => SUIT_Digest,
+  ? suit-coswid-digest => SUIT_Digest,
+  * $$severable-manifest-members-digests-extensions
+)
 
 SUIT_Common = {
     ? suit-dependencies           => bstr .cbor SUIT_Dependencies,
