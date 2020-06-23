@@ -1,30 +1,22 @@
 SUIT_Envelope = {
   ? suit-delegation => bstr .cbor SUIT_Delegation,
-  ? suit-authentication-wrapper => bstr .cbor SUIT_Authentication_Wrapper,
-  SUIT_Encrypted_Manifest_Members // SUIT_Unencrypted_Manifest_Members,
+  ? suit-authentication-wrapper => bstr .cbor SUIT_Authentication,
+  suit-manifest  => bstr .cbor SUIT_Manifest,
   SUIT_Severable_Manifest_Members,
-  * $$SUIT_Envelope_Extensions
+  * $$SUIT_Envelope_Extensions,
+  (int => bstr)
 }
 
 SUIT_Delegation = [ + [ + CWT ] ]
 
 CWT = SUIT_Authentication_Block
 
-SUIT_Authentication_Wrapper = [ + bstr .cbor SUIT_Authentication_Block ]
+SUIT_Authentication = [ + bstr .cbor SUIT_Authentication_Block ]
 
 SUIT_Authentication_Block /= COSE_Mac_Tagged
 SUIT_Authentication_Block /= COSE_Sign_Tagged
 SUIT_Authentication_Block /= COSE_Mac0_Tagged
 SUIT_Authentication_Block /= COSE_Sign1_Tagged
-
-SUIT_Encrypted_Manifest_Members = (
-  suit-manifest-encryption-info => bstr .cbor SUIT_Encryption_Wrapper,
-  suit-manifest-encrypted => bstr,
-)
-
-SUIT_Unencrypted_Manifest_Members = (
-  suit-manifest  => bstr .cbor SUIT_Manifest,
-)
 
 SUIT_Severable_Manifest_Members = (
   ? suit-dependency-resolution => bstr .cbor SUIT_Command_Sequence,
@@ -34,8 +26,6 @@ SUIT_Severable_Manifest_Members = (
   ? suit-coswid => bstr .cbor concise-software-identity,
   * $$SUIT_severable-members-extensions,
 )
-
-SUIT_Encryption_Wrapper = COSE_Encrypt_Tagged / COSE_Encrypt0_Tagged
 
 COSE_Mac_Tagged = any
 COSE_Sign_Tagged = any
@@ -47,7 +37,7 @@ COSE_Encrypt0_Tagged = any
 SUIT_Digest = [
   suit-digest-algorithm-id : suit-digest-algorithm-ids,
   suit-digest-bytes : bstr,
-  ? suit-digest-parameters : any
+  * $$SUIT_Digest-extensions
 ]
 
 ; Named Information Hash Algorithm Identifiers
@@ -102,6 +92,7 @@ SUIT_Common = {
     ? suit-dependency-components
         => bstr .cbor SUIT_Component_References,
     ? suit-common-sequence        => bstr .cbor SUIT_Command_Sequence,
+    * $$SUIT_Common-extensions,
 }
 
 SUIT_Dependencies         = [ + SUIT_Dependency ]
@@ -112,7 +103,8 @@ concise-software-identity = any
 
 SUIT_Dependency = {
     suit-dependency-digest => SUIT_Digest,
-    suit-dependency-prefix => SUIT_Component_Identifier,
+    ? suit-dependency-prefix => SUIT_Component_Identifier,
+    * $$SUIT_Dependency-extensions,
 }
 
 SUIT_Component_Identifier =  [* bstr]
@@ -242,7 +234,7 @@ SUIT_Condition_Version_Comparison_Value = [+int]
 SUIT_Encryption_Info = COSE_Encrypt_Tagged/COSE_Encrypt0_Tagged
 SUIT_Compression_Info = {
     suit-compression-algorithm => SUIT_Compression_Algorithms,
-    ? suit-compression-parameters => bstr
+    * $$SUIT_Compression_Info-extensions,
 }
 
 SUIT_Compression_Algorithms /= SUIT_Compression_Algorithm_zlib
@@ -255,7 +247,8 @@ SUIT_Compression_Algorithm_zstd = 3
 
 SUIT_Unpack_Info = {
     suit-unpack-algorithm => SUIT_Unpack_Algorithms,
-    ? suit-unpack-parameters => bstr
+    * $$SUIT_Unpack_Info-extensions,
+
 }
 
 SUIT_Unpack_Algorithms /= SUIT_Unpack_Algorithm_Hex
