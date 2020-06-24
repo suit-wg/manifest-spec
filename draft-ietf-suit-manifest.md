@@ -137,7 +137,7 @@ It is assumed that the reader is familiar with the high-level firmware update ar
 
 A core concept of the SUIT manifest specification are commands. Commands are either conditions or directives used to define the required behavior. Conceptually, a sequence of commands is like a script but the used language is tailored to software updates and secure boot.
 
-The available commands support simple steps, such as copying a firmware image from one place to another, checking that a firmware image is correct, verifying that the specified firmware is the correct firmware for the device, or unpacking a firmware. By using these steps in different orders and changing the parameters they use, a broad range of use cases can be supported. The SUIT manifest uses this observation to heavily optimize metadata for consumption by constrained devices.
+The available commands support simple steps, such as copying a firmware image from one place to another, checking that a firmware image is correct, verifying that the specified firmware is the correct firmware for the device, or unpacking a firmware. By using these steps in different orders and changing the parameters they use, a broad range of use cases can be supported. The SUIT manifest uses this observation to optimize metadata for consumption by constrained devices.
 
 While the SUIT manifest is informed by and optimized for firmware update and secure boot use cases, there is nothing in the {{I-D.ietf-suit-information-model}} that restricts its use to only those use cases. Other use cases include the management of trusted applications in a Trusted Execution Environment (TEE), see {{I-D.ietf-teep-architecture}}.
 
@@ -232,7 +232,7 @@ When multiple manifests are used for an update, each manifest's steps occur in a
 
 Because the manifest can be used by different actors at different times, some parts of the manifest can be removed without affecting later stages of the lifecycle. This is called "Severing." Severing of information is achieved by separating that information from the signed container so that removing it does not affect the signature. This means that ensuring authenticity of severable parts of the manifest is a requirement for the signed portion of the manifest. Severing some parts makes it possible to discard parts of the manifest that are no longer necessary. This is important because it allows the storage used by the manifest to be greatly reduced. For example, no text size limits are needed if text is removed from the manifest prior to delivery to a constrained device.
 
-Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 should never be severable. Elements larger than (Digest Bits)/8 + 4 may be severable, while elements that are much larger than (Digest Bits)/8 + 4 should be severable.
+Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 SHOULD NOT be severable. Elements larger than (Digest Bits)/8 + 4 MAY be severable, while elements that are much larger than (Digest Bits)/8 + 4 SHOULD be severable.
 
 Because of this, all command sequences in the manifest are encoded in a bstr so that there is a single code path needed for all command sequences.
 
@@ -499,12 +499,12 @@ embedded in the envelope, the top-level structure.
 | Severable Fields       |        +----------------------------+
 | Human-Readable Text    |        | Version                    |
 | COSWID                 |        | Sequence Number            |
-+------------------------+  +------ Common Structure           |
++------------------------+        | Reference to Full Manifest |
+                            +------ Common Structure           |
                             | +---- Commands                   |
-                            | |   | Digest of Enveloped Fields |
-+-----------------------+   | |   | Reference to Full Manifest |
++-----------------------+   | |   | Digests of Envelope Fields |
 | Common Structure      | <-+ |   +----------------------------+
-+-----------------------+     |
++-----------------------+     |   
 | Dependencies          |     +-> +-----------------------+
 | Components IDs        |     +-> | Commands              |
 | Component References  |     |   +-----------------------+
@@ -512,7 +512,7 @@ embedded in the envelope, the top-level structure.
 +-----------------------+         |   * command code      |
                                   |   * argument          |
                                   | ))                    |
-                                  +-----------------------
+                                  +-----------------------+
 ~~~
 
 ## Authenticated Manifests
@@ -614,7 +614,7 @@ The suit-dependency-prefix element contains a SUIT_Component_Identifier. This sp
 
 ## SUIT_Component_Reference
 
-The SUIT_Component_Reference describes an image that is defined by another manifest. This is useful for overriding the behavior of another manifest, for example by directing the recipient to look at a different URI for the image or by changing the expected format, such as when a gateway performs decryption on behalf of a constrained device. 
+The SUIT_Component_Reference describes an image that is defined by another manifest. This is useful for overriding the behavior of another manifest, for example by directing the recipient to look at a different URI for the image or by changing the expected format, such as when a gateway performs decryption on behalf of a constrained device.
 
 ## SUIT_Command_Sequence {#manifest-commands}
 
@@ -639,7 +639,7 @@ Lists of commands are constructed from two kinds of element:
 1. Conditions that MUST be true--any failure is treated as a failure of the update/load/boot
 2. Directives that MUST be executed.
 
-Each condition is a command code identifier, followed by Nil. 
+Each condition is a command code identifier, followed by Nil.
 
 Each directive is composed of:
 
@@ -744,7 +744,7 @@ A URI from which to fetch a resource.
 
 #### suit-parameter-source-component
 
-This parameter sets the source component. 
+This parameter sets the source component.
 
 #### suit-parameter-run-args
 
@@ -752,7 +752,7 @@ This parameter contains an encoded set of arguments for Run.
 
 #### suit-parameter-device-identifier
 
-A RFC 4122 UUID representing the device or component. 
+A RFC 4122 UUID representing the device or component.
 
 #### suit-parameter-minimum-battery
 
@@ -765,14 +765,14 @@ This parameter sets the priority of the update.
 #### suit-parameter-version
 
 Allows to indicate the version numbers of firmware to which the manifest applies, either with a list or with range matching.
-   
+
 #### suit-parameter-wait-info
 
-suit-directive-wait {{suit-directive-wait}} directs the manifest processor to pause until a specified event occurs. The suit-parameter-wait-info encodes the parameters needed for the directive. 
+suit-directive-wait {{suit-directive-wait}} directs the manifest processor to pause until a specified event occurs. The suit-parameter-wait-info encodes the parameters needed for the directive.
 
 #### suit-parameter-uri-list
 
-Indicates a list of URIs from which to fetch a resource. 
+Indicates a list of URIs from which to fetch a resource.
 
 #### suit-parameter-strict-order
 
@@ -784,7 +784,7 @@ When executing a command sequence inside SUIT_Directive_Try_Each and a condition
 
 #### suit-parameter-custom
 
-This parameter is an extension point for any proprietary, application specific conditions and directives. 
+This parameter is an extension point for any proprietary, application specific conditions and directives.
 
 ### SUIT_Condition
 
@@ -1041,7 +1041,7 @@ A third model allows a device to provide even more fine-grained controls: The AC
 
 #  SUIT Digest Container
 
-RFC 8152 {{RFC8152}} provides containers for signature, MAC, and encryption, but no basic digest container. The container needed for a digest requires a type identifier and a container for the raw digest data. Some forms of digest may require additional parameters. These can be added following the digest. 
+RFC 8152 {{RFC8152}} provides containers for signature, MAC, and encryption, but no basic digest container. The container needed for a digest requires a type identifier and a container for the raw digest data. Some forms of digest may require additional parameters. These can be added following the digest.
 
 The algorithms listed are sufficient for verifying integrity of Firmware Updates as of this writing, however this may change over time.
 
@@ -1206,9 +1206,9 @@ Label | Name
 
 ### SUIT Digest Algorithm Identifiers
 
-Label | Name 
+Label | Name
 ---|---
-1 | SHA224 
+1 | SHA224
 2 | SHA256
 3 | SHA384
 4 | SHA512
@@ -1227,16 +1227,16 @@ Label | Name
 
 ### Unpack Algorithms
 
-Label | Name 
+Label | Name
 ---|---
-1 | HEX 
+1 | HEX
 2 | ELF
 3 | COFF
 4 | SREC
 
 #  Security Considerations
 
-This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture {{I-D.ietf-suit-architecture}} and in the information model {{I-D.ietf-suit-information-model}} documents. 
+This document is about a manifest format describing and protecting firmware images and as such it is part of a larger solution for offering a standardized way of delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture {{I-D.ietf-suit-architecture}} and in the information model {{I-D.ietf-suit-information-model}} documents.
 
 # Acknowledgements
 
@@ -1356,12 +1356,26 @@ Capability reporting is similarly simplified. A Recipient can report the Command
 
 The simplicity of design in the Recipient due to all of these benefits allows even a highly constrained platform to use advanced update capabilities.
 
+## C.1 Byte String Wrappers
+{: numbered='no'}
+
+Byte string wrappers are used in several places in the suit manifest. The primary reason for wrappers it to limit the parser extent when invoked at different times, with a possible loss of context.
+
+The elements of the suit envelope are wrapped both to set the extents used by the parser and to simplify integrity checks by clearly defining the length of each element.
+
+The common block is re-parsed in order to find components identifiers from their indices, to find dependency prefixes and digests from their identifiers, and to find the common sequence. The common sequence is wrapped so that it matches other sequences, simplifying the code path.
+
+A severed SUIT command sequence will appear in the envelope, so it must be wrapped as with all envelope elements. For consistency, command sequences are also wrapped in the manifest. This also allows the parser to discern the difference between a command sequence and a SUIT_Digest.
+
+Parameters that structured types (arrays and maps) are also wrapped in a bstr. This is so that parser extents can be set correctly using only a reference to the beginning of the parameter. This enables a parser to store a simple list of references to parameters that can be retrieved when needed.
+
+
 # D. Implementation Conformance Matrix {#implementation-matrix}
 {: numbered='no'}
 
 This section summarizes the functionality a minimal implementation needs
-to offer to claim conformance to this specification, in the absence of 
-an application profile standard specifying otherwise. 
+to offer to claim conformance to this specification, in the absence of
+an application profile standard specifying otherwise.
 
 The subsequent table shows the conditions.
 
@@ -1397,9 +1411,9 @@ Wait For Event | {{suit-directive-wait}} | OPTIONAL
 Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
 Swap | {{suit-directive-swap}} | OPTIONAL
 
-The subsequent table shows the parameters. 
+The subsequent table shows the parameters.
 
-Name | Reference | Implementation 
+Name | Reference | Implementation
 ---|---|---
 Vendor ID | {{suit-parameter-vendor-identifier}} | REQUIRED
 Class ID | {{suit-parameter-class-identifier}} | REQUIRED
