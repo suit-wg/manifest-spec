@@ -282,18 +282,35 @@ SUIT_Unpack_Algorithm_Srec = 4
 
 SUIT_URI_List = [+ tstr ]
 
-SUIT_Text_Map = {SUIT_Text_Keys => tstr}
+SUIT_Text_Map = {
+    ? suit-text-components =>
+    [
+        + {
+            1 => SUIT_Component_Identifier
+            SUIT_Text_Component_Keys
+        }
+    ],
+    SUIT_Text_Keys
+}
 
-SUIT_Text_Keys /= suit-text-manifest-description
-SUIT_Text_Keys /= suit-text-update-description
-SUIT_Text_Keys /= suit-text-vendor-name
-SUIT_Text_Keys /= suit-text-model-name
-SUIT_Text_Keys /= suit-text-vendor-domain
-SUIT_Text_Keys /= suit-text-model-info
-SUIT_Text_Keys /= suit-text-component-description
-SUIT_Text_Keys /= suit-text-manifest-json-source
-SUIT_Text_Keys /= suit-text-manifest-yaml-source
-SUIT_Text_Keys /= suit-text-version-dependencies
+SUIT_Text_Component_Keys = (
+    ? suit-text-vendor-name           => tstr,
+    ? suit-text-model-name            => tstr,
+    ? suit-text-vendor-domain         => tstr,
+    ? suit-text-model-info            => tstr,
+    ? suit-text-component-description => tstr,
+    ? suit-text-component-version     => tstr,
+    * $$suit-text-component-key-extensions
+)
+
+SUIT_Text_Keys = (
+    ? suit-text-manifest-description => tstr,
+    ? suit-text-update-description   => tstr,
+    ? suit-text-manifest-json-source => tstr,
+    ? suit-text-manifest-yaml-source => tstr,
+    ? suit-text-version-dependencies => tstr,
+    * $$suit-text-key-extensions
+)
 
 suit-delegation = 1
 suit-authentication-wrapper = 2
@@ -392,13 +409,16 @@ suit-compression-algorithm = 1
 
 suit-unpack-algorithm  = 1
 
-suit-text-manifest-description  = 1
-suit-text-update-description    = 2
-suit-text-vendor-name           = 3
-suit-text-model-name            = 4
-suit-text-vendor-domain         = 5
-suit-text-model-info            = 6
-suit-text-component-description = 7
-suit-text-manifest-json-source  = 8
-suit-text-manifest-yaml-source  = 9
-suit-text-version-dependencies  = 10
+suit-text-components            = 1
+suit-text-manifest-description  = 2
+suit-text-update-description    = 3
+suit-text-manifest-json-source  = 4
+suit-text-manifest-yaml-source  = 5
+suit-text-version-dependencies  = 6
+
+suit-text-vendor-name           = 2
+suit-text-model-name            = 3
+suit-text-vendor-domain         = 4
+suit-text-model-info            = 5
+suit-text-component-description = 6
+suit-text-version               = 7
