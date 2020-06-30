@@ -63,8 +63,8 @@ SUIT_Manifest = {
     suit-manifest-version         => 1,
     suit-manifest-sequence-number => uint,
     suit-common                   => bstr .cbor SUIT_Common,
-    ? suit-reference-uri          => #6.32(tstr),
-    SUIT_Severable_Members,
+    ? suit-reference-uri          => tstr,
+    SUIT_Severable_Manifest_Members,
     SUIT_Severable_Members_Digests,
     SUIT_Unseverable_Members,
     * $$SUIT_Manifest_Extensions,
@@ -78,11 +78,11 @@ SUIT_Unseverable_Members = (
 )
 
 SUIT_Severable_Members_Digests = (
-  ? suit-dependency-resolution-digest => SUIT_Digest,
-  ? suit-payload-fetch-digest => SUIT_Digest,
-  ? suit-install-digest => SUIT_Digest,
-  ? suit-text-digest => SUIT_Digest,
-  ? suit-coswid-digest => SUIT_Digest,
+  ? suit-dependency-resolution => SUIT_Digest,
+  ? suit-payload-fetch => SUIT_Digest,
+  ? suit-install => SUIT_Digest,
+  ? suit-text => SUIT_Digest,
+  ? suit-coswid => SUIT_Digest,
   * $$severable-manifest-members-digests-extensions
 )
 
@@ -91,7 +91,7 @@ SUIT_Common = {
     ? suit-components             => bstr .cbor SUIT_Components,
     ? suit-dependency-components
         => bstr .cbor SUIT_Component_References,
-    ? suit-common-sequence        => bstr .cbor SUIT_Command_Sequence,
+    ? suit-common-sequence        => bstr .cbor SUIT_Common_Sequence,
     * $$SUIT_Common-extensions,
 }
 
@@ -114,6 +114,22 @@ SUIT_Component_Reference = {
     suit-component-identifier => SUIT_Component_Identifier,
     suit-component-dependency-index => uint
 }
+
+SUIT_Common_Sequence = [
+    + ( SUIT_Condition // SUIT_Common_Commands )
+]
+
+SUIT_Common_Commands //= (suit-directive-set-component-index,  uint/bool)
+SUIT_Common_Commands //= (suit-directive-set-dependency-index, uint/bool)
+SUIT_Common_Commands //= (suit-directive-run-sequence,
+    bstr .cbor SUIT_Command_Sequence)
+SUIT_Common_Commands //= (suit-directive-try-each,
+    SUIT_Directive_Try_Each_Argument)
+SUIT_Common_Commands //= (suit-directive-set-parameters,
+    {+ SUIT_Parameters})
+SUIT_Common_Commands //= (suit-directive-override-parameters,
+    {+ SUIT_Parameters})
+
 
 SUIT_Command_Sequence = [ + (
     SUIT_Condition // SUIT_Directive // SUIT_Command_Custom
@@ -204,6 +220,9 @@ SUIT_Parameters //= (suit-parameter-custom => int/bool/tstr/bstr)
 SUIT_Parameters //= (suit-parameter-strict-order => bool)
 SUIT_Parameters //= (suit-parameter-soft-failure => bool)
 
+SUIT_Parameters //= (suit-parameter-uri-list =>
+    bstr .cbor SUIT_URI_List)
+
 RFC4122_UUID = bstr .size 16
 
 SUIT_Parameter_Version_Match = [
@@ -261,6 +280,8 @@ SUIT_Unpack_Algorithm_Elf = 2
 SUIT_Unpack_Algorithm_Coff = 3
 SUIT_Unpack_Algorithm_Srec = 4
 
+SUIT_URI_List = [+ tstr ]
+
 SUIT_Text_Map = {SUIT_Text_Keys => tstr}
 
 SUIT_Text_Keys /= suit-text-manifest-description
@@ -277,9 +298,6 @@ SUIT_Text_Keys /= suit-text-version-dependencies
 suit-delegation = 1
 suit-authentication-wrapper = 2
 suit-manifest = 3
-
-suit-manifest-encryption-info = 4
-suit-manifest-encrypted       = 5
 
 suit-manifest-version = 1
 suit-manifest-sequence-number = 2
@@ -371,10 +389,8 @@ suit-parameter-uri-list          = 30
 suit-parameter-custom = nint
 
 suit-compression-algorithm = 1
-suit-compression-parameters = 2
 
 suit-unpack-algorithm  = 1
-suit-unpack-parameters = 2
 
 suit-text-manifest-description  = 1
 suit-text-update-description    = 2

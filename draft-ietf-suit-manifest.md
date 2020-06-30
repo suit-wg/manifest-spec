@@ -273,6 +273,8 @@ A device MAY choose to parse and execute only the SUIT_Common section of the man
 
 The guidelines in [Creating Manifests](#creating-manifests) require that the common section contains the applicability checks, so this section is sufficient for applicability verification. The manifest parser MUST NOT execute any command with side-effects outside the parser (for example, Run, Copy, Swap, or Fetch commands) prior to authentication and any such command MUST result in an error.
 
+When validating authenticity of manifests, the interpreter MAY use an ACL (see {{access-control-lists}}) to determine the extent of the rights conferred by that authenticity. Where a device supports only one level of access, it MAY choose to skip signature verification of dependencies, since they are referenced by digest. Where a device supports more than one trusted party, it MAY choose to defer the verification of signatures of dependencies until the list of affected components is known so that it can skip redundant signature verifications. For example, a dependency signed by the same author as the dependent does not require a signature verification. Similarly, the signer of the dependent has full rights to the device, according to the ACL, then no signature verification is necessary on the dependency.
+
 Once a valid, authentic manifest has been selected, the interpreter MUST examine the component list and verify that its maximum number of components is not exceeded and that each listed component ID is supported.
 
 For each listed component, the interpreter MUST provide storage for the supported parameters. If the interpreter does not have sufficient temporary storage to process the parameters for all components, it MAY process components serially for each command sequence. See {{serial-processing}} for more details.
@@ -302,40 +304,42 @@ NOTE: when using A/B images, the manifest functions as two (or more) logical man
 
 The heart of the manifest is the list of commands, which are processed by an interpreter. This interpreter can be modeled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands.
 
-There are two types of commands, namely those that modify state (directives) and those that perform tests (conditions). Parameters are used as the inputs to commands. Some directives offer control flow operations. Directives target a specific component. A component is a unit of code or data that can be targeted by an update. Components are identified by a Component Index, i.e. arrays of binary strings.
+There are two types of commands, namely those that modify state (directives) and those that perform tests (conditions). Parameters are used as the inputs to commands. Some directives offer control flow operations. Directives target a specific component or dependency. A dependency is another SUIT_Envelope that describes additional components. Dependencies are identified by digest, but referenced in commands by Dependency Index, the index into the array of Dependencies. A component is a unit of code or data that can be targeted by an update. Components are identified by Component Identifiers, i.e. arrays of binary strings, but referenced in commands by Component Index, the index into the array of Component Identifiers.
 
-The following table describes the behavior of each command. "params" represents the parameters for the current component or dependency.
+The following table describes the behavior of each command. "params" represents the parameters for the current component or dependency. Most commands operate on either a component or a dependency. Setting the Component Index clears the Dependency Index. Setting the Dependency Index clears the Component Index.
 
 | Command Name | Semantic of the Operation
 |------|----
-| Check Vendor Identifier | binary-match(component, params\[vendor-id\])
-| Check Class Identifier | binary-match(component, params\[class-id\])
-| Verify Image | binary-match(digest(component), params\[digest\])
-| Set Component Index | component := components\[arg\]
-| Override Parameters | params\[k\] := v for k,v in arg
-| Set Dependency Index | dependency := dependencies\[arg\]
-| Set Parameters | params\[k\] := v if not k in params for k,v in arg
-| Process Dependency | exec(dependency\[common\]); exec(dependency\[current-segment\])
-| Run  | run(component)
-| Fetch | store(component, fetch(params\[uri\]))
+| Check Vendor Identifier | binary-match(current, current.params\[vendor-id\])
+| Check Class Identifier | binary-match(current, current.params\[class-id\])
+| Verify Image | binary-match(digest(current), current.params\[digest\])
+| Set Component Index | current := components\[arg\]
+| Override Parameters | current.params\[k\] := v for k,v in arg
+| Set Dependency Index | current := dependencies\[arg\]
+| Set Parameters | current.params\[k\] := v if not k in params for k,v in arg
+| Process Dependency | exec(current\[common\]); exec(current\[current-segment\])
+| Run  | run(current)
+| Fetch | store(current, fetch(current.params\[uri\]))
 | Use Before  | assert(now() < arg)
-| Check Component Offset  | assert(offsetof(component) == arg)
-| Check Device Identifier | binary-match(component, params\[device-id\])
-| Check Image Not Match | not binary-match(digest(component), params\[digest\])
+| Check Component Offset  | assert(offsetof(current) == arg)
+| Check Device Identifier | assert(binary-match(current, current.params\[device-id\]))
+| Check Image Not Match | assert(not binary-match(digest(current), current.params\[digest\]))
 | Check Minimum Battery | assert(battery >= arg)
 | Check Update Authorized | assert(isAuthorized())
-| Check Version | assert(version_check(component, arg))
+| Check Version | assert(version_check(current, arg))
 | Abort | assert(0)
 | Try Each  | break if exec(seq) is not error for seq in arg
-| Copy | store(component, params\[src-component\])
-| Swap | swap(component, params\[src-component\])
+| Copy | store(current, current.params\[src-component\])
+| Swap | swap(current, current.params\[src-component\])
 | Wait For Event  | until event(arg), wait
 | Run Sequence | exec(arg)
-| Run with Arguments | run(component, arg)
+| Run with Arguments | run(current, arg)
 
 ## Serialized Processing Interpreter {#serial-processing}
 
-Because each manifest has a list of components and a list of components defined by its dependencies, it is possible for the manifest processor to handle one component at a time, traversing the manifest tree once for each listed component. In this mode, the interpreter ignores any commands executed while the component index is not the current component. This reduces the overall volatile storage required to process the update so that the only limit on number of components is the size of the manifest. However, this approach requires additional processing power.
+In highly constrained devices, where storage for parameters is limited, the manifest processor MAY handle one component at a time, traversing the manifest tree once for each listed component. In this mode, the interpreter ignores any commands executed while the component index is not the current component. This reduces the overall volatile storage required to process the update so that the only limit on number of components is the size of the manifest. However, this approach requires additional processing power.
+
+In order to operate in this mode, the manifest processor loops on each section for every supported component, simply ignoring commands when the current component is not selected.
 
 ## Parallel Processing Interpreter
 
@@ -367,7 +371,7 @@ Compiling desired system state into a sequence of operations can be accomplished
 
 NOTE: On systems that support only a single component, Set Current Component has no effect and can be omitted.
 
-NOTE: A digest should always be set using Override Parameters, since this prevents a less-privileged dependent from replacing the digest.
+NOTE: **A digest MUST always be set using Override Parameters, since this prevents a less-privileged dependent from replacing the digest.**
 
 ## Compatibility Check Template
 
@@ -396,7 +400,7 @@ Then, the run block contains the following operations:
 
 According to {{command-behavior}}, the Run directive applies to the component referenced by the current Component Index. Hence, the Set Component Index directive has to be used to target a specific component.
 
-## Firmware Download Template
+## Firmware Download Template {#firmware-download-template}
 
 This template triggers the download of firmware.
 
@@ -410,8 +414,17 @@ Then, the install block contains the following operations:
 - Set Component Index directive (see {{suit-directive-set-component-index}})
 - Set Parameters directive (see {{suit-directive-set-parameters}}) for URI (see {{secparameters}})
 - Fetch directive (see {{suit-directive-fetch}})
+- Check Image Match condition (see {{suit-condition-image-match}})
 
 The Fetch directive needs the URI parameter to be set to determine where the image is retrieved from. Additionally, the destination of where the component shall be stored has to be configured. The URI is configured via the Set Parameters directive while the destination is configured via the Set Component Index directive.
+
+## Integrated Payload Template
+
+This template triggers the installation of a payload included in the manifest envelope. It is identical to {{firmware-download-template}} except that it places an added restriction on the URI passed to the Set Parameters directive.
+
+An implementor MAY choose to place a payload in the envelope of a manifest. The payload envelope key MUST NOT be a value between 0 and 24 and it MUST NOT be used by any other envelope element in the manifest. The payload MUST be serialized in a bstr element.
+
+The URI for a payload enclosed in this way MUST be expressed as a fragment-only reference, as defined in {{RFC3986}}, Section 4.4. The fragment identifier is the stringified envelope key of the payload. For example, an envelope that contains a payload a key 42 would use a URI "#42", key -73 would use a URI "#-73".
 
 ## Load from External Storage Template
 
@@ -458,7 +471,7 @@ NOTE: Any changes made to parameters in a dependency persist in the dependent.
 
 An implementor MAY choose to place a dependency's envelope in the envelope of its dependent. The dependent envelope key for the dependency envelope MUST NOT be a value between 0 and 24 and it MUST NOT be used by any other envelope element in the dependent manifest.
 
-The URI for a dependency enclosed in this way MAY be expressed as a relative URI, containing the stringified dependent envelope key. Or, it MAY be a {{RFC2557}} thismessage:/ URI, followed by the stringified dependent envelope key.
+The URI for a dependency enclosed in this way MUST be expressed as a fragment-only reference, as defined in {{RFC3986}}, Section 4.4. The fragment identifier is the stringified envelope key of the dependency. For example, an envelope that contains a dependency at key 42 would use a URI "#42", key -73 would use a URI "#-73".
 
 ## Encrypted Manifest Template {#template-encrypted-manifest}
 
@@ -770,6 +783,8 @@ Allows to indicate the version numbers of firmware to which the manifest applies
 
 suit-directive-wait {{suit-directive-wait}} directs the manifest processor to pause until a specified event occurs. The suit-parameter-wait-info encodes the parameters needed for the directive.
 
+The exact implementation of the pause is implementation-defined. For example, this could be done by blocking on a semaphore, registering an event handler and suspending the manifest processor, polling for a notification, or aborting the update entirely, then restarting when a notification is received.
+
 #### suit-parameter-uri-list
 
 Indicates a list of URIs from which to fetch a resource.
@@ -803,6 +818,8 @@ Minimum Battery | suit-condition-minimum-battery | {{suit-condition-minimum-batt
 Update Authorized | suit-condition-update-authorized | {{suit-condition-update-authorized}}
 Version | suit-condition-version | {{suit-condition-version}}
 Custom Condition | SUIT_Condition_Custom | {{SUIT_Condition_Custom }}
+
+The abstract description of these conditions is defined in {{command-behavior}}.
 
 Each condition MUST report a result code on completion. If a condition reports failure, then the current sequence of commands MUST terminate. If a condition requires additional information, this MUST be specified in one or more parameters before the condition is executed. If a Recipient attempts to process a condition that expects additional information and that information has not been set, it MUST report a failure. If a Recipient encounters an unknown condition, it MUST report a failure.
 
@@ -874,7 +891,7 @@ suit-condition-minimum-battery provides a mechanism to test a device's battery l
 
 #### suit-condition-update-authorized
 
-Request Authorization from the application and fail if not authorized. This can allow a user to decline an update. Argument is an integer priority level. Priorities are application defined. suit-condition-update-authorized is OPTIONAL to implement.
+Request Authorization from the application and fail if not authorized. This can allow a user to decline an update. suit-parameter-update-priority provides an integer priority level that the application can use to determine whether or not to authorize the update. Priorities are application defined. suit-condition-update-authorized is OPTIONAL to implement.
 
 #### suit-condition-version
 
@@ -920,6 +937,8 @@ Run | suit-directive-run | {{suit-directive-run}}
 Wait For Event | suit-directive-wait | {{suit-directive-wait}}
 Run Sequence | suit-directive-run-sequence | {{suit-directive-run-sequence}}
 Swap | suit-directive-swap | {{suit-directive-swap}}
+
+The abstract description of these commands is defined in {{command-behavior}}.
 
 When a Recipient executes a Directive, it MUST report a result code. If the Directive reports failure, then the current Command Sequence MUST terminate.
 
@@ -972,7 +991,7 @@ Available parameters are defined in {{secparameters}}.
 
 suit-directive-fetch instructs the manifest processor to obtain one or more manifests or payloads, as specified by the manifest index and component index, respectively.
 
-suit-directive-fetch can target one or more manifests and one or more payloads. suit-directive-fetch retrieves each component and each manifest listed in component-index and manifest-index, respectively. If component-index or manifest-index is True, instead of an integer, then all current manifest components/manifests are fetched. The current manifest's dependent-components are not automatically fetched. In order to pre-fetch these, they MUST be specified in a component-index integer.
+suit-directive-fetch can target one or more manifests and one or more payloads. suit-directive-fetch retrieves each component and each manifest listed in component-index and dependency-index, respectively. If component-index or dependency-index is True, instead of an integer, then all current manifest components/manifests are fetched. The current manifest's dependent-components are not automatically fetched. In order to pre-fetch these, they MUST be specified in a component-index integer.
 
 suit-directive-fetch typically takes no arguments unless one is needed to modify fetch behavior. If an argument is needed, it must be wrapped in a bstr and set in suit-parameter-fetch-arguments.
 
@@ -1027,7 +1046,7 @@ SUIT_Parameter_Soft_Failure defaults to False when suit-directive-run-sequence b
 
 suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they must be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.
 
-# Access Control Lists
+# Access Control Lists {#access-control-lists}
 
 To manage permissions in the manifest, there are three models that can be used.
 
@@ -1124,10 +1143,15 @@ For each registry, values 0-23 are Standards Action, 24-255 are IETF Review, 256
 
 Negative values -23 to 0 are Experimental Use, -24 and lower are Private Use.
 
-## SUIT Directives
+## SUIT Commands
 
 Label | Name
 ---|---
+1 | Vendor Identifier
+2 | Class Identifier
+3 | Image Match
+4 | Use Before
+5 | Component Offset
 12 | Set Component Index
 13 | Set Dependency Index
 14 | Abort
@@ -1140,24 +1164,14 @@ Label | Name
 21 | Fetch
 22 | Copy
 23 | Run
-29 | Wait For Event
-30 | Run Sequence
-32 | Swap
-
-## SUIT Conditions
-
-Label | Name
----|---
-1 | Vendor Identifier
-2 | Class Identifier
 24 | Device Identifier
-3 | Image Match
 25 | Image Not Match
-4 | Use Before
-5 | Component Offset
 26 | Minimum Battery
 27 | Update Authorized
 28 | Version
+29 | Wait For Event
+30 | Run Sequence
+32 | Swap
 nint | Custom Condition
 
 ## SUIT Parameters
@@ -1367,7 +1381,7 @@ The common block is re-parsed in order to find components identifiers from their
 
 A severed SUIT command sequence will appear in the envelope, so it must be wrapped as with all envelope elements. For consistency, command sequences are also wrapped in the manifest. This also allows the parser to discern the difference between a command sequence and a SUIT_Digest.
 
-Parameters that structured types (arrays and maps) are also wrapped in a bstr. This is so that parser extents can be set correctly using only a reference to the beginning of the parameter. This enables a parser to store a simple list of references to parameters that can be retrieved when needed.
+Parameters that are structured types (arrays and maps) are also wrapped in a bstr. This is so that parser extents can be set correctly using only a reference to the beginning of the parameter. This enables a parser to store a simple list of references to parameters that can be retrieved when needed.
 
 
 # D. Implementation Conformance Matrix {#implementation-matrix}
