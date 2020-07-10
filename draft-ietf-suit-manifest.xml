@@ -17,7 +17,7 @@
 <?rfc docmapping="yes"?>
 <?rfc toc_levels="4"?>
 
-<rfc ipr="trust200902" docName="draft-ietf-suit-manifest-07" category="std">
+<rfc ipr="trust200902" docName="draft-ietf-suit-manifest-08" category="std">
 
   <front>
     <title abbrev="CBOR-based SUIT Manifest">A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest</title>
@@ -3931,12 +3931,12 @@ an application profile standard specifying otherwise.</t>
   </back>
 
 <!-- ##markdown-source:
-H4sIAErVCF8AA+y963Ic2XUm+r+eIg87wk1IVdUkyL7RlsMgSLphk00OwVbL
+H4sIAMDVCF8AA+y963Ic2XUm+r+eIg87wk1IVdUkyL7RlsMgSLphk00OwVbL
 binaiaoEkGJVZikzC2CJTf86D3Eizp95jPk9jnmvs+577Z2ZBVBqa8Y+Vigk
 ojJzX9dee12/NZvNJl3ZrYpH2VF2XFeLsi2yx2WVN7vs5dnvi0WXvS42TdEW
 VZd3ZV1ld48fv3x9MDvL22KZnRZNma/KP/KjZ3WzzrvsvG6y7rLITuvz7jpv
 iuy7zTLvipYenFRd0VRFl9Xn2ZvLsrpos7un3528Oche5FV5XrTdJD87a4qr
-Rxl2pP3AG+GFZb2o8jUMednk592sLLrzWbstu9la3pjd+3KygC4v6mb3KGu7
+Rxl2pP3AG+GFZb2o8jUMednk592sLLrzWbstu9la3pjd+2qygC4v6mb3KGu7
 5WRSbppHWdds2+7w3r2v7x1OYGD5I5jAYtuU3W5yXTdvL5p6u3lEnU3eFjv4
 afnIBjx7gp1NJm2XV8sf81VdwQB2RTvZlI8mWdacL4pl2+1W8muWdfXC/bOs
 lrCE+kNbN11TnLf2924d/dk15cJeXtTrNXxrT8tqVVahm+JdN1uVMGlo5Kxe
@@ -4833,8 +4833,8 @@ OcFePj8xHqGL7qLcaDkfj9CJr6e1ShF3U79zVM2phNbeE6l1Qtquzf2QOk/B
 8TSZ31wxG32CZ9NqAGRlE3Z8rXYS4nzbThjNM3BbQF5OryjkS139l+y17Nrs
 C3Kr6zMfd6v6KTtRQ/EIGgDNUzfaerk/Py90PVEnKbyr95BxjlYi+fJPUyT7
 g4AKwpAg4Nl8zCs0OnrxGOBKNNFHACx00uqiJgxg5q6LpWjpKlmoJtoyQjWO
-aswP1j0S0ACWWuvYyN7zZd5Gz1kO5piOJ0u95hXwfpTz99oARyfpmrDm/wMP
-oBeMHaUCAA==
+aswP1j0S0ACWWuvYyN7zZd5Gz1kO5piOJ0u95hXwfpTz99oARyfpmrDm/wNE
+Y+SgHaUCAA==
 
 -->
 
