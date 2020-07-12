@@ -554,7 +554,7 @@ NOTE: On systems that support only a single component, Set Current Component has
 
 NOTE: **A digest MUST always be set using Override Parameters, since this prevents a less-privileged dependent from replacing the digest.**
 
-## Compatibility Check Template
+## Compatibility Check Template {#template-compatibility-check}
 
 The compatibility check ensures that Recipients only install compatible images.
 In this template all information is contained in the common block and the following sequence of operations are used:
@@ -564,7 +564,7 @@ In this template all information is contained in the common block and the follow
 - Check Vendor Identifier condition (see {{identifiers}})
 - Check Class Identifier condication (see {{identifiers}})
 
-## Secure Boot Template
+## Secure Boot Template {#template-secure-boot}
 
 This template performs a secure boot operation.
 
@@ -593,13 +593,24 @@ The following operations are placed into the common block:
 Then, the install block contains the following operations:
 
 - Set Component Index directive (see {{suit-directive-set-component-index}})
-- Set Parameters directive (see {{suit-directive-set-parameters}}) for URI (see {{secparameters}})
+- Set Parameters directive (see {{suit-directive-set-parameters}}) for URI (see {{suit-parameter-uri}})
 - Fetch directive (see {{suit-directive-fetch}})
 - Check Image Match condition (see {{suit-condition-image-match}})
 
 The Fetch directive needs the URI parameter to be set to determine where the image is retrieved from. Additionally, the destination of where the component shall be stored has to be configured. The URI is configured via the Set Parameters directive while the destination is configured via the Set Component Index directive.
 
-## Integrated Payload Template
+## Install Template {#template-install}
+
+This template modifies the Firmware Download template and adds an additional sequence. The Firmware Download operations are moved from the Payload Install sequence to the Payload Fetch sequence.
+
+Then, the Install sequence contains the following operations:
+
+- Set Component Index directive (see {{suit-directive-set-component-index}})
+- Set Parameters directive (see {{suit-directive-set-parameters}}) for Source Component (see {{suit-parameter-source-component}})
+- Copy directive (see {{suit-directive-copy}})
+- Check Image Match condition (see {{suit-condition-image-match}})
+
+## Integrated Payload Template {#template-integrated-payload}
 
 This template triggers the installation of a payload included in the manifest envelope. It is identical to {{firmware-download-template}} except that it places an added restriction on the URI passed to the Set Parameters directive.
 
@@ -607,7 +618,7 @@ An implementor MAY choose to place a payload in the envelope of a manifest. The 
 
 The URI for a payload enclosed in this way MUST be expressed as a fragment-only reference, as defined in {{RFC3986}}, Section 4.4. The fragment identifier is the stringified envelope key of the payload. For example, an envelope that contains a payload a key 42 would use a URI "#42", key -73 would use a URI "#-73".
 
-## Load from External Storage Template
+## Load from Nonvolatile Storage Template {#template-load-ext}
 
 This directive loads an firmware image from external storage.
 
@@ -619,7 +630,7 @@ The following operations are placed into the load block:
 
 As outlined in {{command-behavior}}, the Copy directive needs a source and a destination to be configured. The source is configured via Component Index (with the Set Parameters directive) and the destination is configured via the Set Component Index directive.  
 
-## Load & Decompress from External Storage Template
+## Load & Decompress from Nonvolatile Storage Template {#template-load-decompress}
 
 The following operations are placed into the load block:
 
@@ -627,7 +638,7 @@ The following operations are placed into the load block:
 - Set Parameters directive (see {{suit-directive-set-parameters}}) for Source Component Index and Compression Info (see {{secparameters}})
 - Copy directive (see {{suit-directive-copy}})
 
-This example is similar to the previous case but additionally performs decompression. Hence, the only difference is in setting the Compression Info parameter.
+This template is similar to {{template-load-ext}} but additionally performs decompression. Hence, the only difference is in setting the Compression Info parameter.
 
 ## Dependency Template {#template-dependency}
 
@@ -1386,7 +1397,11 @@ The SUIT digest is a CBOR List containing two elements: a suit-digest-algorithm-
 
 #  IANA Considerations {#iana}
 
-IANA is requested to allocate a CBOR tag for the SUIT Envelope and another for the SUIT Manifest.
+IANA is requested to:
+
+* allocate a CBOR tag for the SUIT Envelope and another for the SUIT Manifest.
+* allocate a media type for suit: application/suit-envelope
+* setup several registries as described below
 
 IANA is requested to setup a registry for SUIT manifests.
 Several registries defined in the subsections below need to be created.
@@ -1422,8 +1437,9 @@ Label | Name
 27 | Update Authorized
 28 | Version
 29 | Wait For Event
-30 | Run Sequence
-32 | Swap
+30 | Fetch URI List
+31 | Swap
+32 | Run Sequence
 nint | Custom Condition
 
 ## SUIT Parameters
@@ -1459,14 +1475,22 @@ Label | Name
 ---|---
 1 | Manifest Description
 2 | Update Description
-3 | Vendor Name
-4 | Model Name
-5 | Vendor Domain
-6 | Model Info
-7 | Component Description
-8 | Manifest JSON Source
-9 | Manifest YAML Source
-10 | Component Version Dependencies
+3 | Manifest JSON Source
+4 | Manifest YAML Source
+nint | Custom
+
+## SUIT Component Text Values
+
+Label | Name
+---|---
+1 | Vendor Name
+2 | Model Name
+3 | Vendor Domain
+4 | Model Info
+5 | Component Description
+6 | Component Version
+7 | Component Version Required
+nint | Custom
 
 ## SUIT Algorithm Identifiers
 
@@ -1558,48 +1582,94 @@ bz/m4rVlnIXbwK07HypLbAmBMcCjbazR14vTgdzfsJwFLbM5kdtzOLSolg==
 
 Each example uses SHA256 as the digest function.
 
+Note that reporting policies are declared for each non-flow-control command in these examples. The reporting policies used in the examples are described in the following tables.
+
+Policy | Label
+---|---
+suit-send-record-on-success | Rec-Pass
+suit-send-record-on-failure | Rec-Fail
+suit-send-sysinfo-success | Sys-Pass
+suit-send-sysinfo-failure | Sys-Fail
+
+Command | Sys-Fail | Sys-Pass | Rec-Fail | Rec-Pass
+---|---|---|---|---
+suit-condition-vendor-identifier | 1 | 1 | 1 | 1
+suit-condition-class-identifier | 1 | 1 | 1 | 1
+suit-condition-image-match | 1 | 1 | 1 | 1
+suit-condition-component-offset | 0 | 1 | 0 | 1
+suit-directive-fetch | 0 | 0 | 1 | 0
+suit-directive-copy | 0 | 0 | 1 | 0
+suit-directive-run | 0 | 0 | 1 | 0
+
 ## Example 0: Secure Boot
 
-Secure boot and compatibility check.
+This example covers the following templates:
+
+* Compatibility Check ({{template-compatibility-check}})
+* Secure Boot ({{template-secure-boot}})
+
+It also serves as the minimum example.
 
 {::include examples/example0.json.txt}
 
 ## Example 1: Simultaneous Download and Installation of Payload
 
-Simultaneous download and installation of payload.
+This example covers the following templates:
 
+* Compatibility Check ({{template-compatibility-check}})
+* Firmware Download ({{firmware-download-template}})
+
+Simultaneous download and installation of payload. No secure boot is present in this example to demonstrate a download-only manifest.
 
 {::include examples/example1.json.txt}
 
-## Example 2: Simultaneous Download, Installation, and Secure Boot
+## Example 2: Simultaneous Download, Installation, Secure Boot, Severed Fields
 
-Compatibility test, simultaneous download and installation, and secure boot.
+This example covers the following templates:
+
+* Compatibility Check ({{template-compatibility-check}})
+* Secure Boot ({{template-secure-boot}})
+* Firmware Download ({{firmware-download-template}})
+
+This example also demonstrates severable elements ({{ovr-severable}}), and text ({{manifest-digest-text}}).
 
 {::include examples/example2.json.txt}
 
-## Example 3: Load from External Storage
+## Example 3: A/B images
 
-Compatibility test, simultaneous download and installation, load from external storage, and secure boot.
+This example covers the following templates:
+
+* Compatibility Check ({{template-compatibility-check}})
+* Secure Boot ({{template-secure-boot}})
+* Firmware Download ({{firmware-download-template}})
+* A/B Image Template ({{a-b-template}})
 
 {::include examples/example3.json.txt}
 
+
 ## Example 4: Load and Decompress from External Storage
 
-Compatibility test, simultaneous download and installation, load and decompress from external storage, and secure boot.
+This example covers the following templates:
+
+* Compatibility Check ({{template-compatibility-check}})
+* Secure Boot ({{template-secure-boot}})
+* Firmware Download ({{firmware-download-template}})
+* Install ({{template-install}})
+* Load & Decompress ({{template-load-decompress}})
 
 {::include examples/example4.json.txt}
 
-## Example 5: Compatibility Test, Download, Installation, and Secure Boot
+## Example 5: Two Images
 
-Compatibility test, download, installation, and secure boot.
+This example covers the following templates:
+
+* Compatibility Check ({{template-compatibility-check}})
+* Secure Boot ({{template-secure-boot}})
+* Firmware Download ({{firmware-download-template}})
+
+Furthermore, it shows using these templates with two images.
 
 {::include examples/example5.json.txt}
-
-## Example 6: Two Images
-
-Compatibility test, 2 images, simultaneous download and installation, and secure boot.
-
-{::include examples/example7.json.txt}
 
 # C. Design Rational {#design-rationale}
 {: numbered='no'}
