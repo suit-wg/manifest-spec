@@ -5,16 +5,16 @@
 SUIT                                                            B. Moran
 Internet-Draft                                             H. Tschofenig
 Intended status: Standards Track                             Arm Limited
-Expires: 13 January 2021                                     H. Birkholz
+Expires: 14 January 2021                                     H. Birkholz
                                                           Fraunhofer SIT
                                                              K. Zandberg
                                                                    Inria
-                                                            12 July 2020
+                                                            13 July 2020
 
 
 A Concise Binary Object Representation (CBOR)-based Serialization Format
     for the Software Updates for Internet of Things (SUIT) Manifest
-                      draft-ietf-suit-manifest-08
+                      draft-ietf-suit-manifest-09
 
 Abstract
 
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 January 2021.
+   This Internet-Draft will expire on 14 January 2021.
 
 Copyright Notice
 
@@ -84,10 +84,11 @@ Table of Contents
              6.2.1.  Minimizing Signature Verifications
        6.3.  Interpreter Fundamental Properties
        6.4.  Abstract Machine Description
-       6.5.  Serialized Processing Interpreter
-       6.6.  Parallel Processing Interpreter
-       6.7.  Processing Dependencies
-       6.8.  Multiple Manifest Processors
+       6.5.  Special Cases of Component Index and Dependency Index
+       6.6.  Serialized Processing Interpreter
+       6.7.  Parallel Processing Interpreter
+       6.8.  Processing Dependencies
+       6.9.  Multiple Manifest Processors
    7.  Creating Manifests
        7.1.  Compatibility Check Template
        7.2.  Secure Boot Template
@@ -758,6 +759,8 @@ Table of Contents
 
    *  Missing component from a set.
 
+   *  Required parameter not supplied.
+
    These failure reasons MAY be combined with retry mechanisms prior to
    marking a manifest as invalid.
 
@@ -795,7 +798,7 @@ Table of Contents
    the supported parameters.  If the interpreter does not have
    sufficient temporary storage to process the parameters for all
    components, it MAY process components serially for each command
-   sequence.  See Section 6.5 for more details.
+   sequence.  See Section 6.6 for more details.
 
    The interpreter SHOULD check that the common section contains at
    least one vendor ID check and at least one class ID check.
@@ -979,7 +982,41 @@ Table of Contents
 
                                  Table 1
 
-6.5.  Serialized Processing Interpreter
+6.5.  Special Cases of Component Index and Dependency Index
+
+   The interpreter MUST support a special case of Component Index if
+   more than two or more components are supported: setting Component
+   Index to True is allowed.  When a command is invoked and the
+   Component Index is True, the command MUST be invoked once for each
+   Component, in the order listed in the array of Component Identifiers.
+   The interpreter MUST support a special case of Dependency Index when
+   two or more dependencies are supported.  When a command is invoked
+   and the Dependency Index is True, the command MUST be invoked once
+   for each Dependency, in the order listed in the array of
+   Dependencies.
+
+   This is represented by the following pseudocode.
+
+   if iscomponent(current):
+       if current is true:
+         cmd(component) for-each component in components
+       else:
+         cmd(current)
+   else:
+       if current is true:
+         cmd(dependency) for-each dependency in dependencies
+       else:
+         cmd(current)
+
+   Try Each and Run Sequence are affected in the same way as other
+   commands: they are invoked once for each possible Component or
+   Dependency.  This means that the sequences that are arguments to Try
+   Each and Run Sequence are NOT invoked with Component Index = True or
+   Dependency Index = True.  They are only invoked with integer indices.
+   The interpreter loops over the whole sequence, setting the Component
+   Index or Dependency Index to each possible index in turn.
+
+6.6.  Serialized Processing Interpreter
 
    In highly constrained devices, where storage for parameters is
    limited, the manifest processor MAY handle one component at a time,
@@ -994,7 +1031,12 @@ Table of Contents
    each section for every supported component, simply ignoring commands
    when the current component is not selected.
 
-6.6.  Parallel Processing Interpreter
+   When a serialized Manifest Processor encounters a component or
+   dependency index of True, it does not ignore any commands.  It
+   applies them to the current component or dependency on each
+   iteration.
+
+6.7.  Parallel Processing Interpreter
 
    Advanced Recipients MAY make use of the Strict Order parameter and
    enable parallel processing of some Command Sequences, or it may
@@ -1034,7 +1076,7 @@ Table of Contents
    sequence processes to check that the first element is correct, then
    fork a process to handle the remainder of the sequence.
 
-6.7.  Processing Dependencies
+6.8.  Processing Dependencies
 
    As described in Section 6.2, each manifest must invoke each of its
    dependencies sections from the corresponding section of the
@@ -1047,10 +1089,13 @@ Table of Contents
    identified dependency, then it executes the section of the dependency
    that corresponds to the currently executing section of the dependent.
 
+   The Manifest Processor MUST also support a Dependency Index of True,
+   which applies to every dependency, as described in Section 6.5
+
    The interpreter also performs the checks described in Section 6.2 to
    ensure that the dependent is processing the dependency correctly.
 
-6.8.  Multiple Manifest Processors
+6.9.  Multiple Manifest Processors
 
    When a system has multiple security domains they MAY require
    independent verification of authenticity or security policies.
@@ -1106,6 +1151,12 @@ Table of Contents
    accomplished in many ways.  Several templates are provided below to
    cover common use-cases.  These templates can be combined to produce
    more complex behavior.
+
+   The Author MUST ensure that all parameters consumed by a command are
+   set prior to invoking that command.  Where Component Index = True or
+   Dependency Index = True, this means that the parameters consumed by
+   each command MUST have been set for each Component or Dependency,
+   respectively.
 
    NOTE: On systems that support only a single component, Set Current
    Component has no effect and can be omitted.
@@ -1689,7 +1740,7 @@ Table of Contents
 
    A dependency prefix can also be used to indicate when a dependency
    manifest needs to be processed by a secondary manifest processor, as
-   described in Section 6.8.
+   described in Section 6.9.
 
 8.7.2.2.  SUIT_Component_Identifier
 
@@ -1811,8 +1862,6 @@ Table of Contents
 
 8.7.4.  Reporting Policy
 
-   TODO: Records, bitfield
-
    To facilitate construction of Reports that describe the success, or
    failure of a given Procedure, each command is given a Reporting
    Policy.  This is an integer bitfield that follows the command and
@@ -1837,9 +1886,20 @@ Table of Contents
 
    Any or all of these policies may be enabled at once.
 
+   If the component index is set to True when a command is executed with
+   a non-zero reporting policy, then the Reporting Engine MUST receive
+   one Record for each Component, in the order expressed in the
+   Components list.  If the dependency index is set to True when a
+   command is executed with a non-zero reporting policy, then the
+   Reporting Engine MUST receive one Record for each Dependency, in the
+   order expressed in the Dependencies list.
+
    SUIT does NOT REQUIRE a particular format of Records or Reports.
    SUIT only defines hints to the Reporting engine for which Records it
    should aggregate into the Report.
+
+   For example, a system using DICE certificates MAY use instances of
+   suit-send-sysinfo-success to construct its certificates.
 
    An OPTIONAL Record format, SUIT_Record is defined in
    Section appendix.a.  It is encoded as a map, with the following
@@ -2295,7 +2355,7 @@ Table of Contents
    returned to True, ALL preceding commands MUST complete before the
    next command is executed.
 
-   See Section 6.6 for behavioral description of Strict Order.
+   See Section 6.7 for behavioral description of Strict Order.
 
 8.7.5.22.  suit-parameter-soft-failure
 
@@ -2565,13 +2625,20 @@ suit-condition-device-identifier
    Set Component Index defines the component to which successive
    directives and conditions will apply.  The supplied argument MUST be
    either a boolean or an unsigned integer index into suit-components.
-   If the following directives apply to ALL components, then the boolean
-   value “True” is used instead of an index.  If the following
-   directives apply to NO components, then the boolean value “False” is
-   used.  When suit-directive-set-dependency-index is used, suit-
-   directive-set-component-index = False is implied.  When suit-
-   directive-set-component-index is used, suit-directive-set-dependency-
-   index = False is implied.
+   If the following commands apply to ALL components, then the boolean
+   value “True” is used instead of an index.  If the following commands
+   apply to NO components, then the boolean value “False” is used.  When
+   suit-directive-set-dependency-index is used, suit-directive-set-
+   component-index = False is implied.  When suit-directive-set-
+   component-index is used, suit-directive-set-dependency-index = False
+   is implied.
+
+   If component index is set to True when a command is invoked, then the
+   command applies to all components, in the order they appear in suit-
+   common-components.  When the Manifest Processor invokes a command
+   while the component index is set to True, it must execute the command
+   once for each possible component index, ensuring that the command
+   receives the parameters corresponding to that component index.
 
 8.7.7.2.  suit-directive-set-dependency-index
 
@@ -2585,6 +2652,14 @@ suit-condition-device-identifier
    directive-set-dependency-index = False is implied.  When suit-
    directive-set-dependency-index is used, suit-directive-set-component-
    index = False is implied.
+
+   If dependency index is set to True when a command is invoked, then
+   the command applies to all dependencies, in the order they appear in
+   suit-common-components.  When the Manifest Processor invokes a
+   command while the dependency index is set to True, it must execute
+   the command once for each possible dependency index, ensuring that
+   the command receives the parameters corresponding to that dependency
+   index.
 
    Typical operations that require suit-directive-set-dependency-index
    include setting a source URI or Encryption Information, invoking
