@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-07
+docname: draft-ietf-suit-manifest-09
 category: std
 
 ipr: trust200902
@@ -51,6 +51,7 @@ author:
 normative:
   RFC4122:
   RFC8152:
+  RFC3986:
 
 
 informative:
@@ -60,6 +61,8 @@ informative:
   RFC7932:
   RFC1950:
   RFC8392:
+  RFC7228:
+  RFC8747:
   I-D.kucherawy-rfc8478bis:
   HEX:
     title: "Intel HEX"
@@ -135,7 +138,15 @@ Each of these uses happens at a different stage of the manifest lifecycle, so ea
 
 It is assumed that the reader is familiar with the high-level firmware update architecture {{I-D.ietf-suit-architecture}} and the threats, requirements, and user stories in {{I-D.ietf-suit-information-model}}.
 
-A core concept of the SUIT manifest specification are commands. Commands are either conditions or directives used to define the required behavior. Conceptually, a sequence of commands is like a script but the used language is tailored to software updates and secure boot.
+The design of this specification is based on an observation that the vast majority of operations that a device can perform during an update or secure boot are composed of a small group of operations:
+
+* Copy some data from one place to another
+* Transform some data
+* Digest some data and compare to an expected value
+* Compare some system parameters to an expected value
+* Run some code
+
+In the SUIT manifest specification, these operations are called commands. Commands are classed as either conditions or directives. Conditions have no side-effects, while directives do have side-effects. Conceptually, a sequence of commands is like a script but the used language is tailored to software updates and secure boot.
 
 The available commands support simple steps, such as copying a firmware image from one place to another, checking that a firmware image is correct, verifying that the specified firmware is the correct firmware for the device, or unpacking a firmware. By using these steps in different orders and changing the parameters they use, a broad range of use cases can be supported. The SUIT manifest uses this observation to optimize metadata for consumption by constrained devices.
 
@@ -147,36 +158,50 @@ While the SUIT manifest is informed by and optimized for firmware update and sec
 
 The following terminology is used throughout this document:
 
-* SUIT: Software Update for the Internet of Things, the IETF working group for this standard.
+* SUIT: Software Update for the Internet of Things, also the IETF working group for this standard.
 * Payload: A piece of information to be delivered. Typically Firmware for the purposes of SUIT.
 * Resource: A piece of information that is used to construct a payload.
 * Manifest: A manifest is a bundle of metadata about the firmware for an IoT device, where to
-find the firmware, the devices to which it applies, and cryptographic information protecting the manifest.
-* Envelope: A container with the manifest, an authentication wrapper, authorization information, and severed fields.
+find the firmware, and the devices to which it applies.
+* Envelope: A container with the manifest, an authentication wrapper with cryptographic information protecting the manifest, authorization information, and severed fields.
 * Update: One or more manifests that describe one or more payloads.
 * Update Authority: The owner of a cryptographic key used to sign updates, trusted by Recipients.
-* Recipient: The system, typically an IoT device, that receives a manifest.
+* Recipient: The system, typically an IoT device, that receives and processes a manifest.
+* Manifest Processor: A component of the Recipient that consumes Manifests and executes the commands in the Manifest.
+* Component: An updatable logical block of the Firmware, Software, configuration, or data of the Recipient.
+* Component Set: A group of interdependent Components that must be updated simultaneously.
 * Command: A Condition or a Directive.
-* Condition: A test for a property of the Recipient or its components.
+* Condition: A test for a property of the Recipient or its Components.
 * Directive: An action for the Recipient to perform.
 * Trusted Execution: A process by which a system ensures that only trusted code is executed, for example secure boot.
-* A/B images: Dividing a device's storage into two or more bootable images, at different offsets, such that the active image can write to the inactive image(s).
+* A/B images: Dividing a Recipient's storage into two or more bootable images, at different offsets, such that the active image can write to the inactive image(s).
+* Record: The result of a Command and any metadata about it.
+* Report: A list of Records.
+* Procedure: The process of invoking one or more sequences of commands.
+* Update Procedure: A procedure that updates a Recipient by fetching dependencies, software images, and installing them.
+* Boot Procedure: A procedure that boots a Recipient by verifying dependencies and images, loading images, and invoking one or more image.
+* Software: Instructions and data that allow a Recipient to perform a useful function.
+* Firmware: Instructions and data that allow a Recipient to perform a useful function. Typically, changed infrequently, stored in nonvolatile memory, and small enough to apply to {{RFC7228}} Class 0-2 devices.
+* Image: Information that a Recipient uses to perform its function, typically firmware/software, configuration, or resource data such as text or images. Also, a Payload, once installed is an Image.
+* Slot: One of several possible storage locations for a given Component, typically used in A/B image systems
+* Abort: The Manifest Processor immediately halts execution of the current Procedure. It creates a Record of an error condition.
 
 # How to use this Document
 
-This specification covers four aspects of firmware update:
+This specification covers five aspects of firmware update:
 
 * {{background}} describes the device constraints, use cases, and design principles that informed the structure of the manifest.
-* {{interpreter-behavior}} describes what actions a manifest processor should take.
-* {{creating-manifests}} describes the process of creating a manifest.
-* {{manifest-structure}} specifies the content of the manifest and the envelope.
+* {{metadata-structure-overview}} gives a general overview of the metadata structure to inform the following sections
+* {{interpreter-behavior}} describes what actions a Manifest processor should take.
+* {{creating-manifests}} describes the process of creating a Manifest.
+* {{metadata-structure}} specifies the content of the Envelope and the Manifest.
 
-To implement an updatable device, see {{interpreter-behavior}} and {{manifest-structure}}.
-To implement a tool that generates updates, see {{creating-manifests}} and {{manifest-structure}}.
+To implement an updatable device, see {{interpreter-behavior}} and {{metadata-structure}}.
+To implement a tool that generates updates, see {{creating-manifests}} and {{metadata-structure}}.
 
 The IANA consideration section, see {{iana}}, provides instructions to IANA to create several registries. This section also provides the CBOR labels for the structures defined in this document.
 
-The complete CDDL description is provided in Appendix A, examples are given in Appendix B and a design rational is offered in Appendix C. Finally, Appendix D gives a summarize of the mandatory-to-implement features of this specification.
+The complete CDDL description is provided in {{full-cddl}}, examples are given in {{examples}} and a design rational is offered in {{design-rationale}}. Finally, {{implementation-matrix}} gives a summarize of the mandatory-to-implement features of this specification.
 
 # Background {#background}
 
@@ -196,21 +221,21 @@ The various constraints of IoT devices and the range of use cases that need to b
 
 Supporting the requirements introduced by the constraints on IoT devices requires the flexibility to represent a diverse set of possible metadata, but also requires that the encoding is kept simple.
 
-##  Update Workflow Model
+##  SUIT Workflow Model
 
-There are several fundamental assumptions that inform the model of the firmware update workflow:
+There are several fundamental assumptions that inform the model of Update Procedure workflow:
 
 * Compatibility must be checked before any other operation is performed.
 * All dependency manifests should be present before any payload is fetched.
 * In some applications, payloads must be fetched and validated prior to installation.
 
-There are several fundamental assumptions that inform the model of the secure boot workflow:
+There are several fundamental assumptions that inform the model of the Boot Procedure workflow:
 
 * Compatibility must be checked before any other operation is performed.
 * All dependencies and payloads must be validated prior to loading.
 * All loaded images must be validated prior to execution.
 
-Based on these assumptions, the manifest is structured to work with a pull parser, where each section of the manifest is used in sequence. The expected workflow for a device installing an update can be broken down into five steps:
+Based on these assumptions, the manifest is structured to work with a pull parser, where each section of the manifest is used in sequence. The expected workflow for a Recipient installing an update can be broken down into five steps:
 
 1. Verify the signature of the manifest.
 2. Verify the applicability of the manifest.
@@ -224,17 +249,148 @@ When installation is complete, similar information can be used for validating an
 7. Load image(s).
 8. Run image(s).
 
-If verification and running is implemented in a bootloader, then the bootloader must also verify the signature of the manifest and the applicability of the manifest in order to implement secure boot workflows. The bootloader may add its own authentication, e.g. a MAC, to the manifest in order to prevent further verifications.
+If verification and running is implemented in a bootloader, then the bootloader MUST also verify the signature of the manifest and the applicability of the manifest in order to implement secure boot workflows. The bootloader may add its own authentication, e.g. a MAC, to the manifest in order to prevent further verifications.
 
 When multiple manifests are used for an update, each manifest's steps occur in a lockstep fashion; all manifests have dependency resolution performed before any manifest performs a payload fetch, etc.
 
-# Severed Fields
+# Metadata Structure Overview {#metadata-structure-overview}
 
-Because the manifest can be used by different actors at different times, some parts of the manifest can be removed without affecting later stages of the lifecycle. This is called "Severing." Severing of information is achieved by separating that information from the signed container so that removing it does not affect the signature. This means that ensuring authenticity of severable parts of the manifest is a requirement for the signed portion of the manifest. Severing some parts makes it possible to discard parts of the manifest that are no longer necessary. This is important because it allows the storage used by the manifest to be greatly reduced. For example, no text size limits are needed if text is removed from the manifest prior to delivery to a constrained device.
+This section provides a high level overview of the manifest structure. The full description of the manifest structure is in {{manifest-structure}}
 
-Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 SHOULD NOT be severable. Elements larger than (Digest Bits)/8 + 4 MAY be severable, while elements that are much larger than (Digest Bits)/8 + 4 SHOULD be severable.
+The manifest is structured from several key components:
 
-Because of this, all command sequences in the manifest are encoded in a bstr so that there is a single code path needed for all command sequences.
+1. The Envelope (see {{ovr-envelope}}) contains Delegation Chains, the Authentication Block, the Manifest, any Severable Elements, and any Integrated Payloads or Dependencies.
+2. Delegation Chains (see {{ovr-delegation}}) allow a Recipient to work from one of its Trust Anchors to an authority of the Authentication Block.
+3. The Authentication Block (see {{ovr-auth}}) contains a list of signatures or MACs of the manifest..
+4. The Manifest (see {{ovr-manifest}}) contains all critical, non-severable metadata that the Recipient requires. It is further broken down into:
+
+    1. Critical metadata, such as sequence number.
+    2. Common metadata, including lists of dependencies and affected components.
+    3. Command sequences, directing the Recipient how to install and use the payload(s).
+    4. Integrity check values for severable fields.
+
+5. Severable fields (see {{ovr-severable}}).
+6. Integrated dependencies (see {{ovr-integrated}}).
+7. Integrated payloads (see {{ovr-integrated}}).
+
+The diagram below illustrates the hierarchy of the Envelope.
+
+~~~
++-------------------------+
+| Envelope                |
++-------------------------+
+| Delegation Chains       |
+| Authentication Block    |
+| Manifest           ------------> +------------------------------+
+| Severable Elements      |        | Manifest                     |
+| Human-Readable Text     |        +------------------------------+
+| COSWID                  |        | Structure Version            |
+| Integrated Dependencies |        | Sequence Number              |
+| Integrated Payloads     |        | Reference to Full Manifest   |
++-------------------------+  +------ Common Structure             |
+                             | +---- Commands                     |
++-----------------------+    | |   | Digests of Envelope Elements |
+| Common Structure      | <--+ |   +------------------------------+
++-----------------------+      |
+| Dependencies          |      +-> +-----------------------+
+| Components IDs        |          | Commands              |
+| Common Commands ---------------> +-----------------------+
++-----------------------+          | List of ( pairs of (  |
+                                   |   * command code      |
+                                   |   * argument          |
+                                   | ))                    |
+                                   +-----------------------+
+~~~
+
+## Envelope {#ovr-envelope}
+
+The SUIT Envelope is a container that encloses Delegation Chains, the Authentication Block, the Manifest, any Severable Elements, and any integrated payloads or dependencies. The Envelope is used instead of conventional cryptographic envelopes, such as COSE_Envelope because it allows modular processing, severing of elements, and integrated payloads in a way that would add substantial complexity with existing solutions. See {{design-rationale-envelope}} for a description of the reasoning for this.
+
+See {{envelope}} for more detail.
+
+## Delegation Chains {#ovr-delegation}
+
+Delegation Chains allow a Recipient to validate intermediate Update Authorities against long-term a Trust Anchor. These are lists of CWTs, where the first in the list is signed by a Trust Anchor.
+
+See {{delegation-info}} for more detail.
+
+## Authentication Block {#ovr-auth}
+
+The Authentication Block contains one or more COSE authentication blocks. These blocks are one of:
+
+* COSE_Sign_Tagged
+* COSE_Sign1_Tagged
+* COSE_Mac_Tagged
+* COSE_Mac0_Tagged
+
+The payload element in each of these COSE elements is a SUIT_Digest {{SUIT_Digest}}.
+
+See {{authentication-info}} for more detail.
+
+## Manifest {#ovr-manifest}
+
+The Manifest contains most metadata about one or more images. The Manifest is divided into Critical Metadata, Common Metadata, Command Sequences, and Integrity Check Values.
+
+See {{manifest-structure}} for more detail.
+
+### Critical Metadata {#ovr-critical}
+
+Some metadata needs to be accessed before the manifest is processed. This metadata can be used to determine which the newest manifest is and whether the structure version is supported. It also MAY provide a URI for obtaining a canonical copy of the manifest and Envelope.
+
+See {{manifest-version}}, {{manifest-seqnr}}, {{manifest-reference-uri}} for more detail.
+
+### Common {#ovr-common}
+
+Some metadata is used repeatedly and in more than one command sequence. In order to reduce the size of the manifest, this metadata is collected into the Common section. Common is composed of three parts: a list of dependencies, a list of components referenced by the manifest, and a command sequence to execute prior to each other command sequence. The common command sequence is typically used to set commonly used values and perform compatibility checks. The common command sequence MUST NOT have any side-effects outside of setting parameter values.
+
+See {{manifest-common}}, {{SUIT_Dependency}} for more detail.
+
+### Command Sequences {#ovr-commands}
+
+Command sequences provide the instructions that a Recipient requires in order to install or use an image. These sequences tell a device to set parameter values, test system parameters, copy data from one place to another, transform data, digest data, and run code.
+
+Command sequences are broken up into three groups: Common Command Sequence (see {{ovr-common}}), update commands, and secure boot commands.
+
+Update Command Sequences are: Dependency Resolution, Payload Fetch, and Payload Installation. An Update Procedure is the complete set of each Update Command Sequence, each preceded by the Common Command Sequence.
+
+Boot Command Sequences are: System Validation, Image Loading, and Image Invocation. A Boot Procedure is the complete set of each Boot Command Sequence, each preceded by the Common Command Sequence.
+
+Command Sequences are grouped into these sets to ensure that there is common coordination between dependencies and dependents on when to execute each command.
+
+See {{manifest-commands}} for more detail.
+
+### Integrity Check Values {#ovr-integrity}
+
+To enable {{ovr-severable}}, there needs to be a mechanism to verify integrity of any metadata outside the manifest. Integrity Check Values are used to verify the integrity of metadata that is not contained in the manifest. This MAY include Severable Command Sequences, CoSWID, or Text data. Integrated Dependencies and Integrated Payloads are integrity-checked using Command Sequences, so they do not have Integrity Check Values present in the Manifest.
+
+See {{integrity-checks}} for more detail.
+
+### Human-Readable Text {#ovr-text}
+
+Text is typically a [Severable Element](#ovr-severable). It contains all the text that describes the update. Because text is explicitly for human consumption, it is all grouped together so that it can be Severed easily. The text section has space both for describing the manifest as a whole and for describing each individual component.
+
+See {{manifest-digest-text}} for more detail.
+
+## Severable Elements {#ovr-severable}
+
+Severable Elements are elements of the [Envelope](#ovr-envelope) that have [Integrity Check Values](#ovr-integrity) in the [Manifest](#ovr-manifest).
+
+Because of this organisation, these elements can be discarded or "Severed" from the Envelope without changing the signature of the Manifest. This allows savings based on the size of the Envelope in several scenarios, for example:
+
+* A management system Severs the Text and CoSWID sections before sending an Envelope to a constrained Recipient, which saves Recipient bandwidth.
+* A Recipient Severs the Installation section after installing the Update, which saves storage space.
+
+See {{severable-fields}} for more detail.
+
+## Integrated Dependencies and Payloads {#ovr-integrated}
+
+In some cases, it is beneficial to include a dependency or a payload in the Envelope of a manifest. For example:
+
+* When an update is delivered via a comparatively unconstrained medium, such as a removable mass storage device, it may be beneficial to bundle updates into single files.
+* When a manifest requires encryption, it must be referenced as a dependency, so a trivial manifest may be used to enclose the encrypted manifest. The encrypted manifest may be contained in the dependent manifest's envelope.
+* When a manifest transports a small payload, such as an encrypted key, that payload may be placed in the manifest's envelope.
+
+See {{composite-manifests}}, {{encrypted-manifests}} for more detail.
 
 # Interpreter Behavior {#interpreter-behavior}
 
@@ -258,6 +414,8 @@ Here, valid means that a manifest has a supported encoding version and it has no
 * Application crashed when executed.
 * Watchdog timeout occurred.
 * Dependency or Payload verification failed.
+* Missing component from a set.
+* Required parameter not supplied.
 
 These failure reasons MAY be combined with retry mechanisms prior to marking a manifest as invalid.
 
@@ -265,15 +423,9 @@ Following these initial tests, the interpreter clears all parameter storage. Thi
 
 ## Required Checks {#required-checks}
 
-The RECOMMENDED process is to verify the signature of the manifest prior to parsing/executing any section of the manifest. This guards the parser against arbitrary input by unauthenticated third parties, but it costs extra energy when a device receives an incompatible manifest.
+The RECOMMENDED process is to verify the signature of the manifest prior to parsing/executing any section of the manifest. This guards the parser against arbitrary input by unauthenticated third parties, but it costs extra energy when a Recipient receives an incompatible manifest.
 
-A device MAY choose to parse and execute only the SUIT_Common section of the manifest prior to signature verification, if
-- it expects to receive many incompatible manifests, and
-- it has power budget that makes signature verification undesirable.
-
-The guidelines in [Creating Manifests](#creating-manifests) require that the common section contains the applicability checks, so this section is sufficient for applicability verification. The manifest parser MUST NOT execute any command with side-effects outside the parser (for example, Run, Copy, Swap, or Fetch commands) prior to authentication and any such command MUST result in an error.
-
-When validating authenticity of manifests, the interpreter MAY use an ACL (see {{access-control-lists}}) to determine the extent of the rights conferred by that authenticity. Where a device supports only one level of access, it MAY choose to skip signature verification of dependencies, since they are referenced by digest. Where a device supports more than one trusted party, it MAY choose to defer the verification of signatures of dependencies until the list of affected components is known so that it can skip redundant signature verifications. For example, a dependency signed by the same author as the dependent does not require a signature verification. Similarly, the signer of the dependent has full rights to the device, according to the ACL, then no signature verification is necessary on the dependency.
+When validating authenticity of manifests, the interpreter MAY use an ACL (see {{access-control-lists}}) to determine the extent of the rights conferred by that authenticity. Where a device supports only one level of access, it MAY choose to skip signature verification of dependencies, since they are referenced by digest. Where a device supports more than one trusted party, it MAY choose to defer the verification of signatures of dependencies until the list of affected components is known so that it can skip redundant signature verifications. For example, a dependency signed by the same author as the dependent does not require a signature verification. Similarly, if the signer of the dependent has full rights to the device, according to the ACL, then no signature verification is necessary on the dependency.
 
 Once a valid, authentic manifest has been selected, the interpreter MUST examine the component list and verify that its maximum number of components is not exceeded and that each listed component ID is supported.
 
@@ -290,13 +442,29 @@ If a dependency is specified, then the interpreter MUST perform the following ch
 
 If the interpreter does not support dependencies and a manifest specifies a dependency, then the interpreter MUST reject the manifest.
 
+If a Recipient supports groups of interdependent components (a Component Set), then it SHOULD require that all Components in the Component Set are specified by one manifest and its dependencies. This manifest is called the Root Manifest.
+
+### Minimizing Signature Verifications {#minimal-sigs}
+
+Signature verification can be energy and time expensive on a constrained device. MAC verification is typically unaffected by these concerns. A Recipient MAY choose to parse and execute only the SUIT_Common section of the manifest prior to signature verification, if all of the below apply:
+
+- The Authentication Block contains a COSE_Sign_Tagged or COSE_Sign1_Tagged
+- The Recipient can receive many incompatible or inapplicable manifests, and
+- The Recipient has a power budget that makes signature verification undesirable
+
+The guidelines in [Creating Manifests](#creating-manifests) require that the common section contains the applicability checks, so this section is sufficient for applicability verification. The parser MUST restrict acceptable commands to: Conditions, Override Parameters, Set Parameters, Try-Each, and Run Sequence ONLY. The manifest parser MUST NOT execute any command with side-effects outside the parser (for example, Run, Copy, Swap, or Fetch commands) prior to authentication and any such command MUST Abort. The Common Sequence MUST be executed again in its entirety after authenticity validation.
+
+When executing Common prior to authenticity validation, the Manifest Processor MUST evaluate the integrity of the manifest using the SUIT_Digest present in the authentication block.
+
+Alternatively, a Recipient MAY rely on network infrastructure to filter inapplicable manifests.
+
 ## Interpreter Fundamental Properties
 
 The interpreter has a small set of design goals:
 
 1. Executing an update MUST either result in an error, or a verifiably correct system state.
 2. Executing a secure boot MUST either result in an error, or a booted system.
-3. Executing the same manifest on multiple devices MUST result in the same system state.
+3. Executing the same manifest on multiple Recipients MUST result in the same system state.
 
 NOTE: when using A/B images, the manifest functions as two (or more) logical manifests, each of which applies to a system in a particular starting state. With that provision, design goal 3 holds.
 
@@ -306,13 +474,17 @@ The heart of the manifest is the list of commands, which are processed by an int
 
 There are two types of commands, namely those that modify state (directives) and those that perform tests (conditions). Parameters are used as the inputs to commands. Some directives offer control flow operations. Directives target a specific component or dependency. A dependency is another SUIT_Envelope that describes additional components. Dependencies are identified by digest, but referenced in commands by Dependency Index, the index into the array of Dependencies. A component is a unit of code or data that can be targeted by an update. Components are identified by Component Identifiers, i.e. arrays of binary strings, but referenced in commands by Component Index, the index into the array of Component Identifiers.
 
+Conditions MUST NOT have any side-effects other than informing the interpreter of success or failure. The Interpreter does not Abort if the Soft Failure flag is set when a Condition reports failure.
+
+Directives MAY have side-effects in the parameter table, the interpreter state, or the current component. The Interpreter MUST Abort if a Directive reports failure regardless of the Soft Failure flag.
+
 The following table describes the behavior of each command. "params" represents the parameters for the current component or dependency. Most commands operate on either a component or a dependency. Setting the Component Index clears the Dependency Index. Setting the Dependency Index clears the Component Index.
 
 | Command Name | Semantic of the Operation
 |------|----
-| Check Vendor Identifier | binary-match(current, current.params\[vendor-id\])
-| Check Class Identifier | binary-match(current, current.params\[class-id\])
-| Verify Image | binary-match(digest(current), current.params\[digest\])
+| Check Vendor Identifier | assert(binary-match(current, current.params\[vendor-id\]))
+| Check Class Identifier | assert(binary-match(current, current.params\[class-id\]))
+| Verify Image | assert(binary-match(digest(current), current.params\[digest\]))
 | Set Component Index | current := components\[arg\]
 | Override Parameters | current.params\[k\] := v for k,v in arg
 | Set Dependency Index | current := dependencies\[arg\]
@@ -328,12 +500,33 @@ The following table describes the behavior of each command. "params" represents 
 | Check Update Authorized | assert(isAuthorized())
 | Check Version | assert(version_check(current, arg))
 | Abort | assert(0)
-| Try Each  | break if exec(seq) is not error for seq in arg
+| Try Each  | break if exec(seq) is not error for-each seq in arg
 | Copy | store(current, current.params\[src-component\])
 | Swap | swap(current, current.params\[src-component\])
 | Wait For Event  | until event(arg), wait
 | Run Sequence | exec(arg)
 | Run with Arguments | run(current, arg)
+
+## Special Cases of Component Index and Dependency Index {#index-true}
+
+The interpreter MUST support a special case of Component Index if more than two or more components are supported: setting Component Index to True is allowed. When a command is invoked and the Component Index is True, the command MUST be invoked once for each Component, in the order listed in the array of Component Identifiers. The interpreter MUST support a special case of Dependency Index when two or more dependencies are supported. When a command is invoked and the Dependency Index is True, the command MUST be invoked once for each Dependency, in the order listed in the array of Dependencies.
+
+This is represented by the following pseudocode.
+
+~~~
+if iscomponent(current):
+    if current is true:
+      cmd(component) for-each component in components
+    else:
+      cmd(current)
+else:
+    if current is true:
+      cmd(dependency) for-each dependency in dependencies
+    else:
+      cmd(current)
+~~~
+
+Try Each and Run Sequence are affected in the same way as other commands: they are invoked once for each possible Component or Dependency. This means that the sequences that are arguments to Try Each and Run Sequence are NOT invoked with Component Index = True or Dependency Index = True. They are only invoked with integer indices. The interpreter loops over the whole sequence, setting the Component Index or Dependency Index to each possible index in turn.
 
 ## Serialized Processing Interpreter {#serial-processing}
 
@@ -341,9 +534,11 @@ In highly constrained devices, where storage for parameters is limited, the mani
 
 In order to operate in this mode, the manifest processor loops on each section for every supported component, simply ignoring commands when the current component is not selected.
 
-## Parallel Processing Interpreter
+When a serialized Manifest Processor encounters a component or dependency index of True, it does not ignore any commands. It applies them to the current component or dependency on each iteration.
 
-Advanced devices may make use of the Strict Order parameter and enable parallel processing of some segments, or it may reorder some segments. To perform parallel processing, once the Strict Order parameter is set to False, the device may fork a process for each command until the Strict Order parameter is returned to True or the command sequence ends. Then, it joins all forked processes before continuing processing of commands. To perform out-of-order processing, a similar approach is used, except the device consumes all commands after the Strict Order parameter is set to False, then it sorts these commands into its preferred order, invokes them all, then continues processing.
+## Parallel Processing Interpreter {#parallel-processing}
+
+Advanced Recipients MAY make use of the Strict Order parameter and enable parallel processing of some Command Sequences, or it may reorder some Command Sequences. To perform parallel processing, once the Strict Order parameter is set to False, the Recipient may fork a process for each command until the Strict Order parameter is returned to True or the Command Sequence ends. Then, it joins all forked processes before continuing processing of commands. To perform out-of-order processing, a similar approach is used, except the Recipient consumes all commands after the Strict Order parameter is set to False, then it sorts these commands into its preferred order, invokes them all, then continues processing.
 
 Under each of these scenarios the parallel processing must halt:
 
@@ -353,15 +548,27 @@ Under each of these scenarios the parallel processing must halt:
 * Set Dependency Index.
 * Set Component Index.
 
-To perform more useful parallel operations, sequences of commands may be collected in a suit-directive-run-sequence. Then, each of these sequences may be run in parallel. Each sequence defaults to Strict Order = True. To isolate each sequence from each other sequence, each sequence must declare a single target component. Set Component Index is not permitted inside this sequence.
+To perform more useful parallel operations, sequences of commands may be collected in a suit-directive-run-sequence. Then, each of these sequences may be run in parallel. Each sequence defaults to Strict Order = True. To isolate each sequence from each other sequence, each sequence MUST begin with a Set Component Index directive. The interpreter MUST track each Set Component Index directive, and cause an Abort if more than one Set Component Index directive targets the same Component Index. When Strict Order = False, each suit-directive-run-sequence MUST begin with a Set Component Index directive. Any further Set Component Index directives MUST cause an Abort. This allows the interpreter that forks suit-directive-run-sequence processes to check that the first element is correct, then fork a process to handle the remainder of the sequence.
 
-## Processing Dependencies
+## Processing Dependencies {#processing-dependencies}
 
 As described in {{required-checks}}, each manifest must invoke each of its dependencies sections from the corresponding section of the dependent. Any changes made to parameters by the dependency persist in the dependent.
 
 When a Process Dependency command is encountered, the interpreter loads the dependency identified by the Current Dependency Index. The interpreter first executes the common-sequence section of the identified dependency, then it executes the section of the dependency that corresponds to the currently executing section of the dependent.
 
+The Manifest Processor MUST also support a Dependency Index of True, which applies to every dependency, as described in {{index-true}}
+
 The interpreter also performs the checks described in {{required-checks}} to ensure that the dependent is processing the dependency correctly.
+
+## Multiple Manifest Processors {#hierarchical-interpreters}
+
+When a system has multiple security domains they MAY require independent verification of authenticity or security policies. Security domains may be divided by separation technology such as Arm TrustZone, or Intel SGX. Security domains may also be divided into separate processors and memory spaces, with a communication interface between them.
+
+For example, an application processor may have an attached communications module that contains a processor. The communications module may require metadata signed by a specific Trust Authority for regulatory approval. This may be a different Trust Authority than the application processor.
+
+When there are two or more security domains, a manifest processor MAY be required in each. The first manifest processor is the normal manifest processor as described for the Recipient in Abstract Machine. The second manifest processor only executes sections when the first manifest processor requests it. An API interface is provided from the second manifest processor to the first. This allows the first manifest processor to request a limited set of operations from the second. These operations are limited to: setting parameters, inserting an Envelope, invoking a Manifest Command Sequence. The second manifest processor declares a prefix to the first, which tells the first manifest processor when it should delegate to the second. These rules are enforced by underlying separation of privilege infrastructure, such as TEEs, or physical separation.
+
+When the first manifest processor encounters a dependency prefix, that informs the first manifest processor that it should provide the second manifest processor with the corresponding dependency Envelope. This is done when the dependency is fetched. The second manifest processor immediately verifies any authentication information in the dependency Envelope. When a parameter is set for any component that matches the prefix, this parameter setting is passed to the second manifest processor via an API. As the first manifest processor works through the Procedure (set of command sequences) it is executing, each time it sees a Process Dependency command that is associated with the prefix declared by the second manifest processor, it uses the API to ask the second manifest processor to invoke that dependency section instead.
 
 # Creating Manifests {#creating-manifests}
 
@@ -369,13 +576,16 @@ Manifests are created using tools for constructing COSE structures, calculating 
 
 Compiling desired system state into a sequence of operations can be accomplished in many ways. Several templates are provided below to cover common use-cases. These templates can be combined to produce more complex behavior.
 
+The Author MUST ensure that all parameters consumed by a command are set prior to invoking that command. Where Component Index = True or Dependency Index = True, this means that the parameters consumed by each command MUST have been set for each Component or Dependency, respectively.
+
+
 NOTE: On systems that support only a single component, Set Current Component has no effect and can be omitted.
 
 NOTE: **A digest MUST always be set using Override Parameters, since this prevents a less-privileged dependent from replacing the digest.**
 
-## Compatibility Check Template
+## Compatibility Check Template {#template-compatibility-check}
 
-The compatibility check ensures that devices only install compatible images.
+The compatibility check ensures that Recipients only install compatible images.
 In this template all information is contained in the common block and the following sequence of operations are used:
 
 - Set Component Index directive (see {{suit-directive-set-component-index}})
@@ -383,7 +593,7 @@ In this template all information is contained in the common block and the follow
 - Check Vendor Identifier condition (see {{identifiers}})
 - Check Class Identifier condication (see {{identifiers}})
 
-## Secure Boot Template
+## Secure Boot Template {#template-secure-boot}
 
 This template performs a secure boot operation.
 
@@ -412,21 +622,32 @@ The following operations are placed into the common block:
 Then, the install block contains the following operations:
 
 - Set Component Index directive (see {{suit-directive-set-component-index}})
-- Set Parameters directive (see {{suit-directive-set-parameters}}) for URI (see {{secparameters}})
+- Set Parameters directive (see {{suit-directive-set-parameters}}) for URI (see {{suit-parameter-uri}})
 - Fetch directive (see {{suit-directive-fetch}})
 - Check Image Match condition (see {{suit-condition-image-match}})
 
 The Fetch directive needs the URI parameter to be set to determine where the image is retrieved from. Additionally, the destination of where the component shall be stored has to be configured. The URI is configured via the Set Parameters directive while the destination is configured via the Set Component Index directive.
 
-## Integrated Payload Template
+## Install Template {#template-install}
+
+This template modifies the Firmware Download template and adds an additional sequence. The Firmware Download operations are moved from the Payload Install sequence to the Payload Fetch sequence.
+
+Then, the Install sequence contains the following operations:
+
+- Set Component Index directive (see {{suit-directive-set-component-index}})
+- Set Parameters directive (see {{suit-directive-set-parameters}}) for Source Component (see {{suit-parameter-source-component}})
+- Copy directive (see {{suit-directive-copy}})
+- Check Image Match condition (see {{suit-condition-image-match}})
+
+## Integrated Payload Template {#template-integrated-payload}
 
 This template triggers the installation of a payload included in the manifest envelope. It is identical to {{firmware-download-template}} except that it places an added restriction on the URI passed to the Set Parameters directive.
 
-An implementor MAY choose to place a payload in the envelope of a manifest. The payload envelope key MUST NOT be a value between 0 and 24 and it MUST NOT be used by any other envelope element in the manifest. The payload MUST be serialized in a bstr element.
+An implementor MAY choose to place a payload in the envelope of a manifest. The payload envelope key MAY be a positive or negative integer. The payload envelope key MUST NOT be a value between 0 and 24 and it MUST NOT be used by any other envelope element in the manifest. The payload MUST be serialized in a bstr element.
 
 The URI for a payload enclosed in this way MUST be expressed as a fragment-only reference, as defined in {{RFC3986}}, Section 4.4. The fragment identifier is the stringified envelope key of the payload. For example, an envelope that contains a payload a key 42 would use a URI "#42", key -73 would use a URI "#-73".
 
-## Load from External Storage Template
+## Load from Nonvolatile Storage Template {#template-load-ext}
 
 This directive loads an firmware image from external storage.
 
@@ -438,15 +659,15 @@ The following operations are placed into the load block:
 
 As outlined in {{command-behavior}}, the Copy directive needs a source and a destination to be configured. The source is configured via Component Index (with the Set Parameters directive) and the destination is configured via the Set Component Index directive.  
 
-## Load & Decompress from External Storage Template
+## Load & Decompress from Nonvolatile Storage Template {#template-load-decompress}
 
 The following operations are placed into the load block:
 
 - Set Component Index directive (see {{suit-directive-set-component-index}})
-- Set Parameters directive (see {{suit-directive-set-parameters}}) for Component Index and Compression Info (see {{secparameters}})
+- Set Parameters directive (see {{suit-directive-set-parameters}}) for Source Component Index and Compression Info (see {{secparameters}})
 - Copy directive (see {{suit-directive-copy}})
 
-This example is similar to the previous case but additionally performs decompression. Hence, the only difference is in setting the Compression Info parameter.
+This template is similar to {{template-load-ext}} but additionally performs decompression. Hence, the only difference is in setting the Compression Info parameter.
 
 ## Dependency Template {#template-dependency}
 
@@ -495,85 +716,40 @@ Then, the validate block contains the following operations:
 
 A plaintext manifest and its encrypted dependency may also form a [composite manifest](#composite-manifests).
 
+## A/B Image Template {#a-b-template}
 
-# Envelope
+The following operations are placed in the common block:
 
-The diagram below shows high-level structure of the SUIT manifest
-embedded in the envelope, the top-level structure.
+- Set Component Index directive (see {{suit-directive-set-component-index}})
+- Try Each
+    - First Sequence:
+        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Offset A
+        - Check Offset Condition (see {{suit-condition-component-offset}})
+        - Override Parameters directive (see {{suit-directive-override-parameters}}) for Image Digest A and Image Size A (see {{secparameters}})
+    - Second Sequence:
+        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Offset B
+        - Check Offset Condition (see {{suit-condition-component-offset}})
+        - Override Parameters directive (see {{suit-directive-override-parameters}}) for Image Digest B and Image Size B (see {{secparameters}})
 
-~~~
-+------------------------+
-| Envelope               |
-+------------------------+
-| Delegation Info        |
-| Authentication Wrapper |
-| Plaintext or       -+---------> +----------------------------+
-| Encrypted Manifest -+  |        | Manifest                   |
-| Severable Fields       |        +----------------------------+
-| Human-Readable Text    |        | Version                    |
-| COSWID                 |        | Sequence Number            |
-+------------------------+        | Reference to Full Manifest |
-                            +------ Common Structure           |
-                            | +---- Commands                   |
-+-----------------------+   | |   | Digests of Envelope Fields |
-| Common Structure      | <-+ |   +----------------------------+
-+-----------------------+     |   
-| Dependencies          |     +-> +-----------------------+
-| Components IDs        |     +-> | Commands              |
-| Component References  |     |   +-----------------------+
-| Common Commands ------------+   | List of ( pairs of (  |
-+-----------------------+         |   * command code      |
-                                  |   * argument          |
-                                  | ))                    |
-                                  +-----------------------+
-~~~
+The following operations are placed in the fetch block or install block
 
-## Authenticated Manifests
+- Set Component Index directive (see {{suit-directive-set-component-index}})
+- Try Each
+    - First Sequence:
+        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Offset A
+        - Check Offset Condition (see {{suit-condition-component-offset}})
+        - Set Parameters directive (see {{suit-directive-override-parameters}}) for URI A (see {{secparameters}})
+    - Second Sequence:
+        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Offset B
+        - Check Offset Condition (see {{suit-condition-component-offset}})
+        - Set Parameters directive (see {{suit-directive-override-parameters}}) for URI B (see {{secparameters}})
+- Fetch
 
-The suit-authentication-wrapper contains a list of 1 or more cryptographic authentication wrappers for the core part of the manifest. These are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged blocks. Each of these blocks contains a SUIT_Digest of the manifest. This enables modular processing of the manifest. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}}. The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, except for the OPTIONAL suit-delegation, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper or suit-delegation.
+# Metadata Structure {#metadata-structure}
 
-A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be nil.
+The metadata for SUIT updates is composed of several primary constituent parts: the Envelope, Delegation Chains, Authentication Information, Manifest, and Severable Elements.
 
-For manifests that are only authenticated the envelope MUST contain the plaintext manifest in SUIT_Manifest structure.
-
-## Encrypted Manifests
-
-To use an encrypted manifest, it must be a dependency of a plaintext manifest. This allows fine-grained control of what information is accessible to intermediate systems for the purposes of management, while still preserving the confidentiality of the manifest contents. This also means that a device can process an encrypted manifest in the same way as an encrypted payload, allowing code reuse.
-
-A template for using an encrypted manifest is covered in [Encrypted Manifest Template](#template-encrypted-manifest).
-
-## Delegation Info
-
-The suit-delegation field may carry one or multiple CBOR Web Tokens (CWTs) {{RFC8392}}. They can be used to perform enhanced authorization decisions.
-
-## Severable Fields
-
-Each of suit-dependency-resolution, suit-payload-fetch, and suit-payload-installation contain the severable contents of the identically named portions of the manifest, described in {{manifest-structure}}.
-
-## Human-Readable Text
-
-suit-text contains all the human-readable information that describes any and all parts of the manifest, its payload(s) and its resource(s). The text section is typically severable, allowing manifests to be distributed without the text, since end-nodes do not require text. The meaning of each field is described below.
-
-Each section MAY be present. If present, each section MUST be as described. Negative integer IDs are reserved for application-specific text values.
-
- CDDL Structure | Description
----|---
-suit-text-manifest-description | Free text description of the manifest
-suit-text-update-description | Free text description of the update
-suit-text-vendor-name | Free text vendor name
-suit-text-model-name | Free text model name
-suit-text-vendor-domain | The domain used to create the vendor-id condition
-suit-text-model-info | The information used to create the class-id condition
-suit-text-component-description | Free text description of each component in the manifest
-suit-text-manifest-json-source | The JSON-formatted document that was used to create the manifest
-suit-text-manifest-yaml-source | The yaml-formatted document that was used to create the manifest
-suit-text-version-dependencies | List of component versions required by the manifest
-
-
-## COSWID
-
-suit-coswid contains a Concise Software Identifier. This may be discarded by the Recipient, if not needed.
-
+For a diagram of the metadata structure, see {{metadata-structure-overview}}.
 
 ## Encoding Considerations
 
@@ -583,53 +759,142 @@ Wherever enumerations are used, they are started at 1. This allows detection of 
 
 All elements of the envelope must be wrapped in a bstr to minimize the complexity of the code that evaluates the cryptographic integrity of the element and to ensure correct serialization for integrity and authenticity checks.
 
-# Manifest {#manifest-structure}
+## Envelope {#envelope}
+
+The Envelope contains each of the other primary constituent parts of the SUIT metadata. It allows for modular processing of the manifest by ordering components in the expected order of processing.
+
+The Envelope is encoded as a CBOR Map. Each element of the Envelope is enclosed in a bstr, which allows computation of a message digest against known bounds.
+
+## Delegation Chains {#delegation-info}
+
+The suit-delegation field MAY carry one or more CBOR Web Tokens (CWTs) {{RFC8392}}, with {{RFC8747}} cnf claims. They can be used to perform enhanced authorization decisions. The CWTs are arranged into a list of lists. Each list starts with CWT authorized by a Trust Anchor, and finishes with a key used to authenticate the Manifest (see {{authentication-info}}). This allows an Update Authority to delegate from a long term Trust Anchor, down through intermediaries, to a delegate without any out-of-band updates Trust Anchors.
+
+A Recipient MAY choose to cache intermediaries and/or delegates. If an Update Distributor knows that a targeted Recipient has cached some intermediaries or delegates, it MAY choose to strip any cached intermediaries or delegates from the Delegation Chains in order to reduce bandwidth and energy.
+
+## Authenticated Manifests {#authentication-info}
+
+The suit-authentication-wrapper contains a list of one or more cryptographic authentication wrappers for the Manifest. These are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged blocks. Each of these blocks contains a SUIT_Digest of the Manifest. This enables modular processing of the manifest. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}}. The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, except for the OPTIONAL suit-delegation, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper or suit-delegation.
+
+A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be an empty list.
+
+## Encrypted Manifests {#encrypted-manifests}
+
+To use an encrypted manifest, it must be a dependency of a plaintext manifest. This allows fine-grained control of what information is accessible to intermediate systems for the purposes of management, while still preserving the confidentiality of the manifest contents. This also means that a Recipient can process an encrypted manifest in the same way as an encrypted payload, allowing code reuse.
+
+A template for using an encrypted manifest is covered in [Encrypted Manifest Template](#template-encrypted-manifest).
+
+## Manifest {#manifest-structure}
 
 The manifest contains:
 
 - a version number (see {{manifest-version}})
 - a sequence number (see {{manifest-seqnr}})
+- a reference URI (see {{manifest-reference-uri}})
 - a common structure with information that is shared between command sequences (see {{manifest-common}})
-- a list of commands that the Recipient should perform (see {{manifest-commands}})
+- one or more lists of commands that the Recipient should perform (see {{manifest-commands}})
 - a reference to the full manifest (see {{manifest-reference-uri}})
-- a digest of human-readable text describing the manifest found in the SUIT_Envelope (see {{manifest-digest-text}})
-- a digest of the Concise Software Identifier found in the SUIT_Envelope (see {{manifest-digest-coswid}})
+- human-readable text describing the manifest found in the SUIT_Envelope (see {{manifest-digest-text}})
+- a Concise Software Identifier found in the SUIT_Envelope (see {{manifest-digest-coswid}})
 
-Several fields in the Manifest can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable field. Severable fields are RECOMMENDED to implement. In particular, the human-readable text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope.
+The CoSWID, Text section, or any Command Sequence of the Update Procedure (Dependency Resolution, Image Fetch, Image Installation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable field. Severable fields are RECOMMENDED to implement. In particular, the human-readable text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See {{integrity-checks}} for more detail.
 
-## suit-manifest-version {#manifest-version}
+### suit-manifest-version {#manifest-version}
 
 The suit-manifest-version indicates the version of serialization used to encode the manifest. Version 1 is the version described in this document. suit-manifest-version is REQUIRED to implement.
 
-## suit-manifest-sequence-number {#manifest-seqnr}
+### suit-manifest-sequence-number {#manifest-seqnr}
 
-The suit-manifest-sequence-number is a monotonically increasing anti-rollback counter. It also helps devices to determine which in a set of manifests is the "root" manifest in a given update. Each manifest MUST have a sequence number higher than each of its dependencies. Each Recipient MUST reject any manifest that has a sequence number lower than its current sequence number. It MAY be convenient to use a UTC timestamp in seconds as the sequence number. suit-manifest-sequence-number is REQUIRED to implement.
+The suit-manifest-sequence-number is a monotonically increasing anti-rollback counter. It also helps Recipients to determine which in a set of manifests is the "root" manifest in a given update. Each manifest MUST have a sequence number higher than each of its dependencies. Each Recipient MUST reject any manifest that has a sequence number lower than its current sequence number. It MAY be convenient to use a UTC timestamp in seconds as the sequence number. suit-manifest-sequence-number is REQUIRED to implement.
 
-## suit-reference-uri {#manifest-reference-uri}
+### suit-reference-uri {#manifest-reference-uri}
 
-suit-reference-uri is a text string that encodes a URI where a full version of this manifest can be found. This is convenient for allowing management systems to show the severed elements of a manifest when this URI is reported by a device after installation.
+suit-reference-uri is a text string that encodes a URI where a full version of this manifest can be found. This is convenient for allowing management systems to show the severed elements of a manifest when this URI is reported by a Recipient after installation.
 
-## suit-text {#manifest-digest-text}
+### suit-text {#manifest-digest-text}
 
-suit-text is a digest that uniquely identifies the content of the Text that is packaged in the SUIT_Envelope. suit-text is OPTIONAL to implement.
+suit-text SHOULD be a severable element. suit-text is a map of pairs. It MAY contain two different types of pair:
 
-## suit-coswid {#manifest-digest-coswid}
+* integer => text mappings
+* SUIT_Component_Identifier => map mappings
 
-suit-coswid is a digest that uniquely identifies the content of the concise-software-identifier that is packaged in the SUIT_Envelope. suit-coswid is OPTIONAL to implement.
+Each SUIT_Component_Identifier => map entry contains a map of integer => text values. All SUIT_Component_Identifiers present in suit-text MUST also be present in [suit-common](#manifest-common) or the suit-common of a dependency.
 
-## Dependencies {#SUIT_Dependency}
+suit-text contains all the human-readable information that describes any and all parts of the manifest, its payload(s) and its resource(s). The text section is typically severable, allowing manifests to be distributed without the text, since end-nodes do not require text. The meaning of each field is described below.
 
-SUIT_Dependency specifies a manifest that describes a dependency of the current manifest.
+Each section MAY be present. If present, each section MUST be as described. Negative integer IDs are reserved for application-specific text values.
 
-The suit-dependency-digest specifies the dependency manifest uniquely by identifying a particular Manifest structure. The digest is calculated over the Manifest structure instead of the COSE Sig_structure or Mac_structure. This means that a digest may need to be calculated more than once, however this is necessary to ensure that removing a signature from a manifest does not break dependencies due to missing signature elements. This is also necessary to support the trusted intermediary use case, where an intermediary re-signs the Manifest, removing the original signature, potentially with a different algorithm, or trading COSE_Sign for COSE_Mac.
+The following table describes the text fields available in suit-text:
 
-The suit-dependency-prefix element contains a SUIT_Component_Identifier. This specifies the scope at which the dependency operates. This allows the dependency to be forwarded on to a component that is capable of parsing its own manifests. It also allows one manifest to be deployed to multiple dependent devices without those devices needing consistent component hierarchy. This element is OPTIONAL.
+CDDL Structure | Description
+---|---
+suit-text-manifest-description | Free text description of the manifest
+suit-text-update-description | Free text description of the update
+suit-text-manifest-json-source | The JSON-formatted document that was used to create the manifest
+suit-text-manifest-yaml-source | The yaml-formatted document that was used to create the manifest
 
-## SUIT_Component_Reference
+The following table describes the text fields available in each map identified by a SUIT_Component_Identifier.
 
-The SUIT_Component_Reference describes an image that is defined by another manifest. This is useful for overriding the behavior of another manifest, for example by directing the recipient to look at a different URI for the image or by changing the expected format, such as when a gateway performs decryption on behalf of a constrained device.
+CDDL Structure | Description
+---|---
+suit-text-vendor-name | Free text vendor name
+suit-text-model-name | Free text model name
+suit-text-vendor-domain | The domain used to create the vendor-id condition
+suit-text-model-info | The information used to create the class-id condition
+suit-text-component-description | Free text description of each component in the manifest
+suit-text-component-version | A text version number
+suit-text-version-required | A text expression of the required version number
 
-## SUIT_Command_Sequence {#manifest-commands}
+suit-text is OPTIONAL to implement.
+
+## text-version-required
+
+suit-text-version-required is used to represent a version-based dependency on suit-parameter-version as described in {{suit-parameter-version}} and {{suit-condition-version}}. To describe a version dependency, a Manifest Author should populate the suit-text map with a SUIT_Component_Identifier key for the dependency component, and place in the corresponding map a suit-text-version-required key with a text expression that is representative of the version constraints placed on the dependency.
+
+For example, to express a dependency on a component "\['x', 'y'\]", where the version should be any v1.x later than v1.2.5, but not v2.0 or above, the author would add the following structure to the suit-text element. Note that this text is in cbor-diag notation.
+
+```
+[h'78',h'79'] : {
+    7 : ">=1.2.5,<2"
+}
+```
+
+### suit-coswid {#manifest-digest-coswid}
+
+suit-coswid contains a Concise Software Identifier. This element SHOULD be made severable so that it can be discarded by the Recipient or an intermediary if it is not required by the Recipient.
+
+suit-coswid is OPTIONAL to implement.
+
+### suit-common {#manifest-common}
+
+suit-common encodes all the information that is shared between each of the command sequences, including: suit-dependencies, suit-components, and suit-common-sequence. suit-common is REQUIRED to implement.
+
+suit-dependencies is a list of [SUIT_Dependency](#SUIT_Dependency) blocks that specify manifests that must be present before the current manifest can be processed. suit-dependencies is OPTIONAL to implement.
+
+suit-components is a list of [SUIT_Component_Identifier](#suit-component-identifier) blocks that specify the component identifiers that will be affected by the content of the current manifest. suit-components is REQUIRED to implement; at least one manifest in a dependency tree MUST contain a suit-components block.
+
+suit-common-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-common-sequence include setting expected Recipient identity and image digests when they are conditional (see {{suit-directive-try-each}} and {{a-b-template}} for more information on conditional sequences). suit-common-sequence is RECOMMENDED to implement. It is REQUIRED if the optimizations described in {{minimal-sigs}} will be used. Whenever a parameter or try-each is required by more than one Command Sequence, suit-common-sequence results in a smaller encoding.
+
+#### Dependencies {#SUIT_Dependency}
+
+SUIT_Dependency specifies a manifest that describes a dependency of the current manifest. The Manifest is identified, however the Recipient should expect an Envelope when it acquires the dependency. This is because the Manifest is the one invariant element of the Envelope, where other elements may change by countersigning, adding authentication blocks, or severing elements.
+
+The suit-dependency-digest specifies the dependency manifest uniquely by identifying a particular Manifest structure. This is identical to the digest that would be present as the payload of any suit-authentication-block in the dependency's Envelope. The digest is calculated over the Manifest structure instead of the COSE Sig_structure or Mac_structure. This is necessary to ensure that removing a signature from a manifest does not break dependencies due to missing signature elements. This is also necessary to support the trusted intermediary use case, where an intermediary re-signs the Manifest, removing the original signature, potentially with a different algorithm, or trading COSE_Sign for COSE_Mac.
+
+The suit-dependency-prefix element contains a SUIT_Component_Identifier (see {{suit-component-identifier}}). This specifies the scope at which the dependency operates. This allows the dependency to be forwarded on to a component that is capable of parsing its own manifests. It also allows one manifest to be deployed to multiple dependent Recipients without those Recipients needing consistent component hierarchy. This element is OPTIONAL.
+
+A dependency prefix can be used with a component identifier. This allows complex systems to understand where dependencies need to be applied. The dependency prefix can be used in one of two ways. The first simply prepends the prefix to all Component Identifiers in the dependency.
+
+A dependency prefix can also be used to indicate when a dependency manifest needs to be processed by a secondary manifest processor, as described in {{hierarchical-interpreters}}.
+
+#### SUIT_Component_Identifier {#suit-component-identifier}
+
+A component is a unit of code or data that can be targeted by an update. To facilitate composite devices, components are identified by a list of CBOR byte strings, which allows construction of hierarchical component structures. A dependency MAY declare a prefix to the components defined in the dependency manifest. Components are identified by Component Identifiers, i.e. arrays of binary strings, but referenced in commands
+
+A Component Identifier can be trivial, such as the simple array \[h'00'\]. It can also represent a filesystem path by encoding each segment of the path as an element in the list. For example, the path "/usr/bin/env" would encode to \['usr','bin','env'\].
+
+This hierarchical construction allows a component identifier to identify any part of a complex, multi-component system.
+
+### SUIT_Command_Sequence {#manifest-commands}
 
 A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take to accomplish a particular goal. These goals are defined in the manifest and include:
 
@@ -645,43 +910,74 @@ A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take
 
 6. Run or Boot: suit-run is a SUIT_Command_Sequence to execute in order to run an image. suit-run typically contains a single instruction: either the "run" directive for the bootable manifest or the "process dependencies" directive for any dependents of the bootable manifest. suit-run is OPTIONAL to implement. Only one manifest in an update may contain the "run" directive.
 
-Each of these follows exactly the same structure to ensure that the parser is as simple as possible.
+Goals 1,2,3 form the Update Procedure. Goals 4,5,6 form the Boot Procedure.
+
+Each Command Sequence follows exactly the same structure to ensure that the parser is as simple as possible.
 
 Lists of commands are constructed from two kinds of element:
 
 1. Conditions that MUST be true--any failure is treated as a failure of the update/load/boot
 2. Directives that MUST be executed.
 
-Each condition is a command code identifier, followed by Nil.
+Each condition is a command code identifier, followed by a [SUIT_Reporting_Policy](#reporting-policy).
 
 Each directive is composed of:
 
 1. A command code identifier
-2. An argument block or Nil
+2. An argument block or a reporting policy
 
-Argument blocks are defined for each type of directive.
+Argument blocks are consumed only by flow-control directives:
+
+* Set Component/Dependency Index
+* Set/Override Parameters
+* Try Each
+* Run Sequence
+
+Reporting policies provide a hint to the manifest processor of whether or not to add the success or failure of a command to any report that it generates.
 
 Many conditions and directives apply to a given component, and these generally grouped together. Therefore, a special command to set the current component index is provided with a matching command to set the current dependency index. This index is a numeric index into the component ID tables defined at the beginning of the document. For the purpose of setting the index, the two component ID tables are considered to be concatenated together.
 
-To facilitate optional conditions, a special directive is provided. It runs several new lists of conditions/directives, one after another, that are contained as an argument to the directive. By default, it assumes that a failure of a condition should not indicate a failure of the update/boot, but a parameter is provided to override this behavior.
+To facilitate optional conditions, a special directive, {{suit-directive-try-each}}, is provided. It runs several new lists of conditions/directives, one after another, that are contained as an argument to the directive. By default, it assumes that a failure of a condition should not indicate a failure of the update/boot, but a parameter is provided to override this behavior. See {{suit-parameter-soft-failure}}.
 
-### suit-common {#manifest-common}
+### Reporting Policy {#reporting-policy}
 
-suit-common encodes all the information that is shared between each of the command sequences, including: suit-dependencies, suit-components, suit-dependency-components, and suit-common-sequence. suit-common is REQUIRED to implement.
+To facilitate construction of Reports that describe the success, or failure of a given Procedure, each command is given a Reporting Policy. This is an integer bitfield that follows the command and indicates what the Recipient should do with the Record of executing the command. The options are summarized in the table below.
 
-suit-dependencies is a list of SUIT_Dependency blocks that specify manifests that must be present before the current manifest can be processed. suit-dependencies is OPTIONAL to implement.
+Policy | Description
+---|---
+suit-send-record-on-success | Record when the command succeeds
+suit-send-record-on-failure | Record when the command fails
+suit-send-sysinfo-success | Add system information when the command succeeds
+suit-send-sysinfo-failure | Add system information when the command fails
 
-In order to distinguish between components that are affected by the current manifest and components that are affected by a dependency, they are kept in separate lists. Components affected by the current manifest only list the component identifier. Components affected by a dependency include the component identifier and the index of the dependency that defines the component.
+Any or all of these policies may be enabled at once.
 
-suit-components is a list of SUIT_Component blocks that specify the component identifiers that will be affected by the content of the current manifest. suit-components is OPTIONAL to implement, but at least one manifest MUST contain a suit-components block.
+If the component index is set to True when a command is executed with a non-zero reporting policy, then the Reporting Engine MUST receive one Record for each Component, in the order expressed in the Components list. If the dependency index is set to True when a command is executed with a non-zero reporting policy, then the Reporting Engine MUST receive one Record for each Dependency, in the order expressed in the Dependencies list.
 
-suit-dependency-components is a list of SUIT_Component_Reference blocks that specify component identifiers that will be affected by the content of a dependency of the current manifest. suit-dependency-components is OPTIONAL to implement.
 
-suit-common-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-common-sequence include setting expected device identity and image digests when they are conditional (see {{secconditional}} for more information on conditional sequences). suit-common-sequence is RECOMMENDED to implement.
+SUIT does NOT REQUIRE a particular format of Records or Reports. SUIT only defines hints to the Reporting engine for which Records it should aggregate into the Report.
+
+For example, a system using DICE certificates MAY use instances of suit-send-sysinfo-success to construct its certificates.
+
+An OPTIONAL Record format, SUIT_Record is defined in {{full-cddl}}. It is encoded as a map, with the following elements.
+
+Element | Description
+---|---
+suit-record-success | The boolean or integer success or failure code of the command.
+suit-record-component-id | The current component when the record was generated.
+suit-record-dependency-id | The current dependency digest when the record was generated.
+suit-record-command-sequence-id | The label of the Command Sequence that was executing when the record was generated.
+suit-record-command-id | The label of the command that was in progress when the record was generated.
+suit-record-params | The set of parameters that was consumed by the current command.
+suit-record-actual | The value against which a suit-condition compared a parameter.
+
+In Secure Boot operations, the Reporting engine MAY aggregate the Records produced in a Procedure into the evidence used for an attestation report.
 
 ### SUIT_Parameters {#secparameters}
 
 Many conditions and directives require additional information. That information is contained within parameters that can be set in a consistent way. This allows reduction of manifest size and replacement of parameters from one manifest to the next.
+
+Most parameters are scoped to a specific component. This means that setting a parameter for one component has no effect on the parameters of any other component. The only exceptions to this are two Manifest Processor parameters: Strict Order and Soft Failure.
 
 The defined manifest parameters are described below.
 
@@ -705,129 +1001,20 @@ Update Priority | suit-parameter-update-priority | {{suit-parameter-update-prior
 Version | suit-parameter-version | {{suit-parameter-version}}
 Wait Info | suit-parameter-wait-info | {{suit-parameter-wait-info}}
 URI List | suit-parameter-uri-list | {{suit-parameter-uri-list}}
+Fetch Arguments | suit-parameter-fetch-arguments | {{suit-parameter-fetch-arguments}}
 Strict Order | suit-parameter-strict-order | {{suit-parameter-strict-order}}
 Soft Failure | suit-parameter-soft-failure | {{suit-parameter-soft-failure}}
 Custom | suit-parameter-custom | {{suit-parameter-custom}}
 
 CBOR-encoded object parameters are still wrapped in a bstr. This is because it allows a parser that is aggregating parameters to reference the object with a single pointer and traverse it without understanding the contents. This is important for modularization and division of responsibility within a pull parser. The same consideration does not apply to Directives because those elements are invoked with their arguments immediately
 
-#### suit-parameter-vendor-identifier
-
-A RFC 4122 UUID representing the vendor of the device or component.
-
-#### suit-parameter-class-identifier
-
-A RFC 4122 UUID representing the class of the device or component
-
-#### suit-parameter-image-digest
-
-A fingerprint computed over the image itself encoded in the SUIT_Digest structure.
-
-#### suit-parameter-image-size
-
-The size of the firmware image in bytes.
-
-#### suit-parameter-use-before
-
-An expire date for the use of the manifest encoded as a POSIX timestamp.
-
-#### suit-parameter-component-offset
-
-This parameter sets the offset in a component.
-
-#### suit-parameter-encryption-info
-
-Encryption Info defines the mechanism that Fetch or Copy should use to decrypt the data they transfer. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged or a COSE_Encrypt0_Tagged, wrapped in a bstr.
-
-#### suit-parameter-compression-info
-
-Compression Info defines any information that is required for a device to perform decompression operations. Typically, this includes the algorithm identifier. This document defines the use of ZLIB {{RFC1950}}, Brotli {{RFC7932}}, and ZSTD {{I-D.kucherawy-rfc8478bis}}.
-
-Additional compression formats can be registered through the IANA-maintained registry.  
-
-#### suit-parameter-unpack-info
-
-SUIT_Unpack_Info defines the information required for a device to interpret a packed format. This document defines the use of the following binary encodings: Intel HEX {{HEX}}, Motorola S-record {{SREC}},  Executable and Linkable Format (ELF) {{ELF}}, and Common Object File Format (COFF) {{COFF}}.
-
-Additional packing formats can be registered through the IANA-maintained registry.  
-
-#### suit-parameter-uri
-
-A URI from which to fetch a resource.
-
-#### suit-parameter-source-component
-
-This parameter sets the source component.
-
-#### suit-parameter-run-args
-
-This parameter contains an encoded set of arguments for Run.
-
-#### suit-parameter-device-identifier
-
-A RFC 4122 UUID representing the device or component.
-
-#### suit-parameter-minimum-battery
-
-This parameter sets the minimum battery level in mWh.
-
-#### suit-parameter-update-priority
-
-This parameter sets the priority of the update.
-
-#### suit-parameter-version
-
-Allows to indicate the version numbers of firmware to which the manifest applies, either with a list or with range matching.
-
-#### suit-parameter-wait-info
-
-suit-directive-wait {{suit-directive-wait}} directs the manifest processor to pause until a specified event occurs. The suit-parameter-wait-info encodes the parameters needed for the directive.
-
-The exact implementation of the pause is implementation-defined. For example, this could be done by blocking on a semaphore, registering an event handler and suspending the manifest processor, polling for a notification, or aborting the update entirely, then restarting when a notification is received.
-
-#### suit-parameter-uri-list
-
-Indicates a list of URIs from which to fetch a resource.
-
-#### suit-parameter-strict-order
-
-The Strict Order Parameter allows a manifest to govern when directives can be executed out-of-order. This allows for systems that have a sensitivity to order of updates to choose the order in which they are executed. It also allows for more advanced systems to parallelize their handling of updates. Strict Order defaults to True. It MAY be set to False when the order of operations does not matter. When arriving at the end of a command sequence, ALL commands MUST have completed, regardless of the state of SUIT_Parameter_Strict_Order. If SUIT_Parameter_Strict_Order is returned to True, ALL preceding commands MUST complete before the next command is executed.
-
-#### suit-parameter-soft-failure
-
-When executing a command sequence inside SUIT_Directive_Try_Each and a condition failure occurs, the manifest processor aborts the sequence. If Soft Failure is True, it returns Success. Otherwise, it returns the original condition failure. SUIT_Parameter_Soft_Failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates.
-
-#### suit-parameter-custom
-
-This parameter is an extension point for any proprietary, application specific conditions and directives.
-
-### SUIT_Condition
-
-Conditions are used to define mandatory properties of a system in order for an update to be applied. They can be pre-conditions or post-conditions of any directive or series of directives, depending on where they are placed in the list. Conditions never take arguments; conditions should test using parameters instead. Conditions include:
-
- Name | CDDL Structure | Reference
----|---|---
-Vendor Identifier | suit-condition-vendor-identifier | {{identifiers}}
-Class Identifier | suit-condition-class-identifier | {{identifiers}}
-Device Identifier | suit-condition-device-identifier | {{identifiers}}
-Image Match | suit-condition-image-match | {{suit-condition-image-match}}
-Image Not Match | suit-condition-image-not-match | {{suit-condition-image-not-match}}
-Use Before | suit-condition-use-before | {{suit-condition-use-before}}
-Component Offset | suit-condition-component-offset | {{suit-condition-component-offset}}
-Minimum Battery | suit-condition-minimum-battery | {{suit-condition-minimum-battery}}
-Update Authorized | suit-condition-update-authorized | {{suit-condition-update-authorized}}
-Version | suit-condition-version | {{suit-condition-version}}
-Custom Condition | SUIT_Condition_Custom | {{SUIT_Condition_Custom }}
-
-The abstract description of these conditions is defined in {{command-behavior}}.
-
-Each condition MUST report a result code on completion. If a condition reports failure, then the current sequence of commands MUST terminate. If a condition requires additional information, this MUST be specified in one or more parameters before the condition is executed. If a Recipient attempts to process a condition that expects additional information and that information has not been set, it MUST report a failure. If a Recipient encounters an unknown condition, it MUST report a failure.
-
-Condition labels in the positive number range are reserved for IANA registration while those in the negative range are custom conditions reserved for proprietary use.
+#### Constructing Identifiers {#identifiers}
 
 Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 {{RFC4122}} UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.
 
-A device may match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a device that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This device might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.
+A Recipient MAY match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a Recipient that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This Recipient might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.
+
+Identifiers are used for compatibility checks. They MUST NOT be used as assertions of identity. They are evaluated by [identifier conditions](#identifier-conditions).
 
 A more complete example: Imagine a device has the following physical components:
 1. A host MCU
@@ -840,7 +1027,7 @@ This same device has three software modules:
 
 Suppose that the WiFi module's firmware has a proprietary update mechanism and doesn't support manifest processing. This device can report four class IDs:
 
-1. hardware model/revision
+1. Hardware model/revision
 2. OS
 3. WiFi module model/revision
 4. Application
@@ -863,39 +1050,77 @@ Class-specific information is composed of a variety of data, for example:
 * Hardware revision.
 * Bootloader version (for immutable bootloaders).
 
-#### suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier {#identifiers}
+#### suit-parameter-vendor-identifier {#suit-parameter-vendor-identifier}
 
-There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a RFC 4122 {{RFC4122}} UUID that MUST have already been set as a parameter. The installing device MUST match the specified UUID in order to consider the manifest valid. These identifiers MAY be scoped by component.
+A RFC 4122 UUID representing the vendor of the device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in {{identifiers}}
 
-The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.
+#### suit-parameter-class-identifier {#suit-parameter-class-identifier}
 
-#### suit-condition-image-match
+A RFC 4122 UUID representing the class of the device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in {{identifiers}}
 
-Verify that the current component matches the digest parameter for the current component. The digest is verified against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-match is REQUIRED to implement.
+#### suit-parameter-device-identifier {#suit-parameter-device-identifier}
 
-#### suit-condition-image-not-match
+A RFC 4122 UUID representing the specific device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in {{identifiers}}
 
-Verify that the current component does not match the supplied digest. If no digest is specified, then the digest is compared against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-not-match is OPTIONAL to implement.
+#### suit-parameter-image-digest {#suit-parameter-image-digest}
 
-#### suit-condition-use-before
+A fingerprint computed over the component itself, encoded in the [SUIT_Digest](#SUIT_Digest) structure. The SUIT_Digest is wrapped in a bstr, as required in {{secparameters}}.
 
-Verify that the current time is BEFORE the specified time. suit-condition-use-before is used to specify the last time at which an update should be installed. The recipient evaluates the current time against the suit-parameter-use-before parameter, which must have already been set as a parameter, encoded as a POSIX timestamp, that is seconds after 1970-01-01 00:00:00. Timestamp conditions MUST be evaluated in 64 bits, regardless of encoded CBOR size. suit-condition-use-before is OPTIONAL to implement.
+#### suit-parameter-image-size {#suit-parameter-image-size}
 
-#### suit-condition-component-offset
+The size of the firmware image in bytes. This size is encoded as a positive integer.
 
-Verify that the offset of the current component matches the offset set in suit-parameter-component-offset. This condition allows a manifest to select between several images to match a target offset.
+#### suit-parameter-use-before {#suit-parameter-use-before}
 
-#### suit-condition-minimum-battery
+An expiry date for the use of the manifest encoded as a POSIX timestamp; a positive integer. Implementations that use this parameter MUST use a 64-bit internal representation of the integer.
 
-suit-condition-minimum-battery provides a mechanism to test a device's battery level before installing an update. This condition is for use in primary-cell applications, where the battery is only ever discharged. For batteries that are charged, suit-directive-wait is more appropriate, since it defines a "wait" until the battery level is sufficient to install the update. suit-condition-minimum-battery is specified in mWh. suit-condition-minimum-battery is OPTIONAL to implement.
+#### suit-parameter-component-offset {#suit-parameter-component-offset}
 
-#### suit-condition-update-authorized
+This parameter sets the offset in a component. Some components support multiple possible Slots (offsets into a storage area). This parameter describes the intended Slot to use, identified by its offset into the component's storage area. This offset MUST be encoded as a positive integer.
 
-Request Authorization from the application and fail if not authorized. This can allow a user to decline an update. suit-parameter-update-priority provides an integer priority level that the application can use to determine whether or not to authorize the update. Priorities are application defined. suit-condition-update-authorized is OPTIONAL to implement.
+#### suit-parameter-encryption-info {#suit-parameter-encryption-info}
 
-#### suit-condition-version
+Encryption Info defines the mechanism that Fetch or Copy should use to decrypt the data they transfer. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged or a COSE_Encrypt0_Tagged, wrapped in a bstr.
 
-suit-condition-version allows comparing versions of firmware. Verifying image digests is preferred to version checks because digests are more precise. The image can be compared as:
+#### suit-parameter-compression-info {#suit-parameter-compression-info}
+
+Compression Info defines any information that is required for a Recipient to perform decompression operations. Typically, this includes the algorithm identifier. This document defines the use of ZLIB {{RFC1950}}, Brotli {{RFC7932}}, and ZSTD {{I-D.kucherawy-rfc8478bis}}.
+
+Additional compression formats can be registered through the IANA-maintained registry.  
+
+#### suit-parameter-unpack-info {#suit-parameter-unpack-info}
+
+SUIT_Unpack_Info defines the information required for a Recipient to interpret a packed format. This document defines the use of the following binary encodings: Intel HEX {{HEX}}, Motorola S-record {{SREC}},  Executable and Linkable Format (ELF) {{ELF}}, and Common Object File Format (COFF) {{COFF}}.
+
+Additional packing formats can be registered through the IANA-maintained registry.  
+
+#### suit-parameter-uri {#suit-parameter-uri}
+
+A URI from which to fetch a resource.
+
+#### suit-parameter-source-component {#suit-parameter-source-component}
+
+This parameter sets the source component to be used with either [suit-directive-copy](#suit-directive-copy) or with [suit-directive-swap](#suit-directive-swap). The current Component, as set by suit-directive-set-component-index defines the destination, and suit-parameter-source-component defines the source.
+
+#### suit-parameter-run-args {#suit-parameter-run-args}
+
+This parameter contains an encoded set of arguments for [suit-directive-run](#suit-directive-run). The arguments MUST be provided as an implementation-defined bstr.
+
+#### suit-parameter-minimum-battery
+
+This parameter sets the minimum battery level in mWh. This parameter is encoded as a positive integer. Used with [suit-condition-minimum-battery](#suit-condition-minimum-battery).
+
+#### suit-parameter-update-priority
+
+This parameter sets the priority of the update. This parameter is encoded as an integer. It is used along with [suit-condition-update-authorized](suit-condition-update-authorized) to ask an application for permission to initiate an update. This does not constitute a privilege inversion because an explicit request for authorization has been provided by the Update Authority in the form of the suit-condition-update-authorized command.
+
+Applications MAY define their own meanings for the update priority. For example, critical reliability & vulnerability fixes MAY be given negative numbers, while bug fixes MAY be given small positive numbers, and feature additions MAY be given larger positive numbers, which allows an application to make an informed decision about whether and when to allow an update to proceed.
+
+#### suit-parameter-version {#suit-parameter-version}
+
+Indicates allowable versions for the specified component. Allowable versions can be specified, either with a list or with range matching. This parameter is compared with version asserted by the current component when [suit-condition-version](#suit-condition-version) is invoked. The current component may assert the current version in many ways, including storage in a parameter storage database, in a metadata object, or in a known location within the component itself.
+
+The component version can be compared as:
 
 * Greater.
 * Greater or Equal.
@@ -914,6 +1139,127 @@ While the exact encoding of versions is application-defined, semantic versions m
 * 1.2-alpha4 = \[1,2,-3,4\].
 
 suit-condition-version is OPTIONAL to implement.
+
+Versions SHOULD be provided as follows:
+
+1. The first integer represents the major number. This indicates breaking changes to the component.
+2. The second integer represents the minor number. This is typically reserved for new features or large, non-breaking changes.
+3. The third integer is the patch version. This is typically reserved for bug fixes.
+4. The fourth integer is the build number.
+
+Where Alpha (-3), Beta (-2), and Release Candidate (-1) are used, they are inserted as a negative number between Minor and Patch numbers. This allows these releases to compare correctly with final releases. For example, Version 2.0, RC1 should be lower than Version 2.0.0 and higher than any Version 1.x. By encoding RC as -1, this works correctly: \[2,0,-1,1\] compares as lower than \[2,0,0\]. Similarly, beta (-2) is lower than RC and alpha (-3) is lower than RC.
+
+#### suit-parameter-wait-info
+
+suit-directive-wait {{suit-directive-wait}} directs the manifest processor to pause until a specified event occurs. The suit-parameter-wait-info encodes the parameters needed for the directive.
+
+The exact implementation of the pause is implementation-defined. For example, this could be done by blocking on a semaphore, registering an event handler and suspending the manifest processor, polling for a notification, or aborting the update entirely, then restarting when a notification is received.
+
+suit-parameter-wait-info is encoded as a map of wait events. When ALL wait events are satisfied, the Manifest Processor continues. The wait events currently defined are described in the following table.
+
+Name | Encoding | Description
+---|---|---
+suit-wait-event-authorization | int | Same as {{suit-parameter-update-priority}}
+suit-wait-event-power | int | Wait until power state
+suit-wait-event-network | int | Wait until network state
+suit-wait-event-other-device-version | See below | Wait for other device to match version
+suit-wait-event-time | uint | Wait until time (POSIX timestamp)
+suit-wait-event-time-of-day | uint | Wait until seconds since 00:00:00
+suit-wait-event-day-of-week | uint | Wait until days since Sunday
+
+suit-wait-event-other-device-version reuses the encoding of suit-parameter-version-match. It is encoded as a sequence that contains an implementation-defined bstr identifier for the other device, and a list of one or more SUIT_Parameter_Version_Match.
+
+#### suit-parameter-uri-list
+
+Indicates a list of URIs from which to fetch a resource. The URI list is encoded as a list of tstr, in priority order. The Recipient should attempt to fetch the resource from each URI in turn, ruling out each, in order, if the resource is inaccessible or it is otherwise undesirable to fetch from that URI. suit-parameter-uri-list is consumed by {{suit-directive-fetch-uri-list}}.
+
+#### suit-parameter-fetch-arguments
+
+An implementation-defined set of arguments to [suit-directive-fetch](#suit-directive-fetch). Arguments are encoded in a bstr.
+
+#### suit-parameter-strict-order
+
+The Strict Order Parameter allows a manifest to govern when directives can be executed out-of-order. This allows for systems that have a sensitivity to order of updates to choose the order in which they are executed. It also allows for more advanced systems to parallelize their handling of updates. Strict Order defaults to True. It MAY be set to False when the order of operations does not matter. When arriving at the end of a command sequence, ALL commands MUST have completed, regardless of the state of SUIT_Parameter_Strict_Order. If SUIT_Parameter_Strict_Order is returned to True, ALL preceding commands MUST complete before the next command is executed.
+
+See {{parallel-processing}} for behavioral description of Strict Order.
+
+#### suit-parameter-soft-failure
+
+When executing a command sequence inside [suit-directive-try-each](#suit-directive-try-each) or [suit-directive-run-sequence](#suit-directive-run-sequence) and a condition failure occurs, the manifest processor aborts the sequence. For suit-directive-try-each, if Soft Failure is True, the next sequence in Try Each is invoked, otherwise suit-directive-try-each fails with the condition failure code. In suit-directive-run-sequence, if Soft Failure is True the suit-directive-run-sequence simply halts with no side-effects and the Manifest Processor continues with the following command, otherwise, the suit-directive-run-sequence fails with the condition failure code.
+
+suit-parameter-soft-failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates. It MUST NOT be set outside of suit-directive-try-each or suit-directive-run-sequence.
+
+When suit-directive-try-each is invoked, Soft Failure defaults to True. An Update Author may choose to set Soft Failure to False if they require a failed condition in a sequence to force an Abort.
+
+When suit-directive-run-sequence is invoked, Soft Failure defaults to False. An Update Author may choose to make failures soft within a suit-directive-run-sequence.
+
+#### suit-parameter-custom
+
+This parameter is an extension point for any proprietary, application specific conditions and directives.
+
+### SUIT_Condition
+
+Conditions are used to define mandatory properties of a system in order for an update to be applied. They can be pre-conditions or post-conditions of any directive or series of directives, depending on where they are placed in the list. All Conditions specify a Reporting Policy as described {{reporting-policy}}. Conditions include:
+
+ Name | CDDL Structure | Reference
+---|---|---
+Vendor Identifier | suit-condition-vendor-identifier | {{identifier-conditions}}
+Class Identifier | suit-condition-class-identifier | {{identifier-conditions}}
+Device Identifier | suit-condition-device-identifier | {{identifier-conditions}}
+Image Match | suit-condition-image-match | {{suit-condition-image-match}}
+Image Not Match | suit-condition-image-not-match | {{suit-condition-image-not-match}}
+Use Before | suit-condition-use-before | {{suit-condition-use-before}}
+Component Offset | suit-condition-component-offset | {{suit-condition-component-offset}}
+Minimum Battery | suit-condition-minimum-battery | {{suit-condition-minimum-battery}}
+Update Authorized | suit-condition-update-authorized | {{suit-condition-update-authorized}}
+Version | suit-condition-version | {{suit-condition-version}}
+Custom Condition | SUIT_Condition_Custom | {{SUIT_Condition_Custom }}
+
+The abstract description of these conditions is defined in {{command-behavior}}.
+
+Conditions compare parameters against properties of the system. These properties may be asserted in many different ways, including: calculation on-demand, volatile definition in memory, static definition within the manifest processor, storage in known location within an image, storage within a key storage system, storage in One-Time-Programmable memory, inclusion in mask ROM, or inclusion as a register in hardware. Some of these assertion methods are global in scope, such as a hardware register, some are scoped to an individual component, such as storage at a known location in an image, and some assertion methods can be either global or component-scope, based on implementation.
+
+Each condition MUST report a result code on completion. If a condition reports failure, then the current sequence of commands MUST terminate. A subsequent command or command sequence MAY continue executing if [suit-parameter-soft-failure](#suit-parameter-soft-failure) is set. If a condition requires additional information, this MUST be specified in one or more parameters before the condition is executed. If a Recipient attempts to process a condition that expects additional information and that information has not been set, it MUST report a failure. If a Recipient encounters an unknown condition, it MUST report a failure.
+
+Condition labels in the positive number range are reserved for IANA registration while those in the negative range are custom conditions reserved for proprietary use. See {{iana}} for more details.
+
+#### suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier {#identifier-conditions}
+
+There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a RFC 4122 {{RFC4122}} UUID that MUST have already been set as a parameter. The installing Recipient MUST match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. The Recipient MAY treat them as scoped by component or as global identifiers.
+
+The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.
+
+Each identifier condition compares the corresponding identifier parameter to a parameter asserted to the Manifest Processor by the Recipient. Identifiers MUST be known to the Manifest Processor in order to evaluate compatibility.
+
+Globally-scoped identifiers MUST match, regardless of current component index. Component-scoped identifiers match only when the current component index resolves to the component associated with the component-scoped identifier.
+
+#### suit-condition-image-match
+
+Verify that the current component matches the [suit-parameter-image-digest](#suit-parameter-image-digest) for the current component. The digest is verified against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-match is REQUIRED to implement.
+
+#### suit-condition-image-not-match
+
+Verify that the current component does not match the [suit-parameter-image-digest](#suit-parameter-image-digest). If no digest is specified, the condition fails. suit-condition-image-not-match is OPTIONAL to implement.
+
+#### suit-condition-use-before
+
+Verify that the current time is BEFORE the specified time. suit-condition-use-before is used to specify the last time at which an update should be installed. The recipient evaluates the current time against the [suit-parameter-use-before parameter](#suit-parameter-use-before), which must have already been set as a parameter, encoded as a POSIX timestamp, that is seconds after 1970-01-01 00:00:00. Timestamp conditions MUST be evaluated in 64 bits, regardless of encoded CBOR size. suit-condition-use-before is OPTIONAL to implement.
+
+#### suit-condition-component-offset
+
+Verify that the offset of the current component matches the offset set in [suit-parameter-component-offset](#suit-parameter-component-offset). This condition allows a manifest to select between several images to match a target offset.
+
+#### suit-condition-minimum-battery
+
+suit-condition-minimum-battery provides a mechanism to test a Recipient's battery level before installing an update. This condition is primarily for use in primary-cell applications, where the battery is only ever discharged. For batteries that are charged, suit-directive-wait is more appropriate, since it defines a "wait" until the battery level is sufficient to install the update. suit-condition-minimum-battery is specified in mWh. suit-condition-minimum-battery is OPTIONAL to implement. suit-condition-minimum-battery consumes [suit-parameter-minimum-battery](#suit-parameter-minimum-battery).
+
+#### suit-condition-update-authorized
+
+Request Authorization from the application and fail if not authorized. This can allow a user to decline an update. [suit-parameter-update-priority](#suit-parameter-update-priority) provides an integer priority level that the application can use to determine whether or not to authorize the update. Priorities are application defined. suit-condition-update-authorized is OPTIONAL to implement.
+
+#### suit-condition-version
+
+suit-condition-version allows comparing versions of firmware. Verifying image digests is preferred to version checks because digests are more precise. suit-condition-version examines a component's version against the version info specified in [suit-parameter-version](#suit-parameter-version)
 
 #### SUIT_Condition_Custom {#SUIT_Condition_Custom}
 
@@ -937,6 +1283,7 @@ Run | suit-directive-run | {{suit-directive-run}}
 Wait For Event | suit-directive-wait | {{suit-directive-wait}}
 Run Sequence | suit-directive-run-sequence | {{suit-directive-run-sequence}}
 Swap | suit-directive-swap | {{suit-directive-swap}}
+Fetch URI list | suit-directive-fetch-uri-list | {{suit-directive-fetch-uri-list}}
 
 The abstract description of these commands is defined in {{command-behavior}}.
 
@@ -944,14 +1291,17 @@ When a Recipient executes a Directive, it MUST report a result code. If the Dire
 
 #### suit-directive-set-component-index {#suit-directive-set-component-index}
 
-Set Component Index defines the component to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into the concatenation of suit-components and suit-dependency-components. If the following directives apply to ALL components, then the boolean value "True" is used instead of an index. True does not apply to dependency components. If the following directives apply to NO components, then the boolean value "False" is used. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied.
+Set Component Index defines the component to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into suit-components. If the following commands apply to ALL components, then the boolean value "True" is used instead of an index. If the following commands apply to NO components, then the boolean value "False" is used. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied.
 
+If component index is set to True when a command is invoked, then the command applies to all components, in the order they appear in suit-common-components. When the Manifest Processor invokes a command while the component index is set to True, it must execute the command once for each possible component index, ensuring that the command receives the parameters corresponding to that component index.
 
 #### suit-directive-set-dependency-index {#suit-directive-set-dependency-index}
 
 Set Dependency Index defines the manifest to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into the dependencies. If the following directives apply to ALL dependencies, then the boolean value "True" is used instead of an index. If the following directives apply to NO dependencies, then the boolean value "False" is used. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied.
 
-Typical operations that require suit-directive-set-dependency-index include setting a source URI, invoking "Fetch," or invoking "Process Dependency" for an individual dependency.
+If dependency index is set to True when a command is invoked, then the command applies to all dependencies, in the order they appear in suit-common-components. When the Manifest Processor invokes a command while the dependency index is set to True, it must execute the command once for each possible dependency index, ensuring that the command receives the parameters corresponding to that dependency index.
+
+Typical operations that require suit-directive-set-dependency-index include setting a source URI or Encryption Information, invoking "Fetch," or invoking "Process Dependency" for an individual dependency.
 
 
 #### suit-directive-abort {#suit-directive-abort}
@@ -962,8 +1312,9 @@ Unconditionally fail. This operation is typically used in conjunction with suit-
 
 This command runs several SUIT_Command_Sequence, one after another, in a strict order. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.
 
-SUIT_Parameter_Soft_Failure is initialized to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.
+[suit-parameter-soft-failure](#suit-parameter-soft-failure) is initialized to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.
 
+The argument to suit-directive-try-each is a list of SUIT_Command_Sequence. suit-directive-try-each does not specify a reporting policy.
 
 #### suit-directive-process-dependency {#suit-directive-process-dependency}
 
@@ -981,11 +1332,15 @@ Available parameters are defined in {{secparameters}}.
 
 If a parameter is already set, suit-directive-set-parameters will skip setting the parameter to its argument. This provides the core of the override mechanism, allowing dependent manifests to change the behavior of a manifest.
 
+suit-directive-set-parameters does not specify a reporting policy.
+
 #### suit-directive-override-parameters {#suit-directive-override-parameters}
 
 suit-directive-override-parameters replaces any listed parameters that are already set with the values that are provided in its argument. This allows a manifest to prevent replacement of critical parameters.
 
 Available parameters are defined in {{secparameters}}.
+
+suit-directive-override-parameters does not specify a reporting policy.
 
 #### suit-directive-fetch {#suit-directive-fetch}
 
@@ -995,10 +1350,13 @@ suit-directive-fetch can target one or more manifests and one or more payloads. 
 
 suit-directive-fetch typically takes no arguments unless one is needed to modify fetch behavior. If an argument is needed, it must be wrapped in a bstr and set in suit-parameter-fetch-arguments.
 
-suit-directive-fetch reads the URI or URI List parameter to find the source of the fetch it performs.
+suit-directive-fetch reads the URI parameter to find the source of the fetch it performs.
 
 The behavior of suit-directive-fetch can be modified by setting one or more of SUIT_Parameter_Encryption_Info, SUIT_Parameter_Compression_Info, SUIT_Parameter_Unpack_Info. These three parameters each activate and configure a processing step that can be applied to the data that is transferred during suit-directive-fetch.
 
+#### suit-directive-fetch-uri-list {#suit-directive-fetch-uri-list}
+
+suit-directive-fetch-uri-list uses the same semantics as [suit-directive-fetch](#suit-directive-fetch), however it iterates over the [URI List](#suit-parameter-uri-list) to select a URI to fetch from.
 
 #### suit-directive-copy {#suit-directive-copy}
 
@@ -1006,18 +1364,13 @@ suit-directive-copy instructs the manifest processor to obtain one or more paylo
 
 The behavior of suit-directive-copy can be modified by setting one or more of SUIT_Parameter_Encryption_Info, SUIT_Parameter_Compression_Info, SUIT_Parameter_Unpack_Info. These three parameters each activate and configure a processing step that can be applied to the data that is transferred during suit-directive-copy.
 
-**N.B.** Fetch and Copy are very similar. Merging them into one command may be appropriate.
-
-suit-directive-copy reads its source from SUIT_Parameter_Source_Component.
-
+suit-directive-copy reads its source from [suit-parameter-source-component](#suit-parameter-source-component).
 
 #### suit-directive-run {#suit-directive-run}
 
-suit-directive-run directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor MAY be unloaded and execution continues in the Component Index. Arguments are provided to suit-directive-run through suit-parameter-run-arguments and are forwarded to the executable code located in Component Index in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.
+suit-directive-run directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor MAY be unloaded and execution continues in the Component Index. Arguments are provided to suit-directive-run through [suit-parameter-run-arguments](#suit-parameter-run-args) and are forwarded to the executable code located in Component Index in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.
 
 If the executable code at Component Index is constructed in such a way that it does not unload the manifest processor, then the manifest processor may resume execution after the executable completes. This allows the manifest processor to invoke suitable helpers and to verify them with image conditions.
-
-The argument to suit-directive-run is nil.
 
 #### suit-directive-wait {#suit-directive-wait}
 
@@ -1033,18 +1386,31 @@ suit-directive-wait directs the manifest processor to pause until a specified ev
 
 #### suit-directive-run-sequence {#suit-directive-run-sequence}
 
-
 To enable conditional commands, and to allow several strictly ordered sequences to be executed out-of-order, suit-directive-run-sequence allows the manifest processor to execute its argument as a SUIT_Command_Sequence. The argument must be wrapped in a bstr.
 
 When a sequence is executed, any failure of a condition causes immediate termination of the sequence.
 
 When suit-directive-run-sequence completes, it forwards the last status code that occurred in the sequence. If the Soft Failure parameter is true, then suit-directive-run-sequence only fails when a directive in the argument sequence fails.
 
-SUIT_Parameter_Soft_Failure defaults to False when suit-directive-run-sequence begins. Its value is discarded when suit-directive-run-sequence terminates.
+[suit-parameter-soft-failure](#suit-parameter-soft-failure) defaults to False when suit-directive-run-sequence begins. Its value is discarded when suit-directive-run-sequence terminates.
 
 #### suit-directive-swap {#suit-directive-swap}
 
-suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they must be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.
+suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they MUST be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.
+
+### Integrity Check Values {#integrity-checks}
+
+When the CoSWID, Text section, or any Command Sequence of the Update Procedure is made severable, it is moved to the Envelope and replaced with a SUIT_Digest. The SUIT_Digest is computed over the entire bstr enclosing the Manifest element that has been moved to the Envelope. Each element that is made severable from the Manifest is placed in the Envelope with an identical key, so that it matches the key of the corresponding Integrity Check Value.
+
+Each Integrity Check Value covers the corresponding Envelope Element as described in {{severable-fields}}.
+
+## Severable Elements {#severable-fields}
+
+Because the manifest can be used by different actors at different times, some parts of the manifest can be removed or "Severed" without affecting later stages of the lifecycle. Severing of information is achieved by separating that information from the signed container so that removing it does not affect the signature. This means that ensuring integrity of severable parts of the manifest is a requirement for the signed portion of the manifest. Severing some parts makes it possible to discard parts of the manifest that are no longer necessary. This is important because it allows the storage used by the manifest to be greatly reduced. For example, no text size limits are needed if text is removed from the manifest prior to delivery to a constrained device.
+
+Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 SHOULD NOT be severable. Elements larger than (Digest Bits)/8 + 4 MAY be severable, while elements that are much larger than (Digest Bits)/8 + 4 SHOULD be severable.
+
+Because of this, all command sequences in the manifest are encoded in a bstr so that there is a single code path needed for all command sequences.
 
 # Access Control Lists {#access-control-lists}
 
@@ -1054,87 +1420,23 @@ First, the simplest model requires that all manifests are authenticated by a sin
 
 This simplest model can be extended by adding key delegation without much increase in complexity.
 
-A second model requires an ACL to be presented to the device, authenticated by a trusted party or stored on the device. This ACL grants access rights for specific component IDs or component ID prefixes to the listed identities or identity groups. Any identity may verify an image digest, but fetching into or fetching from a component ID requires approval from the ACL.
+A second model requires an ACL to be presented to the Recipient, authenticated by a trusted party or stored on the Recipient. This ACL grants access rights for specific component IDs or component ID prefixes to the listed identities or identity groups. Any identity may verify an image digest, but fetching into or fetching from a component ID requires approval from the ACL.
 
-A third model allows a device to provide even more fine-grained controls: The ACL lists the component ID or component ID prefix that an identity may use, and also lists the commands that the identity may use in combination with that component ID.
+A third model allows a Recipient to provide even more fine-grained controls: The ACL lists the component ID or component ID prefix that an identity may use, and also lists the commands that the identity may use in combination with that component ID.
 
-#  SUIT Digest Container
+#  SUIT Digest Container {#SUIT_Digest}
 
 RFC 8152 {{RFC8152}} provides containers for signature, MAC, and encryption, but no basic digest container. The container needed for a digest requires a type identifier and a container for the raw digest data. Some forms of digest may require additional parameters. These can be added following the digest.
 
-The algorithms listed are sufficient for verifying integrity of Firmware Updates as of this writing, however this may change over time.
-
-# Creating Conditional Sequences {#secconditional}
-
-For some use cases, it is important to provide a sequence that can fail without terminating an update. For example, a dual-image XIP MCU may require an update that can be placed at one of two offsets. This has two implications, first, the digest of each offset will be different. Second, the image fetched for each offset will have a different URI. Conditional sequences allow this to be resolved in a simple way.
-
-The following JSON representation of a manifest demonstrates how this would be represented. It assumes that the bootloader and manifest processor take care of A/B switching and that the manifest is not aware of this distinction.
-
-~~~JSON
-{
-    "structure-version" : 1,
-    "sequence-number" : 7,
-    "common" :{
-        "components" : [
-            [b'0']
-        ],
-        "common-sequence" : [
-            {
-                "directive-set-var" : {
-                    "size": 32567
-                },
-            },
-            {
-                "try-each" : [
-                    [
-                        {"condition-component-offset" : "<offset A>"},
-                        {
-                            "directive-set-var": {
-                                "digest" : "<SHA256 A>"
-                            }
-                        }
-                    ],
-                    [
-                        {"condition-component-offset" : "<offset B>"},
-                        {
-                            "directive-set-var": {
-                                "digest" : "<SHA256 B>"
-                            }
-                        }
-                    ],
-                    [{ "abort" : null }]
-                ]
-            }
-        ]
-    }
-    "fetch" : [
-        {
-            "try-each" : [
-                [
-                    {"condition-component-offset" : "<offset A>"},
-                    {
-                        "directive-set-var": {
-                            "uri" : "<URI A>"
-                        }
-                    }
-                ],
-                [
-                    {"condition-component-offset" : "<offset B>"},
-                    {
-                        "directive-set-var": {
-                            "uri" : "<URI B>"
-                        }
-                    }
-                ],
-                [{ "directive-abort" : null }]
-            ]
-        },
-        "fetch" : null
-    ]
-}
-~~~
+The SUIT digest is a CBOR List containing two elements: a suit-digest-algorithm-id and a bstr containing the bytes of the digest.
 
 #  IANA Considerations {#iana}
+
+IANA is requested to:
+
+* allocate a CBOR tag for the SUIT Envelope and another for the SUIT Manifest.
+* allocate a media type for suit: application/suit-envelope
+* setup several registries as described below
 
 IANA is requested to setup a registry for SUIT manifests.
 Several registries defined in the subsections below need to be created.
@@ -1170,8 +1472,9 @@ Label | Name
 27 | Update Authorized
 28 | Version
 29 | Wait For Event
-30 | Run Sequence
-32 | Swap
+30 | Fetch URI List
+31 | Swap
+32 | Run Sequence
 nint | Custom Condition
 
 ## SUIT Parameters
@@ -1207,14 +1510,22 @@ Label | Name
 ---|---
 1 | Manifest Description
 2 | Update Description
-3 | Vendor Name
-4 | Model Name
-5 | Vendor Domain
-6 | Model Info
-7 | Component Description
-8 | Manifest JSON Source
-9 | Manifest YAML Source
-10 | Component Version Dependencies
+3 | Manifest JSON Source
+4 | Manifest YAML Source
+nint | Custom
+
+## SUIT Component Text Values
+
+Label | Name
+---|---
+1 | Vendor Name
+2 | Model Name
+3 | Vendor Domain
+4 | Model Info
+5 | Component Description
+6 | Component Version
+7 | Component Version Required
+nint | Custom
 
 ## SUIT Algorithm Identifiers
 
@@ -1306,52 +1617,96 @@ bz/m4rVlnIXbwK07HypLbAmBMcCjbazR14vTgdzfsJwFLbM5kdtzOLSolg==
 
 Each example uses SHA256 as the digest function.
 
+Note that reporting policies are declared for each non-flow-control command in these examples. The reporting policies used in the examples are described in the following tables.
+
+Policy | Label
+---|---
+suit-send-record-on-success | Rec-Pass
+suit-send-record-on-failure | Rec-Fail
+suit-send-sysinfo-success | Sys-Pass
+suit-send-sysinfo-failure | Sys-Fail
+
+Command | Sys-Fail | Sys-Pass | Rec-Fail | Rec-Pass
+---|---|---|---|---
+suit-condition-vendor-identifier | 1 | 1 | 1 | 1
+suit-condition-class-identifier | 1 | 1 | 1 | 1
+suit-condition-image-match | 1 | 1 | 1 | 1
+suit-condition-component-offset | 0 | 1 | 0 | 1
+suit-directive-fetch | 0 | 0 | 1 | 0
+suit-directive-copy | 0 | 0 | 1 | 0
+suit-directive-run | 0 | 0 | 1 | 0
+
 ## Example 0: Secure Boot
 
-Secure boot and compatibility check.
+This example covers the following templates:
+
+* Compatibility Check ({{template-compatibility-check}})
+* Secure Boot ({{template-secure-boot}})
+
+It also serves as the minimum example.
 
 {::include examples/example0.json.txt}
 
 ## Example 1: Simultaneous Download and Installation of Payload
 
-Simultaneous download and installation of payload.
+This example covers the following templates:
 
+* Compatibility Check ({{template-compatibility-check}})
+* Firmware Download ({{firmware-download-template}})
+
+Simultaneous download and installation of payload. No secure boot is present in this example to demonstrate a download-only manifest.
 
 {::include examples/example1.json.txt}
 
-## Example 2: Simultaneous Download, Installation, and Secure Boot
+## Example 2: Simultaneous Download, Installation, Secure Boot, Severed Fields
 
-Compatibility test, simultaneous download and installation, and secure boot.
+This example covers the following templates:
+
+* Compatibility Check ({{template-compatibility-check}})
+* Secure Boot ({{template-secure-boot}})
+* Firmware Download ({{firmware-download-template}})
+
+This example also demonstrates severable elements ({{ovr-severable}}), and text ({{manifest-digest-text}}).
 
 {::include examples/example2.json.txt}
 
-## Example 3: Load from External Storage
+## Example 3: A/B images
 
-Compatibility test, simultaneous download and installation, load from external storage, and secure boot.
+This example covers the following templates:
+
+* Compatibility Check ({{template-compatibility-check}})
+* Secure Boot ({{template-secure-boot}})
+* Firmware Download ({{firmware-download-template}})
+* A/B Image Template ({{a-b-template}})
 
 {::include examples/example3.json.txt}
 
+
 ## Example 4: Load and Decompress from External Storage
 
-Compatibility test, simultaneous download and installation, load and decompress from external storage, and secure boot.
+This example covers the following templates:
+
+* Compatibility Check ({{template-compatibility-check}})
+* Secure Boot ({{template-secure-boot}})
+* Firmware Download ({{firmware-download-template}})
+* Install ({{template-install}})
+* Load & Decompress ({{template-load-decompress}})
 
 {::include examples/example4.json.txt}
 
-## Example 5: Compatibility Test, Download, Installation, and Secure Boot
+## Example 5: Two Images
 
-Compatibility test, download, installation, and secure boot.
+This example covers the following templates:
+
+* Compatibility Check ({{template-compatibility-check}})
+* Secure Boot ({{template-secure-boot}})
+* Firmware Download ({{firmware-download-template}})
+
+Furthermore, it shows using these templates with two images.
 
 {::include examples/example5.json.txt}
 
-## Example 6: Two Images
-
-Compatibility test, 2 images, simultaneous download and installation, and secure boot.
-
-{::include examples/example7.json.txt}
-
-
-
-# C. Design Rational {#design-rational}
+# C. Design Rational {#design-rationale}
 {: numbered='no'}
 
 In order to provide flexible behavior to constrained devices, while still allowing more powerful devices to use their full capabilities, the SUIT manifest encodes the required behavior of a Recipient device. Behavior is encoded as a specialized byte code, contained in a CBOR list. This promotes a flat encoding, which simplifies the parser. The information encoded by this byte code closely matches the operations that a device will perform, which promotes ease of processing. The core operations used by most update and trusted execution operations are represented in the byte code. The byte code can be extended by registering new operations.
@@ -1370,8 +1725,27 @@ Capability reporting is similarly simplified. A Recipient can report the Command
 
 The simplicity of design in the Recipient due to all of these benefits allows even a highly constrained platform to use advanced update capabilities.
 
-## C.1 Byte String Wrappers
-{: numbered='no'}
+## C.1 Design Rationale: Envelope {#design-rationale-envelope}
+
+The Envelope is used instead of a COSE structure for several reasons:
+
+1. This enables the use of [Severable Elements](#severable-fields)
+2. This enables modular processing of manifests, particularly with large signatures.
+3. This enables multiple authentication schemes.
+4. This allows integrity verification by a dependent to be unaffected by adding or removing authentication structures.
+
+Modular processing is important because it allows a Manifest Processor to iterate forward over an Envelope, processing Delegation Chains and Authentication Blocks, retaining only intermediate values, without any need to seek forward and backwards in a stream until it gets to the Manifest itself. This allows the use of large, Post-Quantum signatures without requiring retention of the signature itself, or seeking forward and back.
+
+Four authentication objects are supported by the Envelope:
+
+* COSE_Sign_Tagged
+* COSE_Sign1_Tagged
+* COSE_Mac_Tagged
+* COSE_Mac0_Tagged
+
+The SUIT Envelope allows an Update Authority or intermediary to mix and match any number of different authentication blocks it wants without any concern for modifying the integrity of another authentication block. This also allows the addition or removal of an authentication blocks without changing the integrity check of the Manifest, which is important for dependency handling. See {{required-checks}}
+
+## C.2 Byte String Wrappers
 
 Byte string wrappers are used in several places in the suit manifest. The primary reason for wrappers it to limit the parser extent when invoked at different times, with a possible loss of context.
 
@@ -1424,6 +1798,7 @@ Run | {{suit-directive-run}} | REQUIRED for Bootloader
 Wait For Event | {{suit-directive-wait}} | OPTIONAL
 Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
 Swap | {{suit-directive-swap}} | OPTIONAL
+Fetch URI List | {{suit-directive-fetch-uri-list}} | OPTIONAL
 
 The subsequent table shows the parameters.
 
