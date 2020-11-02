@@ -59,7 +59,7 @@ informative:
   I-D.ietf-suit-information-model:
   I-D.ietf-teep-architecture:
   I-D.ietf-sacm-coswid:
-  I-D.draft-ietf-cbor-tags-oid:
+  I-D.ietf-cbor-tags-oid:
   RFC7932:
   RFC1950:
   RFC8392:
@@ -323,13 +323,13 @@ See {{envelope}} for more detail.
 
 ## Delegation Chains {#ovr-delegation}
 
-Delegation Chains allow a Recipient to establish a chain of trust from a Trust Anchor to the signer of a manifest by validating delegation claims. Each delegation claim is a {{rfc8392}} CBOR Web Tokens (CWTs). The first claim in each list is signed by a Trust Anchor. Each subsequent claim in a list is signed by the public key claimed in the preceding list element. The last element in each list claims a public key that can be used to verify a signature in the Authentication Block ({{ovr-auth}}).
+Delegation Chains allow a Recipient to establish a chain of trust from a Trust Anchor to the signer of a manifest by validating delegation claims. Each delegation claim is a {{RFC8392}} CBOR Web Tokens (CWTs). The first claim in each list is signed by a Trust Anchor. Each subsequent claim in a list is signed by the public key claimed in the preceding list element. The last element in each list claims a public key that can be used to verify a signature in the Authentication Block ({{ovr-auth}}).
 
 See {{delegation-info}} for more detail.
 
 ## Authentication Block {#ovr-auth}
 
-The Authentication Block contains a bstr-wrapped [SUIT_Digest](#SUIT_Digest) and one or more {{rfc8152}} CBOR Object Signing and Encryption (COSE) authentication blocks. These blocks are one of:
+The Authentication Block contains a bstr-wrapped [SUIT_Digest](#SUIT_Digest) and one or more {{RFC8152}} CBOR Object Signing and Encryption (COSE) authentication blocks. These blocks are one of:
 
 * COSE_Sign_Tagged
 * COSE_Sign1_Tagged
@@ -432,7 +432,7 @@ Here, valid means that a manifest has a supported encoding version and it has no
 
 These failure reasons MAY be combined with retry mechanisms prior to marking a manifest as invalid.
 
-Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in {{I-D.ietf-suit-architecturel}}, section 3.5. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See {{I-D.ietf-suit-information-model}}, Section 4.2.1 for more discussion on the security considerations that apply to rollback.
+Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in {{I-D.ietf-suit-architecture}}, section 3.5. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See {{I-D.ietf-suit-information-model}}, Section 4.2.1 for more discussion on the security considerations that apply to rollback.
 
 Following these initial tests, the manifest processor clears all parameter storage. This ensures that the manifest processor begins without any leaked data.
 
@@ -502,7 +502,9 @@ Directives MAY have side-effects in the parameter table, the interpreter state, 
 To simplify the logic describing the command semantics, the object "current" is used. It represents the component identified by the Component Index or the dependency identified by the Dependency Index:
 
 ~~~
-current := components\[component-index\] if component-index is not false else dependencies\[dependency-index\]
+current := components\[component-index\]
+    if component-index is not false
+    else dependencies\[dependency-index\]
 ~~~
 
 As a result, Set Component Index is described as current := components\[arg\]. The actual operation performed for Set Component Index is described by the following pseudocode, however, because of the definition of current (above), these are semantically equivalent.
@@ -644,8 +646,8 @@ In this template all information is contained in the common sequence and the fol
 
 - Set Component Index directive (see {{suit-directive-set-component-index}})
 - Set Parameters directive (see {{suit-directive-set-parameters}}) for Vendor ID and Class ID (see {{secparameters}})
-- Check Vendor Identifier condition (see {{identifiers}})
-- Check Class Identifier condition (see {{identifiers}})
+- Check Vendor Identifier condition (see {{uuid-identifiers}})
+- Check Class Identifier condition (see {{uuid-identifiers}})
 
 ## Trusted Invocation Template {#template-secure-boot}
 
@@ -1118,7 +1120,7 @@ NAMESPACE_CBOR_PEN = UUID5(NAMESPACE_OID, h'D86F452B06010401')
 NAMESPACE_CBOR_PEN = 08cfcc43-47d9-5696-85b1-9c738465760e
 ~~~
 
-#### Constructing UUIDs {#identifiers}
+#### Constructing UUIDs {#uuid-identifiers}
 
 Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 {{RFC4122}} UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.
 
@@ -1182,15 +1184,15 @@ suit-parameter-vendor-identifier may be presented in one of two ways:
 - A Private Enterprise Number
 - A byte string containing a UUID ({{RFC4122}})
 
-Private Enterprise Numbers are encoded as a relative OID, according to the definition in {{I-D.draft-ietf-cbor-tags-oid}}. All PENs are relative to the IANA PEN: 1.3.6.1.4.1.
+Private Enterprise Numbers are encoded as a relative OID, according to the definition in {{I-D.ietf-cbor-tags-oid}}. All PENs are relative to the IANA PEN: 1.3.6.1.4.1.
 
 #### suit-parameter-class-identifier {#suit-parameter-class-identifier}
 
-A RFC 4122 UUID representing the class of the device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in {{identifiers}}
+A RFC 4122 UUID representing the class of the device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in {{uuid-identifiers}}
 
 #### suit-parameter-device-identifier {#suit-parameter-device-identifier}
 
-A RFC 4122 UUID representing the specific device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in {{identifiers}}
+A RFC 4122 UUID representing the specific device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in {{uuid-identifiers}}
 
 #### suit-parameter-image-digest {#suit-parameter-image-digest}
 
@@ -1908,13 +1910,14 @@ The subsequent table shows the conditions.
 
 Name | Reference | Implementation
 ---|---|---
-Vendor Identifier | {{identifiers}} | REQUIRED
-Class Identifier | {{identifiers}} | REQUIRED
-Device Identifier | {{identifiers}} | OPTIONAL
+Vendor Identifier | {{uuid-identifiers}} | REQUIRED
+Class Identifier | {{uuid-identifiers}} | REQUIRED
+Device Identifier | {{uuid-identifiers}} | OPTIONAL
 Image Match | {{suit-condition-image-match}} | REQUIRED
 Image Not Match | {{suit-condition-image-not-match}} | OPTIONAL
 Use Before | {{suit-condition-use-before}} | OPTIONAL
 Component Offset | {{suit-condition-component-offset}} | OPTIONAL
+Abort | {{suit-condition-abort}} | OPTIONAL
 Minimum Battery | {{suit-condition-minimum-battery}} | OPTIONAL
 Update Authorized |{{suit-condition-update-authorized}} | OPTIONAL
 Version | {{suit-condition-version}} | OPTIONAL
@@ -1926,7 +1929,6 @@ Name | Reference | Implementation
 ---|---|---
 Set Component Index | {{suit-directive-set-component-index}} | REQUIRED if more than one component
 Set Dependency Index | {{suit-directive-set-dependency-index}} | REQUIRED if dependencies used
-Abort | {{suit-directive-abort}} | OPTIONAL
 Try Each | {{suit-directive-try-each}} | OPTIONAL
 Process Dependency | {{suit-directive-process-dependency}} | OPTIONAL
 Set Parameters | {{suit-directive-set-parameters}} | OPTIONAL

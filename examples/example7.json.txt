@@ -1,178 +1,145 @@
 ~~~
 {
-    / authentication-wrapper / 2:h'81588fd28443a10126a0584482025840343
-7636466373462323532383937313234356363366465373761343861306164313636396
-6366130636634306335353862343532623830383330303737333538584055bd3a67f65
-23da8d482eeacbcedb34ee5417478e74fe8dd4286870b89ffd6fb0951f40bac7d95810
-a17fff201127a5cea7b40aedbcd1c1e988b7f344d2df2a0' / [
-        h'd28443a10126a05844820258403437636466373462323532383937313234
-3563633664653737613438613061643136363966366130636634306335353862343532
-623830383330303737333538584055bd3a67f6523da8d482eeacbcedb34ee5417478e7
-4fe8dd4286870b89ffd6fb0951f40bac7d95810a17fff201127a5cea7b40aedbcd1c1e
-988b7f344d2df2a0' / 18([
-                / protected / h'a10126' / {
-                    / alg / 1:-7 / "ES256" /,
-                } /,
-                / unprotected / {
-                },
-                / payload / h'8202584034376364663734623235323839373132
-3435636336646537376134386130616431363639663661306366343063353538623435
-32623830383330303737333538' / [
-                    / algorithm-id / 2 / "sha256" /,
-                    / digest-bytes / h'3437636466373462323532383937313
-2343563633664653737613438613061643136363966366130636634306335353862343
-532623830383330303737333538'
-                ] /,
-                / signature / h'55bd3a67f6523da8d482eeacbcedb34ee54174
-78e74fe8dd4286870b89ffd6fb0951f40bac7d95810a17fff201127a5cea7b40aedbcd
-1c1e988b7f344d2df2a0'
-            ]) /
-    ] /,
-    / manifest / 3:h'a5010102030358aba20244818141000458a18814a20150fa6
-b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450f825
-8368614a10519840005f614a20358248202582000112233445566778899aabbccddeef
-f0123456789abcdeffedcba98765432100e1987d0583a8614a1051a0008440005f614a
-2035824820258200123456789abcdeffedcba987654321000112233445566778899aab
-bccddeeff0e1a00012c2201f602f6095861860f82582a8613a10519840005f613a1157
-81c687474703a2f2f6578616d706c652e636f6d2f66696c65312e62696e582c8613a10
-51a0008440005f613a115781c687474703a2f2f6578616d706c652e636f6d2f66696c6
-5322e62696e15f603f60a438203f6' / {
+    / authentication-wrapper / 2:bstr .cbor ({        digest: bstr
+.cbor ([
+            / algorithm-id / 2 / "sha256" /,
+            / digest-bytes /
+h'ae0c1ea689c9800a843550f38796b6fdbd52a0c78be5d26011d8e784da43d47c'
+        ])        signatures: [
+            bstr .cbor (18([
+                    / protected / bstr .cbor ({
+                        / alg / 1:-7 / "ES256" /,
+                    }),
+                    / unprotected / {
+                    },
+                    / payload / bstr .cbor ([
+                        / algorithm-id / 2 / "sha256" /,
+                        / digest-bytes /
+h'ae0c1ea689c9800a843550f38796b6fdbd52a0c78be5d26011d8e784da43d47c'
+                    ]),
+                    / signature / h'f7ec21f91555e550fcb8a7997e1f579751
+7636dbf20677aaa996fcbccd5dcb7c05adea3a81962317767a80c41b90db699aa1c9a4
+66b6480f6d49823f018c9a19'
+                ]))
+        ]
+    }),
+    / manifest / 3:bstr .cbor ({
         / manifest-version / 1:1,
         / manifest-sequence-number / 2:3,
-        / common / 3:h'a20244818141000458a18814a20150fa6b4a53d5ad5fdfb
-e9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450f8258368614a105198
-40005f614a20358248202582000112233445566778899aabbccddeeff0123456789abc
-deffedcba98765432100e1987d0583a8614a1051a0008440005f614a20358248202582
-00123456789abcdeffedcba987654321000112233445566778899aabbccddeeff0e1a0
-0012c2201f602f6' / {
-            / components / 2:h'81814100' / [
+        / common / 3:bstr .cbor ({
+            / components / 2:[
                 [h'00']
-            ] /,
-            / common-sequence / 4:h'8814a20150fa6b4a53d5ad5fdfbe9de663
-e4d41ffe02501492af1425695e48bf429b2d51f2ab450f8258368614a10519840005f6
-14a20358248202582000112233445566778899aabbccddeeff0123456789abcdeffedc
-ba98765432100e1987d0583a8614a1051a0008440005f614a203582482025820012345
-6789abcdeffedcba987654321000112233445566778899aabbccddeeff0e1a00012c22
-01f602f6' / [
+            ],
+            / common-sequence / 4:bstr .cbor ([
                 / directive-override-parameters / 20,{
                     / vendor-id /
-1:h'"fa6b4a53d5ad5fdfbe9de663e4d41ffe"' / fa6b4a53-d5ad-5fdf-
+1:h'fa6b4a53d5ad5fdfbe9de663e4d41ffe' / fa6b4a53-d5ad-5fdf-
 be9d-e663e4d41ffe /,
-                    / class-id /
-2:h'"1492af1425695e48bf429b2d51f2ab45"' /
-1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
+                    / class-id / 2:h'1492af1425695e48bf429b2d51f2ab45'
+/ 1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
                 } ,
                 / directive-try-each / 15,[
-                    h'8614a10519840005f614a203582482025820001122334455
-66778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d0' / [
+                    bstr .cbor ([
                         / directive-override-parameters / 20,{
                             / offset / 5:33792,
                         } ,
-                        / condition-component-offset / 5,F6 / nil / ,
+                        / condition-component-offset / 5,5 ,
                         / directive-override-parameters / 20,{
-                            / image-digest / 3:h'820258200011223344556
-6778899aabbccddeeff0123456789abcdeffedcba9876543210' / [
+                            / image-digest / 3:bstr .cbor ([
                                 / algorithm-id / 2 / "sha256" /,
                                 / digest-bytes /
 h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
-                            ] /,
+                            ]),
                             / image-size / 14:34768,
                         }
-                    ] / ,
-                    h'8614a1051a0008440005f614a20358248202582001234567
-89abcdeffedcba987654321000112233445566778899aabbccddeeff0e1a00012c22'
-/ [
+                    ]) ,
+                    bstr .cbor ([
                         / directive-override-parameters / 20,{
                             / offset / 5:541696,
                         } ,
-                        / condition-component-offset / 5,F6 / nil / ,
+                        / condition-component-offset / 5,5 ,
                         / directive-override-parameters / 20,{
-                            / image-digest / 3:h'820258200123456789abc
-deffedcba987654321000112233445566778899aabbccddeeff' / [
+                            / image-digest / 3:bstr .cbor ([
                                 / algorithm-id / 2 / "sha256" /,
                                 / digest-bytes /
 h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
-                            ] /,
+                            ]),
                             / image-size / 14:76834,
                         }
-                    ] /
+                    ])
                 ] ,
-                / condition-vendor-identifier / 1,F6 / nil / ,
-                / condition-class-identifier / 2,F6 / nil /
-            ] /,
-        } /,
-        / install / 9:h'860f82582a8613a10519840005f613a115781c68747470
-3a2f2f6578616d706c652e636f6d2f66696c65312e62696e582c8613a1051a00084400
-05f613a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e62696e
-15f603f6' / [
+                / condition-vendor-identifier / 1,15 ,
+                / condition-class-identifier / 2,15
+            ]),
+        }),
+        / install / 9:bstr .cbor ([
             / directive-try-each / 15,[
-                h'8613a10519840005f613a115781c687474703a2f2f6578616d70
-6c652e636f6d2f66696c65312e62696e' / [
+                bstr .cbor ([
                     / directive-set-parameters / 19,{
                         / offset / 5:33792,
                     } ,
-                    / condition-component-offset / 5,F6 / nil / ,
+                    / condition-component-offset / 5,5 ,
                     / directive-set-parameters / 19,{
                         / uri / 21:'http://example.com/file1.bin',
                     }
-                ] / ,
-                h'8613a1051a0008440005f613a115781c687474703a2f2f657861
-6d706c652e636f6d2f66696c65322e62696e' / [
+                ]) ,
+                bstr .cbor ([
                     / directive-set-parameters / 19,{
                         / offset / 5:541696,
                     } ,
-                    / condition-component-offset / 5,F6 / nil / ,
+                    / condition-component-offset / 5,5 ,
                     / directive-set-parameters / 19,{
                         / uri / 21:'http://example.com/file2.bin',
                     }
-                ] /
+                ])
             ] ,
-            / directive-fetch / 21,F6 / nil / ,
-            / condition-image-match / 3,F6 / nil /
-        ] /,
-        / validate / 10:h'8203f6' / [
-            / condition-image-match / 3,F6 / nil /
-        ] /,
-    } /,
+            / directive-fetch / 21,2 ,
+            / condition-image-match / 3,15
+        ]),
+        / validate / 10:bstr .cbor ([
+            / condition-image-match / 3,15
+        ]),
+    }),
 }
 ~~~
 
-Total size of Envelope without COSE authentication object:  289
+Total size of Envelope without COSE authentication object:  330
 
 Envelope:
 
 ~~~
-a10359011ca5010102030358aba20244818141000458a18814a20150fa6b
-4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2
-ab450f8258368614a10519840005f614a203582482025820001122334455
-66778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d0
-583a8614a1051a0008440005f614a2035824820258200123456789abcdef
-fedcba987654321000112233445566778899aabbccddeeff0e1a00012c22
-01f602f6095861860f82582a8613a10519840005f613a115781c68747470
-3a2f2f6578616d706c652e636f6d2f66696c65312e62696e582c8613a105
-1a0008440005f613a115781c687474703a2f2f6578616d706c652e636f6d
-2f66696c65322e62696e15f603f60a438203f6
+a202582781582482025820ae0c1ea689c9800a843550f38796b6fdbd52a0
+c78be5d26011d8e784da43d47c0359011ba5010102030358aaa202818141
+000458a18814a20150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af
+1425695e48bf429b2d51f2ab450f8258368614a105198400050514a20358
+248202582000112233445566778899aabbccddeeff0123456789abcdeffe
+dcba98765432100e1987d0583a8614a1051a00084400050514a203582482
+0258200123456789abcdeffedcba987654321000112233445566778899aa
+bbccddeeff0e1a00012c22010f020f095861860f82582a8613a105198400
+050513a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65
+312e62696e582c8613a1051a00084400050513a115781c687474703a2f2f
+6578616d706c652e636f6d2f66696c65322e62696e1502030f0a4382030f
 ~~~
 
-Total size of Envelope with COSE authentication object:  438
+Total size of Envelope with COSE authentication object:  443
 
 Envelope with COSE authentication object:
 
 ~~~
-a202589281588fd28443a10126a058448202584034376364663734623235
-323839373132343563633664653737613438613061643136363966366130
-636634306335353862343532623830383330303737333538584055bd3a67
-f6523da8d482eeacbcedb34ee5417478e74fe8dd4286870b89ffd6fb0951
-f40bac7d95810a17fff201127a5cea7b40aedbcd1c1e988b7f344d2df2a0
-0359011ca5010102030358aba20244818141000458a18814a20150fa6b4a
-53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab
-450f8258368614a10519840005f614a20358248202582000112233445566
-778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d058
-3a8614a1051a0008440005f614a2035824820258200123456789abcdeffe
-dcba987654321000112233445566778899aabbccddeeff0e1a00012c2201
-f602f6095861860f82582a8613a10519840005f613a115781c687474703a
-2f2f6578616d706c652e636f6d2f66696c65312e62696e582c8613a1051a
-0008440005f613a115781c687474703a2f2f6578616d706c652e636f6d2f
-66696c65322e62696e15f603f60a438203f6
+a202589882582482025820ae0c1ea689c9800a843550f38796b6fdbd52a0
+c78be5d26011d8e784da43d47c586fd28443a10126a0582482025820ae0c
+1ea689c9800a843550f38796b6fdbd52a0c78be5d26011d8e784da43d47c
+5840f7ec21f91555e550fcb8a7997e1f5797517636dbf20677aaa996fcbc
+cd5dcb7c05adea3a81962317767a80c41b90db699aa1c9a466b6480f6d49
+823f018c9a190359011ba5010102030358aaa202818141000458a18814a2
+0150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf42
+9b2d51f2ab450f8258368614a105198400050514a2035824820258200011
+2233445566778899aabbccddeeff0123456789abcdeffedcba9876543210
+0e1987d0583a8614a1051a00084400050514a20358248202582001234567
+89abcdeffedcba987654321000112233445566778899aabbccddeeff0e1a
+00012c22010f020f095861860f82582a8613a105198400050513a115781c
+687474703a2f2f6578616d706c652e636f6d2f66696c65312e62696e582c
+8613a1051a00084400050513a115781c687474703a2f2f6578616d706c65
+2e636f6d2f66696c65322e62696e1502030f0a4382030f
 ~~~
 

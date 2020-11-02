@@ -7,7 +7,7 @@ SUIT_Envelope = {
   * SUIT_Integrated_Payload,
   * SUIT_Integrated_Dependency,
   * $$SUIT_Envelope_Extensions,
-  (int => bstr)
+  * (int => bstr)
 }
 
 SUIT_Delegation = [ + [ + bstr .cbor CWT ] ]
@@ -57,7 +57,9 @@ SUIT_Severable_Manifest_Members = (
 )
 
 SUIT_Integrated_Payload = (suit-integrated-payload-key => bstr)
-SUIT_Integrated_Dependency = (suit-integrated-payload-key => bstr .cbor SUIT_Envelope)
+SUIT_Integrated_Dependency = (
+    suit-integrated-payload-key => bstr .cbor SUIT_Envelope
+)
 suit-integrated-payload-key = nint / uint .ge 24
 
 SUIT_Manifest_Tagged = #6.480(SUIT_Manifest)
@@ -133,17 +135,17 @@ SUIT_Command_Sequence = [ + (
 ) ]
 
 SUIT_Command_Custom = (suit-command-custom, bstr/tstr/int/nil)
-SUIT_Condition //= (suit-condition-vendor-identifier, SUIT_Reporting_Policy)
-SUIT_Condition //= (suit-condition-class-identifier,  SUIT_Reporting_Policy)
-SUIT_Condition //= (suit-condition-device-identifier, SUIT_Reporting_Policy)
-SUIT_Condition //= (suit-condition-image-match,       SUIT_Reporting_Policy)
-SUIT_Condition //= (suit-condition-image-not-match,   SUIT_Reporting_Policy)
-SUIT_Condition //= (suit-condition-use-before,        SUIT_Reporting_Policy)
-SUIT_Condition //= (suit-condition-minimum-battery,   SUIT_Reporting_Policy)
-SUIT_Condition //= (suit-condition-update-authorized, SUIT_Reporting_Policy)
-SUIT_Condition //= (suit-condition-version,           SUIT_Reporting_Policy)
-SUIT_Condition //= (suit-condition-component-offset,  SUIT_Reporting_Policy)
-SUIT_Condition //= (suit-condition-abort,             SUIT_Reporting_Policy)
+SUIT_Condition //= (suit-condition-vendor-identifier, SUIT_Rep_Policy)
+SUIT_Condition //= (suit-condition-class-identifier,  SUIT_Rep_Policy)
+SUIT_Condition //= (suit-condition-device-identifier, SUIT_Rep_Policy)
+SUIT_Condition //= (suit-condition-image-match,       SUIT_Rep_Policy)
+SUIT_Condition //= (suit-condition-image-not-match,   SUIT_Rep_Policy)
+SUIT_Condition //= (suit-condition-use-before,        SUIT_Rep_Policy)
+SUIT_Condition //= (suit-condition-minimum-battery,   SUIT_Rep_Policy)
+SUIT_Condition //= (suit-condition-update-authorized, SUIT_Rep_Policy)
+SUIT_Condition //= (suit-condition-version,           SUIT_Rep_Policy)
+SUIT_Condition //= (suit-condition-component-offset,  SUIT_Rep_Policy)
+SUIT_Condition //= (suit-condition-abort,             SUIT_Rep_Policy)
 
 SUIT_Directive //= (suit-directive-set-component-index,  IndexArg)
 SUIT_Directive //= (suit-directive-set-dependency-index, IndexArg)
@@ -151,24 +153,24 @@ SUIT_Directive //= (suit-directive-run-sequence,
     bstr .cbor SUIT_Command_Sequence)
 SUIT_Directive //= (suit-directive-try-each,
     SUIT_Directive_Try_Each_Argument)
-SUIT_Directive //= (suit-directive-process-dependency,   SUIT_Reporting_Policy)
+SUIT_Directive //= (suit-directive-process-dependency, SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-set-parameters,
     {+ SUIT_Parameters})
 SUIT_Directive //= (suit-directive-override-parameters,
     {+ SUIT_Parameters})
-SUIT_Directive //= (suit-directive-fetch,                SUIT_Reporting_Policy)
-SUIT_Directive //= (suit-directive-copy,                 SUIT_Reporting_Policy)
-SUIT_Directive //= (suit-directive-swap,                 SUIT_Reporting_Policy)
-SUIT_Directive //= (suit-directive-run,                  SUIT_Reporting_Policy)
-SUIT_Directive //= (suit-directive-wait,                 SUIT_Reporting_Policy)
-SUIT_Directive //= (suit-directive-fetch-uri-list,       SUIT_Reporting_Policy)
+SUIT_Directive //= (suit-directive-fetch,             SUIT_Rep_Policy)
+SUIT_Directive //= (suit-directive-copy,              SUIT_Rep_Policy)
+SUIT_Directive //= (suit-directive-swap,              SUIT_Rep_Policy)
+SUIT_Directive //= (suit-directive-run,               SUIT_Rep_Policy)
+SUIT_Directive //= (suit-directive-wait,              SUIT_Rep_Policy)
+SUIT_Directive //= (suit-directive-fetch-uri-list,    SUIT_Rep_Policy)
 
 SUIT_Directive_Try_Each_Argument = [
     + bstr .cbor SUIT_Command_Sequence,
     nil / bstr .cbor SUIT_Command_Sequence
 ]
 
-SUIT_Reporting_Policy = uint .bits suit-reporting-bits
+SUIT_Rep_Policy = uint .bits suit-reporting-bits
 
 suit-reporting-bits = &(
     suit-send-record-success : 0,
