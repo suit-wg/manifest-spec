@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-09
+docname: draft-ietf-suit-manifest-11
 category: std
 
 ipr: trust200902
@@ -460,10 +460,12 @@ If a dependency is specified, then the manifest processor MUST perform the follo
 
 If the interpreter does not support dependencies and a manifest specifies a dependency, then the interpreter MUST reject the manifest.
 
-If a Recipient supports groups of interdependent components (a Component Set), then it SHOULD verify that all Components in the Component Set are specified by one update, where an update is composed of all the
-TODO: Wording
+If a Recipient supports groups of interdependent components (a Component Set), then it SHOULD verify that all Components in the Component Set are specified by one update, that is: a single manifest and all its dependencies that together:
 
- manifest and its dependencies. This manifest is called the Root Manifest.
+1. have sufficient permissions imparted by their signatures
+2. specify a digest and a payload for every Component in the Component Set.
+
+The single dependent manifest is sometimes called a Root Manifest.
 
 ### Minimizing Signature Verifications {#minimal-sigs}
 
@@ -1050,20 +1052,22 @@ suit-send-sysinfo-failure | Add system information when the command fails
 
 Any or all of these policies may be enabled at once.
 
-At the completion of each command, a recipient MAY forward that command's reporting policy, the result of the command, the current set of parameters, and the system information consumed by the command to a TODO
+At the completion of each command, a Manifest Processor MAY forward information about the command to a Reporting Engine, which is responsible for reporting boot or update status to a third party. The Reporting Engine is entirely implementation-defined, the reporting policy simply facilitates the Reporting Engine's interface to the SUIT Manifest Processor.
 
- several information elements are provided to an implementation defined subsystem, the Reporting Engine:
+The information elements provided to the Reporting Engine are:
 
-- The reporting policies
+- The reporting policy
 - The result of the command
-- The parameters consumed by the command
+- The values of parameters consumed by the command
 - The system information consumed by the command
 
-If the component index is set to True or an array when a command is executed with a non-zero reporting policy, then the Reporting Engine MUST receive one Record for each Component, in the order expressed in the Components list or the component index array, respectively. If the dependency index is set to True or an array when a command is executed with a non-zero reporting policy, then the Reporting Engine MUST receive one Record for each Dependency, in the order expressed in the Dependencies list or the component index array, respectively.
+Together, these elements are called a Record. A group of Records is a Report.
 
-This specification does define a particular format of Records or Reports. This specification only defines hints to the Reporting Engine for which Records it should aggregate into the Report. The Reporting Engine MAY choose to ignore these hints and apply its own policy instead.
+If the component index is set to True or an array when a command is executed with a non-zero reporting policy, then the Reporting Engine MUST receive one Record for each Component, in the order expressed in the Components list or the component index array. If the dependency index is set to True or an array when a command is executed with a non-zero reporting policy, then the Reporting Engine MUST receive one Record for each Dependency, in the order expressed in the Dependencies list or the component index array, respectively.
 
-When used in a Invocation Process, the report MAY form the basis of an attestation report. When used in an Update Process, the report MAY form the basis for one or more log entries.
+This specification does not define a particular format of Records or Reports. This specification only defines hints to the Reporting Engine for which Records it should aggregate into the Report. The Reporting Engine MAY choose to ignore these hints and apply its own policy instead.
+
+When used in a Invocation Procedure, the report MAY form the basis of an attestation report. When used in an Update Process, the report MAY form the basis for one or more log entries.
 
 ### SUIT_Parameters {#secparameters}
 
@@ -1434,7 +1438,7 @@ Set Component Index defines the component to which successive directives and con
 3. An array of unsigned integers (REQUIRED to implement in parser ONLY IF 3 or more components supported)
 
 If the following commands apply to ONE component, an unsigned integer index into the component list is used. If the following commands apply to ALL components, then the boolean value "True" is used instead of an index. If the following commands apply to more than one, but not all components, then an array of unsigned integer indices into the component list is used.
-TODO: Component list
+See {{index-true}} for more details.
 
 If the following commands apply to NO components, then the boolean value "False" is used. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied.
 
@@ -1442,10 +1446,11 @@ If component index is set to True when a command is invoked, then the command ap
 
 #### suit-directive-set-dependency-index {#suit-directive-set-dependency-index}
 
-Set Dependency Index defines the manifest to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into the dependencies. If the following directives apply to ALL dependencies, then the boolean value "True" is used instead of an index. If the following directives apply to NO dependencies, then the boolean value "False" is used. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied.
-TODO: Component list|Dependency List
+Set Dependency Index defines the manifest to which successive directives and conditions will apply. The supplied argument MUST be either a boolean or an unsigned integer index into the dependencies, or an array of unsigned integer indices into the list of dependencies. If the following directives apply to ALL dependencies, then the boolean value "True" is used instead of an index. If the following directives apply to NO dependencies, then the boolean value "False" is used. When suit-directive-set-component-index is used, suit-directive-set-dependency-index = False is implied. When suit-directive-set-dependency-index is used, suit-directive-set-component-index = False is implied.
 
-If dependency index is set to True when a command is invoked, then the command applies to all dependencies, in the order they appear in suit-common-components. When the Manifest Processor invokes a command while the dependency index is set to True, it must execute the command once for each possible dependency index, ensuring that the command receives the parameters corresponding to that dependency index.
+If dependency index is set to True when a command is invoked, then the command applies to all dependencies, in the order they appear in suit-common-components. When the Manifest Processor invokes a command while the dependency index is set to True, the Manifest Processor MUST execute the command once for each possible dependency index, ensuring that the command receives the parameters corresponding to that dependency index. If the dependency index is set to an array of unsigned integers, then the Manifest Processor MUST execute the command once for each listed dependency index, ensuring that the command receives the parameters corresponding to that dependency index.
+
+See {{index-true}} for more details.
 
 Typical operations that require suit-directive-set-dependency-index include setting a source URI or Encryption Information, invoking "Fetch," or invoking "Process Dependency" for an individual dependency.
 
