@@ -1,113 +1,96 @@
 ~~~
 {
-    / authentication-wrapper / 2:h'81588fd28443a10126a0584482025840393
-8376565633835666139396664333164333332333831623938313066393062303563326
-530643466323834613666343231313230376564303066666637353058404931df82e15
-3bf1e3af5a59800216d8a47c33a37839e7d63d9f526fd369aa8359daae18f7619c9591
-23e7f7f928ee92a9893afedd35d06a936d6ed3d5843bf2a' / [
-        h'd28443a10126a05844820258403938376565633835666139396664333164
-3333323338316239383130663930623035633265306434663238346136663432313132
-30376564303066666637353058404931df82e153bf1e3af5a59800216d8a47c33a3783
-9e7d63d9f526fd369aa8359daae18f7619c959123e7f7f928ee92a9893afedd35d06a9
-36d6ed3d5843bf2a' / 18([
-                / protected / h'a10126' / {
-                    / alg / 1:-7 / "ES256" /,
-                } /,
-                / unprotected / {
-                },
-                / payload / h'8202584039383765656338356661393966643331
-6433333233383162393831306639306230356332653064346632383461366634323131
-32303765643030666666373530' / [
-                    / algorithm-id / 2 / "sha256" /,
-                    / digest-bytes / h'3938376565633835666139396664333
-1643333323338316239383130663930623035633265306434663238346136663432313
-132303765643030666666373530'
-                ] /,
-                / signature / h'4931df82e153bf1e3af5a59800216d8a47c33a
-37839e7d63d9f526fd369aa8359daae18f7619c959123e7f7f928ee92a9893afedd35d
-06a936d6ed3d5843bf2a'
-            ]) /
-    ] /,
-    / manifest / 3:h'a50101020103585fa202818141000458568614a40150fa6b4
-a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450358248
-202582000112233445566778899aabbccddeeff0123456789abcdeffedcba987654321
-00e1987d0010f020f0958258613a115781b687474703a2f2f6578616d706c652e636f6
-d2f66696c652e62696e1502030f0a4382030f' / {
+    / authentication-wrapper / 2:bstr .cbor ({        digest: bstr
+.cbor ([
+            / algorithm-id / 2 / "sha256" /,
+            / digest-bytes /
+h'987eec85fa99fd31d332381b9810f90b05c2e0d4f284a6f4211207ed00fff750'
+        ])        signatures: [
+            bstr .cbor (18([
+                    / protected / bstr .cbor ({
+                        / alg / 1:-7 / "ES256" /,
+                    }),
+                    / unprotected / {
+                    },
+                    / payload / bstr .cbor ([
+                        / algorithm-id / 2 / "sha256" /,
+                        / digest-bytes /
+h'987eec85fa99fd31d332381b9810f90b05c2e0d4f284a6f4211207ed00fff750'
+                    ]),
+                    / signature / h'750141d65b4f20a88dc70c6785a67e0f4f
+085aead83ba2289d6e37271508cc91e0a0592f5c940c2257c9c0b26403c0ba4477f2ce
+37b60089fe02cde7911d1c15'
+                ]))
+        ]
+    }),
+    / manifest / 3:bstr .cbor ({
         / manifest-version / 1:1,
         / manifest-sequence-number / 2:1,
-        / common / 3:h'a202818141000458568614a40150fa6b4a53d5ad5fdfbe9
-de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45035824820258200011223
-3445566778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d0010f0
-20f' / {
+        / common / 3:bstr .cbor ({
             / components / 2:[
                 [h'00']
             ],
-            / common-sequence / 4:h'8614a40150fa6b4a53d5ad5fdfbe9de663
-e4d41ffe02501492af1425695e48bf429b2d51f2ab4503582482025820001122334455
-66778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d0010f020f'
-/ [
+            / common-sequence / 4:bstr .cbor ([
                 / directive-override-parameters / 20,{
                     / vendor-id /
-1:h'"fa6b4a53d5ad5fdfbe9de663e4d41ffe"' / fa6b4a53-d5ad-5fdf-
+1:h'fa6b4a53d5ad5fdfbe9de663e4d41ffe' / fa6b4a53-d5ad-5fdf-
 be9d-e663e4d41ffe /,
-                    / class-id /
-2:h'"1492af1425695e48bf429b2d51f2ab45"' /
-1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
-                    / image-digest / 3:h'8202582000112233445566778899a
-abbccddeeff0123456789abcdeffedcba9876543210' / [
+                    / class-id / 2:h'1492af1425695e48bf429b2d51f2ab45'
+/ 1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
+                    / image-digest / 3:bstr .cbor ([
                         / algorithm-id / 2 / "sha256" /,
                         / digest-bytes /
 h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
-                    ] /,
+                    ]),
                     / image-size / 14:34768,
                 } ,
                 / condition-vendor-identifier / 1,15 ,
                 / condition-class-identifier / 2,15
-            ] /,
-        } /,
-        / install / 9:h'8613a115781b687474703a2f2f6578616d706c652e636f
-6d2f66696c652e62696e1502030f' / [
+            ]),
+        }),
+        / install / 9:bstr .cbor ([
             / directive-set-parameters / 19,{
                 / uri / 21:'http://example.com/file.bin',
             } ,
             / directive-fetch / 21,2 ,
             / condition-image-match / 3,15
-        ] /,
-        / validate / 10:h'82030f' / [
+        ]),
+        / validate / 10:bstr .cbor ([
             / condition-image-match / 3,15
-        ] /,
-    } /,
+        ]),
+    }),
 }
 ~~~
 
-Total size of Envelope without COSE authentication object:  152
+Total size of Envelope without COSE authentication object:  194
 
 Envelope:
 
 ~~~
-a1035894a50101020103585fa202818141000458568614a40150fa6b4a53
-d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
-0358248202582000112233445566778899aabbccddeeff0123456789abcd
-effedcba98765432100e1987d0010f020f0958258613a115781b68747470
-3a2f2f6578616d706c652e636f6d2f66696c652e62696e1502030f0a4382
-030f
+a202582781582482025820987eec85fa99fd31d332381b9810f90b05c2e0
+d4f284a6f4211207ed00fff750035894a50101020103585fa20281814100
+0458568614a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af14
+25695e48bf429b2d51f2ab450358248202582000112233445566778899aa
+bbccddeeff0123456789abcdeffedcba98765432100e1987d0010f020f09
+58258613a115781b687474703a2f2f6578616d706c652e636f6d2f66696c
+652e62696e1502030f0a4382030f
 ~~~
 
-Total size of Envelope with COSE authentication object:  301
+Total size of Envelope with COSE authentication object:  307
 
 Envelope with COSE authentication object:
 
 ~~~
-a202589281588fd28443a10126a058448202584039383765656338356661
-393966643331643333323338316239383130663930623035633265306434
-66323834613666343231313230376564303066666637353058404931df82
-e153bf1e3af5a59800216d8a47c33a37839e7d63d9f526fd369aa8359daa
-e18f7619c959123e7f7f928ee92a9893afedd35d06a936d6ed3d5843bf2a
-035894a50101020103585fa202818141000458568614a40150fa6b4a53d5
-ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab4503
-58248202582000112233445566778899aabbccddeeff0123456789abcdef
-fedcba98765432100e1987d0010f020f0958258613a115781b687474703a
-2f2f6578616d706c652e636f6d2f66696c652e62696e1502030f0a438203
-0f
+a202589882582482025820987eec85fa99fd31d332381b9810f90b05c2e0
+d4f284a6f4211207ed00fff750586fd28443a10126a0582482025820987e
+ec85fa99fd31d332381b9810f90b05c2e0d4f284a6f4211207ed00fff750
+5840750141d65b4f20a88dc70c6785a67e0f4f085aead83ba2289d6e3727
+1508cc91e0a0592f5c940c2257c9c0b26403c0ba4477f2ce37b60089fe02
+cde7911d1c15035894a50101020103585fa202818141000458568614a401
+50fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b
+2d51f2ab450358248202582000112233445566778899aabbccddeeff0123
+456789abcdeffedcba98765432100e1987d0010f020f0958258613a11578
+1b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e1502
+030f0a4382030f
 ~~~
 

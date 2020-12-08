@@ -1,152 +1,132 @@
 ~~~
+RHS was not SUITManifestDict
+RHS was <suit_tool.manifest.SUITComponentId object at 0x104ac7250>
+RHS was not SUITManifestDict
+RHS was <suit_tool.manifest.SUITComponentId object at 0x104ac7250>
+RHS was not SUITManifestDict
+RHS was <suit_tool.manifest.SUITComponentId object at 0x104ac7250>
+RHS was not SUITManifestDict
+RHS was <suit_tool.manifest.SUITComponentId object at 0x104ac7250>
+RHS was not SUITManifestDict
+RHS was <suit_tool.manifest.SUITComponentId object at 0x104ac7250>
+RHS was not SUITManifestDict
+RHS was <suit_tool.manifest.SUITComponentId object at 0x104ac7250>
 {
-    / authentication-wrapper / 2:h'81588fd28443a10126a0584482025840616
-2323436646439643735613037383664336561643237383232393163386638373031343
-8323330346336626466333836633935323733346565623963356263584099795932b54
-578464e9a35195ad18ac76fc8bf4195823fe1c7d0d2d9f9a5c93c106b16b8e5e1be944
-22d403455bfaffcb8522c59a65c3c6494a4328d9819ccd3' / [
-        h'd28443a10126a05844820258406162323436646439643735613037383664
-3365616432373832323931633866383730313438323330346336626466333836633935
-323733346565623963356263584099795932b54578464e9a35195ad18ac76fc8bf4195
-823fe1c7d0d2d9f9a5c93c106b16b8e5e1be94422d403455bfaffcb8522c59a65c3c64
-94a4328d9819ccd3' / 18([
-                / protected / h'a10126' / {
-                    / alg / 1:-7 / "ES256" /,
-                } /,
-                / unprotected / {
-                },
-                / payload / h'8202584061623234366464396437356130373836
-6433656164323738323239316338663837303134383233303463366264663338366339
-35323733346565623963356263' / [
-                    / algorithm-id / 2 / "sha256" /,
-                    / digest-bytes / h'6162323436646439643735613037383
-6643365616432373832323931633866383730313438323330346336626466333836633
-935323733346565623963356263'
-                ] /,
-                / signature / h'99795932b54578464e9a35195ad18ac76fc8bf
-4195823fe1c7d0d2d9f9a5c93c106b16b8e5e1be94422d403455bfaffcb8522c59a65c
-3c6494a4328d9819ccd3'
-            ]) /
-    ] /,
-    / manifest / 3:h'a601010203035896a20247828141008141010458898c0c001
-4a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f
-2ab450358248202582000112233445566778899aabbccddeeff0123456789abcdeffed
-cba98765432100e1987d001f602f60c0114a2035824820258200123456789abcdeffed
-cba987654321000112233445566778899aabbccddeeff0e1a00012c2209584f900c001
-3a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65312e62696e15f60
-3f60c0113a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e626
-96e15f603f60a49880c0003f60c0103f60c47860c0017f617f6' / {
+    / authentication-wrapper / 2:bstr .cbor ({        digest: bstr
+.cbor ([
+            / algorithm-id / 2 / "sha256" /,
+            / digest-bytes /
+h'0e674ca9c0add818be54fb78569962bda95d1d400acc4a56d1a25f73b26dc62d'
+        ])        signatures: [
+            bstr .cbor (18([
+                    / protected / bstr .cbor ({
+                        / alg / 1:-7 / "ES256" /,
+                    }),
+                    / unprotected / {
+                    },
+                    / payload / bstr .cbor ([
+                        / algorithm-id / 2 / "sha256" /,
+                        / digest-bytes /
+h'0e674ca9c0add818be54fb78569962bda95d1d400acc4a56d1a25f73b26dc62d'
+                    ]),
+                    / signature / h'f59ca754b56474b2c563d0e8cd9a2ce346
+5d54e43ecd9e380a3df109ba47ac26077fbce5d9bd893e486dca43392759c054ed6108
+4ea60cb4941e78c5587c416b'
+                ]))
+        ]
+    }),
+    / manifest / 3:bstr .cbor ({
         / manifest-version / 1:1,
         / manifest-sequence-number / 2:3,
-        / common / 3:h'a20247828141008141010458898c0c0014a40150fa6b4a5
-3d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45035824820
-2582000112233445566778899aabbccddeeff0123456789abcdeffedcba98765432100
-e1987d001f602f60c0114a2035824820258200123456789abcdeffedcba98765432100
-0112233445566778899aabbccddeeff0e1a00012c22' / {
-            / components / 2:h'82814100814101' / [
-                [h'00'] ,
-                [h'01']
-            ] /,
-            / common-sequence / 4:h'8c0c0014a40150fa6b4a53d5ad5fdfbe9d
-e663e4d41ffe02501492af1425695e48bf429b2d51f2ab450358248202582000112233
-445566778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d001f602
-f60c0114a2035824820258200123456789abcdeffedcba987654321000112233445566
-778899aabbccddeeff0e1a00012c22' / [
+        / common / 3:bstr .cbor ({
+            / dependencies / 1:[
+                {
+                    / dependency-digest / 1:[
+                        / algorithm-id / 2 / "sha256" /,
+                        / digest-bytes /
+h'67949ccb7a7f302cc0d3f76226a070c27c0fae963275c28db60cfb589148f358'
+                    ],
+                }
+            ],
+            / components / 2:[
+                [h'00']
+            ],
+            / common-sequence / 4:bstr .cbor ([
                 / directive-set-component-index / 12,0 ,
                 / directive-override-parameters / 20,{
                     / vendor-id /
-1:h'"fa6b4a53d5ad5fdfbe9de663e4d41ffe"' / fa6b4a53-d5ad-5fdf-
+1:h'fa6b4a53d5ad5fdfbe9de663e4d41ffe' / fa6b4a53-d5ad-5fdf-
 be9d-e663e4d41ffe /,
-                    / class-id /
-2:h'"1492af1425695e48bf429b2d51f2ab45"' /
-1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
-                    / image-digest / 3:h'8202582000112233445566778899a
-abbccddeeff0123456789abcdeffedcba9876543210' / [
-                        / algorithm-id / 2 / "sha256" /,
-                        / digest-bytes /
-h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
-                    ] /,
-                    / image-size / 14:34768,
+                    / class-id / 2:h'1492af1425695e48bf429b2d51f2ab45'
+/ 1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
                 } ,
-                / condition-vendor-identifier / 1,F6 / nil / ,
-                / condition-class-identifier / 2,F6 / nil / ,
-                / directive-set-component-index / 12,1 ,
-                / directive-override-parameters / 20,{
-                    / image-digest / 3:h'820258200123456789abcdeffedcb
-a987654321000112233445566778899aabbccddeeff' / [
-                        / algorithm-id / 2 / "sha256" /,
-                        / digest-bytes /
-h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
-                    ] /,
-                    / image-size / 14:76834,
-                }
-            ] /,
-        } /,
-        / install / 9:h'900c0013a115781c687474703a2f2f6578616d706c652e
-636f6d2f66696c65312e62696e15f603f60c0113a115781c687474703a2f2f6578616d
-706c652e636f6d2f66696c65322e62696e15f603f6' / [
+                / condition-vendor-identifier / 1,15 ,
+                / condition-class-identifier / 2,15
+            ]),
+        }),
+        / dependency-resolution / 7:bstr .cbor ([
+            / directive-set-dependency-index / 13,0 ,
+            / directive-set-parameters / 19,{
+                / uri / 21:'http://server.local/example6a.suit',
+            } ,
+            / directive-fetch / 21,2 ,
+            / condition-image-match / 3,15
+        ]),
+        / install / 9:bstr .cbor ([
             / directive-set-component-index / 12,0 ,
             / directive-set-parameters / 19,{
-                / uri / 21:'http://example.com/file1.bin',
+                / uri / 21:'http://server.local/file1.bin',
             } ,
-            / directive-fetch / 21,F6 / nil / ,
-            / condition-image-match / 3,F6 / nil / ,
-            / directive-set-component-index / 12,1 ,
-            / directive-set-parameters / 19,{
-                / uri / 21:'http://example.com/file2.bin',
-            } ,
-            / directive-fetch / 21,F6 / nil / ,
-            / condition-image-match / 3,F6 / nil /
-        ] /,
-        / validate / 10:h'880c0003f60c0103f6' / [
+            / directive-set-dependency-index / 13,0 ,
+            / directive-process-dependency / 18,0
+        ]),
+        / validate / 10:bstr .cbor ([
             / directive-set-component-index / 12,0 ,
-            / condition-image-match / 3,F6 / nil / ,
-            / directive-set-component-index / 12,1 ,
-            / condition-image-match / 3,F6 / nil /
-        ] /,
-        / run / 12:h'860c0017f617f6' / [
-            / directive-set-component-index / 12,0 ,
-            / directive-run / 23,F6 / nil / ,
-            / directive-run / 23,F6 / nil /
-        ] /,
-    } /,
+            / condition-image-match / 3,15 ,
+            / directive-set-dependency-index / 13,0 ,
+            / directive-process-dependency / 18,0
+        ]),
+        / run / 12:bstr .cbor ([
+            / directive-set-dependency-index / 13,0 ,
+            / directive-process-dependency / 18,0
+        ]),
+    }),
 }
 ~~~
 
-Total size of Envelope without COSE authentication object:  265
+Total size of Envelope without COSE authentication object:  259
 
 Envelope:
 
 ~~~
-a103590104a601010203035896a20247828141008141010458898c0c0014
-a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf
-429b2d51f2ab450358248202582000112233445566778899aabbccddeeff
-0123456789abcdeffedcba98765432100e1987d001f602f60c0114a20358
-24820258200123456789abcdeffedcba9876543210001122334455667788
-99aabbccddeeff0e1a00012c2209584f900c0013a115781c687474703a2f
-2f6578616d706c652e636f6d2f66696c65312e62696e15f603f60c0113a1
-15781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e6269
-6e15f603f60a49880c0003f60c0103f60c47860c0017f617f6
+a2025827815824820258200e674ca9c0add818be54fb78569962bda95d1d
+400acc4a56d1a25f73b26dc62d0358d5a70101020303585ea30181a10182
+02582067949ccb7a7f302cc0d3f76226a070c27c0fae963275c28db60cfb
+589148f358028181410004582d880c0014a20150fa6b4a53d5ad5fdfbe9d
+e663e4d41ffe02501492af1425695e48bf429b2d51f2ab45010f020f0758
+2e880d0013a1157822687474703a2f2f7365727665722e6c6f63616c2f65
+78616d706c6536612e737569741502030f095829880c0013a115781d6874
+74703a2f2f7365727665722e6c6f63616c2f66696c65312e62696e0d0012
+000a49880c00030f0d0012000c45840d001200
 ~~~
 
-Total size of Envelope with COSE authentication object:  414
+Total size of Envelope with COSE authentication object:  372
 
 Envelope with COSE authentication object:
 
 ~~~
-a202589281588fd28443a10126a058448202584061623234366464396437
-356130373836643365616432373832323931633866383730313438323330
-346336626466333836633935323733346565623963356263584099795932
-b54578464e9a35195ad18ac76fc8bf4195823fe1c7d0d2d9f9a5c93c106b
-16b8e5e1be94422d403455bfaffcb8522c59a65c3c6494a4328d9819ccd3
-03590104a601010203035896a20247828141008141010458898c0c0014a4
-0150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf42
-9b2d51f2ab450358248202582000112233445566778899aabbccddeeff01
-23456789abcdeffedcba98765432100e1987d001f602f60c0114a2035824
-820258200123456789abcdeffedcba987654321000112233445566778899
-aabbccddeeff0e1a00012c2209584f900c0013a115781c687474703a2f2f
-6578616d706c652e636f6d2f66696c65312e62696e15f603f60c0113a115
-781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e62696e
-15f603f60a49880c0003f60c0103f60c47860c0017f617f6
+a2025898825824820258200e674ca9c0add818be54fb78569962bda95d1d
+400acc4a56d1a25f73b26dc62d586fd28443a10126a05824820258200e67
+4ca9c0add818be54fb78569962bda95d1d400acc4a56d1a25f73b26dc62d
+5840f59ca754b56474b2c563d0e8cd9a2ce3465d54e43ecd9e380a3df109
+ba47ac26077fbce5d9bd893e486dca43392759c054ed61084ea60cb4941e
+78c5587c416b0358d5a70101020303585ea30181a1018202582067949ccb
+7a7f302cc0d3f76226a070c27c0fae963275c28db60cfb589148f3580281
+81410004582d880c0014a20150fa6b4a53d5ad5fdfbe9de663e4d41ffe02
+501492af1425695e48bf429b2d51f2ab45010f020f07582e880d0013a115
+7822687474703a2f2f7365727665722e6c6f63616c2f6578616d706c6536
+612e737569741502030f095829880c0013a115781d687474703a2f2f7365
+727665722e6c6f63616c2f66696c65312e62696e0d0012000a49880c0003
+0f0d0012000c45840d001200
 ~~~
 
