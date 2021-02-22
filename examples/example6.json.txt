@@ -1,28 +1,24 @@
 ~~~
 {
-    / authentication-wrapper / 2:bstr .cbor ({        digest: bstr
-.cbor ([
+    / authentication-wrapper / 2:bstr .cbor ([
+        digest: bstr .cbor ([
             / algorithm-id / 2 / "sha256" /,
             / digest-bytes /
 h'0e674ca9c0add818be54fb78569962bda95d1d400acc4a56d1a25f73b26dc62d'
-        ])        signatures: [
-            bstr .cbor (18([
-                    / protected / bstr .cbor ({
-                        / alg / 1:-7 / "ES256" /,
-                    }),
-                    / unprotected / {
-                    },
-                    / payload / bstr .cbor ([
-                        / algorithm-id / 2 / "sha256" /,
-                        / digest-bytes /
-h'0e674ca9c0add818be54fb78569962bda95d1d400acc4a56d1a25f73b26dc62d'
-                    ]),
-                    / signature / h'7735339958b49616997704b0d9afd0d387
-071e35c106e76e4fbd2ce5aa779be81ace049c7af03bdcf3326a8faab4597dcc45861c
-d0563ee2fb8d45e97ba3d577'
-                ]))
+        ]),
+        signature: bstr .cbor (18([
+                / protected / bstr .cbor ({
+                    / alg / 1:-7 / "ES256" /,
+                }),
+                / unprotected / {
+                },
+                / payload / F6 / nil /,
+                / signature / h'3583ecb29f0637e31c0c2a928c399992023462
+6027eb576464200b6cbac9df813ee6d82c0f019966daf2ff92e9d939636796726ea51b
+8a9a2afc34188df70d1e'
+            ]))
         ]
-    }),
+    ]),
     / manifest / 3:bstr .cbor ({
         / manifest-version / 1:1,
         / manifest-sequence-number / 2:3,
@@ -98,23 +94,22 @@ e663e4d41ffe02501492af1425695e48bf429b2d51f2ab45010f020f0758
 000a49880c00030f0d0012000c45840d001200
 ~~~
 
-Total size of Envelope with COSE authentication object:  372
+Total size of Envelope with COSE authentication object:  335
 
 Envelope with COSE authentication object:
 
 ~~~
-a2025898825824820258200e674ca9c0add818be54fb78569962bda95d1d
-400acc4a56d1a25f73b26dc62d586fd28443a10126a05824820258200e67
-4ca9c0add818be54fb78569962bda95d1d400acc4a56d1a25f73b26dc62d
-58407735339958b49616997704b0d9afd0d387071e35c106e76e4fbd2ce5
-aa779be81ace049c7af03bdcf3326a8faab4597dcc45861cd0563ee2fb8d
-45e97ba3d5770358d5a70101020303585ea30181a1018202582067949ccb
-7a7f302cc0d3f76226a070c27c0fae963275c28db60cfb589148f3580281
-81410004582d880c0014a20150fa6b4a53d5ad5fdfbe9de663e4d41ffe02
-501492af1425695e48bf429b2d51f2ab45010f020f07582e880d0013a115
-7822687474703a2f2f7365727665722e6c6f63616c2f6578616d706c6536
-612e737569741502030f095829880c0013a115781d687474703a2f2f7365
-727665722e6c6f63616c2f66696c65312e62696e0d0012000a49880c0003
-0f0d0012000c45840d001200
+a2025873825824820258200e674ca9c0add818be54fb78569962bda95d1d
+400acc4a56d1a25f73b26dc62d584ad28443a10126a0f658403583ecb29f
+0637e31c0c2a928c3999920234626027eb576464200b6cbac9df813ee6d8
+2c0f019966daf2ff92e9d939636796726ea51b8a9a2afc34188df70d1e03
+58d5a70101020303585ea30181a1018202582067949ccb7a7f302cc0d3f7
+6226a070c27c0fae963275c28db60cfb589148f358028181410004582d88
+0c0014a20150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af142569
+5e48bf429b2d51f2ab45010f020f07582e880d0013a1157822687474703a
+2f2f7365727665722e6c6f63616c2f6578616d706c6536612e7375697415
+02030f095829880c0013a115781d687474703a2f2f7365727665722e6c6f
+63616c2f66696c65312e62696e0d0012000a49880c00030f0d0012000c45
+840d001200
 ~~~
 
