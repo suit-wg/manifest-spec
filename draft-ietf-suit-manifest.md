@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-11
+docname: draft-ietf-suit-manifest-12
 category: std
 
 ipr: trust200902
@@ -546,6 +546,7 @@ The following table describes the behavior of each command. "params" represents 
 | Wait For Event  | until event(arg), wait
 | Run Sequence | exec(arg)
 | Run with Arguments | run(current, arg)
+| Garbage Collect | garbage-collect(current)
 
 ## Special Cases of Component Index and Dependency Index {#index-true}
 
@@ -1424,6 +1425,7 @@ Run | suit-directive-run | {{suit-directive-run}}
 Wait For Event | suit-directive-wait | {{suit-directive-wait}}
 Run Sequence | suit-directive-run-sequence | {{suit-directive-run-sequence}}
 Swap | suit-directive-swap | {{suit-directive-swap}}
+Garbage Collect | suit-directive-garbage-collect | {{suit-directive-garbage-collect}}
 
 The abstract description of these commands is defined in {{command-behavior}}.
 
@@ -1548,6 +1550,18 @@ suit-directive-swap instructs the manifest processor to move the source to the d
 
 If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they MUST be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.
 
+### suit-directive-garbage-collect {#suit-directive-garbage-collect}
+
+suit-directive-garbage-collect marks the current component as unused in the current manifest. This can be used to remove temporary storage or remove components that are no longer needed. Example use cases:
+
+* Temporary storage for encrypted download
+* Temporary storage for verifying decompressed file before writing to flash
+* Removing Trusted Service no longer needed by Trusted Application
+
+Once the current Command Sequence is complete, the manifest processors checks each marked component to see whether any other manifests have referenced it. Those marked components with no other references are deleted. The manifest processor MAY choose to ignore a Garbage Collect directive depending on device policy.
+
+suit-directive-garbage-collect is OPTIONAL to implement in manifest processors.
+
 ### Integrity Check Values {#integrity-checks}
 
 When the CoSWID, Text section, or any Command Sequence of the Update Procedure is made severable, it is moved to the Envelope and replaced with a SUIT_Digest. The SUIT_Digest is computed over the entire bstr enclosing the Manifest element that has been moved to the Envelope. Each element that is made severable from the Manifest is placed in the Envelope. The keys for the envelope elements have the same values as the keys for the manifest elements.
@@ -1584,8 +1598,8 @@ The SUIT digest is a CBOR List containing two elements: a suit-digest-algorithm-
 
 IANA is requested to:
 
-* allocate CBOR tag 48 in the CBOR Tags registry for the SUIT Envelope.
-* allocate CBOR tag 480 in the CBOR Tags registry for the SUIT Manifest.
+* allocate CBOR tag 107 in the CBOR Tags registry for the SUIT Envelope.
+* allocate CBOR tag 1070 in the CBOR Tags registry for the SUIT Manifest.
 * allocate media type application/suit-envelope in the Media Types registry.
 * setup several registries as described below.
 
@@ -1626,6 +1640,7 @@ Label | Name | Reference
 30 | Fetch URI List | {{suit-directive-fetch-uri-list}}
 31 | Swap | {{suit-directive-swap}}
 32 | Run Sequence | {{suit-directive-run-sequence}}
+33 | Garbage Collect | {{suit-directive-garbage-collect}}
 nint | Custom Condition | {{SUIT_Condition_Custom}}
 
 ## SUIT Parameters
@@ -1907,7 +1922,8 @@ Parameters that are structured types (arrays and maps) are also wrapped in a bst
 
 # D. Implementation Conformance Matrix {#implementation-matrix}
 
-This section summarizes the functionality a minimal implementation needs
+This section summarizes the functionality a minimal manifest processor
+implementation needs
 to offer to claim conformance to this specification, in the absence of
 an application profile standard specifying otherwise.
 
@@ -1945,6 +1961,7 @@ Wait For Event | {{suit-directive-wait}} | OPTIONAL
 Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
 Swap | {{suit-directive-swap}} | OPTIONAL
 Fetch URI List | {{suit-directive-fetch-uri-list}} | OPTIONAL
+Garbage Collect | {{suit-directive-garbage-collect}} | OPTIONAL
 
 The subsequent table shows the parameters.
 

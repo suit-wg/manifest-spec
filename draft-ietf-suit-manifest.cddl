@@ -164,6 +164,7 @@ SUIT_Directive //= (suit-directive-swap,              SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-run,               SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-wait,              SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-fetch-uri-list,    SUIT_Rep_Policy)
+SUIT_Directive //= (suit-directive-garbage-collect,   SUIT_Rep_Policy)
 
 SUIT_Directive_Try_Each_Argument = [
     + bstr .cbor SUIT_Command_Sequence,
@@ -371,8 +372,6 @@ suit-condition-version                  = 28
 suit-directive-set-component-index      = 12
 suit-directive-set-dependency-index     = 13
 suit-directive-try-each                 = 15
-;suit-directive-do-each                  = 16 ; TBD
-;suit-directive-map-filter               = 17 ; TBD
 suit-directive-process-dependency       = 18
 suit-directive-set-parameters           = 19
 suit-directive-override-parameters      = 20
@@ -384,6 +383,7 @@ suit-directive-wait                     = 29
 suit-directive-fetch-uri-list           = 30
 suit-directive-swap                     = 31
 suit-directive-run-sequence             = 32
+suit-directive-garbage-collect          = 33
 
 suit-wait-event-authorization = 1
 suit-wait-event-power = 2
