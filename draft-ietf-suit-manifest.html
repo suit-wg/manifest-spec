@@ -20,7 +20,7 @@ of operations, rather than declaring the metadata.
     " name="description">
 <meta content="xml2rfc 3.0.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
-<meta content="draft-ietf-suit-manifest-11" name="ietf.draft">
+<meta content="draft-ietf-suit-manifest-12" name="ietf.draft">
 <link href="./draft-ietf-suit-manifest.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">/*
@@ -1153,11 +1153,11 @@ dd > ul:first-child {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CBOR-based SUIT Manifest</td>
-<td class="right">December 2020</td>
+<td class="right">February 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Moran, et al.</td>
-<td class="center">Expires June 11, 2021</td>
+<td class="center">Expires August 26, 2021</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1167,15 +1167,15 @@ dd > ul:first-child {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">SUIT</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-suit-manifest-11</dd>
+<dd class="internet-draft">draft-ietf-suit-manifest-12</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2020-12-08" class="published">December 8, 2020</time>
+<time datetime="2021-02-22" class="published">February 22, 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2021-06-11">June 11, 2021</time></dd>
+<dd class="expires"><time datetime="2021-08-26">August 26, 2021</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1227,7 +1227,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on June 11, 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on August 26, 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1236,7 +1236,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
 <a href="#name-copyright-notice-2" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2020 IETF Trust and the persons identified as the
+            Copyright (c) 2021 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1255,311 +1255,314 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents-2">
 <a href="#name-table-of-contents-2" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.1">
+<nav class="toc"><ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction-2" class="xref">Introduction</a><a href="#section-toc.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.2">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-conventions-and-terminology-2" class="xref">Conventions and Terminology</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.3">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="xref">3</a>.  <a href="#name-how-to-use-this-document-2" class="xref">How to use this Document</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.4">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-background-2" class="xref">Background</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.4.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.4.2.1">
                 <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-iot-firmware-update-constrai" class="xref">IoT Firmware Update Constraints</a><a href="#section-toc.1-1.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.2">
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-suit-workflow-model-2" class="xref">SUIT Workflow Model</a><a href="#section-toc.1-1.4.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.5">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-metadata-structure-overview-2" class="xref">Metadata Structure Overview</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.5.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-envelope-3" class="xref">Envelope</a><a href="#section-toc.1-1.5.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.2">
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-delegation-chains-3" class="xref">Delegation Chains</a><a href="#section-toc.1-1.5.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.3">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-authentication-block-2" class="xref">Authentication Block</a><a href="#section-toc.1-1.5.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.4">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.4">
                 <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-manifest-3" class="xref">Manifest</a><a href="#section-toc.1-1.5.2.4.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.5.2.4.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.5.2.4.2.1">
                     <p id="section-toc.1-1.5.2.4.2.1.1"><a href="#section-5.4.1" class="xref">5.4.1</a>.  <a href="#name-critical-metadata-2" class="xref">Critical Metadata</a><a href="#section-toc.1-1.5.2.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.4.2.2">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.4.2.2">
                     <p id="section-toc.1-1.5.2.4.2.2.1"><a href="#section-5.4.2" class="xref">5.4.2</a>.  <a href="#name-common-2" class="xref">Common</a><a href="#section-toc.1-1.5.2.4.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.4.2.3">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.4.2.3">
                     <p id="section-toc.1-1.5.2.4.2.3.1"><a href="#section-5.4.3" class="xref">5.4.3</a>.  <a href="#name-command-sequences-2" class="xref">Command Sequences</a><a href="#section-toc.1-1.5.2.4.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.4.2.4">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.4.2.4">
                     <p id="section-toc.1-1.5.2.4.2.4.1"><a href="#section-5.4.4" class="xref">5.4.4</a>.  <a href="#name-integrity-check-values-3" class="xref">Integrity Check Values</a><a href="#section-toc.1-1.5.2.4.2.4.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.4.2.5">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.4.2.5">
                     <p id="section-toc.1-1.5.2.4.2.5.1"><a href="#section-5.4.5" class="xref">5.4.5</a>.  <a href="#name-human-readable-text-2" class="xref">Human-Readable Text</a><a href="#section-toc.1-1.5.2.4.2.5.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.5">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.5">
                 <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="xref">5.5</a>.  <a href="#name-severable-elements-3" class="xref">Severable Elements</a><a href="#section-toc.1-1.5.2.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.6">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.6">
                 <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="xref">5.6</a>.  <a href="#name-integrated-dependencies-and-" class="xref">Integrated Dependencies and Payloads</a><a href="#section-toc.1-1.5.2.6.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.6">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-manifest-processor-behavior-2" class="xref">Manifest Processor Behavior</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.6.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-manifest-processor-setup-2" class="xref">Manifest Processor Setup</a><a href="#section-toc.1-1.6.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.6.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.6.2.2">
                 <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-required-checks-2" class="xref">Required Checks</a><a href="#section-toc.1-1.6.2.2.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.6.2.2.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.6.2.2.2.1">
                     <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="xref">6.2.1</a>.  <a href="#name-minimizing-signature-verific" class="xref">Minimizing Signature Verifications</a><a href="#section-toc.1-1.6.2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.6.2.3">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.6.2.3">
                 <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="xref">6.3</a>.  <a href="#name-interpreter-fundamental-prop" class="xref">Interpreter Fundamental Properties</a><a href="#section-toc.1-1.6.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.6.2.4">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.6.2.4">
                 <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="xref">6.4</a>.  <a href="#name-abstract-machine-description" class="xref">Abstract Machine Description</a><a href="#section-toc.1-1.6.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.6.2.5">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.6.2.5">
                 <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="xref">6.5</a>.  <a href="#name-special-cases-of-component-i" class="xref">Special Cases of Component Index and Dependency Index</a><a href="#section-toc.1-1.6.2.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.6.2.6">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.6.2.6">
                 <p id="section-toc.1-1.6.2.6.1"><a href="#section-6.6" class="xref">6.6</a>.  <a href="#name-serialized-processing-interp" class="xref">Serialized Processing Interpreter</a><a href="#section-toc.1-1.6.2.6.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.6.2.7">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.6.2.7">
                 <p id="section-toc.1-1.6.2.7.1"><a href="#section-6.7" class="xref">6.7</a>.  <a href="#name-parallel-processing-interpre" class="xref">Parallel Processing Interpreter</a><a href="#section-toc.1-1.6.2.7.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.6.2.8">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.6.2.8">
                 <p id="section-toc.1-1.6.2.8.1"><a href="#section-6.8" class="xref">6.8</a>.  <a href="#name-processing-dependencies-2" class="xref">Processing Dependencies</a><a href="#section-toc.1-1.6.2.8.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.6.2.9">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.6.2.9">
                 <p id="section-toc.1-1.6.2.9.1"><a href="#section-6.9" class="xref">6.9</a>.  <a href="#name-multiple-manifest-processors" class="xref">Multiple Manifest Processors</a><a href="#section-toc.1-1.6.2.9.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.7">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-creating-manifests-2" class="xref">Creating Manifests</a><a href="#section-toc.1-1.7.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.7.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.7.2.1">
                 <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-compatibility-check-template" class="xref">Compatibility Check Template</a><a href="#section-toc.1-1.7.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.7.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.2">
                 <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-trusted-invocation-template-2" class="xref">Trusted Invocation Template</a><a href="#section-toc.1-1.7.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.7.2.3">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.3">
                 <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="xref">7.3</a>.  <a href="#name-component-download-template-2" class="xref">Component Download Template</a><a href="#section-toc.1-1.7.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.7.2.4">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.4">
                 <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="xref">7.4</a>.  <a href="#name-install-template-2" class="xref">Install Template</a><a href="#section-toc.1-1.7.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.7.2.5">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.5">
                 <p id="section-toc.1-1.7.2.5.1"><a href="#section-7.5" class="xref">7.5</a>.  <a href="#name-install-and-transform-templa" class="xref">Install and Transform Template</a><a href="#section-toc.1-1.7.2.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.7.2.6">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.6">
                 <p id="section-toc.1-1.7.2.6.1"><a href="#section-7.6" class="xref">7.6</a>.  <a href="#name-integrated-payload-template-2" class="xref">Integrated Payload Template</a><a href="#section-toc.1-1.7.2.6.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.7.2.7">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.7">
                 <p id="section-toc.1-1.7.2.7.1"><a href="#section-7.7" class="xref">7.7</a>.  <a href="#name-load-from-nonvolatile-storag" class="xref">Load from Nonvolatile Storage Template</a><a href="#section-toc.1-1.7.2.7.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.7.2.8">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.8">
                 <p id="section-toc.1-1.7.2.8.1"><a href="#section-7.8" class="xref">7.8</a>.  <a href="#name-load-decompress-from-nonvola" class="xref">Load &amp; Decompress from Nonvolatile Storage Template</a><a href="#section-toc.1-1.7.2.8.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.7.2.9">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.9">
                 <p id="section-toc.1-1.7.2.9.1"><a href="#section-7.9" class="xref">7.9</a>.  <a href="#name-dependency-template-2" class="xref">Dependency Template</a><a href="#section-toc.1-1.7.2.9.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.7.2.9.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.7.2.9.2.1">
                     <p id="section-toc.1-1.7.2.9.2.1.1"><a href="#section-7.9.1" class="xref">7.9.1</a>.  <a href="#name-composite-manifests-2" class="xref">Composite Manifests</a><a href="#section-toc.1-1.7.2.9.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.7.2.10">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.10">
                 <p id="section-toc.1-1.7.2.10.1"><a href="#section-7.10" class="xref">7.10</a>. <a href="#name-encrypted-manifest-template-2" class="xref">Encrypted Manifest Template</a><a href="#section-toc.1-1.7.2.10.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.7.2.11">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.11">
                 <p id="section-toc.1-1.7.2.11.1"><a href="#section-7.11" class="xref">7.11</a>. <a href="#name-a-b-image-template-2" class="xref">A/B Image Template</a><a href="#section-toc.1-1.7.2.11.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.8">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-metadata-structure-2" class="xref">Metadata Structure</a><a href="#section-toc.1-1.8.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.8.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.8.2.1">
                 <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-encoding-considerations-2" class="xref">Encoding Considerations</a><a href="#section-toc.1-1.8.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.2">
                 <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-envelope-4" class="xref">Envelope</a><a href="#section-toc.1-1.8.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.3">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.3">
                 <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="xref">8.3</a>.  <a href="#name-delegation-chains-4" class="xref">Delegation Chains</a><a href="#section-toc.1-1.8.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.4">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.4">
                 <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="xref">8.4</a>.  <a href="#name-authenticated-manifests-2" class="xref">Authenticated Manifests</a><a href="#section-toc.1-1.8.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.5">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.5">
                 <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="xref">8.5</a>.  <a href="#name-encrypted-manifests-2" class="xref">Encrypted Manifests</a><a href="#section-toc.1-1.8.2.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.6">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.6">
                 <p id="section-toc.1-1.8.2.6.1"><a href="#section-8.6" class="xref">8.6</a>.  <a href="#name-manifest-4" class="xref">Manifest</a><a href="#section-toc.1-1.8.2.6.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.8.2.6.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.8.2.6.2.1">
                     <p id="section-toc.1-1.8.2.6.2.1.1"><a href="#section-8.6.1" class="xref">8.6.1</a>.  <a href="#name-suit-manifest-version-2" class="xref">suit-manifest-version</a><a href="#section-toc.1-1.8.2.6.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.6.2.2">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.6.2.2">
                     <p id="section-toc.1-1.8.2.6.2.2.1"><a href="#section-8.6.2" class="xref">8.6.2</a>.  <a href="#name-suit-manifest-sequence-numbe" class="xref">suit-manifest-sequence-number</a><a href="#section-toc.1-1.8.2.6.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.6.2.3">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.6.2.3">
                     <p id="section-toc.1-1.8.2.6.2.3.1"><a href="#section-8.6.3" class="xref">8.6.3</a>.  <a href="#name-suit-reference-uri-2" class="xref">suit-reference-uri</a><a href="#section-toc.1-1.8.2.6.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.6.2.4">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.6.2.4">
                     <p id="section-toc.1-1.8.2.6.2.4.1"><a href="#section-8.6.4" class="xref">8.6.4</a>.  <a href="#name-suit-text-2" class="xref">suit-text</a><a href="#section-toc.1-1.8.2.6.2.4.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.7">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.7">
                 <p id="section-toc.1-1.8.2.7.1"><a href="#section-8.7" class="xref">8.7</a>.  <a href="#name-text-version-required-2" class="xref">text-version-required</a><a href="#section-toc.1-1.8.2.7.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.8.2.7.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.8.2.7.2.1">
                     <p id="section-toc.1-1.8.2.7.2.1.1"><a href="#section-8.7.1" class="xref">8.7.1</a>.  <a href="#name-suit-coswid-2" class="xref">suit-coswid</a><a href="#section-toc.1-1.8.2.7.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.7.2.2">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.7.2.2">
                     <p id="section-toc.1-1.8.2.7.2.2.1"><a href="#section-8.7.2" class="xref">8.7.2</a>.  <a href="#name-suit-common-2" class="xref">suit-common</a><a href="#section-toc.1-1.8.2.7.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.7.2.3">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.7.2.3">
                     <p id="section-toc.1-1.8.2.7.2.3.1"><a href="#section-8.7.3" class="xref">8.7.3</a>.  <a href="#name-suit_command_sequence-2" class="xref">SUIT_Command_Sequence</a><a href="#section-toc.1-1.8.2.7.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.7.2.4">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.7.2.4">
                     <p id="section-toc.1-1.8.2.7.2.4.1"><a href="#section-8.7.4" class="xref">8.7.4</a>.  <a href="#name-reporting-policy-2" class="xref">Reporting Policy</a><a href="#section-toc.1-1.8.2.7.2.4.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.7.2.5">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.7.2.5">
                     <p id="section-toc.1-1.8.2.7.2.5.1"><a href="#section-8.7.5" class="xref">8.7.5</a>.  <a href="#name-suit_parameters-2" class="xref">SUIT_Parameters</a><a href="#section-toc.1-1.8.2.7.2.5.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.7.2.6">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.7.2.6">
                     <p id="section-toc.1-1.8.2.7.2.6.1"><a href="#section-8.7.6" class="xref">8.7.6</a>.  <a href="#name-suit_condition-2" class="xref">SUIT_Condition</a><a href="#section-toc.1-1.8.2.7.2.6.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.7.2.7">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.7.2.7">
                     <p id="section-toc.1-1.8.2.7.2.7.1"><a href="#section-8.7.7" class="xref">8.7.7</a>.  <a href="#name-suit_directive-2" class="xref">SUIT_Directive</a><a href="#section-toc.1-1.8.2.7.2.7.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.7.2.8">
-                    <p id="section-toc.1-1.8.2.7.2.8.1"><a href="#section-8.7.8" class="xref">8.7.8</a>.  <a href="#name-integrity-check-values-4" class="xref">Integrity Check Values</a><a href="#section-toc.1-1.8.2.7.2.8.1" class="pilcrow">¶</a></p>
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.7.2.8">
+                    <p id="section-toc.1-1.8.2.7.2.8.1"><a href="#section-8.7.8" class="xref">8.7.8</a>.  <a href="#name-suit-directive-garbage-colle" class="xref">suit-directive-garbage-collect</a><a href="#section-toc.1-1.8.2.7.2.8.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.7.2.9">
+                    <p id="section-toc.1-1.8.2.7.2.9.1"><a href="#section-8.7.9" class="xref">8.7.9</a>.  <a href="#name-integrity-check-values-4" class="xref">Integrity Check Values</a><a href="#section-toc.1-1.8.2.7.2.9.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.8">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.8">
                 <p id="section-toc.1-1.8.2.8.1"><a href="#section-8.8" class="xref">8.8</a>.  <a href="#name-severable-elements-4" class="xref">Severable Elements</a><a href="#section-toc.1-1.8.2.8.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.9">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.9">
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-access-control-lists-2" class="xref">Access Control Lists</a><a href="#section-toc.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.10">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.10">
             <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-suit-digest-container-2" class="xref">SUIT Digest Container</a><a href="#section-toc.1-1.10.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.11">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.11">
             <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-iana-considerations-2" class="xref">IANA Considerations</a><a href="#section-toc.1-1.11.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.11.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.11.2.1">
                 <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="xref">11.1</a>.  <a href="#name-suit-commands-2" class="xref">SUIT Commands</a><a href="#section-toc.1-1.11.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.11.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.2">
                 <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="xref">11.2</a>.  <a href="#name-suit-parameters-2" class="xref">SUIT Parameters</a><a href="#section-toc.1-1.11.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.11.2.3">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.3">
                 <p id="section-toc.1-1.11.2.3.1"><a href="#section-11.3" class="xref">11.3</a>.  <a href="#name-suit-text-values-2" class="xref">SUIT Text Values</a><a href="#section-toc.1-1.11.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.11.2.4">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.4">
                 <p id="section-toc.1-1.11.2.4.1"><a href="#section-11.4" class="xref">11.4</a>.  <a href="#name-suit-component-text-values-2" class="xref">SUIT Component Text Values</a><a href="#section-toc.1-1.11.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.11.2.5">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.5">
                 <p id="section-toc.1-1.11.2.5.1"><a href="#section-11.5" class="xref">11.5</a>.  <a href="#name-suit-algorithm-identifiers-2" class="xref">SUIT Algorithm Identifiers</a><a href="#section-toc.1-1.11.2.5.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.11.2.5.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.11.2.5.2.1">
                     <p id="section-toc.1-1.11.2.5.2.1.1"><a href="#section-11.5.1" class="xref">11.5.1</a>.  <a href="#name-suit-digest-algorithm-identi" class="xref">SUIT Digest Algorithm Identifiers</a><a href="#section-toc.1-1.11.2.5.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.11.2.5.2.2">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.5.2.2">
                     <p id="section-toc.1-1.11.2.5.2.2.1"><a href="#section-11.5.2" class="xref">11.5.2</a>.  <a href="#name-suit-compression-algorithm-i" class="xref">SUIT Compression Algorithm Identifiers</a><a href="#section-toc.1-1.11.2.5.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.11.2.5.2.3">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.5.2.3">
                     <p id="section-toc.1-1.11.2.5.2.3.1"><a href="#section-11.5.3" class="xref">11.5.3</a>.  <a href="#name-unpack-algorithms-2" class="xref">Unpack Algorithms</a><a href="#section-toc.1-1.11.2.5.2.3.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.12">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.12">
             <p id="section-toc.1-1.12.1"><a href="#section-12" class="xref">12</a>. <a href="#name-security-considerations-2" class="xref">Security Considerations</a><a href="#section-toc.1-1.12.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.13">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.13">
             <p id="section-toc.1-1.13.1"><a href="#section-13" class="xref">13</a>. <a href="#name-acknowledgements-2" class="xref">Acknowledgements</a><a href="#section-toc.1-1.13.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.14">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.14">
             <p id="section-toc.1-1.14.1"><a href="#section-14" class="xref">14</a>. <a href="#name-references-2" class="xref">References</a><a href="#section-toc.1-1.14.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.14.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.14.2.1">
                 <p id="section-toc.1-1.14.2.1.1"><a href="#section-14.1" class="xref">14.1</a>.  <a href="#name-normative-references-2" class="xref">Normative References</a><a href="#section-toc.1-1.14.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.14.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.14.2.2">
                 <p id="section-toc.1-1.14.2.2.1"><a href="#section-14.2" class="xref">14.2</a>.  <a href="#name-informative-references-2" class="xref">Informative References</a><a href="#section-toc.1-1.14.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.15">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.15">
             <p id="section-toc.1-1.15.1"><a href="#section-appendix.a" class="xref">Appendix A</a>.  <a href="#name-a-full-cddl-2" class="xref">A. Full CDDL</a><a href="#section-toc.1-1.15.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.16">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.16">
             <p id="section-toc.1-1.16.1"><a href="#section-appendix.b" class="xref">Appendix B</a>.  <a href="#name-b-examples-2" class="xref">B. Examples</a><a href="#section-toc.1-1.16.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.16.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.16.2.1">
                 <p id="section-toc.1-1.16.2.1.1"><a href="#section-b.1" class="xref">B.1</a>.  <a href="#name-example-0-secure-boot-2" class="xref">Example 0: Secure Boot</a><a href="#section-toc.1-1.16.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.16.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.16.2.2">
                 <p id="section-toc.1-1.16.2.2.1"><a href="#section-b.2" class="xref">B.2</a>.  <a href="#name-example-1-simultaneous-downl" class="xref">Example 1: Simultaneous Download and Installation of Payload</a><a href="#section-toc.1-1.16.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.16.2.3">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.16.2.3">
                 <p id="section-toc.1-1.16.2.3.1"><a href="#section-b.3" class="xref">B.3</a>.  <a href="#name-example-2-simultaneous-downl" class="xref">Example 2: Simultaneous Download, Installation, Secure Boot, Severed Fields</a><a href="#section-toc.1-1.16.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.16.2.4">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.16.2.4">
                 <p id="section-toc.1-1.16.2.4.1"><a href="#section-b.4" class="xref">B.4</a>.  <a href="#name-example-3-a-b-images-2" class="xref">Example 3: A/B images</a><a href="#section-toc.1-1.16.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.16.2.5">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.16.2.5">
                 <p id="section-toc.1-1.16.2.5.1"><a href="#section-b.5" class="xref">B.5</a>.  <a href="#name-example-4-load-and-decompres" class="xref">Example 4: Load and Decompress from External Storage</a><a href="#section-toc.1-1.16.2.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.16.2.6">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.16.2.6">
                 <p id="section-toc.1-1.16.2.6.1"><a href="#section-b.6" class="xref">B.6</a>.  <a href="#name-example-5-two-images-2" class="xref">Example 5: Two Images</a><a href="#section-toc.1-1.16.2.6.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.17">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.17">
             <p id="section-toc.1-1.17.1"><a href="#section-appendix.c" class="xref">Appendix C</a>.  <a href="#name-c-design-rational-2" class="xref">C. Design Rational</a><a href="#section-toc.1-1.17.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.17.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.17.2.1">
                 <p id="section-toc.1-1.17.2.1.1"><a href="#section-c.1" class="xref">C.1</a>.  <a href="#name-c1-design-rationale-envelope" class="xref">C.1 Design Rationale: Envelope</a><a href="#section-toc.1-1.17.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.17.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.17.2.2">
                 <p id="section-toc.1-1.17.2.2.1"><a href="#section-c.2" class="xref">C.2</a>.  <a href="#name-c2-byte-string-wrappers-2" class="xref">C.2 Byte String Wrappers</a><a href="#section-toc.1-1.17.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.18">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.18">
             <p id="section-toc.1-1.18.1"><a href="#section-appendix.d" class="xref">Appendix D</a>.  <a href="#name-d-implementation-conformance" class="xref">D. Implementation Conformance Matrix</a><a href="#section-toc.1-1.18.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.19">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.19">
             <p id="section-toc.1-1.19.1"><a href="#section-appendix.e" class="xref"></a><a href="#name-authors-addresses-2" class="xref">Authors' Addresses</a><a href="#section-toc.1-1.19.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
@@ -1970,7 +1973,7 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 <a href="#section-5.4.4" class="section-number selfRef">5.4.4. </a><a href="#name-integrity-check-values-3" class="section-name selfRef">Integrity Check Values</a>
           </h4>
 <p id="section-5.4.4-1">To enable <a href="#ovr-severable" class="xref">Section 5.5</a>, there needs to be a mechanism to verify integrity of any metadata outside the manifest. Integrity Check Values are used to verify the integrity of metadata that is not contained in the manifest. This MAY include Severable Command Sequences, Concise Software Identifiers (<span><a href="#I-D.ietf-sacm-coswid" class="xref">CoSWID</a> [<a href="#I-D.ietf-sacm-coswid" class="xref">I-D.ietf-sacm-coswid</a>]</span>), or Text data. Integrated Dependencies and Integrated Payloads are integrity-checked using Command Sequences, so they do not have Integrity Check Values present in the Manifest.<a href="#section-5.4.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4.4-2">See <a href="#integrity-checks" class="xref">Section 8.7.8</a> for more detail.<a href="#section-5.4.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.4.4-2">See <a href="#integrity-checks" class="xref">Section 8.7.9</a> for more detail.<a href="#section-5.4.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ovr-text">
@@ -2263,6 +2266,10 @@ dependency-index := false
             <tr>
               <td class="text-left" rowspan="1" colspan="1">Run with Arguments</td>
               <td class="text-left" rowspan="1" colspan="1">run(current, arg)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Garbage Collect</td>
+              <td class="text-left" rowspan="1" colspan="1">garbage-collect(current)</td>
             </tr>
           </tbody>
         </table>
@@ -2785,7 +2792,7 @@ for current in current-list:
           <li class="normal" id="section-8.6-2.8">a Concise Software Identifier (CoSWID) found in the SUIT_Envelope (see <a href="#manifest-digest-coswid" class="xref">Section 8.7.1</a>)<a href="#section-8.6-2.8" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-8.6-3">The CoSWID, Text section, or any Command Sequence of the Update Procedure (Dependency Resolution, Image Fetch, Image Installation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable element. Severable elements are RECOMMENDED to implement. In particular, the human-readable text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See <a href="#integrity-checks" class="xref">Section 8.7.8</a> for more detail.<a href="#section-8.6-3" class="pilcrow">¶</a></p>
+<p id="section-8.6-3">The CoSWID, Text section, or any Command Sequence of the Update Procedure (Dependency Resolution, Image Fetch, Image Installation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable element. Severable elements are RECOMMENDED to implement. In particular, the human-readable text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See <a href="#integrity-checks" class="xref">Section 8.7.9</a> for more detail.<a href="#section-8.6-3" class="pilcrow">¶</a></p>
 <div id="manifest-version">
 <section id="section-8.6.1">
           <h4 id="name-suit-manifest-version-2">
@@ -3913,6 +3920,13 @@ Class ID = UUID5(
                   <a href="#suit-directive-swap" class="xref">Section 8.7.7.13</a>
 </td>
               </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Garbage Collect</td>
+                <td class="text-left" rowspan="1" colspan="1">suit-directive-garbage-collect</td>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <a href="#suit-directive-garbage-collect" class="xref">Section 8.7.8</a>
+</td>
+              </tr>
             </tbody>
           </table>
 <p id="section-8.7.7-3">The abstract description of these commands is defined in <a href="#command-behavior" class="xref">Section 6.4</a>.<a href="#section-8.7.7-3" class="pilcrow">¶</a></p>
@@ -4075,13 +4089,31 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 </section>
 </div>
-<div id="integrity-checks">
+<div id="suit-directive-garbage-collect">
 <section id="section-8.7.8">
-          <h4 id="name-integrity-check-values-4">
-<a href="#section-8.7.8" class="section-number selfRef">8.7.8. </a><a href="#name-integrity-check-values-4" class="section-name selfRef">Integrity Check Values</a>
+          <h4 id="name-suit-directive-garbage-colle">
+<a href="#section-8.7.8" class="section-number selfRef">8.7.8. </a><a href="#name-suit-directive-garbage-colle" class="section-name selfRef">suit-directive-garbage-collect</a>
           </h4>
-<p id="section-8.7.8-1">When the CoSWID, Text section, or any Command Sequence of the Update Procedure is made severable, it is moved to the Envelope and replaced with a SUIT_Digest. The SUIT_Digest is computed over the entire bstr enclosing the Manifest element that has been moved to the Envelope. Each element that is made severable from the Manifest is placed in the Envelope. The keys for the envelope elements have the same values as the keys for the manifest elements.<a href="#section-8.7.8-1" class="pilcrow">¶</a></p>
-<p id="section-8.7.8-2">Each Integrity Check Value covers the corresponding Envelope Element as described in <a href="#severable-fields" class="xref">Section 8.8</a>.<a href="#section-8.7.8-2" class="pilcrow">¶</a></p>
+<p id="section-8.7.8-1">suit-directive-garbage-collect marks the current component as unused in the current manifest. This can be used to remove temporary storage or remove components that are no longer needed. Example use cases:<a href="#section-8.7.8-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.7.8-2.1">Temporary storage for encrypted download<a href="#section-8.7.8-2.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-8.7.8-2.2">Temporary storage for verifying decompressed file before writing to flash<a href="#section-8.7.8-2.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-8.7.8-2.3">Removing Trusted Service no longer needed by Trusted Application<a href="#section-8.7.8-2.3" class="pilcrow">¶</a>
+</li>
+          </ul>
+<p id="section-8.7.8-3">Once the current Command Sequence is complete, the manifest processors checks each marked component to see whether any other manifests have referenced it. Those marked components with no other references are deleted. The manifest processor MAY choose to ignore a Garbage Collect directive depending on device policy.<a href="#section-8.7.8-3" class="pilcrow">¶</a></p>
+<p id="section-8.7.8-4">suit-directive-garbage-collect is OPTIONAL to implement in manifest processors.<a href="#section-8.7.8-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="integrity-checks">
+<section id="section-8.7.9">
+          <h4 id="name-integrity-check-values-4">
+<a href="#section-8.7.9" class="section-number selfRef">8.7.9. </a><a href="#name-integrity-check-values-4" class="section-name selfRef">Integrity Check Values</a>
+          </h4>
+<p id="section-8.7.9-1">When the CoSWID, Text section, or any Command Sequence of the Update Procedure is made severable, it is moved to the Envelope and replaced with a SUIT_Digest. The SUIT_Digest is computed over the entire bstr enclosing the Manifest element that has been moved to the Envelope. Each element that is made severable from the Manifest is placed in the Envelope. The keys for the envelope elements have the same values as the keys for the manifest elements.<a href="#section-8.7.9-1" class="pilcrow">¶</a></p>
+<p id="section-8.7.9-2">Each Integrity Check Value covers the corresponding Envelope Element as described in <a href="#severable-fields" class="xref">Section 8.8</a>.<a href="#section-8.7.9-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4126,9 +4158,9 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
       </h2>
 <p id="section-11-1">IANA is requested to:<a href="#section-11-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-11-2.1">allocate CBOR tag 48 in the CBOR Tags registry for the SUIT Envelope.<a href="#section-11-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-11-2.1">allocate CBOR tag 107 in the CBOR Tags registry for the SUIT Envelope.<a href="#section-11-2.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-11-2.2">allocate CBOR tag 480 in the CBOR Tags registry for the SUIT Manifest.<a href="#section-11-2.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-11-2.2">allocate CBOR tag 1070 in the CBOR Tags registry for the SUIT Manifest.<a href="#section-11-2.2" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-11-2.3">allocate media type application/suit-envelope in the Media Types registry.<a href="#section-11-2.3" class="pilcrow">¶</a>
 </li>
@@ -4354,6 +4386,14 @@ Several registries defined in the subsections below need to be created.<a href="
               <td class="text-left" rowspan="1" colspan="1">Run Sequence</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#suit-directive-run-sequence" class="xref">Section 8.7.7.12</a>
+</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">33</td>
+              <td class="text-left" rowspan="1" colspan="1">Garbage Collect</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <a href="#suit-directive-garbage-collect" class="xref">Section 8.7.8</a>
 </td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
@@ -4927,7 +4967,7 @@ Several registries defined in the subsections below need to be created.<a href="
 <dd class="break"></dd>
 <dt id="I-D.ietf-cbor-tags-oid">[I-D.ietf-cbor-tags-oid]</dt>
         <dd>
-<span class="refAuthor">Bormann, C.</span><span class="refAuthor"> and S. Leonard</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags for Object Identifiers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cbor-tags-oid-03</span>, <time datetime="2020-11-17" class="refDate">November 17, 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-cbor-tags-oid-03.txt">http://www.ietf.org/internet-drafts/draft-ietf-cbor-tags-oid-03.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Bormann, C.</span><span class="refAuthor"> and S. Leonard</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags for Object Identifiers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cbor-tags-oid-04</span>, <time datetime="2021-01-26" class="refDate">January 26, 2021</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-cbor-tags-oid-04.txt">http://www.ietf.org/internet-drafts/draft-ietf-cbor-tags-oid-04.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-sacm-coswid">[I-D.ietf-sacm-coswid]</dt>
         <dd>
@@ -4935,7 +4975,7 @@ Several registries defined in the subsections below need to be created.<a href="
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-architecture">[I-D.ietf-suit-architecture]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span><span class="refAuthor">, Tschofenig, H.</span><span class="refAuthor">, Brown, D.</span><span class="refAuthor">, and M. Meriac</span>, <span class="refTitle">"A Firmware Update Architecture for Internet of Things"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-architecture-14</span>, <time datetime="2020-10-21" class="refDate">October 21, 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-suit-architecture-14.txt">http://www.ietf.org/internet-drafts/draft-ietf-suit-architecture-14.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span><span class="refAuthor">, Tschofenig, H.</span><span class="refAuthor">, Brown, D.</span><span class="refAuthor">, and M. Meriac</span>, <span class="refTitle">"A Firmware Update Architecture for Internet of Things"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-architecture-15</span>, <time datetime="2021-01-17" class="refDate">January 17, 2021</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-suit-architecture-15.txt">http://www.ietf.org/internet-drafts/draft-ietf-suit-architecture-15.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-information-model">[I-D.ietf-suit-information-model]</dt>
         <dd>
@@ -4947,7 +4987,7 @@ Several registries defined in the subsections below need to be created.<a href="
 <dd class="break"></dd>
 <dt id="I-D.kucherawy-rfc8478bis">[I-D.kucherawy-rfc8478bis]</dt>
         <dd>
-<span class="refAuthor">Collet, Y.</span><span class="refAuthor"> and M. Kucherawy</span>, <span class="refTitle">"Zstandard Compression and the application/zstd Media Type"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-kucherawy-rfc8478bis-05</span>, <time datetime="2020-04-23" class="refDate">April 23, 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-kucherawy-rfc8478bis-05.txt">http://www.ietf.org/internet-drafts/draft-kucherawy-rfc8478bis-05.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Collet, Y.</span><span class="refAuthor"> and M. Kucherawy</span>, <span class="refTitle">"Zstandard Compression and the application/zstd Media Type"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-kucherawy-rfc8478bis-06</span>, <time datetime="2020-12-18" class="refDate">December 18, 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-kucherawy-rfc8478bis-06.txt">http://www.ietf.org/internet-drafts/draft-kucherawy-rfc8478bis-06.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC1950">[RFC1950]</dt>
         <dd>
@@ -5154,6 +5194,7 @@ SUIT_Directive //= (suit-directive-swap,              SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-run,               SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-wait,              SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-fetch-uri-list,    SUIT_Rep_Policy)
+SUIT_Directive //= (suit-directive-garbage-collect,   SUIT_Rep_Policy)
 
 SUIT_Directive_Try_Each_Argument = [
     + bstr .cbor SUIT_Command_Sequence,
@@ -5361,8 +5402,6 @@ suit-condition-version                  = 28
 suit-directive-set-component-index      = 12
 suit-directive-set-dependency-index     = 13
 suit-directive-try-each                 = 15
-;suit-directive-do-each                  = 16 ; TBD
-;suit-directive-map-filter               = 17 ; TBD
 suit-directive-process-dependency       = 18
 suit-directive-set-parameters           = 19
 suit-directive-override-parameters      = 20
@@ -5374,6 +5413,7 @@ suit-directive-wait                     = 29
 suit-directive-fetch-uri-list           = 30
 suit-directive-swap                     = 31
 suit-directive-run-sequence             = 32
+suit-directive-garbage-collect          = 33
 
 suit-wait-event-authorization = 1
 suit-wait-event-power = 2
@@ -5562,29 +5602,25 @@ bz/m4rVlnIXbwK07HypLbAmBMcCjbazR14vTgdzfsJwFLbM5kdtzOLSolg==
 <div class="artwork art-text alignLeft" id="section-b.1-4">
 <pre>
 {
-    / authentication-wrapper / 2:bstr .cbor ({        digest: bstr
-.cbor ([
+    / authentication-wrapper / 2:bstr .cbor ([
+        digest: bstr .cbor ([
             / algorithm-id / 2 / "sha256" /,
             / digest-bytes /
 h'5c097ef64bf3bb9b494e71e1f2418eef8d466cc902f639a855ec9af3e9eddb99'
-        ])        signatures: [
-            bstr .cbor (18([
-                    / protected / bstr .cbor ({
-                        / alg / 1:-7 / "ES256" /,
-                    }),
-                    / unprotected / {
-                    },
-                    / payload / bstr .cbor ([
-                        / algorithm-id / 2 / "sha256" /,
-                        / digest-bytes /
-h'5c097ef64bf3bb9b494e71e1f2418eef8d466cc902f639a855ec9af3e9eddb99'
-                    ]),
-                    / signature / h'60f5c3d03a3aa759bfef2ef0f5f97a93b1
-f5e741f7463f4385af88513a5c2957bea2d6c4cfddd03392a267aab0fc0fd515560ed5
-8e33fad26ac32a024c5a7143'
-                ]))
+        ]),
+        signature: bstr .cbor (18([
+                / protected / bstr .cbor ({
+                    / alg / 1:-7 / "ES256" /,
+                }),
+                / unprotected / {
+                },
+                / payload / F6 / nil /,
+                / signature / h'a19fd1f23b17beed321cece7423dfb48c457b8
+f1f6ac83577a3c10c6773f6f3a7902376b59540920b6c5f57bac5fc8543d8f5d3d974f
+aa2e6d03daa534b443a7'
+            ]))
         ]
-    }),
+    ]),
     / manifest / 3:bstr .cbor ({
         / manifest-version / 1:1,
         / manifest-sequence-number / 2:0,
@@ -5632,20 +5668,18 @@ bbccddeeff0123456789abcdeffedcba98765432100e1987d0010f020f0a
 4382030f0c43821702
 </pre><a href="#section-b.1-7" class="pilcrow">¶</a>
 </div>
-<p id="section-b.1-8">Total size of Envelope with COSE authentication object:  272<a href="#section-b.1-8" class="pilcrow">¶</a></p>
+<p id="section-b.1-8">Total size of Envelope with COSE authentication object:  235<a href="#section-b.1-8" class="pilcrow">¶</a></p>
 <p id="section-b.1-9">Envelope with COSE authentication object:<a href="#section-b.1-9" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-b.1-10">
 <pre>
-a2025898825824820258205c097ef64bf3bb9b494e71e1f2418eef8d466c
-c902f639a855ec9af3e9eddb99586fd28443a10126a05824820258205c09
-7ef64bf3bb9b494e71e1f2418eef8d466cc902f639a855ec9af3e9eddb99
-584060f5c3d03a3aa759bfef2ef0f5f97a93b1f5e741f7463f4385af8851
-3a5c2957bea2d6c4cfddd03392a267aab0fc0fd515560ed58e33fad26ac3
-2a024c5a7143035871a50101020003585fa202818141000458568614a401
-50fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b
-2d51f2ab450358248202582000112233445566778899aabbccddeeff0123
-456789abcdeffedcba98765432100e1987d0010f020f0a4382030f0c4382
-1702
+a2025873825824820258205c097ef64bf3bb9b494e71e1f2418eef8d466c
+c902f639a855ec9af3e9eddb99584ad28443a10126a0f65840a19fd1f23b
+17beed321cece7423dfb48c457b8f1f6ac83577a3c10c6773f6f3a790237
+6b59540920b6c5f57bac5fc8543d8f5d3d974faa2e6d03daa534b443a703
+5871a50101020003585fa202818141000458568614a40150fa6b4a53d5ad
+5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450358
+248202582000112233445566778899aabbccddeeff0123456789abcdeffe
+dcba98765432100e1987d0010f020f0a4382030f0c43821702
 </pre><a href="#section-b.1-10" class="pilcrow">¶</a>
 </div>
 </section>
@@ -5666,29 +5700,25 @@ c902f639a855ec9af3e9eddb99586fd28443a10126a05824820258205c09
 <div class="artwork art-text alignLeft" id="section-b.2-4">
 <pre>
 {
-    / authentication-wrapper / 2:bstr .cbor ({        digest: bstr
-.cbor ([
+    / authentication-wrapper / 2:bstr .cbor ([
+        digest: bstr .cbor ([
             / algorithm-id / 2 / "sha256" /,
             / digest-bytes /
 h'987eec85fa99fd31d332381b9810f90b05c2e0d4f284a6f4211207ed00fff750'
-        ])        signatures: [
-            bstr .cbor (18([
-                    / protected / bstr .cbor ({
-                        / alg / 1:-7 / "ES256" /,
-                    }),
-                    / unprotected / {
-                    },
-                    / payload / bstr .cbor ([
-                        / algorithm-id / 2 / "sha256" /,
-                        / digest-bytes /
-h'987eec85fa99fd31d332381b9810f90b05c2e0d4f284a6f4211207ed00fff750'
-                    ]),
-                    / signature / h'750141d65b4f20a88dc70c6785a67e0f4f
-085aead83ba2289d6e37271508cc91e0a0592f5c940c2257c9c0b26403c0ba4477f2ce
-37b60089fe02cde7911d1c15'
-                ]))
+        ]),
+        signature: bstr .cbor (18([
+                / protected / bstr .cbor ({
+                    / alg / 1:-7 / "ES256" /,
+                }),
+                / unprotected / {
+                },
+                / payload / F6 / nil /,
+                / signature / h'0008d2678ddda1afd6846cb9272f539a789e4c
+ed4c874774e58dbe4cf1607e755668029ad6383d4e14c72083ba43002fe3f5cda48859
+90c9b59135976b80ebc9'
+            ]))
         ]
-    }),
+    ]),
     / manifest / 3:bstr .cbor ({
         / manifest-version / 1:1,
         / manifest-sequence-number / 2:1,
@@ -5741,21 +5771,19 @@ bbccddeeff0123456789abcdeffedcba98765432100e1987d0010f020f09
 652e62696e1502030f0a4382030f
 </pre><a href="#section-b.2-7" class="pilcrow">¶</a>
 </div>
-<p id="section-b.2-8">Total size of Envelope with COSE authentication object:  307<a href="#section-b.2-8" class="pilcrow">¶</a></p>
+<p id="section-b.2-8">Total size of Envelope with COSE authentication object:  270<a href="#section-b.2-8" class="pilcrow">¶</a></p>
 <p id="section-b.2-9">Envelope with COSE authentication object:<a href="#section-b.2-9" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-b.2-10">
 <pre>
-a202589882582482025820987eec85fa99fd31d332381b9810f90b05c2e0
-d4f284a6f4211207ed00fff750586fd28443a10126a0582482025820987e
-ec85fa99fd31d332381b9810f90b05c2e0d4f284a6f4211207ed00fff750
-5840750141d65b4f20a88dc70c6785a67e0f4f085aead83ba2289d6e3727
-1508cc91e0a0592f5c940c2257c9c0b26403c0ba4477f2ce37b60089fe02
-cde7911d1c15035894a50101020103585fa202818141000458568614a401
-50fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b
-2d51f2ab450358248202582000112233445566778899aabbccddeeff0123
-456789abcdeffedcba98765432100e1987d0010f020f0958258613a11578
-1b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e1502
-030f0a4382030f
+a202587382582482025820987eec85fa99fd31d332381b9810f90b05c2e0
+d4f284a6f4211207ed00fff750584ad28443a10126a0f658400008d2678d
+dda1afd6846cb9272f539a789e4ced4c874774e58dbe4cf1607e75566802
+9ad6383d4e14c72083ba43002fe3f5cda4885990c9b59135976b80ebc903
+5894a50101020103585fa202818141000458568614a40150fa6b4a53d5ad
+5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450358
+248202582000112233445566778899aabbccddeeff0123456789abcdeffe
+dcba98765432100e1987d0010f020f0958258613a115781b687474703a2f
+2f6578616d706c652e636f6d2f66696c652e62696e1502030f0a4382030f
 </pre><a href="#section-b.2-10" class="pilcrow">¶</a>
 </div>
 </section>
@@ -5778,29 +5806,25 @@ cde7911d1c15035894a50101020103585fa202818141000458568614a401
 <div class="artwork art-text alignLeft" id="section-b.3-4">
 <pre>
 {
-    / authentication-wrapper / 2:bstr .cbor ({        digest: bstr
-.cbor ([
+    / authentication-wrapper / 2:bstr .cbor ([
+        digest: bstr .cbor ([
             / algorithm-id / 2 / "sha256" /,
             / digest-bytes /
-h'75685579a83babd71ec8ef22fa49ac873f78a708a43a674e782ad30b6598d17a'
-        ])        signatures: [
-            bstr .cbor (18([
-                    / protected / bstr .cbor ({
-                        / alg / 1:-7 / "ES256" /,
-                    }),
-                    / unprotected / {
-                    },
-                    / payload / bstr .cbor ([
-                        / algorithm-id / 2 / "sha256" /,
-                        / digest-bytes /
-h'75685579a83babd71ec8ef22fa49ac873f78a708a43a674e782ad30b6598d17a'
-                    ]),
-                    / signature / h'861b9bfb449125742baa648bc9d148cba4
-5519cca8efecf705c2165ecdecaeba8b6ce2131284e66708788d741e8779d5973fa8e2
-5da49eb203c81920719da949'
-                ]))
+h'78fa7652e377d31dcd7e95730c885ef13b6ee394d586410aa5fd0aca1f299d34'
+        ]),
+        signature: bstr .cbor (18([
+                / protected / bstr .cbor ({
+                    / alg / 1:-7 / "ES256" /,
+                }),
+                / unprotected / {
+                },
+                / payload / F6 / nil /,
+                / signature / h'1aa5bf99688b5d6a1211fd9c99bdd409b64cd6
+add316ff87029a81faf682f93c5fb94863eebdfd17a6fcfed729ffa9735a624ce7edb5
+65cba26ff7a5bd6a779d'
+            ]))
         ]
-    }),
+    ]),
     / manifest / 3:bstr .cbor ({
         / manifest-version / 1:1,
         / manifest-sequence-number / 2:2,
@@ -5840,7 +5864,7 @@ h'3ee96dc79641970ae46b929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d2'
         / text / 13:[
             / algorithm-id / 2 / "sha256" /,
             / digest-bytes /
-h'23f48b2e2838650f43c144234aee18401ffe3cce4733b23881c3a8ae2d2b66e8'
+h'2bfc4d0cc6680be7dd9f5ca30aa2bb5d1998145de33d54101b80e2ca49faf918'
         ],
     }),
     / install / 9:bstr .cbor ([
@@ -5865,69 +5889,67 @@ demonstration. The digest is a sample pattern, not a real one.',
 <p id="section-b.3-6">Envelope:<a href="#section-b.3-6" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-b.3-7">
 <pre>
-a20258278158248202582075685579a83babd71ec8ef22fa49ac873f78a7
-08a43a674e782ad30b6598d17a0358bba70101020203585fa20281814100
+a20258278158248202582078fa7652e377d31dcd7e95730c885ef13b6ee3
+94d586410aa5fd0aca1f299d340358bba70101020203585fa20281814100
 0458568614a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af14
 25695e48bf429b2d51f2ab450358248202582000112233445566778899aa
 bbccddeeff0123456789abcdeffedcba98765432100e1987d0010f020f09
 820258203ee96dc79641970ae46b929ccf0b72ba9536dd846020dbdc9f94
-9d84ea0e18d20a4382030f0c438217020d8202582023f48b2e2838650f43
-c144234aee18401ffe3cce4733b23881c3a8ae2d2b66e8
+9d84ea0e18d20a4382030f0c438217020d820258202bfc4d0cc6680be7dd
+9f5ca30aa2bb5d1998145de33d54101b80e2ca49faf918
 </pre><a href="#section-b.3-7" class="pilcrow">¶</a>
 </div>
-<p id="section-b.3-8">Total size of the Envelope with COSE authentication object but without Severable Elements:  346<a href="#section-b.3-8" class="pilcrow">¶</a></p>
+<p id="section-b.3-8">Total size of the Envelope with COSE authentication object but without Severable Elements:  309<a href="#section-b.3-8" class="pilcrow">¶</a></p>
 <p id="section-b.3-9">Envelope:<a href="#section-b.3-9" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-b.3-10">
 <pre>
-a20258988258248202582075685579a83babd71ec8ef22fa49ac873f78a7
-08a43a674e782ad30b6598d17a586fd28443a10126a05824820258207568
-5579a83babd71ec8ef22fa49ac873f78a708a43a674e782ad30b6598d17a
-5840861b9bfb449125742baa648bc9d148cba45519cca8efecf705c2165e
-cdecaeba8b6ce2131284e66708788d741e8779d5973fa8e25da49eb203c8
-1920719da9490358bba70101020203585fa202818141000458568614a401
-50fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b
-2d51f2ab450358248202582000112233445566778899aabbccddeeff0123
-456789abcdeffedcba98765432100e1987d0010f020f09820258203ee96d
-c79641970ae46b929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d20a
-4382030f0c438217020d8202582023f48b2e2838650f43c144234aee1840
-1ffe3cce4733b23881c3a8ae2d2b66e8
+a20258738258248202582078fa7652e377d31dcd7e95730c885ef13b6ee3
+94d586410aa5fd0aca1f299d34584ad28443a10126a0f658401aa5bf9968
+8b5d6a1211fd9c99bdd409b64cd6add316ff87029a81faf682f93c5fb948
+63eebdfd17a6fcfed729ffa9735a624ce7edb565cba26ff7a5bd6a779d03
+58bba70101020203585fa202818141000458568614a40150fa6b4a53d5ad
+5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450358
+248202582000112233445566778899aabbccddeeff0123456789abcdeffe
+dcba98765432100e1987d0010f020f09820258203ee96dc79641970ae46b
+929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d20a4382030f0c4382
+17020d820258202bfc4d0cc6680be7dd9f5ca30aa2bb5d1998145de33d54
+101b80e2ca49faf918
 </pre><a href="#section-b.3-10" class="pilcrow">¶</a>
 </div>
-<p id="section-b.3-11">Total size of Envelope with COSE authentication object:  929<a href="#section-b.3-11" class="pilcrow">¶</a></p>
+<p id="section-b.3-11">Total size of Envelope with COSE authentication object and Severable Elements:  892<a href="#section-b.3-11" class="pilcrow">¶</a></p>
 <p id="section-b.3-12">Envelope with COSE authentication object:<a href="#section-b.3-12" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-b.3-13">
 <pre>
-a40258988258248202582075685579a83babd71ec8ef22fa49ac873f78a7
-08a43a674e782ad30b6598d17a586fd28443a10126a05824820258207568
-5579a83babd71ec8ef22fa49ac873f78a708a43a674e782ad30b6598d17a
-5840861b9bfb449125742baa648bc9d148cba45519cca8efecf705c2165e
-cdecaeba8b6ce2131284e66708788d741e8779d5973fa8e25da49eb203c8
-1920719da9490358bba70101020203585fa202818141000458568614a401
-50fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b
-2d51f2ab450358248202582000112233445566778899aabbccddeeff0123
-456789abcdeffedcba98765432100e1987d0010f020f09820258203ee96d
-c79641970ae46b929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d20a
-4382030f0c438217020d8202582023f48b2e2838650f43c144234aee1840
-1ffe3cce4733b23881c3a8ae2d2b66e809583c8613a1157832687474703a
-2f2f6578616d706c652e636f6d2f766572792f6c6f6e672f706174682f74
-6f2f66696c652f66696c652e62696e1502030f0d590204a20179019d2323
-204578616d706c6520323a2053696d756c74616e656f757320446f776e6c
-6f61642c20496e7374616c6c6174696f6e2c2053656375726520426f6f74
-2c2053657665726564204669656c64730a0a202020205468697320657861
-6d706c6520636f766572732074686520666f6c6c6f77696e672074656d70
-6c617465733a0a202020200a202020202a20436f6d7061746962696c6974
-7920436865636b20287b7b74656d706c6174652d636f6d7061746962696c
-6974792d636865636b7d7d290a202020202a2053656375726520426f6f74
-20287b7b74656d706c6174652d7365637572652d626f6f747d7d290a2020
-20202a204669726d7761726520446f776e6c6f616420287b7b6669726d77
-6172652d646f776e6c6f61642d74656d706c6174657d7d290a202020200a
-2020202054686973206578616d706c6520616c736f2064656d6f6e737472
-6174657320736576657261626c6520656c656d656e747320287b7b6f7672
-2d736576657261626c657d7d292c20616e64207465787420287b7b6d616e
-69666573742d6469676573742d746578747d7d292e814100a2036761726d
-2e636f6d0578525468697320636f6d706f6e656e7420697320612064656d
-6f6e7374726174696f6e2e20546865206469676573742069732061207361
-6d706c65207061747465726e2c206e6f742061207265616c206f6e652e
+a40258738258248202582078fa7652e377d31dcd7e95730c885ef13b6ee3
+94d586410aa5fd0aca1f299d34584ad28443a10126a0f658401aa5bf9968
+8b5d6a1211fd9c99bdd409b64cd6add316ff87029a81faf682f93c5fb948
+63eebdfd17a6fcfed729ffa9735a624ce7edb565cba26ff7a5bd6a779d03
+58bba70101020203585fa202818141000458568614a40150fa6b4a53d5ad
+5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450358
+248202582000112233445566778899aabbccddeeff0123456789abcdeffe
+dcba98765432100e1987d0010f020f09820258203ee96dc79641970ae46b
+929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d20a4382030f0c4382
+17020d820258202bfc4d0cc6680be7dd9f5ca30aa2bb5d1998145de33d54
+101b80e2ca49faf91809583c8613a1157832687474703a2f2f6578616d70
+6c652e636f6d2f766572792f6c6f6e672f706174682f746f2f66696c652f
+66696c652e62696e1502030f0d590204a20179019d2323204578616d706c
+6520323a2053696d756c74616e656f757320446f776e6c6f61642c20496e
+7374616c6c6174696f6e2c2053656375726520426f6f742c205365766572
+6564204669656c64730a0a2020202054686973206578616d706c6520636f
+766572732074686520666f6c6c6f77696e672074656d706c617465733a0a
+202020200a202020202a20436f6d7061746962696c69747920436865636b
+20287b7b74656d706c6174652d636f6d7061746962696c6974792d636865
+636b7d7d290a202020202a2053656375726520426f6f7420287b7b74656d
+706c6174652d7365637572652d626f6f747d7d290a202020202a20466972
+6d7761726520446f776e6c6f616420287b7b6669726d776172652d646f77
+6e6c6f61642d74656d706c6174657d7d290a202020200a20202020546869
+73206578616d706c6520616c736f2064656d6f6e73747261746573207365
+76657261626c6520656c656d656e747320287b7b6f76722d736576657261
+626c657d7d292c20616e64207465787420287b7b6d616e69666573742d64
+69676573742d746578747d7d292e814100a2036761726d2e636f6d057852
+5468697320636f6d706f6e656e7420697320612064656d6f6e7374726174
+696f6e2e205468652064696765737420697320612073616d706c65207061
+747465726e2c206e6f742061207265616c206f6e652e
 </pre><a href="#section-b.3-13" class="pilcrow">¶</a>
 </div>
 </section>
@@ -5951,29 +5973,25 @@ c79641970ae46b929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d20a
 <div class="artwork art-text alignLeft" id="section-b.4-3">
 <pre>
 {
-    / authentication-wrapper / 2:bstr .cbor ({        digest: bstr
-.cbor ([
+    / authentication-wrapper / 2:bstr .cbor ([
+        digest: bstr .cbor ([
             / algorithm-id / 2 / "sha256" /,
             / digest-bytes /
 h'ae0c1ea689c9800a843550f38796b6fdbd52a0c78be5d26011d8e784da43d47c'
-        ])        signatures: [
-            bstr .cbor (18([
-                    / protected / bstr .cbor ({
-                        / alg / 1:-7 / "ES256" /,
-                    }),
-                    / unprotected / {
-                    },
-                    / payload / bstr .cbor ([
-                        / algorithm-id / 2 / "sha256" /,
-                        / digest-bytes /
-h'ae0c1ea689c9800a843550f38796b6fdbd52a0c78be5d26011d8e784da43d47c'
-                    ]),
-                    / signature / h'359960bae5a7de2457c8f48d3250d96d1a
-f2d36e08764b62d76f8a3f3041774b150b2c835bb1b2d7b1b2e629e1f08cc3b1b48fce
-bb8fb38182c116161e02b33f'
-                ]))
+        ]),
+        signature: bstr .cbor (18([
+                / protected / bstr .cbor ({
+                    / alg / 1:-7 / "ES256" /,
+                }),
+                / unprotected / {
+                },
+                / payload / F6 / nil /,
+                / signature / h'1296c87d168bb857495e6551730f9d6d3a6d81
+ad6c908c72fbc52ddcb2e8011d20d217b3f1c028374eecbda5d2ca26d047270b397dca
+a91a48a7c78cf376004e'
+            ]))
         ]
-    }),
+    ]),
     / manifest / 3:bstr .cbor ({
         / manifest-version / 1:1,
         / manifest-sequence-number / 2:3,
@@ -6071,25 +6089,24 @@ bbccddeeff0e1a00012c22010f020f095861860f82582a8613a105198400
 6578616d706c652e636f6d2f66696c65322e62696e1502030f0a4382030f
 </pre><a href="#section-b.4-6" class="pilcrow">¶</a>
 </div>
-<p id="section-b.4-7">Total size of Envelope with COSE authentication object:  443<a href="#section-b.4-7" class="pilcrow">¶</a></p>
+<p id="section-b.4-7">Total size of Envelope with COSE authentication object:  406<a href="#section-b.4-7" class="pilcrow">¶</a></p>
 <p id="section-b.4-8">Envelope with COSE authentication object:<a href="#section-b.4-8" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-b.4-9">
 <pre>
-a202589882582482025820ae0c1ea689c9800a843550f38796b6fdbd52a0
-c78be5d26011d8e784da43d47c586fd28443a10126a0582482025820ae0c
-1ea689c9800a843550f38796b6fdbd52a0c78be5d26011d8e784da43d47c
-5840359960bae5a7de2457c8f48d3250d96d1af2d36e08764b62d76f8a3f
-3041774b150b2c835bb1b2d7b1b2e629e1f08cc3b1b48fcebb8fb38182c1
-16161e02b33f0359011ba5010102030358aaa202818141000458a18814a2
-0150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf42
-9b2d51f2ab450f8258368614a105198400050514a2035824820258200011
-2233445566778899aabbccddeeff0123456789abcdeffedcba9876543210
-0e1987d0583a8614a1051a00084400050514a20358248202582001234567
-89abcdeffedcba987654321000112233445566778899aabbccddeeff0e1a
-00012c22010f020f095861860f82582a8613a105198400050513a115781c
-687474703a2f2f6578616d706c652e636f6d2f66696c65312e62696e582c
-8613a1051a00084400050513a115781c687474703a2f2f6578616d706c65
-2e636f6d2f66696c65322e62696e1502030f0a4382030f
+a202587382582482025820ae0c1ea689c9800a843550f38796b6fdbd52a0
+c78be5d26011d8e784da43d47c584ad28443a10126a0f658401296c87d16
+8bb857495e6551730f9d6d3a6d81ad6c908c72fbc52ddcb2e8011d20d217
+b3f1c028374eecbda5d2ca26d047270b397dcaa91a48a7c78cf376004e03
+59011ba5010102030358aaa202818141000458a18814a20150fa6b4a53d5
+ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450f
+8258368614a105198400050514a203582482025820001122334455667788
+99aabbccddeeff0123456789abcdeffedcba98765432100e1987d0583a86
+14a1051a00084400050514a2035824820258200123456789abcdeffedcba
+987654321000112233445566778899aabbccddeeff0e1a00012c22010f02
+0f095861860f82582a8613a105198400050513a115781c687474703a2f2f
+6578616d706c652e636f6d2f66696c65312e62696e582c8613a1051a0008
+4400050513a115781c687474703a2f2f6578616d706c652e636f6d2f6669
+6c65322e62696e1502030f0a4382030f
 </pre><a href="#section-b.4-9" class="pilcrow">¶</a>
 </div>
 </section>
@@ -6115,29 +6132,25 @@ c78be5d26011d8e784da43d47c586fd28443a10126a0582482025820ae0c
 <div class="artwork art-text alignLeft" id="section-b.5-3">
 <pre>
 {
-    / authentication-wrapper / 2:bstr .cbor ({        digest: bstr
-.cbor ([
+    / authentication-wrapper / 2:bstr .cbor ([
+        digest: bstr .cbor ([
             / algorithm-id / 2 / "sha256" /,
             / digest-bytes /
 h'4b4c7c8c0fda76c9c9591a9db160918e2b3c96a58b0a5e4984fd4e8f9359a928'
-        ])        signatures: [
-            bstr .cbor (18([
-                    / protected / bstr .cbor ({
-                        / alg / 1:-7 / "ES256" /,
-                    }),
-                    / unprotected / {
-                    },
-                    / payload / bstr .cbor ([
-                        / algorithm-id / 2 / "sha256" /,
-                        / digest-bytes /
-h'4b4c7c8c0fda76c9c9591a9db160918e2b3c96a58b0a5e4984fd4e8f9359a928'
-                    ]),
-                    / signature / h'd721cb3415f27cfeb8ef066bb6312ba758
-32b57410a0c700de71cf8004ea23b9dd3c912a99fab111e9b8f2cc55c7dffcc37012de
-cf72e44f69b3d3db8cc98cb6'
-                ]))
+        ]),
+        signature: bstr .cbor (18([
+                / protected / bstr .cbor ({
+                    / alg / 1:-7 / "ES256" /,
+                }),
+                / unprotected / {
+                },
+                / payload / F6 / nil /,
+                / signature / h'd88c4953fe5a0399e69ab37fe654d1f1b957a4
+4a46fde3e9cffdf0cdaa0456ddce9f08bc2a59895ffd70adce0e4aee8690645dcd4b7b
+77d401bd91e35aa115d2'
+            ]))
         ]
-    }),
+    ]),
     / manifest / 3:bstr .cbor ({
         / manifest-version / 1:1,
         / manifest-sequence-number / 2:4,
@@ -6225,24 +6238,23 @@ cdeffedcba987654321000112233445566778899aabbccddeeff0e1a0001
 2c22130116001602030f0c45840c021702
 </pre><a href="#section-b.5-6" class="pilcrow">¶</a>
 </div>
-<p id="section-b.5-7">Total size of Envelope with COSE authentication object:  400<a href="#section-b.5-7" class="pilcrow">¶</a></p>
+<p id="section-b.5-7">Total size of Envelope with COSE authentication object:  363<a href="#section-b.5-7" class="pilcrow">¶</a></p>
 <p id="section-b.5-8">Envelope with COSE authentication object:<a href="#section-b.5-8" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-b.5-9">
 <pre>
-a2025898825824820258204b4c7c8c0fda76c9c9591a9db160918e2b3c96
-a58b0a5e4984fd4e8f9359a928586fd28443a10126a05824820258204b4c
-7c8c0fda76c9c9591a9db160918e2b3c96a58b0a5e4984fd4e8f9359a928
-5840d721cb3415f27cfeb8ef066bb6312ba75832b57410a0c700de71cf80
-04ea23b9dd3c912a99fab111e9b8f2cc55c7dffcc37012decf72e44f69b3
-d3db8cc98cb60358f1a801010204035867a2028381410081410281410104
-5858880c0014a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af
-1425695e48bf429b2d51f2ab450358248202582000112233445566778899
-aabbccddeeff0123456789abcdeffedcba98765432100e1987d0010f020f
-085827880c0113a115781b687474703a2f2f6578616d706c652e636f6d2f
-66696c652e62696e1502030f094b880c0013a116011602030f0a45840c00
-030f0b583a880c0213a4035824820258200123456789abcdeffedcba9876
-54321000112233445566778899aabbccddeeff0e1a00012c221301160016
-02030f0c45840c021702
+a2025873825824820258204b4c7c8c0fda76c9c9591a9db160918e2b3c96
+a58b0a5e4984fd4e8f9359a928584ad28443a10126a0f65840d88c4953fe
+5a0399e69ab37fe654d1f1b957a44a46fde3e9cffdf0cdaa0456ddce9f08
+bc2a59895ffd70adce0e4aee8690645dcd4b7b77d401bd91e35aa115d203
+58f1a801010204035867a20283814100814102814101045858880c0014a4
+0150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf42
+9b2d51f2ab450358248202582000112233445566778899aabbccddeeff01
+23456789abcdeffedcba98765432100e1987d0010f020f085827880c0113
+a115781b687474703a2f2f6578616d706c652e636f6d2f66696c652e6269
+6e1502030f094b880c0013a116011602030f0a45840c00030f0b583a880c
+0213a4035824820258200123456789abcdeffedcba987654321000112233
+445566778899aabbccddeeff0e1a00012c22130116001602030f0c45840c
+021702
 </pre><a href="#section-b.5-9" class="pilcrow">¶</a>
 </div>
 </section>
@@ -6265,29 +6277,25 @@ aabbccddeeff0123456789abcdeffedcba98765432100e1987d0010f020f
 <div class="artwork art-text alignLeft" id="section-b.6-4">
 <pre>
 {
-    / authentication-wrapper / 2:bstr .cbor ({        digest: bstr
-.cbor ([
+    / authentication-wrapper / 2:bstr .cbor ([
+        digest: bstr .cbor ([
             / algorithm-id / 2 / "sha256" /,
             / digest-bytes /
 h'de7c7927a15bd2eda59cab1512875f17c9f1e9e23885ce1ac6d671eefcefa37a'
-        ])        signatures: [
-            bstr .cbor (18([
-                    / protected / bstr .cbor ({
-                        / alg / 1:-7 / "ES256" /,
-                    }),
-                    / unprotected / {
-                    },
-                    / payload / bstr .cbor ([
-                        / algorithm-id / 2 / "sha256" /,
-                        / digest-bytes /
-h'de7c7927a15bd2eda59cab1512875f17c9f1e9e23885ce1ac6d671eefcefa37a'
-                    ]),
-                    / signature / h'e71e332c985fb0479f296685669d05348b
-cdba8e186f25a5418f4682ea168df61661f54bf48f964577225ed455b22d277dd94de8
-7c57f1baceedd6719f3d56ec'
-                ]))
+        ]),
+        signature: bstr .cbor (18([
+                / protected / bstr .cbor ({
+                    / alg / 1:-7 / "ES256" /,
+                }),
+                / unprotected / {
+                },
+                / payload / F6 / nil /,
+                / signature / h'8f5919c05ef786366ab4899db27a2e7412ef72
+480372437757b1c1c9f8b2ed2a677a88db17fcfbb47d178c9e5620f14ac68a314ceabc
+d20cbf54fbe89b8e83ad'
+            ]))
         ]
-    }),
+    ]),
     / manifest / 3:bstr .cbor ({
         / manifest-version / 1:1,
         / manifest-sequence-number / 2:5,
@@ -6369,24 +6377,23 @@ d0010f020f0c0114a2035824820258200123456789abcdeffedcba987654
 0c001702
 </pre><a href="#section-b.6-7" class="pilcrow">¶</a>
 </div>
-<p id="section-b.6-8">Total size of Envelope with COSE authentication object:  417<a href="#section-b.6-8" class="pilcrow">¶</a></p>
+<p id="section-b.6-8">Total size of Envelope with COSE authentication object:  380<a href="#section-b.6-8" class="pilcrow">¶</a></p>
 <p id="section-b.6-9">Envelope with COSE authentication object:<a href="#section-b.6-9" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-b.6-10">
 <pre>
-a202589882582482025820de7c7927a15bd2eda59cab1512875f17c9f1e9
-e23885ce1ac6d671eefcefa37a586fd28443a10126a0582482025820de7c
-7927a15bd2eda59cab1512875f17c9f1e9e23885ce1ac6d671eefcefa37a
-5840e71e332c985fb0479f296685669d05348bcdba8e186f25a5418f4682
-ea168df61661f54bf48f964577225ed455b22d277dd94de87c57f1baceed
-d6719f3d56ec03590101a601010205035895a20282814100814101045889
-8c0c0014a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425
-695e48bf429b2d51f2ab450358248202582000112233445566778899aabb
-ccddeeff0123456789abcdeffedcba98765432100e1987d0010f020f0c01
-14a2035824820258200123456789abcdeffedcba98765432100011223344
-5566778899aabbccddeeff0e1a00012c2209584f900c0013a115781c6874
-74703a2f2f6578616d706c652e636f6d2f66696c65312e62696e1502030f
-0c0113a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65
-322e62696e1502030f0a49880c00030f0c01030f0c45840c001702
+a202587382582482025820de7c7927a15bd2eda59cab1512875f17c9f1e9
+e23885ce1ac6d671eefcefa37a584ad28443a10126a0f658408f5919c05e
+f786366ab4899db27a2e7412ef72480372437757b1c1c9f8b2ed2a677a88
+db17fcfbb47d178c9e5620f14ac68a314ceabcd20cbf54fbe89b8e83ad03
+590101a601010205035895a202828141008141010458898c0c0014a40150
+fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d
+51f2ab450358248202582000112233445566778899aabbccddeeff012345
+6789abcdeffedcba98765432100e1987d0010f020f0c0114a20358248202
+58200123456789abcdeffedcba987654321000112233445566778899aabb
+ccddeeff0e1a00012c2209584f900c0013a115781c687474703a2f2f6578
+616d706c652e636f6d2f66696c65312e62696e1502030f0c0113a115781c
+687474703a2f2f6578616d706c652e636f6d2f66696c65322e62696e1502
+030f0a49880c00030f0c01030f0c45840c001702
 </pre><a href="#section-b.6-10" class="pilcrow">¶</a>
 </div>
 </section>
@@ -6456,7 +6463,8 @@ ccddeeff0123456789abcdeffedcba98765432100e1987d0010f020f0c01
       <h2 id="name-d-implementation-conformance">
 <a href="#section-appendix.d" class="section-number selfRef">Appendix D. </a><a href="#name-d-implementation-conformance" class="section-name selfRef">D. Implementation Conformance Matrix</a>
       </h2>
-<p id="section-appendix.d-1">This section summarizes the functionality a minimal implementation needs
+<p id="section-appendix.d-1">This section summarizes the functionality a minimal manifest processor
+implementation needs
 to offer to claim conformance to this specification, in the absence of
 an application profile standard specifying otherwise.<a href="#section-appendix.d-1" class="pilcrow">¶</a></p>
 <p id="section-appendix.d-2">The subsequent table shows the conditions.<a href="#section-appendix.d-2" class="pilcrow">¶</a></p>
@@ -6655,6 +6663,13 @@ an application profile standard specifying otherwise.<a href="#section-appendix.
             <td class="text-left" rowspan="1" colspan="1">Fetch URI List</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-directive-fetch-uri-list" class="xref">Section 8.7.7.8</a>
+</td>
+            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">Garbage Collect</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#suit-directive-garbage-collect" class="xref">Section 8.7.8</a>
 </td>
             <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
           </tr>
