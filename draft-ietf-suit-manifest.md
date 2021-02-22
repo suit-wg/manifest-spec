@@ -1640,6 +1640,7 @@ Label | Name | Reference
 30 | Fetch URI List | {{suit-directive-fetch-uri-list}}
 31 | Swap | {{suit-directive-swap}}
 32 | Run Sequence | {{suit-directive-run-sequence}}
+33 | Garbage Collect | {{suit-directive-garbage-collect}}
 nint | Custom Condition | {{SUIT_Condition_Custom}}
 
 ## SUIT Parameters
@@ -1921,7 +1922,8 @@ Parameters that are structured types (arrays and maps) are also wrapped in a bst
 
 # D. Implementation Conformance Matrix {#implementation-matrix}
 
-This section summarizes the functionality a minimal implementation needs
+This section summarizes the functionality a minimal manifest processor
+implementation needs
 to offer to claim conformance to this specification, in the absence of
 an application profile standard specifying otherwise.
 
@@ -1959,6 +1961,7 @@ Wait For Event | {{suit-directive-wait}} | OPTIONAL
 Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
 Swap | {{suit-directive-swap}} | OPTIONAL
 Fetch URI List | {{suit-directive-fetch-uri-list}} | OPTIONAL
+Garbage Collect | {{suit-directive-garbage-collect}} | OPTIONAL
 
 The subsequent table shows the parameters.
 
