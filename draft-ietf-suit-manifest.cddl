@@ -58,9 +58,10 @@ SUIT_Severable_Manifest_Members = (
 
 SUIT_Integrated_Payload = (suit-integrated-payload-key => bstr)
 SUIT_Integrated_Dependency = (
-    suit-integrated-payload-key => bstr .cbor SUIT_Envelope
+    suit-integrated-dependency-key => bstr .cbor SUIT_Envelope
 )
 suit-integrated-payload-key = nint / uint .ge 24
+suit-integrated-dependency-key = suit-integrated-payload-key
 
 SUIT_Manifest_Tagged = #6.480(SUIT_Manifest)
 
