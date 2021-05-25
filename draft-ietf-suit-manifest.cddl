@@ -341,11 +341,11 @@ suit-reference-uri = 4
 suit-dependency-resolution = 7
 suit-payload-fetch = 8
 suit-install = 9
-suit-validate = 10
-suit-load = 11
-suit-run = 12
-suit-text = 13
-suit-coswid = 14
+suit-text = 10
+suit-coswid = 11
+suit-validate = 12
+suit-load = 13
+suit-run = 14
 
 suit-dependencies = 1
 suit-components = 2
