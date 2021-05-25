@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-12
+docname: draft-ietf-suit-manifest-13
 category: std
 
 ipr: trust200902
@@ -1217,7 +1217,7 @@ This parameter sets the offset in a component. Some components support multiple 
 
 #### suit-parameter-encryption-info {#suit-parameter-encryption-info}
 
-Encryption Info defines the mechanism that Fetch or Copy should use to decrypt the data they transfer. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged or a COSE_Encrypt0_Tagged, wrapped in a bstr.
+Encryption Info defines the keys and algorithm information Fetch or Copy has to use to decrypt the confidentiality protected data. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged structure wrapped in a bstr. A separate document will profile the COSE specification for use of manifest and firmware encrytion.
 
 #### suit-parameter-compression-info {#suit-parameter-compression-info}
 
