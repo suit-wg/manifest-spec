@@ -168,8 +168,8 @@ SUIT_Directive //= (suit-directive-fetch-uri-list,    SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-garbage-collect,   SUIT_Rep_Policy)
 
 SUIT_Directive_Try_Each_Argument = [
-    + bstr .cbor SUIT_Command_Sequence,
-    nil / bstr .cbor SUIT_Command_Sequence
+    2* bstr .cbor SUIT_Command_Sequence,
+    ?nil
 ]
 
 SUIT_Rep_Policy = uint .bits suit-reporting-bits
