@@ -297,10 +297,10 @@ SUIT_Unpack_Algorithm_Srec = 4
 SUIT_URI_List = [+ tstr ]
 
 SUIT_Text_Map = {
+    SUIT_Text_Keys,
     * SUIT_Component_Identifier => {
         SUIT_Text_Component_Keys
-    },
-    SUIT_Text_Keys
+    }
 }
 
 SUIT_Text_Component_Keys = (
