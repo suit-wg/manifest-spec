@@ -214,10 +214,10 @@ suit-common = 3
 suit-reference-uri = 4
 suit-payload-fetch = 8
 suit-install = 9
-suit-validate = 10
-suit-load = 11
-suit-run = 12
-suit-text = 13
+suit-text = 10
+suit-validate = 11
+suit-load = 12
+suit-run = 13
 
 suit-components = 2
 suit-common-sequence = 4
