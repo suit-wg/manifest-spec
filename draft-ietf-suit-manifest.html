@@ -20,7 +20,7 @@ of operations, rather than declaring the metadata.
     " name="description">
 <meta content="xml2rfc 3.0.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
-<meta content="draft-ietf-suit-manifest-12" name="ietf.draft">
+<meta content="draft-ietf-suit-manifest-13" name="ietf.draft">
 <link href="./draft-ietf-suit-manifest.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">/*
@@ -1153,11 +1153,11 @@ dd > ul:first-child {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CBOR-based SUIT Manifest</td>
-<td class="right">February 2021</td>
+<td class="right">May 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Moran, et al.</td>
-<td class="center">Expires August 26, 2021</td>
+<td class="center">Expires November 26, 2021</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1167,15 +1167,15 @@ dd > ul:first-child {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">SUIT</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-suit-manifest-12</dd>
+<dd class="internet-draft">draft-ietf-suit-manifest-13</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-02-22" class="published">February 22, 2021</time>
+<time datetime="2021-05-25" class="published">May 25, 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2021-08-26">August 26, 2021</time></dd>
+<dd class="expires"><time datetime="2021-11-26">November 26, 2021</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1227,7 +1227,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on August 26, 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on November 26, 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3399,7 +3399,7 @@ Class ID = UUID5(
             <h5 id="name-suit-parameter-encryption-in">
 <a href="#section-8.7.5.10" class="section-number selfRef">8.7.5.10. </a><a href="#name-suit-parameter-encryption-in" class="section-name selfRef">suit-parameter-encryption-info</a>
             </h5>
-<p id="section-8.7.5.10-1">Encryption Info defines the mechanism that Fetch or Copy should use to decrypt the data they transfer. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged or a COSE_Encrypt0_Tagged, wrapped in a bstr.<a href="#section-8.7.5.10-1" class="pilcrow">¶</a></p>
+<p id="section-8.7.5.10-1">Encryption Info defines the keys and algorithm information Fetch or Copy has to use to decrypt the confidentiality protected data. SUIT_Parameter_Encryption_Info is encoded as a COSE_Encrypt_Tagged structure wrapped in a bstr. A separate document will profile the COSE specification for use of manifest and firmware encrytion.<a href="#section-8.7.5.10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-compression-info">
@@ -4967,27 +4967,27 @@ Several registries defined in the subsections below need to be created.<a href="
 <dd class="break"></dd>
 <dt id="I-D.ietf-cbor-tags-oid">[I-D.ietf-cbor-tags-oid]</dt>
         <dd>
-<span class="refAuthor">Bormann, C.</span><span class="refAuthor"> and S. Leonard</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags for Object Identifiers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cbor-tags-oid-04</span>, <time datetime="2021-01-26" class="refDate">January 26, 2021</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-cbor-tags-oid-04.txt">http://www.ietf.org/internet-drafts/draft-ietf-cbor-tags-oid-04.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags for Object Identifiers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cbor-tags-oid-06</span>, <time datetime="2021-03-30" class="refDate">March 30, 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-cbor-tags-oid-06.txt">https://www.ietf.org/archive/id/draft-ietf-cbor-tags-oid-06.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-sacm-coswid">[I-D.ietf-sacm-coswid]</dt>
         <dd>
-<span class="refAuthor">Birkholz, H.</span><span class="refAuthor">, Fitzgerald-McKay, J.</span><span class="refAuthor">, Schmidt, C.</span><span class="refAuthor">, and D. Waltermire</span>, <span class="refTitle">"Concise Software Identification Tags"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-sacm-coswid-16</span>, <time datetime="2020-11-02" class="refDate">November 2, 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-sacm-coswid-16.txt">http://www.ietf.org/internet-drafts/draft-ietf-sacm-coswid-16.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Birkholz, H.</span><span class="refAuthor">, Fitzgerald-McKay, J.</span><span class="refAuthor">, Schmidt, C.</span><span class="refAuthor">, and D. Waltermire</span>, <span class="refTitle">"Concise Software Identification Tags"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-sacm-coswid-17</span>, <time datetime="2021-02-22" class="refDate">February 22, 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-sacm-coswid-17.txt">https://www.ietf.org/archive/id/draft-ietf-sacm-coswid-17.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-architecture">[I-D.ietf-suit-architecture]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span><span class="refAuthor">, Tschofenig, H.</span><span class="refAuthor">, Brown, D.</span><span class="refAuthor">, and M. Meriac</span>, <span class="refTitle">"A Firmware Update Architecture for Internet of Things"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-architecture-15</span>, <time datetime="2021-01-17" class="refDate">January 17, 2021</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-suit-architecture-15.txt">http://www.ietf.org/internet-drafts/draft-ietf-suit-architecture-15.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span><span class="refAuthor">, Tschofenig, H.</span><span class="refAuthor">, Brown, D.</span><span class="refAuthor">, and M. Meriac</span>, <span class="refTitle">"A Firmware Update Architecture for Internet of Things"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-architecture-16</span>, <time datetime="2021-01-27" class="refDate">January 27, 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-architecture-16.txt">https://www.ietf.org/archive/id/draft-ietf-suit-architecture-16.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-information-model">[I-D.ietf-suit-information-model]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span><span class="refAuthor">, Tschofenig, H.</span><span class="refAuthor">, and H. Birkholz</span>, <span class="refTitle">"An Information Model for Firmware Updates in IoT Devices"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-information-model-08</span>, <time datetime="2020-10-28" class="refDate">October 28, 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-suit-information-model-08.txt">http://www.ietf.org/internet-drafts/draft-ietf-suit-information-model-08.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span><span class="refAuthor">, Tschofenig, H.</span><span class="refAuthor">, and H. Birkholz</span>, <span class="refTitle">"A Manifest Information Model for Firmware Updates in IoT Devices"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-information-model-11</span>, <time datetime="2021-04-06" class="refDate">April 6, 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-information-model-11.txt">https://www.ietf.org/archive/id/draft-ietf-suit-information-model-11.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-teep-architecture">[I-D.ietf-teep-architecture]</dt>
         <dd>
-<span class="refAuthor">Pei, M.</span><span class="refAuthor">, Tschofenig, H.</span><span class="refAuthor">, Thaler, D.</span><span class="refAuthor">, and D. Wheeler</span>, <span class="refTitle">"Trusted Execution Environment Provisioning (TEEP) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teep-architecture-13</span>, <time datetime="2020-11-02" class="refDate">November 2, 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-teep-architecture-13.txt">http://www.ietf.org/internet-drafts/draft-ietf-teep-architecture-13.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Pei, M.</span><span class="refAuthor">, Tschofenig, H.</span><span class="refAuthor">, Thaler, D.</span><span class="refAuthor">, and D. Wheeler</span>, <span class="refTitle">"Trusted Execution Environment Provisioning (TEEP) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teep-architecture-14</span>, <time datetime="2021-02-22" class="refDate">February 22, 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-teep-architecture-14.txt">https://www.ietf.org/archive/id/draft-ietf-teep-architecture-14.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.kucherawy-rfc8478bis">[I-D.kucherawy-rfc8478bis]</dt>
         <dd>
-<span class="refAuthor">Collet, Y.</span><span class="refAuthor"> and M. Kucherawy</span>, <span class="refTitle">"Zstandard Compression and the application/zstd Media Type"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-kucherawy-rfc8478bis-06</span>, <time datetime="2020-12-18" class="refDate">December 18, 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-kucherawy-rfc8478bis-06.txt">http://www.ietf.org/internet-drafts/draft-kucherawy-rfc8478bis-06.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Collet, Y.</span><span class="refAuthor"> and M. S. Kucherawy</span>, <span class="refTitle">"Zstandard Compression and the 'application/zstd' Media Type"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-kucherawy-rfc8478bis-06</span>, <time datetime="2020-12-18" class="refDate">December 18, 2020</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-kucherawy-rfc8478bis-06.txt">https://www.ietf.org/archive/id/draft-kucherawy-rfc8478bis-06.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC1950">[RFC1950]</dt>
         <dd>
