@@ -79,7 +79,7 @@ SUIT_Unseverable_Members = (
   ? suit-validate => bstr .cbor SUIT_Command_Sequence,
   ? suit-load => bstr .cbor SUIT_Command_Sequence,
   ? suit-run => bstr .cbor SUIT_Command_Sequence,
-  * $$unserverble-manifest-member-extensions,
+  * $$unseverable-manifest-member-extensions,
 )
 
 SUIT_Severable_Members_Digests = (
