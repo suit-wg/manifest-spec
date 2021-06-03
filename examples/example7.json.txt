@@ -1,32 +1,32 @@
 ~~~
 {
-    / authentication-wrapper / 2:bstr .cbor ([
-        digest: bstr .cbor ([
+    / authentication-wrapper / 2:<<[
+        digest: <<[
             / algorithm-id / 2 / "sha256" /,
             / digest-bytes /
 h'ae0c1ea689c9800a843550f38796b6fdbd52a0c78be5d26011d8e784da43d47c'
-        ]),
-        signature: bstr .cbor (18([
-                / protected / bstr .cbor ({
+        ]>>,
+        signature: <<18([
+                / protected / <<{
                     / alg / 1:-7 / "ES256" /,
-                }),
+                }>>,
                 / unprotected / {
                 },
                 / payload / F6 / nil /,
-                / signature / h'ebae6a5abf8f2393c7c24088a5364859804e93
-57509920fc7545fef8d5365b415a695834f469f00d9707b2994d1da84b2934fc3a00df
-232d8a7f9ba101a11ceb'
-            ]))
+                / signature / h'ffeb94986dc24806fba26a800ef5d1a998aa47
+1a5104e0713e98ca92b80eb221239bba33ee8fe03c1896e1548b05b48e786794790c3b
+4d549b0f3e8d32e1d637'
+            ])>>
         ]
-    ]),
-    / manifest / 3:bstr .cbor ({
+    ]>>,
+    / manifest / 3:<<{
         / manifest-version / 1:1,
         / manifest-sequence-number / 2:3,
-        / common / 3:bstr .cbor ({
+        / common / 3:<<{
             / components / 2:[
                 [h'00']
             ],
-            / common-sequence / 4:bstr .cbor ([
+            / common-sequence / 4:<<[
                 / directive-override-parameters / 20,{
                     / vendor-id /
 1:h'fa6b4a53d5ad5fdfbe9de663e4d41ffe' / fa6b4a53-d5ad-5fdf-
@@ -35,42 +35,42 @@ be9d-e663e4d41ffe /,
 / 1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
                 } ,
                 / directive-try-each / 15,[
-                    bstr .cbor ([
+                    <<[
                         / directive-override-parameters / 20,{
                             / offset / 5:33792,
                         } ,
                         / condition-component-offset / 5,5 ,
                         / directive-override-parameters / 20,{
-                            / image-digest / 3:bstr .cbor ([
+                            / image-digest / 3:<<[
                                 / algorithm-id / 2 / "sha256" /,
                                 / digest-bytes /
 h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
-                            ]),
+                            ]>>,
                             / image-size / 14:34768,
                         }
-                    ]) ,
-                    bstr .cbor ([
+                    ]>> ,
+                    <<[
                         / directive-override-parameters / 20,{
                             / offset / 5:541696,
                         } ,
                         / condition-component-offset / 5,5 ,
                         / directive-override-parameters / 20,{
-                            / image-digest / 3:bstr .cbor ([
+                            / image-digest / 3:<<[
                                 / algorithm-id / 2 / "sha256" /,
                                 / digest-bytes /
 h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
-                            ]),
+                            ]>>,
                             / image-size / 14:76834,
                         }
-                    ])
+                    ]>>
                 ] ,
                 / condition-vendor-identifier / 1,15 ,
                 / condition-class-identifier / 2,15
-            ]),
-        }),
-        / install / 9:bstr .cbor ([
+            ]>>,
+        }>>,
+        / install / 9:<<[
             / directive-try-each / 15,[
-                bstr .cbor ([
+                <<[
                     / directive-set-parameters / 19,{
                         / offset / 5:33792,
                     } ,
@@ -78,8 +78,8 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                     / directive-set-parameters / 19,{
                         / uri / 21:'http://example.com/file1.bin',
                     }
-                ]) ,
-                bstr .cbor ([
+                ]>> ,
+                <<[
                     / directive-set-parameters / 19,{
                         / offset / 5:541696,
                     } ,
@@ -87,15 +87,15 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                     / directive-set-parameters / 19,{
                         / uri / 21:'http://example.com/file2.bin',
                     }
-                ])
+                ]>>
             ] ,
             / directive-fetch / 21,2 ,
             / condition-image-match / 3,15
-        ]),
-        / validate / 10:bstr .cbor ([
+        ]>>,
+        / validate / 10:<<[
             / condition-image-match / 3,15
-        ]),
-    }),
+        ]>>,
+    }>>,
 }
 ~~~
 
@@ -123,9 +123,9 @@ Envelope with COSE authentication object:
 
 ~~~
 a202587382582482025820ae0c1ea689c9800a843550f38796b6fdbd52a0
-c78be5d26011d8e784da43d47c584ad28443a10126a0f65840ebae6a5abf
-8f2393c7c24088a5364859804e9357509920fc7545fef8d5365b415a6958
-34f469f00d9707b2994d1da84b2934fc3a00df232d8a7f9ba101a11ceb03
+c78be5d26011d8e784da43d47c584ad28443a10126a0f65840ffeb94986d
+c24806fba26a800ef5d1a998aa471a5104e0713e98ca92b80eb221239bba
+33ee8fe03c1896e1548b05b48e786794790c3b4d549b0f3e8d32e1d63703
 59011ba5010102030358aaa202818141000458a18814a20150fa6b4a53d5
 ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab450f
 8258368614a105198400050514a203582482025820001122334455667788
