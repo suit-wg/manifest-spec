@@ -329,7 +329,7 @@ See {{delegation-info}} for more detail.
 
 ## Authentication Block {#ovr-auth}
 
-The Authentication Block contains a bstr-wrapped [SUIT_Digest](#SUIT_Digest) and one or more {{RFC8152}} CBOR Object Signing and Encryption (COSE) authentication blocks. These blocks are one of:
+The Authentication Block contains a bstr-wrapped SUIT Digest Container, see [SUIT_Digest], and one or more {{RFC8152}} CBOR Object Signing and Encryption (COSE) authentication blocks. These blocks are one of:
 
 * COSE_Sign_Tagged
 * COSE_Sign1_Tagged
@@ -869,7 +869,7 @@ A Recipient MAY choose to cache intermediaries and/or delegates. If an Update Di
 
 ## Authenticated Manifests {#authentication-info}
 
-The suit-authentication-wrapper contains a list containing a [SUIT_Digest](#SUIT_Digest) and one or more cryptographic authentication wrappers for the Manifest. These are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged blocks. Each of these blocks contains a SUIT_Digest of the Manifest. This enables modular processing of the manifest. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}}. The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, except for the OPTIONAL suit-delegation, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper or suit-delegation.
+The suit-authentication-wrapper contains a list containing a SUIT Digest Container (see [SUIT_Digest]) and one or more cryptographic authentication wrappers for the Manifest. These blocks are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged structures. Each of these blocks contains a SUIT_Digest of the Manifest. This enables modular processing of the manifest. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}}. The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, except for the OPTIONAL suit-delegation, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper or suit-delegation.
 
 A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.
 
