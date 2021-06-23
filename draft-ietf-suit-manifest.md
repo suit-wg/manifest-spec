@@ -533,7 +533,7 @@ The following table describes the behavior of each command. "params" represents 
 | Run  | run(current)
 | Fetch | store(current, fetch(current.params\[uri\]))
 | Use Before  | assert(now() < arg)
-| Check Component Offset  | assert(offsetof(current) == arg)
+| Check Component Slot  | assert(current.slot-index == arg)
 | Check Device Identifier | assert(binary-match(current, current.params\[device-id\]))
 | Check Image Not Match | assert(not binary-match(digest(current), current.params\[digest\]))
 | Check Minimum Battery | assert(battery >= arg)
@@ -815,12 +815,12 @@ The following commands are placed in the common block:
 - Set Component Index directive (see {{suit-directive-set-component-index}})
 - Try Each
     - First Sequence:
-        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Offset A
-        - Check Offset Condition (see {{suit-condition-component-offset}})
+        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Slot A
+        - Check Slot Condition (see {{suit-condition-component-slot}})
         - Override Parameters directive (see {{suit-directive-override-parameters}}) for Image Digest A and Image Size A (see {{secparameters}})
     - Second Sequence:
-        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Offset B
-        - Check Offset Condition (see {{suit-condition-component-offset}})
+        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Slot B
+        - Check Slot Condition (see {{suit-condition-component-slot}})
         - Override Parameters directive (see {{suit-directive-override-parameters}}) for Image Digest B and Image Size B (see {{secparameters}})
 
 The following commands are placed in the fetch block or install block
@@ -828,18 +828,18 @@ The following commands are placed in the fetch block or install block
 - Set Component Index directive (see {{suit-directive-set-component-index}})
 - Try Each
     - First Sequence:
-        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Offset A
-        - Check Offset Condition (see {{suit-condition-component-offset}})
+        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Slot A
+        - Check Slot Condition (see {{suit-condition-component-slot}})
         - Set Parameters directive (see {{suit-directive-override-parameters}}) for URI A (see {{secparameters}})
     - Second Sequence:
-        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Offset B
-        - Check Offset Condition (see {{suit-condition-component-offset}})
+        - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Slot B
+        - Check Slot Condition (see {{suit-condition-component-slot}})
         - Set Parameters directive (see {{suit-directive-override-parameters}}) for URI B (see {{secparameters}})
 - Fetch
 
 If Trusted Invocation ({{template-secure-boot}}) is used, only the run sequence is added to this template, since the common sequence is populated by this template.
 
-NOTE: Any test can be used to select between images, Check Offset Condition is used in this template because it is a typical test for execute-in-place devices.
+NOTE: Any test can be used to select between images, Check Slot Condition is used in this template because it is a typical test for execute-in-place devices.
 
 # Metadata Structure {#metadata-structure}
 
@@ -1086,7 +1086,7 @@ Device ID | suit-parameter-device-identifier | {{suit-parameter-device-identifie
 Image Digest | suit-parameter-image-digest | {{suit-parameter-image-digest}}
 Image Size | suit-parameter-image-size | {{suit-parameter-image-size}}
 Use Before | suit-parameter-use-before | {{suit-parameter-use-before}}
-Component Offset | suit-parameter-component-offset | {{suit-parameter-component-offset}}
+Component Slot | suit-parameter-component-slot | {{suit-parameter-component-slot}}
 Encryption Info | suit-parameter-encryption-info | {{suit-parameter-encryption-info}}
 Compression Info | suit-parameter-compression-info | {{suit-parameter-compression-info}}
 Unpack Info | suit-parameter-unpack-info | {{suit-parameter-unpack-info}}
@@ -1211,9 +1211,9 @@ The size of the firmware image in bytes. This size is encoded as a positive inte
 
 An expiry date for the use of the manifest encoded as the positive integer number of seconds since 1970-01-01. Implementations that use this parameter MUST use a 64-bit internal representation of the integer.
 
-#### suit-parameter-component-offset {#suit-parameter-component-offset}
+#### suit-parameter-component-slot {#suit-parameter-component-slot}
 
-This parameter sets the offset in a component. Some components support multiple possible Slots (offsets into a storage area). This parameter describes the intended Slot to use, identified by its offset into the component's storage area. This offset MUST be encoded as a positive integer.
+This parameter sets the slot index of a component. Some components support multiple possible Slots (offsets into a storage area). This parameter describes the intended Slot to use, identified by its index into the component's storage area. This slot MUST be encoded as a positive integer.
 
 #### suit-parameter-encryption-info {#suit-parameter-encryption-info}
 
@@ -1348,7 +1348,7 @@ Device Identifier | suit-condition-device-identifier | {{identifier-conditions}}
 Image Match | suit-condition-image-match | {{suit-condition-image-match}}
 Image Not Match | suit-condition-image-not-match | {{suit-condition-image-not-match}}
 Use Before | suit-condition-use-before | {{suit-condition-use-before}}
-Component Offset | suit-condition-component-offset | {{suit-condition-component-offset}}
+Component Slot | suit-condition-component-slot | {{suit-condition-component-slot}}
 Minimum Battery | suit-condition-minimum-battery | {{suit-condition-minimum-battery}}
 Update Authorized | suit-condition-update-authorized | {{suit-condition-update-authorized}}
 Version | suit-condition-version | {{suit-condition-version}}
@@ -1383,9 +1383,9 @@ Verify that the current component does not match the suit-parameter-image-digest
 
 Verify that the current time is BEFORE the specified time. suit-condition-use-before is used to specify the last time at which an update should be installed. The recipient evaluates the current time against the suit-parameter-use-before parameter ({{suit-parameter-use-before}}), which must have already been set as a parameter, encoded as seconds after 1970-01-01 00:00:00 UTC. Timestamp conditions MUST be evaluated in 64 bits, regardless of encoded CBOR size. suit-condition-use-before is OPTIONAL to implement.
 
-#### suit-condition-component-offset
+#### suit-condition-component-slot
 
-Verify that the offset of the current component matches the offset set in suit-parameter-component-offset ({{suit-parameter-component-offset}}). This condition allows a manifest to select between several images to match a target offset.
+Verify that the slot index of the current component matches the slot index set in suit-parameter-component-slot ({{suit-parameter-component-slot}}). This condition allows a manifest to select between several images to match a target slot.
 
 #### suit-condition-minimum-battery
 
@@ -1618,7 +1618,7 @@ Label | Name | Reference
 2 | Class Identifier | {{identifier-conditions}}
 3 | Image Match | {{suit-condition-image-match}}
 4 | Use Before | {{suit-condition-use-before}}
-5 | Component Offset | {{suit-condition-component-offset}}
+5 | Component Slot | {{suit-condition-component-slot}}
 12 | Set Component Index | {{suit-directive-set-component-index}}
 13 | Set Dependency Index | {{suit-directive-set-dependency-index}}
 14 | Abort
@@ -1651,7 +1651,7 @@ Label | Name | Reference
 2 | Class ID | {{suit-parameter-class-identifier}}
 3 | Image Digest | {{suit-parameter-image-digest}}
 4 | Use Before | {{suit-parameter-use-before}}
-5 | Component Offset | {{suit-parameter-component-offset}}
+5 | Component Slot | {{suit-parameter-component-slot}}
 12 | Strict Order | {{suit-parameter-strict-order}}
 13 | Soft Failure | {{suit-parameter-soft-failure}}
 14 | Image Size | {{suit-parameter-image-size}}
@@ -1794,7 +1794,7 @@ Command | Sys-Fail | Sys-Pass | Rec-Fail | Rec-Pass
 suit-condition-vendor-identifier | 1 | 1 | 1 | 1
 suit-condition-class-identifier | 1 | 1 | 1 | 1
 suit-condition-image-match | 1 | 1 | 1 | 1
-suit-condition-component-offset | 0 | 1 | 0 | 1
+suit-condition-component-slot | 0 | 1 | 0 | 1
 suit-directive-fetch | 0 | 0 | 1 | 0
 suit-directive-copy | 0 | 0 | 1 | 0
 suit-directive-run | 0 | 0 | 1 | 0
@@ -1937,7 +1937,7 @@ Device Identifier | {{uuid-identifiers}} | OPTIONAL
 Image Match | {{suit-condition-image-match}} | REQUIRED
 Image Not Match | {{suit-condition-image-not-match}} | OPTIONAL
 Use Before | {{suit-condition-use-before}} | OPTIONAL
-Component Offset | {{suit-condition-component-offset}} | OPTIONAL
+Component Slot | {{suit-condition-component-slot}} | OPTIONAL
 Abort | {{suit-condition-abort}} | OPTIONAL
 Minimum Battery | {{suit-condition-minimum-battery}} | OPTIONAL
 Update Authorized |{{suit-condition-update-authorized}} | OPTIONAL
@@ -1972,7 +1972,7 @@ Class ID | {{suit-parameter-class-identifier}} | REQUIRED
 Image Digest | {{suit-parameter-image-digest}} | REQUIRED
 Image Size | {{suit-parameter-image-size}} | REQUIRED
 Use Before | {{suit-parameter-use-before}} | RECOMMENDED
-Component Offset | {{suit-parameter-component-offset}} | OPTIONAL
+Component Slot | {{suit-parameter-component-slot}} | OPTIONAL
 Encryption Info | {{suit-parameter-encryption-info}} | RECOMMENDED
 Compression Info | {{suit-parameter-compression-info}} | RECOMMENDED
 Unpack Info | {{suit-parameter-unpack-info}}  | RECOMMENDED
