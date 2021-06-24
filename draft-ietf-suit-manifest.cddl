@@ -48,9 +48,10 @@ SUIT_Severable_Manifest_Members = (
 
 SUIT_Integrated_Payload = (suit-integrated-payload-key => bstr)
 SUIT_Integrated_Dependency = (
-    suit-integrated-payload-key => bstr .cbor SUIT_Envelope
+    suit-integrated-dependency-key => bstr .cbor SUIT_Envelope
 )
 suit-integrated-payload-key = nint / uint .ge 24
+suit-integrated-dependency-key = suit-integrated-payload-key
 
 SUIT_Manifest_Tagged = #6.480(SUIT_Manifest)
 
@@ -59,8 +60,7 @@ SUIT_Manifest = {
     suit-manifest-sequence-number => uint,
     suit-common                   => bstr .cbor SUIT_Common,
     ? suit-reference-uri          => tstr,
-    SUIT_Severable_Manifest_Members,
-    SUIT_Severable_Members_Digests,
+    SUIT_Severable_Members_Members_Choice,
     SUIT_Unseverable_Members,
     * $$SUIT_Manifest_Extensions,
 }
@@ -69,16 +69,16 @@ SUIT_Unseverable_Members = (
   ? suit-validate => bstr .cbor SUIT_Command_Sequence,
   ? suit-load => bstr .cbor SUIT_Command_Sequence,
   ? suit-run => bstr .cbor SUIT_Command_Sequence,
-  * $$unserverble-manifest-member-extensions,
+  * $$unseverable-manifest-member-extensions,
 )
 
-SUIT_Severable_Members_Digests = (
-  ? suit-dependency-resolution => SUIT_Digest,
-  ? suit-payload-fetch => SUIT_Digest,
-  ? suit-install => SUIT_Digest,
-  ? suit-text => SUIT_Digest,
-  ? suit-coswid => SUIT_Digest,
-  * $$severable-manifest-members-digests-extensions
+SUIT_Severable_Members_Members_Choice = (
+  ? suit-dependency-resolution => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  ? suit-payload-fetch => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  ? suit-install => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  ? suit-text => bstr .cbor SUIT_Text_Map / SUIT_Digest,
+  ? suit-coswid => bstr .cbor concise-software-identity / SUIT_Digest,
+  * $$severable-manifest-members-choice-extensions
 )
 
 SUIT_Common = {
@@ -157,8 +157,8 @@ SUIT_Directive //= (suit-directive-fetch-uri-list,    SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-garbage-collect,   SUIT_Rep_Policy)
 
 SUIT_Directive_Try_Each_Argument = [
-    + bstr .cbor SUIT_Command_Sequence,
-    nil / bstr .cbor SUIT_Command_Sequence
+    2* bstr .cbor SUIT_Command_Sequence,
+    ?nil
 ]
 
 SUIT_Rep_Policy = uint .bits suit-reporting-bits
@@ -286,10 +286,10 @@ SUIT_Unpack_Algorithm_Srec = 4
 SUIT_URI_List = [+ tstr ]
 
 SUIT_Text_Map = {
+    SUIT_Text_Keys,
     * SUIT_Component_Identifier => {
         SUIT_Text_Component_Keys
-    },
-    SUIT_Text_Keys
+    }
 }
 
 SUIT_Text_Component_Keys = (
@@ -331,11 +331,11 @@ suit-reference-uri = 4
 suit-dependency-resolution = 7
 suit-payload-fetch = 8
 suit-install = 9
-suit-validate = 10
-suit-load = 11
-suit-run = 12
-suit-text = 13
-suit-coswid = 14
+suit-text = 10
+suit-coswid = 11
+suit-validate = 12
+suit-load = 13
+suit-run = 14
 
 suit-dependencies = 1
 suit-components = 2
