@@ -40,13 +40,6 @@ SUIT_Authentication_Block /= COSE_Sign_Tagged
 SUIT_Authentication_Block /= COSE_Mac0_Tagged
 SUIT_Authentication_Block /= COSE_Sign1_Tagged
 
-COSE_Mac_Tagged = any
-COSE_Sign_Tagged = any
-COSE_Mac0_Tagged = any
-COSE_Sign1_Tagged = any
-COSE_Encrypt_Tagged = any
-COSE_Encrypt0_Tagged = any
-
 SUIT_Severable_Manifest_Members = (
   ? suit-dependency-resolution => bstr .cbor SUIT_Command_Sequence,
   ? suit-payload-fetch => bstr .cbor SUIT_Command_Sequence,
