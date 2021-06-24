@@ -52,6 +52,7 @@ normative:
   RFC4122:
   RFC8152:
   RFC3986:
+  I-D.ietf-cose-hash-algs:
 
 
 informative:
@@ -1590,9 +1591,12 @@ A third model allows a Recipient to provide even more fine-grained controls: The
 
 #  SUIT Digest Container {#SUIT_Digest}
 
-RFC 8152 {{RFC8152}} provides containers for signature, MAC, and encryption, but no basic digest container. The container needed for a digest requires a type identifier and a container for the raw digest data. Some forms of digest may require additional parameters. These can be added following the digest.
+The SUIT digest is a CBOR List containing two elements: an algorithm identifier and a bstr containing the bytes of the digest. Some forms of digest may require additional parameters. These can be added following the digest.
 
-The SUIT digest is a CBOR List containing two elements: a suit-digest-algorithm-id and a bstr containing the bytes of the digest.
+The values of the algorithm identifier are defined by {I-D.ietf-cose-hash-algs}. The following algorithms MUST NOT be used in SUIT_Digest containers:
+
+* SHA-1 (-14)
+* SHA-256/64 (-15)
 
 #  IANA Considerations {#iana}
 

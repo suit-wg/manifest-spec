@@ -20,20 +20,10 @@ SUIT_Authentication = [
 ]
 
 SUIT_Digest = [
-  suit-digest-algorithm-id : suit-digest-algorithm-ids,
+  suit-digest-algorithm-id : int, ; Defined in I-D.ietf-cose-hash-algs
   suit-digest-bytes : bstr,
   * $$SUIT_Digest-extensions
 ]
-
-; Named Information Hash Algorithm Identifiers
-suit-digest-algorithm-ids /= algorithm-id-sha224
-suit-digest-algorithm-ids /= algorithm-id-sha256
-suit-digest-algorithm-ids /= algorithm-id-sha384
-suit-digest-algorithm-ids /= algorithm-id-sha512
-suit-digest-algorithm-ids /= algorithm-id-sha3-224
-suit-digest-algorithm-ids /= algorithm-id-sha3-256
-suit-digest-algorithm-ids /= algorithm-id-sha3-384
-suit-digest-algorithm-ids /= algorithm-id-sha3-512
 
 SUIT_Authentication_Block /= COSE_Mac_Tagged
 SUIT_Authentication_Block /= COSE_Sign_Tagged
