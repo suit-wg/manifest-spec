@@ -20,7 +20,7 @@ SUIT_Authentication = [
 ]
 
 SUIT_Digest = [
-  suit-digest-algorithm-id : int, ; Defined in I-D.ietf-cose-hash-algs
+  suit-digest-algorithm-id : suit-cose-hash-algs,
   suit-digest-bytes : bstr,
   * $$SUIT_Digest-extensions
 ]
@@ -98,6 +98,12 @@ SUIT_Dependency = {
     ? suit-dependency-prefix => SUIT_Component_Identifier,
     * $$SUIT_Dependency-extensions,
 }
+
+suit-cose-hash-algs /= cose-alg-sha-256
+suit-cose-hash-algs /= cose-alg-shake128
+suit-cose-hash-algs /= cose-alg-sha-384
+suit-cose-hash-algs /= cose-alg-sha-512
+suit-cose-hash-algs /= cose-alg-shake256
 
 SUIT_Component_Identifier =  [* bstr]
 
@@ -315,14 +321,14 @@ suit-delegation = 1
 suit-authentication-wrapper = 2
 suit-manifest = 3
 
-algorithm-id-sha224 = 1
-algorithm-id-sha256 = 2
-algorithm-id-sha384 = 3
-algorithm-id-sha512 = 4
-algorithm-id-sha3-224 = 5
-algorithm-id-sha3-256 = 6
-algorithm-id-sha3-384 = 7
-algorithm-id-sha3-512 = 8
+;REQUIRED to implement:
+cose-alg-sha-256 = -16
+
+;OPTIONAL to implement:
+cose-alg-shake128 = -18
+cose-alg-sha-384 = -43
+cose-alg-sha-512 = -44
+cose-alg-shake256 = -45
 
 suit-manifest-version = 1
 suit-manifest-sequence-number = 2

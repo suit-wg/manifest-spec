@@ -1593,10 +1593,16 @@ A third model allows a Recipient to provide even more fine-grained controls: The
 
 The SUIT digest is a CBOR List containing two elements: an algorithm identifier and a bstr containing the bytes of the digest. Some forms of digest may require additional parameters. These can be added following the digest.
 
-The values of the algorithm identifier are defined by {I-D.ietf-cose-hash-algs}. The following algorithms MUST NOT be used in SUIT_Digest containers:
+The values of the algorithm identifier are defined by {I-D.ietf-cose-hash-algs}. The following algorithms MUST be implemented by all Manifest Processors:
 
-* SHA-1 (-14)
-* SHA-256/64 (-15)
+* SHA-256 (-16)
+
+The following algorithms MAY be implemented in a Manifest Processor:
+
+* SHAKE128 (-18)
+* SHA-384 (-43)
+* SHA-512 (-44)
+* SHAKE256 (-45)
 
 #  IANA Considerations {#iana}
 
@@ -1697,19 +1703,6 @@ Label | Name | Reference
 nint | Custom | {{manifest-digest-text}}
 
 ## SUIT Algorithm Identifiers
-
-### SUIT Digest Algorithm Identifiers
-
-Label | Name |
----|---|---
-1 | SHA224 | {{SUIT_Digest}}
-2 | SHA256 | {{SUIT_Digest}}
-3 | SHA384 | {{SUIT_Digest}}
-4 | SHA512 | {{SUIT_Digest}}
-5 | SHA3-224 | {{SUIT_Digest}}
-6 | SHA3-256 | {{SUIT_Digest}}
-7 | SHA3-384 | {{SUIT_Digest}}
-8 | SHA3-512 | {{SUIT_Digest}}
 
 ### SUIT Compression Algorithm Identifiers
 
