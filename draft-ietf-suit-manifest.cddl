@@ -41,9 +41,10 @@ SUIT_Severable_Manifest_Members = (
 
 SUIT_Integrated_Payload = (suit-integrated-payload-key => bstr)
 SUIT_Integrated_Dependency = (
-    suit-integrated-payload-key => bstr .cbor SUIT_Envelope
+    suit-integrated-dependency-key => bstr .cbor SUIT_Envelope
 )
 suit-integrated-payload-key = nint / uint .ge 24
+suit-integrated-dependency-key = suit-integrated-payload-key
 
 SUIT_Manifest_Tagged = #6.480(SUIT_Manifest)
 
@@ -52,8 +53,7 @@ SUIT_Manifest = {
     suit-manifest-sequence-number => uint,
     suit-common                   => bstr .cbor SUIT_Common,
     ? suit-reference-uri          => tstr,
-    SUIT_Severable_Manifest_Members,
-    SUIT_Severable_Members_Digests,
+    SUIT_Severable_Members_Choice,
     SUIT_Unseverable_Members,
     * $$SUIT_Manifest_Extensions,
 }
@@ -62,16 +62,16 @@ SUIT_Unseverable_Members = (
   ? suit-validate => bstr .cbor SUIT_Command_Sequence,
   ? suit-load => bstr .cbor SUIT_Command_Sequence,
   ? suit-run => bstr .cbor SUIT_Command_Sequence,
-  * $$unserverble-manifest-member-extensions,
+  * $$unseverable-manifest-member-extensions,
 )
 
-SUIT_Severable_Members_Digests = (
-  ? suit-dependency-resolution => SUIT_Digest,
-  ? suit-payload-fetch => SUIT_Digest,
-  ? suit-install => SUIT_Digest,
-  ? suit-text => SUIT_Digest,
-  ? suit-coswid => SUIT_Digest,
-  * $$severable-manifest-members-digests-extensions
+SUIT_Severable_Members_Choice = (
+  ? suit-dependency-resolution => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  ? suit-payload-fetch => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  ? suit-install => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  ? suit-text => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  ? suit-coswid => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  * $$severable-manifest-members-choice-extensions
 )
 
 SUIT_Common = {
@@ -92,7 +92,10 @@ SUIT_Dependency = {
     * $$SUIT_Dependency-extensions,
 }
 
+;REQUIRED to implement:
 suit-cose-hash-algs /= cose-alg-sha-256
+
+;OPTIONAL to implement:
 suit-cose-hash-algs /= cose-alg-shake128
 suit-cose-hash-algs /= cose-alg-sha-384
 suit-cose-hash-algs /= cose-alg-sha-512
@@ -133,7 +136,7 @@ SUIT_Condition //= (suit-condition-use-before,        SUIT_Rep_Policy)
 SUIT_Condition //= (suit-condition-minimum-battery,   SUIT_Rep_Policy)
 SUIT_Condition //= (suit-condition-update-authorized, SUIT_Rep_Policy)
 SUIT_Condition //= (suit-condition-version,           SUIT_Rep_Policy)
-SUIT_Condition //= (suit-condition-component-offset,  SUIT_Rep_Policy)
+SUIT_Condition //= (suit-condition-component-slot,    SUIT_Rep_Policy)
 SUIT_Condition //= (suit-condition-abort,             SUIT_Rep_Policy)
 
 SUIT_Directive //= (suit-directive-set-component-index,  IndexArg)
@@ -153,11 +156,11 @@ SUIT_Directive //= (suit-directive-swap,              SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-run,               SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-wait,              SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-fetch-uri-list,    SUIT_Rep_Policy)
-SUIT_Directive //= (suit-directive-garbage-collect,   SUIT_Rep_Policy)
+SUIT_Directive //= (suit-directive-unlink,            SUIT_Rep_Policy)
 
 SUIT_Directive_Try_Each_Argument = [
-    + bstr .cbor SUIT_Command_Sequence,
-    nil / bstr .cbor SUIT_Command_Sequence
+    2* bstr .cbor SUIT_Command_Sequence,
+    ?nil
 ]
 
 SUIT_Rep_Policy = uint .bits suit-reporting-bits
@@ -196,7 +199,7 @@ SUIT_Parameters //= (suit-parameter-image-digest
     => bstr .cbor SUIT_Digest)
 SUIT_Parameters //= (suit-parameter-image-size => uint)
 SUIT_Parameters //= (suit-parameter-use-before => uint)
-SUIT_Parameters //= (suit-parameter-component-offset => uint)
+SUIT_Parameters //= (suit-parameter-component-slot => uint)
 
 SUIT_Parameters //= (suit-parameter-encryption-info
     => bstr .cbor SUIT_Encryption_Info)
@@ -285,10 +288,10 @@ SUIT_Unpack_Algorithm_Srec = 4
 SUIT_URI_List = [+ tstr ]
 
 SUIT_Text_Map = {
+    SUIT_Text_Keys,
     * SUIT_Component_Identifier => {
         SUIT_Text_Component_Keys
-    },
-    SUIT_Text_Keys
+    }
 }
 
 SUIT_Text_Component_Keys = (
@@ -349,7 +352,7 @@ suit-condition-vendor-identifier = 1
 suit-condition-class-identifier  = 2
 suit-condition-image-match       = 3
 suit-condition-use-before        = 4
-suit-condition-component-offset  = 5
+suit-condition-component-slot    = 5
 
 suit-condition-abort                    = 14
 suit-condition-device-identifier        = 24
@@ -372,21 +375,21 @@ suit-directive-wait                     = 29
 suit-directive-fetch-uri-list           = 30
 suit-directive-swap                     = 31
 suit-directive-run-sequence             = 32
-suit-directive-garbage-collect          = 33
+suit-directive-unlink                   = 33
 
-suit-wait-event-authorization = 1
-suit-wait-event-power = 2
-suit-wait-event-network = 3
+suit-wait-event-authorization        = 1
+suit-wait-event-power                = 2
+suit-wait-event-network              = 3
 suit-wait-event-other-device-version = 4
-suit-wait-event-time = 5
-suit-wait-event-time-of-day = 6
-suit-wait-event-day-of-week = 7
+suit-wait-event-time                 = 5
+suit-wait-event-time-of-day          = 6
+suit-wait-event-day-of-week          = 7
 
 suit-parameter-vendor-identifier = 1
 suit-parameter-class-identifier  = 2
 suit-parameter-image-digest      = 3
 suit-parameter-use-before        = 4
-suit-parameter-component-offset  = 5
+suit-parameter-component-slot    = 5
 
 suit-parameter-strict-order      = 12
 suit-parameter-soft-failure      = 13
