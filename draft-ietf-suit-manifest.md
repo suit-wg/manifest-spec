@@ -546,7 +546,7 @@ The following table describes the behavior of each command. "params" represents 
 | Wait For Event  | until event(arg), wait
 | Run Sequence | exec(arg)
 | Run with Arguments | run(current, arg)
-| Garbage Collect | garbage-collect(current)
+| Unlink | unlink(current)
 
 ## Special Cases of Component Index and Dependency Index {#index-true}
 
@@ -1425,7 +1425,7 @@ Run | suit-directive-run | {{suit-directive-run}}
 Wait For Event | suit-directive-wait | {{suit-directive-wait}}
 Run Sequence | suit-directive-run-sequence | {{suit-directive-run-sequence}}
 Swap | suit-directive-swap | {{suit-directive-swap}}
-Garbage Collect | suit-directive-garbage-collect | {{suit-directive-garbage-collect}}
+Unlink | suit-directive-unlink | {{suit-directive-unlink}}
 
 The abstract description of these commands is defined in {{command-behavior}}.
 
@@ -1550,17 +1550,17 @@ suit-directive-swap instructs the manifest processor to move the source to the d
 
 If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they MUST be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.
 
-### suit-directive-garbage-collect {#suit-directive-garbage-collect}
+### suit-directive-unlink {#suit-directive-unlink}
 
-suit-directive-garbage-collect marks the current component as unused in the current manifest. This can be used to remove temporary storage or remove components that are no longer needed. Example use cases:
+suit-directive-unlink marks the current component as unused in the current manifest. This can be used to remove temporary storage or remove components that are no longer needed. Example use cases:
 
 * Temporary storage for encrypted download
 * Temporary storage for verifying decompressed file before writing to flash
 * Removing Trusted Service no longer needed by Trusted Application
 
-Once the current Command Sequence is complete, the manifest processors checks each marked component to see whether any other manifests have referenced it. Those marked components with no other references are deleted. The manifest processor MAY choose to ignore a Garbage Collect directive depending on device policy.
+Once the current Command Sequence is complete, the manifest processors checks each marked component to see whether any other manifests have referenced it. Those marked components with no other references are deleted. The manifest processor MAY choose to ignore a Unlink directive depending on device policy.
 
-suit-directive-garbage-collect is OPTIONAL to implement in manifest processors.
+suit-directive-unlink is OPTIONAL to implement in manifest processors.
 
 ### Integrity Check Values {#integrity-checks}
 
@@ -1640,7 +1640,7 @@ Label | Name | Reference
 30 | Fetch URI List | {{suit-directive-fetch-uri-list}}
 31 | Swap | {{suit-directive-swap}}
 32 | Run Sequence | {{suit-directive-run-sequence}}
-33 | Garbage Collect | {{suit-directive-garbage-collect}}
+33 | Unlink | {{suit-directive-unlink}}
 nint | Custom Condition | {{SUIT_Condition_Custom}}
 
 ## SUIT Parameters
@@ -1961,7 +1961,7 @@ Wait For Event | {{suit-directive-wait}} | OPTIONAL
 Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
 Swap | {{suit-directive-swap}} | OPTIONAL
 Fetch URI List | {{suit-directive-fetch-uri-list}} | OPTIONAL
-Garbage Collect | {{suit-directive-garbage-collect}} | OPTIONAL
+Unlink | {{suit-directive-unlink}} | OPTIONAL
 
 The subsequent table shows the parameters.
 
