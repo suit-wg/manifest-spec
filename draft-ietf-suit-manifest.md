@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-13
+docname: draft-ietf-suit-manifest-14
 category: std
 
 ipr: trust200902
@@ -66,7 +66,7 @@ informative:
   RFC8392:
   RFC7228:
   RFC8747:
-  I-D.kucherawy-rfc8478bis:
+  RFC8878:
   YAML:
     title: "YAML Ain't Markup Language"
     author:
@@ -330,7 +330,7 @@ See {{delegation-info}} for more detail.
 
 ## Authentication Block {#ovr-auth}
 
-The Authentication Block contains a bstr-wrapped SUIT Digest Container, see [SUIT_Digest], and one or more {{RFC8152}} CBOR Object Signing and Encryption (COSE) authentication blocks. These blocks are one of:
+The Authentication Block contains a bstr-wrapped SUIT Digest Container, see {{SUIT_Digest}}, and one or more {{RFC8152}} CBOR Object Signing and Encryption (COSE) authentication blocks. These blocks are one of:
 
 * COSE_Sign_Tagged
 * COSE_Sign1_Tagged
@@ -870,7 +870,7 @@ A Recipient MAY choose to cache intermediaries and/or delegates. If an Update Di
 
 ## Authenticated Manifests {#authentication-info}
 
-The suit-authentication-wrapper contains a list containing a SUIT Digest Container (see [SUIT_Digest]) and one or more cryptographic authentication wrappers for the Manifest. These blocks are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged structures. Each of these blocks contains a SUIT_Digest of the Manifest. This enables modular processing of the manifest. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}}. The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, except for the OPTIONAL suit-delegation, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper or suit-delegation.
+The suit-authentication-wrapper contains a list containing a SUIT Digest Container (see {{SUIT_Digest}}) and one or more cryptographic authentication wrappers for the Manifest. These blocks are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged structures. Each of these blocks contains a SUIT_Digest of the Manifest. This enables modular processing of the manifest. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}}. The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, except for the OPTIONAL suit-delegation, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper or suit-delegation.
 
 A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.
 
@@ -1222,7 +1222,7 @@ Encryption Info defines the keys and algorithm information Fetch or Copy has to 
 
 #### suit-parameter-compression-info {#suit-parameter-compression-info}
 
-SUIT_Compression_Info defines any information that is required for a Recipient to perform decompression operations. SUIT_Compression_Info is a map containing this data. The only element defined for the map in this specification is the suit-compression-algorithm. This document defines the following suit-compression-algorithm's: ZLIB {{RFC1950}}, Brotli {{RFC7932}}, and ZSTD {{I-D.kucherawy-rfc8478bis}}.
+SUIT_Compression_Info defines any information that is required for a Recipient to perform decompression operations. SUIT_Compression_Info is a map containing this data. The only element defined for the map in this specification is the suit-compression-algorithm. This document defines the following suit-compression-algorithm's: ZLIB {{RFC1950}}, Brotli {{RFC7932}}, and ZSTD {{RFC8878}}.
 
 Additional suit-compression-algorithm's can be registered through the IANA-maintained registry. If such a format requires more data than an algorithm identifier, one or more new elements MUST be introduced by specifying an element for SUIT_Compression_Info-extensions.
 
@@ -1593,7 +1593,7 @@ A third model allows a Recipient to provide even more fine-grained controls: The
 
 The SUIT digest is a CBOR List containing two elements: an algorithm identifier and a bstr containing the bytes of the digest. Some forms of digest may require additional parameters. These can be added following the digest.
 
-The values of the algorithm identifier are defined by {I-D.ietf-cose-hash-algs}. The following algorithms MUST be implemented by all Manifest Processors:
+The values of the algorithm identifier are defined by {{I-D.ietf-cose-hash-algs}}. The following algorithms MUST be implemented by all Manifest Processors:
 
 * SHA-256 (-16)
 
@@ -1748,7 +1748,7 @@ We would like to thank the following persons for their support in designing this
 # A. Full CDDL {#full-cddl}
 In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL data definition.
 
-To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in {{rfc8478bis}}, section 1.4.
+To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in {{RFC8152}}, section 1.4.
 
 ~~~ CDDL
 {::include draft-ietf-suit-manifest.cddl}

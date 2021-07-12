@@ -1,4 +1,4 @@
-SUIT_Envelope_Tagged = #6.48(SUIT_Envelope)
+SUIT_Envelope_Tagged = #6.107(SUIT_Envelope)
 SUIT_Envelope = {
   ? suit-delegation => bstr .cbor SUIT_Delegation,
   suit-authentication-wrapper => bstr .cbor SUIT_Authentication,
@@ -46,7 +46,7 @@ SUIT_Integrated_Dependency = (
 suit-integrated-payload-key = nint / uint .ge 24
 suit-integrated-dependency-key = suit-integrated-payload-key
 
-SUIT_Manifest_Tagged = #6.480(SUIT_Manifest)
+SUIT_Manifest_Tagged = #6.1070(SUIT_Manifest)
 
 SUIT_Manifest = {
     suit-manifest-version         => 1,
@@ -66,8 +66,10 @@ SUIT_Unseverable_Members = (
 )
 
 SUIT_Severable_Members_Choice = (
-  ? suit-dependency-resolution => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
-  ? suit-payload-fetch => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  ? suit-dependency-resolution => \
+    bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  ? suit-payload-fetch => \
+    bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
   ? suit-install => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
   ? suit-text => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
   ? suit-coswid => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
