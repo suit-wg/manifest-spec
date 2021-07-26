@@ -40,7 +40,7 @@ be9d-e663e4d41ffe /,
                             / directive-override-parameters / 20,{
                                 / offset / 5:33792,
                             } ,
-                            / condition-component-offset / 5,5 ,
+                            / condition-component-slot / 5,5 ,
                             / directive-override-parameters / 20,{
                                 / image-digest / 3:<<[
                                     / algorithm-id / -16 / "sha256" /,
@@ -54,7 +54,7 @@ h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                             / directive-override-parameters / 20,{
                                 / offset / 5:541696,
                             } ,
-                            / condition-component-offset / 5,5 ,
+                            / condition-component-slot / 5,5 ,
                             / directive-override-parameters / 20,{
                                 / image-digest / 3:<<[
                                     / algorithm-id / -16 / "sha256" /,
@@ -75,7 +75,7 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                         / directive-set-parameters / 19,{
                             / offset / 5:33792,
                         } ,
-                        / condition-component-offset / 5,5 ,
+                        / condition-component-slot / 5,5 ,
                         / directive-set-parameters / 19,{
                             / uri / 21:'http://example.com/file1.bin',
                         }
@@ -84,7 +84,7 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                         / directive-set-parameters / 19,{
                             / offset / 5:541696,
                         } ,
-                        / condition-component-offset / 5,5 ,
+                        / condition-component-slot / 5,5 ,
                         / directive-set-parameters / 19,{
                             / uri / 21:'http://example.com/file2.bin',
                         }
