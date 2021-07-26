@@ -79,7 +79,7 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                     / image-size / 14:76834,
                     / source-component / 22:0 / [h'00'] /,
                     / compression-info / 19:<<{
-                        / compression-algorithm / 1:1 / "gzip" /,
+                        / compression-algorithm / 1:1 / "zlib" /,
                     }>>,
                 } ,
                 / directive-copy / 22,2 ,
