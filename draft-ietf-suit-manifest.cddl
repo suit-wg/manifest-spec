@@ -93,15 +93,21 @@ SUIT_Common_Sequence = [
 
 SUIT_Common_Commands //= (suit-directive-set-component-index,  IndexArg)
 SUIT_Common_Commands //= (suit-directive-run-sequence,
-    bstr .cbor SUIT_Command_Sequence)
+    bstr .cbor SUIT_Common_Sequence)
 SUIT_Common_Commands //= (suit-directive-try-each,
-    SUIT_Directive_Try_Each_Argument)
+    SUIT_Directive_Try_Each_Argument_Common)
 SUIT_Common_Commands //= (suit-directive-override-parameters,
     {+ SUIT_Parameters})
 
 IndexArg /= uint
 IndexArg /= bool
 IndexArg /= [+uint]
+
+
+SUIT_Directive_Try_Each_Argument_Common = [
+    2* bstr .cbor SUIT_Common_Sequence,
+    ?nil
+]
 
 SUIT_Command_Sequence = [ + (
     SUIT_Condition // SUIT_Directive // SUIT_Command_Custom
