@@ -6,7 +6,6 @@ SUIT_Envelope = {
   SUIT_Severable_Manifest_Members,
   * SUIT_Integrated_Payload,
   * $$SUIT_Envelope_Extensions,
-  * (int => bstr)
 }
 
 SUIT_Authentication = [
