@@ -71,6 +71,15 @@ h'2bfc4d0cc6680be7dd9f5ca30aa2bb5d1998145de33d54101b80e2ca49faf918'
             / condition-image-match / 3,15
         ]>>,
         / text / 13:<<{
+            1:'## Example 2: Simultaneous Download, Installation, Secure Boot, Severed Fields
+
+    This example covers the following templates:
+    
+    * Compatibility Check ({{template-compatibility-check}})
+    * Secure Boot ({{template-secure-boot}})
+    * Firmware Download ({{firmware-download-template}})
+    
+    This example also demonstrates severable elements ({{ovr-severable}}), and text ({{manifest-digest-text}}).'
             [h'00']:{
                     / vendor-domain / 3:'arm.com',
                     / component-description / 5:'This component is a
