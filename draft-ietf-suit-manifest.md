@@ -1110,20 +1110,21 @@ CBOR-encoded object parameters are still wrapped in a bstr. This is because it a
 
 The CBOR PEN UUID Namespace Identifier is constructed as follows:
 
-It uses the OID Namespace as a starting point, then uses the CBOR OID encoding for the IANA PEN OID (1.3.6.1.4.1):
+It uses the OID Namespace as a starting point, then uses the CBOR absolute OID encoding for the IANA PEN OID (1.3.6.1.4.1):
 
 ~~~
-D8 DE                # tag(111)
+D8 6F                # tag(111)
    45                # bytes(5)
+# Absolute OID encoding of IANA Private Enterprise Number:
+#    1.3. 6. 1. 4. 1
       2B 06 01 04 01 # X.690 Clause 8.19
-#    1.3  6  1  4  1  show component encoding
 ~~~
 
 Computing a type 5 UUID from these produces:
 
 ~~~
 NAMESPACE_CBOR_PEN = UUID5(NAMESPACE_OID, h'D86F452B06010401')
-NAMESPACE_CBOR_PEN = 08cfcc43-47d9-5696-85b1-9c738465760e
+NAMESPACE_CBOR_PEN = 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e
 ~~~
 
 #### Constructing UUIDs {#uuid-identifiers}
