@@ -53,54 +53,20 @@ normative:
   RFC8152:
   RFC3986:
   RFC9019:
-  I-D.ietf-cose-hash-algs:
+  I-D.ietf-suit-information-model:
 
 
 informative:
-  I-D.ietf-suit-architecture:
-  I-D.ietf-suit-information-model:
+  I-D.ietf-cose-hash-algs:
   I-D.ietf-teep-architecture:
-  I-D.ietf-sacm-coswid:
   I-D.ietf-cbor-tags-oid:
-  RFC7932:
-  RFC1950:
-  RFC8392:
+  I-D.ietf-suit-firmware-encryption:
   RFC7228:
-  RFC8747:
-  RFC8878:
   YAML:
     title: "YAML Ain't Markup Language"
     author:
     date: 2020
     target: https://yaml.org/
-  HEX:
-    title: "Intel HEX"
-    author:
-    -
-      ins: "Wikipedia"
-    date: 2020
-    target: https://en.wikipedia.org/wiki/Intel_HEX
-  SREC:
-    title: "SREC (file format)"
-    author:
-    -
-      ins: "Wikipedia"
-    date: 2020
-    target: https://en.wikipedia.org/wiki/SREC_(file_format)
-  ELF:
-    title: "Executable and Linkable Format (ELF)"
-    author:
-    -
-      ins: "Wikipedia"
-    date: 2020
-    target: https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
-  COFF:
-    title: "Common Object File Format (COFF)"
-    author:
-    -
-      ins: "Wikipedia"
-    date: 2020
-    target: https://en.wikipedia.org/wiki/COFF
 
 --- abstract
 This specification describes the format of a manifest.  A manifest is
@@ -150,7 +116,7 @@ The SUIT manifest can be used for a variety of purposes throughout its lifecycle
 
 Each of these uses happens at a different stage of the manifest lifecycle, so each has different requirements.
 
-It is assumed that the reader is familiar with the high-level firmware update architecture {{I-D.ietf-suit-architecture}} and the threats, requirements, and user stories in {{I-D.ietf-suit-information-model}}.
+It is assumed that the reader is familiar with the high-level firmware update architecture {{RFC9019}} and the threats, requirements, and user stories in {{I-D.ietf-suit-information-model}}.
 
 The design of this specification is based on an observation that the vast majority of operations that a device can perform during an update or Trusted Invocation are composed of a small group of operations:
 
@@ -220,13 +186,13 @@ The complete CDDL description is provided in {{full-cddl}}, examples are given i
 This specification covers the core features of SUIT. Additional specifications will cover advanced use cases and update management needs:
 
 * Firmware Encryption is covered in {{I-D.ietf-suit-firmware-encryption}}
-* Update Management is covered in {{I-D.moran-suit-management-commands}}
-* Multiple Trust Domains (dependencies, key delegation, multiple processors, TEEs, etc.) are covered in {{I-D.moran-suit-trust-domains}}
-* Update Compression is covered in {{I-D.moran-suit-payload-compression}}
+* Update Management is covered in (TBD) <!--{{I-D.moran-suit-update-management}}-->
+* Multiple Trust Domains (dependencies, key delegation, multiple processors, TEEs, etc.) are covered in (TBD) <!--{{I-D.moran-suit-trust-domains}}-->
+* Update Compression is covered in (TBD) <!--{{I-D.moran-suit-payload-compression}}-->
 
 # Background {#background}
 
-Distributing software updates to diverse devices with diverse trust anchors in a coordinated system presents unique challenges. Devices have a broad set of constraints, requiring different metadata to make appropriate decisions. There may be many actors in production IoT systems, each of whom has some authority. Distributing firmware in such a multi-party environment presents additional challenges. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in {{I-D.ietf-suit-architecture}}. The security aspects are described in {{I-D.ietf-suit-information-model}}.
+Distributing software updates to diverse devices with diverse trust anchors in a coordinated system presents unique challenges. Devices have a broad set of constraints, requiring different metadata to make appropriate decisions. There may be many actors in production IoT systems, each of whom has some authority. Distributing firmware in such a multi-party environment presents additional challenges. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in {{RFC9019}}. The security aspects are described in {{I-D.ietf-suit-information-model}}.
 
 ## IoT Firmware Update Constraints
 
@@ -398,7 +364,7 @@ In some cases, it is beneficial to include a payload in the Envelope of a manife
 * When an update is delivered via a comparatively unconstrained medium, such as a removable mass storage device, it may be beneficial to bundle updates into single files.
 * When a manifest transports a small payload, such as an encrypted key, that payload may be placed in the manifest's envelope.
 
-See {{composite-manifests}} for more detail.
+See {{template-integrated-payload}} for more detail.
 
 # Manifest Processor Behavior {#interpreter-behavior}
 
@@ -1068,7 +1034,7 @@ Device Identifier | suit-condition-device-identifier | {{identifier-conditions}}
 Image Match | suit-condition-image-match | {{suit-condition-image-match}}
 Component Slot | suit-condition-component-slot | {{suit-condition-component-slot}}
 Abort | suit-condition-abort | {{suit-condition-abort}}
-Custom Condition | suit-condition-custom | {{SUIT_Condition_Custom }}
+Custom Condition | suit-condition-custom | {{SUIT_Condition_Custom}}
 
 The abstract description of these conditions is defined in {{command-behavior}}.
 
@@ -1302,7 +1268,7 @@ Label | Name | Reference
 27 | Reserved
 28 | Reserved
 29 | Reserved
-30 | URI List | {{suit-parameter-uri-list}}
+30 | Reserved
 nint | Custom | {{suit-parameter-custom}}
 
 ## SUIT Text Values
@@ -1330,7 +1296,7 @@ nint | Custom | {{manifest-digest-text}}
 
 #  Security Considerations
 
-This document is about a manifest format protecting and describing how to retrieve, install, and invoke firmware images and as such it is part of a larger solution for delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture {{I-D.ietf-suit-architecture}} and in the information model {{I-D.ietf-suit-information-model}} documents.
+This document is about a manifest format protecting and describing how to retrieve, install, and invoke firmware images and as such it is part of a larger solution for delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture {{RFC9019}} and in the information model {{I-D.ietf-suit-information-model}} documents.
 
 # Acknowledgements
 
@@ -1451,7 +1417,7 @@ This example covers the following templates:
 {::include examples/example3.json.txt}
 
 
-## Example 4: Load and Decompress from External Storage
+## Example 4: Load from External Storage
 
 This example covers the following templates:
 
@@ -1459,7 +1425,7 @@ This example covers the following templates:
 * Secure Boot ({{template-secure-boot}})
 * Firmware Download ({{firmware-download-template}})
 * Install ({{template-install}})
-* Load & Decompress ({{template-load-decompress}})
+* Load ({{template-load-ext}})
 
 {::include examples/example4.json.txt}
 

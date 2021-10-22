@@ -272,8 +272,6 @@ suit-parameter-device-identifier = 24
 
 suit-parameter-custom = nint
 
-suit-compression-algorithm = 1
-
 suit-text-manifest-description  = 1
 suit-text-update-description    = 2
 suit-text-manifest-json-source  = 3
