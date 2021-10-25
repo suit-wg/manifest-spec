@@ -264,9 +264,9 @@ The diagram below illustrates the hierarchy of the Envelope.
 | Manifest           --------------> +------------------------------+
 | Severable Elements      |          | Manifest                     |
 | Human-Readable Text     |          +------------------------------+
-| COSWID                  |          | Structure Version            |
-| Integrated Payloads     |          | Sequence Number              |
-+-------------------------+          | Reference to Full Manifest   |
+| Integrated Payloads     |          | Structure Version            |
++-------------------------+          | Sequence Number              |
+                                     | Reference to Full Manifest   |
                                +------ Common Structure             |
                                | +---- Command Sequences            |
 +-------------------------+    | |   | Digests of Envelope Elements |
