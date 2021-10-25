@@ -191,7 +191,6 @@ SUIT_Text_Keys = (
     * $$suit-text-key-extensions
 )
 
-;suit-delegation = 1
 suit-authentication-wrapper = 2
 suit-manifest = 3
 
@@ -208,52 +207,35 @@ suit-manifest-version = 1
 suit-manifest-sequence-number = 2
 suit-common = 3
 suit-reference-uri = 4
-;suit-dependency-resolution = 7
 suit-payload-fetch = 8
 suit-install = 9
 suit-validate = 10
 suit-load = 11
 suit-run = 12
 suit-text = 13
-;suit-coswid = 14
 
-;suit-dependencies = 1
 suit-components = 2
 suit-common-sequence = 4
-
-;suit-dependency-digest = 1
-;suit-dependency-prefix = 2
 
 suit-command-custom = nint
 
 suit-condition-vendor-identifier = 1
 suit-condition-class-identifier  = 2
 suit-condition-image-match       = 3
-;suit-condition-use-before        = 4
 suit-condition-component-slot    = 5
 
 suit-condition-abort                    = 14
 suit-condition-device-identifier        = 24
-;suit-condition-image-not-match          = 25
-;suit-condition-minimum-battery          = 26
-;suit-condition-update-authorized        = 27
-;suit-condition-version                  = 28
 
 suit-directive-set-component-index      = 12
-;suit-directive-set-dependency-index     = 13
 suit-directive-try-each                 = 15
-;suit-directive-process-dependency       = 18
-;suit-directive-set-parameters           = 19
 suit-directive-override-parameters      = 20
 suit-directive-fetch                    = 21
 suit-directive-copy                     = 22
 suit-directive-run                      = 23
 
-;suit-directive-wait                     = 29
-;suit-directive-fetch-uri-list           = 30
 suit-directive-swap                     = 31
 suit-directive-run-sequence             = 32
-;suit-directive-unlink                   = 33
 
 suit-parameter-vendor-identifier = 1
 suit-parameter-class-identifier  = 2
