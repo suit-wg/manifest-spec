@@ -29,7 +29,6 @@ SUIT_Severable_Manifest_Members = (
   ? suit-payload-fetch => bstr .cbor SUIT_Command_Sequence,
   ? suit-install => bstr .cbor SUIT_Command_Sequence,
   ? suit-text => bstr .cbor SUIT_Text_Map,
-  ? suit-coswid => bstr .cbor concise-software-identity,
   * $$SUIT_severable-members-extensions,
 )
 
