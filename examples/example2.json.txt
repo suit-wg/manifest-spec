@@ -63,7 +63,7 @@ h'2bfc4d0cc6680be7dd9f5ca30aa2bb5d1998145de33d54101b80e2ca49faf918'
             ]>>,
         }>>,
         / install / 9:<<[
-            / directive-set-parameters / 19,{
+            / directive-override-parameters / 20,{
                 / uri /
 21:'http://example.com/very/long/path/to/file/file.bin',
             } ,
