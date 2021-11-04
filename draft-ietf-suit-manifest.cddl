@@ -102,6 +102,7 @@ suit-cose-hash-algs /= cose-alg-shake128
 suit-cose-hash-algs /= cose-alg-sha-384
 suit-cose-hash-algs /= cose-alg-sha-512
 suit-cose-hash-algs /= cose-alg-shake256
+suit-cose-asym-algs /= cose-alg-es256
 
 SUIT_Component_Identifier =  [* bstr]
 
