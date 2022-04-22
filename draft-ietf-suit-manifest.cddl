@@ -33,7 +33,7 @@ SUIT_Severable_Manifest_Members = (
 )
 
 SUIT_Integrated_Payload = (suit-integrated-payload-key => bstr)
-suit-integrated-payload-key = str
+suit-integrated-payload-key = tstr
 
 SUIT_Manifest_Tagged = #6.1070(SUIT_Manifest)
 
@@ -55,7 +55,7 @@ SUIT_Unseverable_Members = (
 )
 
 SUIT_Severable_Members_Choice = (
-  ? suit-payload-fetch => \
+  ? suit-payload-fetch =>
     bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
   ? suit-install => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
   ? suit-text => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
