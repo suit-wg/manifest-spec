@@ -143,7 +143,7 @@ Additionally, the following terminology is used throughout this document:
 * Resource: A piece of information that is used to construct a payload.
 * Manifest: A manifest is a bundle of metadata about the firmware for an IoT device, where to
 find the firmware, and the devices to which it applies.
-* Envelope: A container with the manifest, an authentication wrapper with cryptographic information protecting the manifest, authorization information, and severable elements (see: TBD).
+* Envelope: A container with the manifest, an authentication wrapper with cryptographic information protecting the manifest, authorization information, and severable elements.
 * Update: One or more manifests that describe one or more payloads.
 * Update Authority: The owner of a cryptographic key used to sign updates, trusted by Recipients.
 * Recipient: The system, typically an IoT device, that receives and processes a manifest.
