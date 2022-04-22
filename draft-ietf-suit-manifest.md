@@ -61,6 +61,9 @@ informative:
   I-D.ietf-teep-architecture:
   I-D.ietf-cbor-tags-oid:
   I-D.ietf-suit-firmware-encryption:
+  I-D.ietf-suit-update-management:
+  I-D.ietf-suit-trust-domains:
+  I-D.ietf-suit-report:
   RFC7228:
   YAML:
     title: "YAML Ain't Markup Language"
@@ -183,12 +186,13 @@ The IANA consideration section, see {{iana}}, provides instructions to IANA to c
 
 The complete CDDL description is provided in {{full-cddl}}, examples are given in {{examples}} and a design rational is offered in {{design-rationale}}. Finally, {{implementation-matrix}} gives a summarize of the mandatory-to-implement features of this specification.
 
-This specification covers the core features of SUIT. Additional specifications will cover advanced use cases and update management needs:
+This specification covers the core features of SUIT. Additional specifications describe functionality of advanced use cases, such as:
 
 * Firmware Encryption is covered in {{I-D.ietf-suit-firmware-encryption}}
-* Update Management is covered in (TBD) <!--{{I-D.moran-suit-update-management}}-->
-* Multiple Trust Domains (dependencies, key delegation, multiple processors, TEEs, etc.) are covered in (TBD) <!--{{I-D.moran-suit-trust-domains}}-->
-* Update Compression is covered in (TBD) <!--{{I-D.moran-suit-payload-compression}}-->
+* Update Management is covered in {{I-D.ietf-suit-update-management}}
+* Features, such as dependencies, key delegation, multiple processors, required by the use of multiple trust domains are covered in {{I-D.ietf-suit-trust-domains}}
+* Secure reporting of the update status is covered in {{I-D.ietf-suit-report}}
+* Compression of firmware images
 
 # Background {#background}
 
