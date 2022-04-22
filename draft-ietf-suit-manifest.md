@@ -703,7 +703,7 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
 
 Likewise, Section 6.3 of {{RFC8152}} describes the details for computing a MAC and the fields of the MAC_structure need to be populated. The rules for external_aad and the payload fields described in the paragraph above also apply to this structure.
 
-The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper (NOTE: key delegation MAY relax this requirement to include a delegation structure as well).
+The suit-authentication-wrapper MUST come before the suit-manifest element, regardless of canonical encoding of CBOR.
 
 A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.
 
