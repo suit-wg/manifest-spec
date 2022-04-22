@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-16
+docname: draft-ietf-suit-manifest-17
 category: std
 
 ipr: trust200902
@@ -53,7 +53,7 @@ normative:
   RFC8152:
   RFC3986:
   RFC9019:
-  I-D.ietf-suit-information-model:
+  RFC9124:
 
 
 informative:
@@ -97,7 +97,7 @@ A manifest is a bundle of metadata describing one or more code or data payloads 
 
 This specification defines the SUIT manifest format and it is intended to meet several goals:
 
-* Meet the requirements defined in {{I-D.ietf-suit-information-model}}.
+* Meet the requirements defined in {{RFC9124}}.
 * Simple to parse on a constrained node
 * Simple to process on a constrained node
 * Compact encoding
@@ -119,7 +119,7 @@ The SUIT manifest can be used for a variety of purposes throughout its lifecycle
 
 Each of these uses happens at a different stage of the manifest lifecycle, so each has different requirements.
 
-It is assumed that the reader is familiar with the high-level firmware update architecture {{RFC9019}} and the threats, requirements, and user stories in {{I-D.ietf-suit-information-model}}.
+It is assumed that the reader is familiar with the high-level firmware update architecture {{RFC9019}} and the threats, requirements, and user stories in {{RFC9124}}.
 
 The design of this specification is based on an observation that the vast majority of operations that a device can perform during an update or Trusted Invocation are composed of a small group of operations:
 
@@ -133,7 +133,7 @@ In this document, these operations are called commands. Commands are classed as 
 
 The available commands support simple steps, such as copying a firmware image from one place to another, checking that a firmware image is correct, verifying that the specified firmware is the correct firmware for the device, or unpacking a firmware. By using these steps in different orders and changing the parameters they use, a broad range of use cases can be supported. The SUIT manifest uses this observation to optimize metadata for consumption by constrained devices.
 
-While the SUIT manifest is informed by and optimized for firmware update and Trusted Invocation use cases, there is nothing in the SUIT Information Model ({{I-D.ietf-suit-information-model}}) that restricts its use to only those use cases. Other use cases include the management of trusted applications (TAs) in a Trusted Execution Environment (TEE), as discussed in {{I-D.ietf-teep-architecture}}.
+While the SUIT manifest is informed by and optimized for firmware update and Trusted Invocation use cases, there is nothing in the SUIT Information Model ({{RFC9124}}) that restricts its use to only those use cases. Other use cases include the management of trusted applications (TAs) in a Trusted Execution Environment (TEE), as discussed in {{I-D.ietf-teep-architecture}}.
 
 #  Conventions and Terminology
 
@@ -196,7 +196,7 @@ This specification covers the core features of SUIT. Additional specifications d
 
 # Background {#background}
 
-Distributing software updates to diverse devices with diverse trust anchors in a coordinated system presents unique challenges. Devices have a broad set of constraints, requiring different metadata to make appropriate decisions. There may be many actors in production IoT systems, each of whom has some authority. Distributing firmware in such a multi-party environment presents additional challenges. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in {{RFC9019}}. The security aspects are described in {{I-D.ietf-suit-information-model}}.
+Distributing software updates to diverse devices with diverse trust anchors in a coordinated system presents unique challenges. Devices have a broad set of constraints, requiring different metadata to make appropriate decisions. There may be many actors in production IoT systems, each of whom has some authority. Distributing firmware in such a multi-party environment presents additional challenges. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in {{RFC9019}}. The security aspects are described in {{RFC9124}}.
 
 ## IoT Firmware Update Constraints
 
@@ -396,7 +396,7 @@ Here, valid means that a manifest has a supported encoding version and it has no
 
 These failure reasons MAY be combined with retry mechanisms prior to marking a manifest as invalid.
 
-Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in {{RFC9019}}, section 3.5. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See {{I-D.ietf-suit-information-model}}, Section 4.2.1 for more discussion on the security considerations that apply to rollback.
+Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in {{RFC9019}}, section 3.5. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See {{RFC9124}}, Section 4.2.1 for more discussion on the security considerations that apply to rollback.
 
 Following these initial tests, the manifest processor clears all parameter storage. This ensures that the manifest processor begins without any leaked data.
 
@@ -1300,7 +1300,7 @@ nint | Custom | {{manifest-digest-text}}
 
 #  Security Considerations
 
-This document is about a manifest format protecting and describing how to retrieve, install, and invoke firmware images and as such it is part of a larger solution for delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture {{RFC9019}} and in the information model {{I-D.ietf-suit-information-model}} documents.
+This document is about a manifest format protecting and describing how to retrieve, install, and invoke firmware images and as such it is part of a larger solution for delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture {{RFC9019}} and in the information model {{RFC9124}} documents.
 
 # Acknowledgements
 
