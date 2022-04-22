@@ -694,11 +694,18 @@ The Envelope is encoded as a CBOR Map. Each element of the Envelope is enclosed 
 
 ## Authenticated Manifests {#authentication-info}
 
-The suit-authentication-wrapper contains a list containing a SUIT Digest Container (see {{SUIT_Digest}}) and one or more cryptographic authentication wrappers for the Manifest. These blocks are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged structures with null payloads, indicating that the payload to be used is the SUIT Digest Container. This enables modular processing of the manifest. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 {{RFC8152}}. The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper (NOTE: key delegation MAY relax this requirement to include a delegation structure as well).
+The suit-authentication-wrapper contains a SUIT Digest Container (see {{SUIT_Digest}}) and one or more SUIT Authentication Blocks. The SUIT_Digest carries the result of computing the indicated hash algorithm over the suit-manifest element. A signing application MUST verify the suit-manifest element against the SUIT_Digest prior to signing. A SUIT Authentication Block is implemented as COSE_Mac_Tagged, COSE_Mac0_Tagged, COSE_Sign_Tagged or COSE_Sign1_Tagged structures with detached payloads, as described in RFC 8152 {{RFC8152}}.
+
+For COSE_Sign and COSE_Sign1 a special signature structure (called Sig_structure) has to be created onto which the selected digital signature algorithm is applied to, see Section 4.4 of {{RFC8152}} for details. This specification requires Sig_structure to be populated as follows:
+* The external_aad field MUST be set to a zero-length binary string (i.e. there is no external additional authenticated data).
+* The payload field is set to SUIT_Digest structure.
+All other fields in the Sig_structure are populated as described in Section 4.4 of {{RFC8152}}.
+
+Likewise, Section 6.3 of {{RFC8152}} describes the details for computing a MAC and the fields of the MAC_structure need to be populated. The rules for external_aad and the payload fields described in the paragraph above also apply to this structure.
+
+The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper (NOTE: key delegation MAY relax this requirement to include a delegation structure as well).
 
 A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.
-
-A signing application MUST verify the suit-manifest element against the SUIT_Digest prior to signing.
 
 ## Manifest {#manifest-structure}
 
