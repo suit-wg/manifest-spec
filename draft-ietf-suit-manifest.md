@@ -1325,7 +1325,7 @@ We would like to thank the following persons for their support in designing this
 # A. Full CDDL {#full-cddl}
 In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL data definition.
 
-To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in {{RFC8152}}, section 1.3.
+To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in {{RFC8152}}, Section 1.3.
 
 ~~~ CDDL
 {::include draft-ietf-suit-manifest.cddl}
