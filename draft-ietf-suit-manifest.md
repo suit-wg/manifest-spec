@@ -698,7 +698,7 @@ The suit-authentication-wrapper contains a SUIT Digest Container (see {{SUIT_Dig
 
 For COSE_Sign and COSE_Sign1 a special signature structure (called Sig_structure) has to be created onto which the selected digital signature algorithm is applied to, see Section 4.4 of {{RFC8152}} for details. This specification requires Sig_structure to be populated as follows:
 * The external_aad field MUST be set to a zero-length binary string (i.e. there is no external additional authenticated data).
-* The payload field is set to SUIT_Digest structure.
+* The payload field contains the SUIT_Digest wrapped in a bstr, as per the requirements in Section 4.4 of RFC 8152.
 All other fields in the Sig_structure are populated as described in Section 4.4 of {{RFC8152}}.
 
 Likewise, Section 6.3 of {{RFC8152}} describes the details for computing a MAC and the fields of the MAC_structure need to be populated. The rules for external_aad and the payload fields described in the paragraph above also apply to this structure.
