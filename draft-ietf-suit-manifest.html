@@ -18,28 +18,29 @@ the manifest. Software updates and Trusted Invocation both tend to use
 sequences of common operations, so the manifest encodes those sequences
 of operations, rather than declaring the metadata. 
     " name="description">
-<meta content="xml2rfc 3.10.0" name="generator">
+<meta content="xml2rfc 3.12.4" name="generator">
 <meta content="Internet-Draft" name="keyword">
-<meta content="draft-ietf-suit-manifest-14" name="ietf.draft">
+<meta content="draft-ietf-suit-manifest-17" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.10.0
-    Python 3.8.9
+  xml2rfc 3.12.4
+    Python 3.6.9
     appdirs 1.4.4
-    ConfigArgParse 1.5.3
-    google-i18n-address 2.5.0
+    ConfigArgParse 1.2.3
+    google-i18n-address 2.4.0
     html5lib 1.1
     intervaltree 3.1.0
-    Jinja2 2.11.3
+    Jinja2 2.11.2
     kitchen 1.2.6
-    lxml 4.6.3
+    lxml 4.5.2
+    MarkupSafe 2.0.1
     pycountry 20.7.3
-    pyflakes 2.4.0
-    PyYAML 6.0
-    requests 2.26.0
-    setuptools 49.2.1
+    pyflakes 2.2.0
+    PyYAML 5.3.1
+    requests 2.24.0
+    setuptools 40.6.2
     six 1.15.0
 -->
-<link href="draft-ietf-suit-manifest.xml" rel="alternate" type="application/rfc+xml">
+<link href="/tmp/CPvsSvLrqb.dir/input.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">/*
 
@@ -1194,11 +1195,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CBOR-based SUIT Manifest</td>
-<td class="right">October 2021</td>
+<td class="right">April 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Moran, et al.</td>
-<td class="center">Expires 25 April 2022</td>
+<td class="center">Expires 30 October 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1208,15 +1209,15 @@ li > p:last-of-type {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">SUIT</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-suit-manifest-14</dd>
+<dd class="internet-draft">draft-ietf-suit-manifest-17</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-10-22" class="published">22 October 2021</time>
+<time datetime="2022-04-28" class="published">28 April 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-04-25">25 April 2022</time></dd>
+<dd class="expires"><time datetime="2022-10-30">30 October 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1251,8 +1252,8 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
-        <h2 id="name-status-of-this-memo-2">
-<a href="#name-status-of-this-memo-2" class="section-name selfRef">Status of This Memo</a>
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
         </h2>
 <p id="section-boilerplate.1-1">
         This Internet-Draft is submitted in full conformance with the
@@ -1268,16 +1269,16 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 25 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 30 October 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
 <section id="section-boilerplate.2">
-        <h2 id="name-copyright-notice-2">
-<a href="#name-copyright-notice-2" class="section-name selfRef">Copyright Notice</a>
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2021 IETF Trust and the persons identified as the
+            Copyright (c) 2022 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1286,268 +1287,268 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
             publication of this document. Please review these documents
             carefully, as they describe your rights and restrictions with
             respect to this document. Code Components extracted from this
-            document must include Simplified BSD License text as described in
+            document must include Revised BSD License text as described in
             Section 4.e of the Trust Legal Provisions and are provided without
-            warranty as described in the Simplified BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="toc">
 <section id="section-toc.1">
-        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents-2">
-<a href="#name-table-of-contents-2" class="section-name selfRef">Table of Contents</a>
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
 <nav class="toc"><ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
-            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction-2" class="xref">Introduction</a></p>
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-conventions-and-terminology-2" class="xref">Conventions and Terminology</a></p>
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-conventions-and-terminology" class="xref">Conventions and Terminology</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="xref">3</a>.  <a href="#name-how-to-use-this-document-2" class="xref">How to use this Document</a></p>
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="xref">3</a>.  <a href="#name-how-to-use-this-document" class="xref">How to use this Document</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-background-2" class="xref">Background</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-background" class="xref">Background</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-iot-firmware-update-constrai" class="xref">IoT Firmware Update Constraints</a></p>
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-iot-firmware-update-constra" class="xref">IoT Firmware Update Constraints</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
-                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-suit-workflow-model-2" class="xref">SUIT Workflow Model</a></p>
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-suit-workflow-model" class="xref">SUIT Workflow Model</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-metadata-structure-overview-2" class="xref">Metadata Structure Overview</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-metadata-structure-overview" class="xref">Metadata Structure Overview</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-envelope-3" class="xref">Envelope</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-envelope" class="xref">Envelope</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-authentication-block-2" class="xref">Authentication Block</a></p>
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-authentication-block" class="xref">Authentication Block</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
-                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-manifest-3" class="xref">Manifest</a></p>
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-manifest" class="xref">Manifest</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.1">
-                    <p id="section-toc.1-1.5.2.3.2.1.1"><a href="#section-5.3.1" class="xref">5.3.1</a>.  <a href="#name-critical-metadata-2" class="xref">Critical Metadata</a></p>
+                    <p id="section-toc.1-1.5.2.3.2.1.1"><a href="#section-5.3.1" class="xref">5.3.1</a>.  <a href="#name-critical-metadata" class="xref">Critical Metadata</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.2">
-                    <p id="section-toc.1-1.5.2.3.2.2.1"><a href="#section-5.3.2" class="xref">5.3.2</a>.  <a href="#name-common-2" class="xref">Common</a></p>
+                    <p id="section-toc.1-1.5.2.3.2.2.1"><a href="#section-5.3.2" class="xref">5.3.2</a>.  <a href="#name-common" class="xref">Common</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.3">
-                    <p id="section-toc.1-1.5.2.3.2.3.1"><a href="#section-5.3.3" class="xref">5.3.3</a>.  <a href="#name-command-sequences-2" class="xref">Command Sequences</a></p>
+                    <p id="section-toc.1-1.5.2.3.2.3.1"><a href="#section-5.3.3" class="xref">5.3.3</a>.  <a href="#name-command-sequences" class="xref">Command Sequences</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.4">
-                    <p id="section-toc.1-1.5.2.3.2.4.1"><a href="#section-5.3.4" class="xref">5.3.4</a>.  <a href="#name-integrity-check-values-3" class="xref">Integrity Check Values</a></p>
+                    <p id="section-toc.1-1.5.2.3.2.4.1"><a href="#section-5.3.4" class="xref">5.3.4</a>.  <a href="#name-integrity-check-values" class="xref">Integrity Check Values</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.5">
-                    <p id="section-toc.1-1.5.2.3.2.5.1"><a href="#section-5.3.5" class="xref">5.3.5</a>.  <a href="#name-human-readable-text-2" class="xref">Human-Readable Text</a></p>
+                    <p id="section-toc.1-1.5.2.3.2.5.1"><a href="#section-5.3.5" class="xref">5.3.5</a>.  <a href="#name-human-readable-text" class="xref">Human-Readable Text</a></p>
 </li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
-                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-severable-elements-3" class="xref">Severable Elements</a></p>
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-severable-elements" class="xref">Severable Elements</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
-                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="xref">5.5</a>.  <a href="#name-integrated-payloads-2" class="xref">Integrated Payloads</a></p>
+                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="xref">5.5</a>.  <a href="#name-integrated-payloads" class="xref">Integrated Payloads</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-manifest-processor-behavior-2" class="xref">Manifest Processor Behavior</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-manifest-processor-behavior" class="xref">Manifest Processor Behavior</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-manifest-processor-setup-2" class="xref">Manifest Processor Setup</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-manifest-processor-setup" class="xref">Manifest Processor Setup</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-required-checks-2" class="xref">Required Checks</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-required-checks" class="xref">Required Checks</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.1">
-                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="xref">6.2.1</a>.  <a href="#name-minimizing-signature-verific" class="xref">Minimizing Signature Verifications</a></p>
+                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="xref">6.2.1</a>.  <a href="#name-minimizing-signature-verifi" class="xref">Minimizing Signature Verifications</a></p>
 </li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
-                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="xref">6.3</a>.  <a href="#name-interpreter-fundamental-prop" class="xref">Interpreter Fundamental Properties</a></p>
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="xref">6.3</a>.  <a href="#name-interpreter-fundamental-pro" class="xref">Interpreter Fundamental Properties</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4">
-                <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="xref">6.4</a>.  <a href="#name-abstract-machine-description" class="xref">Abstract Machine Description</a></p>
+                <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="xref">6.4</a>.  <a href="#name-abstract-machine-descriptio" class="xref">Abstract Machine Description</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5">
-                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="xref">6.5</a>.  <a href="#name-special-cases-of-component-i" class="xref">Special Cases of Component Index</a></p>
+                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="xref">6.5</a>.  <a href="#name-special-cases-of-component-" class="xref">Special Cases of Component Index</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.6">
-                <p id="section-toc.1-1.6.2.6.1"><a href="#section-6.6" class="xref">6.6</a>.  <a href="#name-serialized-processing-interp" class="xref">Serialized Processing Interpreter</a></p>
+                <p id="section-toc.1-1.6.2.6.1"><a href="#section-6.6" class="xref">6.6</a>.  <a href="#name-serialized-processing-inter" class="xref">Serialized Processing Interpreter</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.7">
-                <p id="section-toc.1-1.6.2.7.1"><a href="#section-6.7" class="xref">6.7</a>.  <a href="#name-parallel-processing-interpre" class="xref">Parallel Processing Interpreter</a></p>
+                <p id="section-toc.1-1.6.2.7.1"><a href="#section-6.7" class="xref">6.7</a>.  <a href="#name-parallel-processing-interpr" class="xref">Parallel Processing Interpreter</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-creating-manifests-2" class="xref">Creating Manifests</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-creating-manifests" class="xref">Creating Manifests</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-compatibility-check-template" class="xref">Compatibility Check Template</a></p>
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-compatibility-check-templat" class="xref">Compatibility Check Template</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-trusted-invocation-template-2" class="xref">Trusted Invocation Template</a></p>
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-trusted-invocation-template" class="xref">Trusted Invocation Template</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
-                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="xref">7.3</a>.  <a href="#name-component-download-template-2" class="xref">Component Download Template</a></p>
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="xref">7.3</a>.  <a href="#name-component-download-template" class="xref">Component Download Template</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.4">
-                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="xref">7.4</a>.  <a href="#name-install-template-2" class="xref">Install Template</a></p>
+                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="xref">7.4</a>.  <a href="#name-install-template" class="xref">Install Template</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.5">
-                <p id="section-toc.1-1.7.2.5.1"><a href="#section-7.5" class="xref">7.5</a>.  <a href="#name-integrated-payload-template-2" class="xref">Integrated Payload Template</a></p>
+                <p id="section-toc.1-1.7.2.5.1"><a href="#section-7.5" class="xref">7.5</a>.  <a href="#name-integrated-payload-template" class="xref">Integrated Payload Template</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.6">
-                <p id="section-toc.1-1.7.2.6.1"><a href="#section-7.6" class="xref">7.6</a>.  <a href="#name-load-from-nonvolatile-storag" class="xref">Load from Nonvolatile Storage Template</a></p>
+                <p id="section-toc.1-1.7.2.6.1"><a href="#section-7.6" class="xref">7.6</a>.  <a href="#name-load-from-nonvolatile-stora" class="xref">Load from Nonvolatile Storage Template</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.7">
-                <p id="section-toc.1-1.7.2.7.1"><a href="#section-7.7" class="xref">7.7</a>.  <a href="#name-a-b-image-template-2" class="xref">A/B Image Template</a></p>
+                <p id="section-toc.1-1.7.2.7.1"><a href="#section-7.7" class="xref">7.7</a>.  <a href="#name-a-b-image-template" class="xref">A/B Image Template</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-metadata-structure-2" class="xref">Metadata Structure</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-metadata-structure" class="xref">Metadata Structure</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-encoding-considerations-2" class="xref">Encoding Considerations</a></p>
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-encoding-considerations" class="xref">Encoding Considerations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-envelope-4" class="xref">Envelope</a></p>
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-envelope-2" class="xref">Envelope</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
-                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="xref">8.3</a>.  <a href="#name-authenticated-manifests-2" class="xref">Authenticated Manifests</a></p>
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="xref">8.3</a>.  <a href="#name-authenticated-manifests" class="xref">Authenticated Manifests</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
-                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="xref">8.4</a>.  <a href="#name-manifest-4" class="xref">Manifest</a></p>
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="xref">8.4</a>.  <a href="#name-manifest-2" class="xref">Manifest</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.1">
-                    <p id="section-toc.1-1.8.2.4.2.1.1"><a href="#section-8.4.1" class="xref">8.4.1</a>.  <a href="#name-suit-manifest-version-2" class="xref">suit-manifest-version</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.1.1"><a href="#section-8.4.1" class="xref">8.4.1</a>.  <a href="#name-suit-manifest-version" class="xref">suit-manifest-version</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.2">
-                    <p id="section-toc.1-1.8.2.4.2.2.1"><a href="#section-8.4.2" class="xref">8.4.2</a>.  <a href="#name-suit-manifest-sequence-numbe" class="xref">suit-manifest-sequence-number</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.2.1"><a href="#section-8.4.2" class="xref">8.4.2</a>.  <a href="#name-suit-manifest-sequence-numb" class="xref">suit-manifest-sequence-number</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.3">
-                    <p id="section-toc.1-1.8.2.4.2.3.1"><a href="#section-8.4.3" class="xref">8.4.3</a>.  <a href="#name-suit-reference-uri-2" class="xref">suit-reference-uri</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.3.1"><a href="#section-8.4.3" class="xref">8.4.3</a>.  <a href="#name-suit-reference-uri" class="xref">suit-reference-uri</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.4">
-                    <p id="section-toc.1-1.8.2.4.2.4.1"><a href="#section-8.4.4" class="xref">8.4.4</a>.  <a href="#name-suit-text-2" class="xref">suit-text</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.4.1"><a href="#section-8.4.4" class="xref">8.4.4</a>.  <a href="#name-suit-text" class="xref">suit-text</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.5">
-                    <p id="section-toc.1-1.8.2.4.2.5.1"><a href="#section-8.4.5" class="xref">8.4.5</a>.  <a href="#name-suit-common-2" class="xref">suit-common</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.5.1"><a href="#section-8.4.5" class="xref">8.4.5</a>.  <a href="#name-suit-common" class="xref">suit-common</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.6">
-                    <p id="section-toc.1-1.8.2.4.2.6.1"><a href="#section-8.4.6" class="xref">8.4.6</a>.  <a href="#name-suit_command_sequence-2" class="xref">SUIT_Command_Sequence</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.6.1"><a href="#section-8.4.6" class="xref">8.4.6</a>.  <a href="#name-suit_command_sequence" class="xref">SUIT_Command_Sequence</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.7">
-                    <p id="section-toc.1-1.8.2.4.2.7.1"><a href="#section-8.4.7" class="xref">8.4.7</a>.  <a href="#name-reporting-policy-2" class="xref">Reporting Policy</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.7.1"><a href="#section-8.4.7" class="xref">8.4.7</a>.  <a href="#name-reporting-policy" class="xref">Reporting Policy</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.8">
-                    <p id="section-toc.1-1.8.2.4.2.8.1"><a href="#section-8.4.8" class="xref">8.4.8</a>.  <a href="#name-suit_parameters-2" class="xref">SUIT_Parameters</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.8.1"><a href="#section-8.4.8" class="xref">8.4.8</a>.  <a href="#name-suit_parameters" class="xref">SUIT_Parameters</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.9">
-                    <p id="section-toc.1-1.8.2.4.2.9.1"><a href="#section-8.4.9" class="xref">8.4.9</a>.  <a href="#name-suit_condition-2" class="xref">SUIT_Condition</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.9.1"><a href="#section-8.4.9" class="xref">8.4.9</a>.  <a href="#name-suit_condition" class="xref">SUIT_Condition</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.10">
-                    <p id="section-toc.1-1.8.2.4.2.10.1"><a href="#section-8.4.10" class="xref">8.4.10</a>. <a href="#name-suit_directive-2" class="xref">SUIT_Directive</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.10.1"><a href="#section-8.4.10" class="xref">8.4.10</a>. <a href="#name-suit_directive" class="xref">SUIT_Directive</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.11">
-                    <p id="section-toc.1-1.8.2.4.2.11.1"><a href="#section-8.4.11" class="xref">8.4.11</a>. <a href="#name-integrity-check-values-4" class="xref">Integrity Check Values</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.11.1"><a href="#section-8.4.11" class="xref">8.4.11</a>. <a href="#name-integrity-check-values-2" class="xref">Integrity Check Values</a></p>
 </li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.5">
-                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="xref">8.5</a>.  <a href="#name-severable-elements-4" class="xref">Severable Elements</a></p>
+                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="xref">8.5</a>.  <a href="#name-severable-elements-2" class="xref">Severable Elements</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-access-control-lists-2" class="xref">Access Control Lists</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-access-control-lists" class="xref">Access Control Lists</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-suit-digest-container-2" class="xref">SUIT Digest Container</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-suit-digest-container" class="xref">SUIT Digest Container</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-iana-considerations-2" class="xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="xref">11.1</a>.  <a href="#name-suit-commands-2" class="xref">SUIT Commands</a></p>
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="xref">11.1</a>.  <a href="#name-suit-commands" class="xref">SUIT Commands</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="xref">11.2</a>.  <a href="#name-suit-parameters-2" class="xref">SUIT Parameters</a></p>
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="xref">11.2</a>.  <a href="#name-suit-parameters" class="xref">SUIT Parameters</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3">
-                <p id="section-toc.1-1.11.2.3.1"><a href="#section-11.3" class="xref">11.3</a>.  <a href="#name-suit-text-values-2" class="xref">SUIT Text Values</a></p>
+                <p id="section-toc.1-1.11.2.3.1"><a href="#section-11.3" class="xref">11.3</a>.  <a href="#name-suit-text-values" class="xref">SUIT Text Values</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.4">
-                <p id="section-toc.1-1.11.2.4.1"><a href="#section-11.4" class="xref">11.4</a>.  <a href="#name-suit-component-text-values-2" class="xref">SUIT Component Text Values</a></p>
+                <p id="section-toc.1-1.11.2.4.1"><a href="#section-11.4" class="xref">11.4</a>.  <a href="#name-suit-component-text-values" class="xref">SUIT Component Text Values</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-12" class="xref">12</a>. <a href="#name-security-considerations-2" class="xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="xref">12</a>. <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#section-13" class="xref">13</a>. <a href="#name-acknowledgements-2" class="xref">Acknowledgements</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="xref">13</a>. <a href="#name-acknowledgements" class="xref">Acknowledgements</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#section-14" class="xref">14</a>. <a href="#name-references-2" class="xref">References</a></p>
+            <p id="section-toc.1-1.14.1"><a href="#section-14" class="xref">14</a>. <a href="#name-references" class="xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.1">
-                <p id="section-toc.1-1.14.2.1.1"><a href="#section-14.1" class="xref">14.1</a>.  <a href="#name-normative-references-2" class="xref">Normative References</a></p>
+                <p id="section-toc.1-1.14.2.1.1"><a href="#section-14.1" class="xref">14.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.2">
-                <p id="section-toc.1-1.14.2.2.1"><a href="#section-14.2" class="xref">14.2</a>.  <a href="#name-informative-references-2" class="xref">Informative References</a></p>
+                <p id="section-toc.1-1.14.2.2.1"><a href="#section-14.2" class="xref">14.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-a-full-cddl-2" class="xref">A. Full CDDL</a></p>
+            <p id="section-toc.1-1.15.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-a-full-cddl" class="xref">A. Full CDDL</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
-            <p id="section-toc.1-1.16.1"><a href="#appendix-B" class="xref">Appendix B</a>.  <a href="#name-b-examples-2" class="xref">B. Examples</a></p>
+            <p id="section-toc.1-1.16.1"><a href="#appendix-B" class="xref">Appendix B</a>.  <a href="#name-b-examples" class="xref">B. Examples</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.1">
-                <p id="section-toc.1-1.16.2.1.1"><a href="#appendix-B.1" class="xref">B.1</a>.  <a href="#name-example-0-secure-boot-2" class="xref">Example 0: Secure Boot</a></p>
+                <p id="section-toc.1-1.16.2.1.1"><a href="#appendix-B.1" class="xref">B.1</a>.  <a href="#name-example-0-secure-boot" class="xref">Example 0: Secure Boot</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.2">
-                <p id="section-toc.1-1.16.2.2.1"><a href="#appendix-B.2" class="xref">B.2</a>.  <a href="#name-example-1-simultaneous-downl" class="xref">Example 1: Simultaneous Download and Installation of Payload</a></p>
+                <p id="section-toc.1-1.16.2.2.1"><a href="#appendix-B.2" class="xref">B.2</a>.  <a href="#name-example-1-simultaneous-down" class="xref">Example 1: Simultaneous Download and Installation of Payload</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.3">
-                <p id="section-toc.1-1.16.2.3.1"><a href="#appendix-B.3" class="xref">B.3</a>.  <a href="#name-example-2-simultaneous-downl" class="xref">Example 2: Simultaneous Download, Installation, Secure Boot, Severed Fields</a></p>
+                <p id="section-toc.1-1.16.2.3.1"><a href="#appendix-B.3" class="xref">B.3</a>.  <a href="#name-example-2-simultaneous-down" class="xref">Example 2: Simultaneous Download, Installation, Secure Boot, Severed Fields</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.4">
-                <p id="section-toc.1-1.16.2.4.1"><a href="#appendix-B.4" class="xref">B.4</a>.  <a href="#name-example-3-a-b-images-2" class="xref">Example 3: A/B images</a></p>
+                <p id="section-toc.1-1.16.2.4.1"><a href="#appendix-B.4" class="xref">B.4</a>.  <a href="#name-example-3-a-b-images" class="xref">Example 3: A/B images</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.5">
-                <p id="section-toc.1-1.16.2.5.1"><a href="#appendix-B.5" class="xref">B.5</a>.  <a href="#name-example-4-load-from-external" class="xref">Example 4: Load from External Storage</a></p>
+                <p id="section-toc.1-1.16.2.5.1"><a href="#appendix-B.5" class="xref">B.5</a>.  <a href="#name-example-4-load-from-externa" class="xref">Example 4: Load from External Storage</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.6">
-                <p id="section-toc.1-1.16.2.6.1"><a href="#appendix-B.6" class="xref">B.6</a>.  <a href="#name-example-5-two-images-2" class="xref">Example 5: Two Images</a></p>
+                <p id="section-toc.1-1.16.2.6.1"><a href="#appendix-B.6" class="xref">B.6</a>.  <a href="#name-example-5-two-images" class="xref">Example 5: Two Images</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
-            <p id="section-toc.1-1.17.1"><a href="#appendix-C" class="xref">Appendix C</a>.  <a href="#name-c-design-rational-2" class="xref">C. Design Rational</a></p>
+            <p id="section-toc.1-1.17.1"><a href="#appendix-C" class="xref">Appendix C</a>.  <a href="#name-c-design-rational" class="xref">C. Design Rational</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.1">
-                <p id="section-toc.1-1.17.2.1.1"><a href="#appendix-C.1" class="xref">C.1</a>.  <a href="#name-c1-design-rationale-envelope" class="xref">C.1 Design Rationale: Envelope</a></p>
+                <p id="section-toc.1-1.17.2.1.1"><a href="#appendix-C.1" class="xref">C.1</a>.  <a href="#name-c1-design-rationale-envelop" class="xref">C.1 Design Rationale: Envelope</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.2">
-                <p id="section-toc.1-1.17.2.2.1"><a href="#appendix-C.2" class="xref">C.2</a>.  <a href="#name-c2-byte-string-wrappers-2" class="xref">C.2 Byte String Wrappers</a></p>
+                <p id="section-toc.1-1.17.2.2.1"><a href="#appendix-C.2" class="xref">C.2</a>.  <a href="#name-c2-byte-string-wrappers" class="xref">C.2 Byte String Wrappers</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18">
-            <p id="section-toc.1-1.18.1"><a href="#appendix-D" class="xref">Appendix D</a>.  <a href="#name-d-implementation-conformance" class="xref">D. Implementation Conformance Matrix</a></p>
+            <p id="section-toc.1-1.18.1"><a href="#appendix-D" class="xref">Appendix D</a>.  <a href="#name-d-implementation-conformanc" class="xref">D. Implementation Conformance Matrix</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.19">
-            <p id="section-toc.1-1.19.1"><a href="#appendix-E" class="xref"></a><a href="#name-authors-addresses-2" class="xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.19.1"><a href="#appendix-E" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1555,8 +1556,8 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
 </div>
 <div id="introduction">
 <section id="section-1">
-      <h2 id="name-introduction-2">
-<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction-2" class="section-name selfRef">Introduction</a>
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">A firmware update mechanism is an essential security feature for IoT devices to deal with vulnerabilities. While the transport of firmware images to the devices themselves is important there are already various techniques available. Equally important is the inclusion of metadata about the conveyed firmware image (in the form of a manifest) and the use of a security wrapper to provide end-to-end security protection to detect modifications and (optionally) to make reverse engineering more difficult. End-to-end security allows the author, who builds the firmware image, to be sure that no other party (including potential adversaries) can install firmware updates on IoT devices without adequate privileges. For confidentiality protected firmware images it is additionally required to encrypt the firmware image. Starting security protection at the author is a risk mitigation technique so firmware images and manifests can be stored on untrusted repositories; it also reduces the scope of a compromise of any repository or intermediate system to be no worse than a denial of service.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">A manifest is a bundle of metadata describing one or more code or data payloads and how to:<a href="#section-1-2" class="pilcrow">¶</a></p>
@@ -1576,7 +1577,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
       </ul>
 <p id="section-1-4">This specification defines the SUIT manifest format and it is intended to meet several goals:<a href="#section-1-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1-5.1">Meet the requirements defined in <span>[<a href="#I-D.ietf-suit-information-model" class="xref">I-D.ietf-suit-information-model</a>]</span>.<a href="#section-1-5.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1-5.1">Meet the requirements defined in <span>[<a href="#RFC9124" class="xref">RFC9124</a>]</span>.<a href="#section-1-5.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-1-5.2">Simple to parse on a constrained node<a href="#section-1-5.2" class="pilcrow">¶</a>
 </li>
@@ -1613,7 +1614,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
 </li>
       </ul>
 <p id="section-1-8">Each of these uses happens at a different stage of the manifest lifecycle, so each has different requirements.<a href="#section-1-8" class="pilcrow">¶</a></p>
-<p id="section-1-9">It is assumed that the reader is familiar with the high-level firmware update architecture <span>[<a href="#RFC9019" class="xref">RFC9019</a>]</span> and the threats, requirements, and user stories in <span>[<a href="#I-D.ietf-suit-information-model" class="xref">I-D.ietf-suit-information-model</a>]</span>.<a href="#section-1-9" class="pilcrow">¶</a></p>
+<p id="section-1-9">It is assumed that the reader is familiar with the high-level firmware update architecture <span>[<a href="#RFC9019" class="xref">RFC9019</a>]</span> and the threats, requirements, and user stories in <span>[<a href="#RFC9124" class="xref">RFC9124</a>]</span>.<a href="#section-1-9" class="pilcrow">¶</a></p>
 <p id="section-1-10">The design of this specification is based on an observation that the vast majority of operations that a device can perform during an update or Trusted Invocation are composed of a small group of operations:<a href="#section-1-10" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1-11.1">Copy some data from one place to another<a href="#section-1-11.1" class="pilcrow">¶</a>
@@ -1629,13 +1630,13 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
       </ul>
 <p id="section-1-12">In this document, these operations are called commands. Commands are classed as either conditions or directives. Conditions have no side-effects, while directives do have side-effects. Conceptually, a sequence of commands is like a script but the language is tailored to software updates and Trusted Invocation.<a href="#section-1-12" class="pilcrow">¶</a></p>
 <p id="section-1-13">The available commands support simple steps, such as copying a firmware image from one place to another, checking that a firmware image is correct, verifying that the specified firmware is the correct firmware for the device, or unpacking a firmware. By using these steps in different orders and changing the parameters they use, a broad range of use cases can be supported. The SUIT manifest uses this observation to optimize metadata for consumption by constrained devices.<a href="#section-1-13" class="pilcrow">¶</a></p>
-<p id="section-1-14">While the SUIT manifest is informed by and optimized for firmware update and Trusted Invocation use cases, there is nothing in the SUIT Information Model (<span>[<a href="#I-D.ietf-suit-information-model" class="xref">I-D.ietf-suit-information-model</a>]</span>) that restricts its use to only those use cases. Other use cases include the management of trusted applications (TAs) in a Trusted Execution Environment (TEE), as discussed in <span>[<a href="#I-D.ietf-teep-architecture" class="xref">I-D.ietf-teep-architecture</a>]</span>.<a href="#section-1-14" class="pilcrow">¶</a></p>
+<p id="section-1-14">While the SUIT manifest is informed by and optimized for firmware update and Trusted Invocation use cases, there is nothing in the SUIT Information Model (<span>[<a href="#RFC9124" class="xref">RFC9124</a>]</span>) that restricts its use to only those use cases. Other use cases include the management of trusted applications (TAs) in a Trusted Execution Environment (TEE), as discussed in <span>[<a href="#I-D.ietf-teep-architecture" class="xref">I-D.ietf-teep-architecture</a>]</span>.<a href="#section-1-14" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-terminology">
 <section id="section-2">
-      <h2 id="name-conventions-and-terminology-2">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-terminology-2" class="section-name selfRef">Conventions and Terminology</a>
+      <h2 id="name-conventions-and-terminology">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-terminology" class="section-name selfRef">Conventions and Terminology</a>
       </h2>
 <p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
 NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
@@ -1653,7 +1654,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
         <li class="normal" id="section-2-3.4">Manifest: A manifest is a bundle of metadata about the firmware for an IoT device, where to
 find the firmware, and the devices to which it applies.<a href="#section-2-3.4" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-2-3.5">Envelope: A container with the manifest, an authentication wrapper with cryptographic information protecting the manifest, authorization information, and severable elements (see: TBD).<a href="#section-2-3.5" class="pilcrow">¶</a>
+        <li class="normal" id="section-2-3.5">Envelope: A container with the manifest, an authentication wrapper with cryptographic information protecting the manifest, authorization information, and severable elements.<a href="#section-2-3.5" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-2-3.6">Update: One or more manifests that describe one or more payloads.<a href="#section-2-3.6" class="pilcrow">¶</a>
 </li>
@@ -1702,8 +1703,8 @@ find the firmware, and the devices to which it applies.<a href="#section-2-3.4" 
 </div>
 <div id="how-to-use-this-document">
 <section id="section-3">
-      <h2 id="name-how-to-use-this-document-2">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-how-to-use-this-document-2" class="section-name selfRef">How to use this Document</a>
+      <h2 id="name-how-to-use-this-document">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-how-to-use-this-document" class="section-name selfRef">How to use this Document</a>
       </h2>
 <p id="section-3-1">This specification covers five aspects of firmware update:<a href="#section-3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1727,29 +1728,31 @@ find the firmware, and the devices to which it applies.<a href="#section-2-3.4" 
 To implement a tool that generates updates, see <a href="#creating-manifests" class="xref">Section 7</a> and <a href="#metadata-structure" class="xref">Section 8</a>.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">The IANA consideration section, see <a href="#iana" class="xref">Section 11</a>, provides instructions to IANA to create several registries. This section also provides the CBOR labels for the structures defined in this document.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <p id="section-3-5">The complete CDDL description is provided in <a href="#full-cddl" class="xref">Appendix A</a>, examples are given in <a href="#examples" class="xref">Appendix B</a> and a design rational is offered in <a href="#design-rationale" class="xref">Appendix C</a>. Finally, <a href="#implementation-matrix" class="xref">Appendix D</a> gives a summarize of the mandatory-to-implement features of this specification.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">This specification covers the core features of SUIT. Additional specifications will cover advanced use cases and update management needs:<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-6">This specification covers the core features of SUIT. Additional specifications describe functionality of advanced use cases, such as:<a href="#section-3-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3-7.1">Firmware Encryption is covered in <span>[<a href="#I-D.ietf-suit-firmware-encryption" class="xref">I-D.ietf-suit-firmware-encryption</a>]</span><a href="#section-3-7.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-3-7.2">Update Management is covered in (TBD)<a href="#section-3-7.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-3-7.2">Update Management is covered in <span>[<a href="#I-D.ietf-suit-update-management" class="xref">I-D.ietf-suit-update-management</a>]</span><a href="#section-3-7.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-3-7.3">Multiple Trust Domains (dependencies, key delegation, multiple processors, TEEs, etc.) are covered in (TBD)<a href="#section-3-7.3" class="pilcrow">¶</a>
+        <li class="normal" id="section-3-7.3">Features, such as dependencies, key delegation, multiple processors, required by the use of multiple trust domains are covered in <span>[<a href="#I-D.ietf-suit-trust-domains" class="xref">I-D.ietf-suit-trust-domains</a>]</span><a href="#section-3-7.3" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-3-7.4">Update Compression is covered in (TBD)<a href="#section-3-7.4" class="pilcrow">¶</a>
+        <li class="normal" id="section-3-7.4">Secure reporting of the update status is covered in <span>[<a href="#I-D.ietf-suit-report" class="xref">I-D.ietf-suit-report</a>]</span><a href="#section-3-7.4" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-7.5">Compression of firmware images<a href="#section-3-7.5" class="pilcrow">¶</a>
 </li>
       </ul>
 </section>
 </div>
 <div id="background">
 <section id="section-4">
-      <h2 id="name-background-2">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-background-2" class="section-name selfRef">Background</a>
+      <h2 id="name-background">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-background" class="section-name selfRef">Background</a>
       </h2>
-<p id="section-4-1">Distributing software updates to diverse devices with diverse trust anchors in a coordinated system presents unique challenges. Devices have a broad set of constraints, requiring different metadata to make appropriate decisions. There may be many actors in production IoT systems, each of whom has some authority. Distributing firmware in such a multi-party environment presents additional challenges. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in <span>[<a href="#RFC9019" class="xref">RFC9019</a>]</span>. The security aspects are described in <span>[<a href="#I-D.ietf-suit-information-model" class="xref">I-D.ietf-suit-information-model</a>]</span>.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">Distributing software updates to diverse devices with diverse trust anchors in a coordinated system presents unique challenges. Devices have a broad set of constraints, requiring different metadata to make appropriate decisions. There may be many actors in production IoT systems, each of whom has some authority. Distributing firmware in such a multi-party environment presents additional challenges. Each party requires a different subset of data. Some data may not be accessible to all parties. Multiple signatures may be required from parties with different authorities. This topic is covered in more depth in <span>[<a href="#RFC9019" class="xref">RFC9019</a>]</span>. The security aspects are described in <span>[<a href="#RFC9124" class="xref">RFC9124</a>]</span>.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <div id="iot-firmware-update-constraints">
 <section id="section-4.1">
-        <h3 id="name-iot-firmware-update-constrai">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-iot-firmware-update-constrai" class="section-name selfRef">IoT Firmware Update Constraints</a>
+        <h3 id="name-iot-firmware-update-constra">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-iot-firmware-update-constra" class="section-name selfRef">IoT Firmware Update Constraints</a>
         </h3>
 <p id="section-4.1-1">The various constraints of IoT devices and the range of use cases that need to be supported create a broad set of requirements. For example, devices with:<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1773,8 +1776,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="suit-workflow-model">
 <section id="section-4.2">
-        <h3 id="name-suit-workflow-model-2">
-<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-suit-workflow-model-2" class="section-name selfRef">SUIT Workflow Model</a>
+        <h3 id="name-suit-workflow-model">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-suit-workflow-model" class="section-name selfRef">SUIT Workflow Model</a>
         </h3>
 <p id="section-4.2-1">There are several fundamental assumptions that inform the model of Update Procedure workflow:<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1819,8 +1822,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="metadata-structure-overview">
 <section id="section-5">
-      <h2 id="name-metadata-structure-overview-2">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-metadata-structure-overview-2" class="section-name selfRef">Metadata Structure Overview</a>
+      <h2 id="name-metadata-structure-overview">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-metadata-structure-overview" class="section-name selfRef">Metadata Structure Overview</a>
       </h2>
 <p id="section-5-1">This section provides a high level overview of the manifest structure. The full description of the manifest structure is in <a href="#manifest-structure" class="xref">Section 8.4</a><a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">The manifest is structured from several key components:<a href="#section-5-2" class="pilcrow">¶</a></p>
@@ -1857,9 +1860,9 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 | Manifest           --------------&gt; +------------------------------+
 | Severable Elements      |          | Manifest                     |
 | Human-Readable Text     |          +------------------------------+
-| COSWID                  |          | Structure Version            |
-| Integrated Payloads     |          | Sequence Number              |
-+-------------------------+          | Reference to Full Manifest   |
+| Integrated Payloads     |          | Structure Version            |
++-------------------------+          | Sequence Number              |
+                                     | Reference to Full Manifest   |
                                +------ Common Structure             |
                                | +---- Command Sequences            |
 +-------------------------+    | |   | Digests of Envelope Elements |
@@ -1878,8 +1881,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="ovr-envelope">
 <section id="section-5.1">
-        <h3 id="name-envelope-3">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-envelope-3" class="section-name selfRef">Envelope</a>
+        <h3 id="name-envelope">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-envelope" class="section-name selfRef">Envelope</a>
         </h3>
 <p id="section-5.1-1">The SUIT Envelope is a container that encloses the Authentication Block, the Manifest, any Severable Elements, and any integrated payloads. The Envelope is used instead of conventional cryptographic envelopes, such as COSE_Envelope because it allows modular processing, severing of elements, and integrated payloads in a way that would add substantial complexity with existing solutions. See <a href="#design-rationale-envelope" class="xref">Appendix C.1</a> for a description of the reasoning for this.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">See <a href="#envelope" class="xref">Section 8.2</a> for more detail.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
@@ -1887,8 +1890,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="ovr-auth">
 <section id="section-5.2">
-        <h3 id="name-authentication-block-2">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-authentication-block-2" class="section-name selfRef">Authentication Block</a>
+        <h3 id="name-authentication-block">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-authentication-block" class="section-name selfRef">Authentication Block</a>
         </h3>
 <p id="section-5.2-1">The Authentication Block contains a bstr-wrapped SUIT Digest Container, see <a href="#SUIT_Digest" class="xref">Section 10</a>, and one or more <span>[<a href="#RFC8152" class="xref">RFC8152</a>]</span> CBOR Object Signing and Encryption (COSE) authentication blocks. These blocks are one of:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1907,15 +1910,15 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="ovr-manifest">
 <section id="section-5.3">
-        <h3 id="name-manifest-3">
-<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-manifest-3" class="section-name selfRef">Manifest</a>
+        <h3 id="name-manifest">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-manifest" class="section-name selfRef">Manifest</a>
         </h3>
 <p id="section-5.3-1">The Manifest contains most metadata about one or more images. The Manifest is divided into Critical Metadata, Common Metadata, Command Sequences, and Integrity Check Values.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 <p id="section-5.3-2">See <a href="#manifest-structure" class="xref">Section 8.4</a> for more detail.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
 <div id="ovr-critical">
 <section id="section-5.3.1">
-          <h4 id="name-critical-metadata-2">
-<a href="#section-5.3.1" class="section-number selfRef">5.3.1. </a><a href="#name-critical-metadata-2" class="section-name selfRef">Critical Metadata</a>
+          <h4 id="name-critical-metadata">
+<a href="#section-5.3.1" class="section-number selfRef">5.3.1. </a><a href="#name-critical-metadata" class="section-name selfRef">Critical Metadata</a>
           </h4>
 <p id="section-5.3.1-1">Some metadata needs to be accessed before the manifest is processed. This metadata can be used to determine which manifest is newest and whether the structure version is supported. It also MAY provide a URI for obtaining a canonical copy of the manifest and Envelope.<a href="#section-5.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.1-2">See <a href="#manifest-version" class="xref">Section 8.4.1</a>, <a href="#manifest-seqnr" class="xref">Section 8.4.2</a>, and <a href="#manifest-reference-uri" class="xref">Section 8.4.3</a> for more detail.<a href="#section-5.3.1-2" class="pilcrow">¶</a></p>
@@ -1923,8 +1926,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="ovr-common">
 <section id="section-5.3.2">
-          <h4 id="name-common-2">
-<a href="#section-5.3.2" class="section-number selfRef">5.3.2. </a><a href="#name-common-2" class="section-name selfRef">Common</a>
+          <h4 id="name-common">
+<a href="#section-5.3.2" class="section-number selfRef">5.3.2. </a><a href="#name-common" class="section-name selfRef">Common</a>
           </h4>
 <p id="section-5.3.2-1">Some metadata is used repeatedly and in more than one command sequence. In order to reduce the size of the manifest, this metadata is collected into the Common section. Common is composed of two parts: a list of components referenced by the manifest, and a command sequence to execute prior to each other command sequence. The common command sequence is typically used to set commonly used values and perform compatibility checks. The common command sequence MUST NOT have any side-effects outside of setting parameter values.<a href="#section-5.3.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.2-2">See <a href="#manifest-common" class="xref">Section 8.4.5</a> for more detail.<a href="#section-5.3.2-2" class="pilcrow">¶</a></p>
@@ -1932,8 +1935,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="ovr-commands">
 <section id="section-5.3.3">
-          <h4 id="name-command-sequences-2">
-<a href="#section-5.3.3" class="section-number selfRef">5.3.3. </a><a href="#name-command-sequences-2" class="section-name selfRef">Command Sequences</a>
+          <h4 id="name-command-sequences">
+<a href="#section-5.3.3" class="section-number selfRef">5.3.3. </a><a href="#name-command-sequences" class="section-name selfRef">Command Sequences</a>
           </h4>
 <p id="section-5.3.3-1">Command sequences provide the instructions that a Recipient requires in order to install or use an image. These sequences tell a device to set parameter values, test system parameters, copy data from one place to another, transform data, digest data, and run code.<a href="#section-5.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.3-2">Command sequences are broken up into three groups: Common Command Sequence (see <a href="#ovr-common" class="xref">Section 5.3.2</a>), update commands, and secure boot commands.<a href="#section-5.3.3-2" class="pilcrow">¶</a></p>
@@ -1945,8 +1948,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="ovr-integrity">
 <section id="section-5.3.4">
-          <h4 id="name-integrity-check-values-3">
-<a href="#section-5.3.4" class="section-number selfRef">5.3.4. </a><a href="#name-integrity-check-values-3" class="section-name selfRef">Integrity Check Values</a>
+          <h4 id="name-integrity-check-values">
+<a href="#section-5.3.4" class="section-number selfRef">5.3.4. </a><a href="#name-integrity-check-values" class="section-name selfRef">Integrity Check Values</a>
           </h4>
 <p id="section-5.3.4-1">To enable <a href="#ovr-severable" class="xref">Section 5.4</a>, there needs to be a mechanism to verify integrity of any metadata outside the manifest. Integrity Check Values are used to verify the integrity of metadata that is not contained in the manifest. This MAY include Severable Command Sequences, or Text data. Integrated Payloads are integrity-checked using Command Sequences, so they do not have Integrity Check Values present in the Manifest.<a href="#section-5.3.4-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.4-2">See <a href="#integrity-checks" class="xref">Section 8.4.11</a> for more detail.<a href="#section-5.3.4-2" class="pilcrow">¶</a></p>
@@ -1954,8 +1957,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="ovr-text">
 <section id="section-5.3.5">
-          <h4 id="name-human-readable-text-2">
-<a href="#section-5.3.5" class="section-number selfRef">5.3.5. </a><a href="#name-human-readable-text-2" class="section-name selfRef">Human-Readable Text</a>
+          <h4 id="name-human-readable-text">
+<a href="#section-5.3.5" class="section-number selfRef">5.3.5. </a><a href="#name-human-readable-text" class="section-name selfRef">Human-Readable Text</a>
           </h4>
 <p id="section-5.3.5-1">Text is typically a Severable Element (<a href="#ovr-severable" class="xref">Section 5.4</a>). It contains all the text that describes the update. Because text is explicitly for human consumption, it is all grouped together so that it can be Severed easily. The text section has space both for describing the manifest as a whole and for describing each individual component.<a href="#section-5.3.5-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.5-2">See <a href="#manifest-digest-text" class="xref">Section 8.4.4</a> for more detail.<a href="#section-5.3.5-2" class="pilcrow">¶</a></p>
@@ -1965,8 +1968,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="ovr-severable">
 <section id="section-5.4">
-        <h3 id="name-severable-elements-3">
-<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-severable-elements-3" class="section-name selfRef">Severable Elements</a>
+        <h3 id="name-severable-elements">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-severable-elements" class="section-name selfRef">Severable Elements</a>
         </h3>
 <p id="section-5.4-1">Severable Elements are elements of the Envelope (<a href="#ovr-envelope" class="xref">Section 5.1</a>) that have Integrity Check Values (<a href="#ovr-integrity" class="xref">Section 5.3.4</a>) in the Manifest (<a href="#ovr-manifest" class="xref">Section 5.3</a>).<a href="#section-5.4-1" class="pilcrow">¶</a></p>
 <p id="section-5.4-2">Because of this organisation, these elements can be discarded or "Severed" from the Envelope without changing the signature of the Manifest. This allows savings based on the size of the Envelope in several scenarios, for example:<a href="#section-5.4-2" class="pilcrow">¶</a></p>
@@ -1981,8 +1984,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="ovr-integrated">
 <section id="section-5.5">
-        <h3 id="name-integrated-payloads-2">
-<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-integrated-payloads-2" class="section-name selfRef">Integrated Payloads</a>
+        <h3 id="name-integrated-payloads">
+<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-integrated-payloads" class="section-name selfRef">Integrated Payloads</a>
         </h3>
 <p id="section-5.5-1">In some cases, it is beneficial to include a payload in the Envelope of a manifest. For example:<a href="#section-5.5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1998,14 +2001,14 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="interpreter-behavior">
 <section id="section-6">
-      <h2 id="name-manifest-processor-behavior-2">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-manifest-processor-behavior-2" class="section-name selfRef">Manifest Processor Behavior</a>
+      <h2 id="name-manifest-processor-behavior">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-manifest-processor-behavior" class="section-name selfRef">Manifest Processor Behavior</a>
       </h2>
 <p id="section-6-1">This section describes the behavior of the manifest processor and focuses primarily on interpreting commands in the manifest. However, there are several other important behaviors of the manifest processor: encoding version detection, rollback protection, and authenticity verification are chief among these.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <div id="interpreter-setup">
 <section id="section-6.1">
-        <h3 id="name-manifest-processor-setup-2">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-manifest-processor-setup-2" class="section-name selfRef">Manifest Processor Setup</a>
+        <h3 id="name-manifest-processor-setup">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-manifest-processor-setup" class="section-name selfRef">Manifest Processor Setup</a>
         </h3>
 <p id="section-6.1-1">Prior to executing any command sequence, the manifest processor or its host application MUST inspect the manifest version field and fail when it encounters an unsupported encoding version. Next, the manifest processor or its host application MUST extract the manifest sequence number and perform a rollback check using this sequence number. The exact logic of rollback protection may vary by application, but it has the following properties:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2038,14 +2041,14 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </li>
         </ul>
 <p id="section-6.1-5">These failure reasons MAY be combined with retry mechanisms prior to marking a manifest as invalid.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
-<p id="section-6.1-6">Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in <span>[<a href="#RFC9019" class="xref">RFC9019</a>]</span>, section 3.5. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See <span>[<a href="#I-D.ietf-suit-information-model" class="xref">I-D.ietf-suit-information-model</a>]</span>, Section 4.2.1 for more discussion on the security considerations that apply to rollback.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
+<p id="section-6.1-6">Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in <span>[<a href="#RFC9019" class="xref">RFC9019</a>]</span>, section 3.5. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See <span>[<a href="#RFC9124" class="xref">RFC9124</a>]</span>, Section 4.2.1 for more discussion on the security considerations that apply to rollback.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
 <p id="section-6.1-7">Following these initial tests, the manifest processor clears all parameter storage. This ensures that the manifest processor begins without any leaked data.<a href="#section-6.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="required-checks">
 <section id="section-6.2">
-        <h3 id="name-required-checks-2">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-required-checks-2" class="section-name selfRef">Required Checks</a>
+        <h3 id="name-required-checks">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-required-checks" class="section-name selfRef">Required Checks</a>
         </h3>
 <p id="section-6.2-1">The RECOMMENDED process is to verify the signature of the manifest prior to parsing/executing any section of the manifest. This guards the parser against arbitrary input by unauthenticated third parties, but it costs extra energy when a Recipient receives an incompatible manifest.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.2-2">When validating authenticity of manifests, the manifest processor MAY use an ACL (see <a href="#access-control-lists" class="xref">Section 9</a>) to determine the extent of the rights conferred by that authenticity.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
@@ -2063,8 +2066,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
         </ol>
 <div id="minimal-sigs">
 <section id="section-6.2.1">
-          <h4 id="name-minimizing-signature-verific">
-<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-minimizing-signature-verific" class="section-name selfRef">Minimizing Signature Verifications</a>
+          <h4 id="name-minimizing-signature-verifi">
+<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-minimizing-signature-verifi" class="section-name selfRef">Minimizing Signature Verifications</a>
           </h4>
 <p id="section-6.2.1-1">Signature verification can be energy and time expensive on a constrained device. MAC verification is typically unaffected by these concerns. A Recipient MAY choose to parse and execute only the SUIT_Common section of the manifest prior to signature verification, if all of the below apply:<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2084,8 +2087,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="interpreter-fundamental-properties">
 <section id="section-6.3">
-        <h3 id="name-interpreter-fundamental-prop">
-<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-interpreter-fundamental-prop" class="section-name selfRef">Interpreter Fundamental Properties</a>
+        <h3 id="name-interpreter-fundamental-pro">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-interpreter-fundamental-pro" class="section-name selfRef">Interpreter Fundamental Properties</a>
         </h3>
 <p id="section-6.3-1">The interpreter has a small set of design goals:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.3-2">
@@ -2101,10 +2104,10 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </div>
 <div id="command-behavior">
 <section id="section-6.4">
-        <h3 id="name-abstract-machine-description">
-<a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-abstract-machine-description" class="section-name selfRef">Abstract Machine Description</a>
+        <h3 id="name-abstract-machine-descriptio">
+<a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-abstract-machine-descriptio" class="section-name selfRef">Abstract Machine Description</a>
         </h3>
-<p id="section-6.4-1">The heart of the manifest is the list of commands, which are processed by a Manifest Processor-a form of interpreter. This Manifest Processor can be modeled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.4-1">The heart of the manifest is the list of commands, which are processed by a Manifest Processor--a form of interpreter. This Manifest Processor can be modeled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.4-2">There are two types of commands, namely those that modify state (directives) and those that perform tests (conditions). Parameters are used as the inputs to commands. Some directives offer control flow operations. Directives target a specific component. A component is a unit of code or data that can be targeted by an update. Components are identified by Component Identifiers, but referenced in commands by Component Index; Component Identifiers are arrays of binary strings and a Component Index is an index into the array of Component Identifiers.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
 <p id="section-6.4-3">Conditions MUST NOT have any side-effects other than informing the interpreter of success or failure. The Interpreter does not Abort if the Soft Failure flag (<a href="#suit-parameter-soft-failure" class="xref">Section 8.4.8.14</a>) is set when a Condition reports failure.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
 <p id="section-6.4-4">Directives MAY have side-effects in the parameter table, the interpreter state, or the current component. The Interpreter MUST Abort if a Directive reports failure regardless of the Soft Failure flag.<a href="#section-6.4-4" class="pilcrow">¶</a></p>
@@ -2199,8 +2202,8 @@ current := components\[component-index\]
 </div>
 <div id="index-true">
 <section id="section-6.5">
-        <h3 id="name-special-cases-of-component-i">
-<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-special-cases-of-component-i" class="section-name selfRef">Special Cases of Component Index</a>
+        <h3 id="name-special-cases-of-component-">
+<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-special-cases-of-component-" class="section-name selfRef">Special Cases of Component Index</a>
         </h3>
 <p id="section-6.5-1">Component Index can take on one of three types:<a href="#section-6.5-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.5-2">
@@ -2231,8 +2234,8 @@ for current in current-list:
 </div>
 <div id="serial-processing">
 <section id="section-6.6">
-        <h3 id="name-serialized-processing-interp">
-<a href="#section-6.6" class="section-number selfRef">6.6. </a><a href="#name-serialized-processing-interp" class="section-name selfRef">Serialized Processing Interpreter</a>
+        <h3 id="name-serialized-processing-inter">
+<a href="#section-6.6" class="section-number selfRef">6.6. </a><a href="#name-serialized-processing-inter" class="section-name selfRef">Serialized Processing Interpreter</a>
         </h3>
 <p id="section-6.6-1">In highly constrained devices, where storage for parameters is limited, the manifest processor MAY handle one component at a time, traversing the manifest tree once for each listed component. In this mode, the interpreter ignores any commands executed while the component index is not the current component. This reduces the overall volatile storage required to process the update so that the only limit on number of components is the size of the manifest. However, this approach requires additional processing power.<a href="#section-6.6-1" class="pilcrow">¶</a></p>
 <p id="section-6.6-2">In order to operate in this mode, the manifest processor loops on each section for every supported component, simply ignoring commands when the current component is not selected.<a href="#section-6.6-2" class="pilcrow">¶</a></p>
@@ -2241,8 +2244,8 @@ for current in current-list:
 </div>
 <div id="parallel-processing">
 <section id="section-6.7">
-        <h3 id="name-parallel-processing-interpre">
-<a href="#section-6.7" class="section-number selfRef">6.7. </a><a href="#name-parallel-processing-interpre" class="section-name selfRef">Parallel Processing Interpreter</a>
+        <h3 id="name-parallel-processing-interpr">
+<a href="#section-6.7" class="section-number selfRef">6.7. </a><a href="#name-parallel-processing-interpr" class="section-name selfRef">Parallel Processing Interpreter</a>
         </h3>
 <p id="section-6.7-1">Advanced Recipients MAY make use of the Strict Order parameter and enable parallel processing of some Command Sequences, or it may reorder some Command Sequences. To perform parallel processing, once the Strict Order parameter is set to False, the Recipient may issue each or every command concurrently until the Strict Order parameter is returned to True or the Command Sequence ends. Then, it waits for all issued commands to complete before continuing processing of commands. To perform out-of-order processing, a similar approach is used, except the Recipient consumes all commands after the Strict Order parameter is set to False, then it sorts these commands into its preferred order, invokes them all, then continues processing.<a href="#section-6.7-1" class="pilcrow">¶</a></p>
 <p id="section-6.7-2">When the manifest processor encounters any of these scenarios the parallel processing MUST halt until all issued commands have completed:<a href="#section-6.7-2" class="pilcrow">¶</a></p>
@@ -2263,8 +2266,8 @@ for current in current-list:
 </div>
 <div id="creating-manifests">
 <section id="section-7">
-      <h2 id="name-creating-manifests-2">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-creating-manifests-2" class="section-name selfRef">Creating Manifests</a>
+      <h2 id="name-creating-manifests">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-creating-manifests" class="section-name selfRef">Creating Manifests</a>
       </h2>
 <p id="section-7-1">Manifests are created using tools for constructing COSE structures, calculating cryptographic values and compiling desired system state into a sequence of operations required to achieve that state. The process of constructing COSE structures and the calculation of cryptographic values is covered in <span>[<a href="#RFC8152" class="xref">RFC8152</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <p id="section-7-2">Compiling desired system state into a sequence of operations can be accomplished in many ways. Several templates are provided below to cover common use-cases. These templates can be combined to produce more complex behavior.<a href="#section-7-2" class="pilcrow">¶</a></p>
@@ -2274,8 +2277,8 @@ for current in current-list:
 <p id="section-7-6">NOTE: <strong>A digest MUST always be set using Override Parameters.</strong><a href="#section-7-6" class="pilcrow">¶</a></p>
 <div id="template-compatibility-check">
 <section id="section-7.1">
-        <h3 id="name-compatibility-check-template">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-compatibility-check-template" class="section-name selfRef">Compatibility Check Template</a>
+        <h3 id="name-compatibility-check-templat">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-compatibility-check-templat" class="section-name selfRef">Compatibility Check Template</a>
         </h3>
 <p id="section-7.1-1">The goal of the compatibility check template ensure that Recipients only install compatible images.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2">In this template all information is contained in the common sequence and the following sequence of commands is used:<a href="#section-7.1-2" class="pilcrow">¶</a></p>
@@ -2293,8 +2296,8 @@ for current in current-list:
 </div>
 <div id="template-secure-boot">
 <section id="section-7.2">
-        <h3 id="name-trusted-invocation-template-2">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-trusted-invocation-template-2" class="section-name selfRef">Trusted Invocation Template</a>
+        <h3 id="name-trusted-invocation-template">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-trusted-invocation-template" class="section-name selfRef">Trusted Invocation Template</a>
         </h3>
 <p id="section-7.2-1">The goal of the Trusted Invocation template is to ensure that only authorized code is invoked; such as in Secure Boot or when a Trusted Application is loaded into a TEE.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <p id="section-7.2-2">The following commands are placed into the common sequence:<a href="#section-7.2-2" class="pilcrow">¶</a></p>
@@ -2322,8 +2325,8 @@ for current in current-list:
 </div>
 <div id="firmware-download-template">
 <section id="section-7.3">
-        <h3 id="name-component-download-template-2">
-<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-component-download-template-2" class="section-name selfRef">Component Download Template</a>
+        <h3 id="name-component-download-template">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-component-download-template" class="section-name selfRef">Component Download Template</a>
         </h3>
 <p id="section-7.3-1">The goal of the Component Download template is to acquire and store an image.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
 <p id="section-7.3-2">The following commands are placed into the common sequence:<a href="#section-7.3-2" class="pilcrow">¶</a></p>
@@ -2349,8 +2352,8 @@ for current in current-list:
 </div>
 <div id="template-install">
 <section id="section-7.4">
-        <h3 id="name-install-template-2">
-<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-install-template-2" class="section-name selfRef">Install Template</a>
+        <h3 id="name-install-template">
+<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-install-template" class="section-name selfRef">Install Template</a>
         </h3>
 <p id="section-7.4-1">The goal of the Install template is to use an image already stored in an identified component to copy into a second component.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 <p id="section-7.4-2">This template is typically used with the Component Download template, however a modification to that template is required: the Component Download operations are moved from the Payload Install sequence to the Payload Fetch sequence.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
@@ -2369,8 +2372,8 @@ for current in current-list:
 </div>
 <div id="template-integrated-payload">
 <section id="section-7.5">
-        <h3 id="name-integrated-payload-template-2">
-<a href="#section-7.5" class="section-number selfRef">7.5. </a><a href="#name-integrated-payload-template-2" class="section-name selfRef">Integrated Payload Template</a>
+        <h3 id="name-integrated-payload-template">
+<a href="#section-7.5" class="section-number selfRef">7.5. </a><a href="#name-integrated-payload-template" class="section-name selfRef">Integrated Payload Template</a>
         </h3>
 <p id="section-7.5-1">The goal of the Integrated Payload template is to install a payload that is included in the manifest envelope. It is identical to the Component Download template (<a href="#firmware-download-template" class="xref">Section 7.3</a>).<a href="#section-7.5-1" class="pilcrow">¶</a></p>
 <p id="section-7.5-2">An implementer MAY choose to place a payload in the envelope of a manifest. The payload envelope key MUST be a string. The payload MUST be serialized in a bstr element.<a href="#section-7.5-2" class="pilcrow">¶</a></p>
@@ -2380,8 +2383,8 @@ for current in current-list:
 </div>
 <div id="template-load-ext">
 <section id="section-7.6">
-        <h3 id="name-load-from-nonvolatile-storag">
-<a href="#section-7.6" class="section-number selfRef">7.6. </a><a href="#name-load-from-nonvolatile-storag" class="section-name selfRef">Load from Nonvolatile Storage Template</a>
+        <h3 id="name-load-from-nonvolatile-stora">
+<a href="#section-7.6" class="section-number selfRef">7.6. </a><a href="#name-load-from-nonvolatile-stora" class="section-name selfRef">Load from Nonvolatile Storage Template</a>
         </h3>
 <p id="section-7.6-1">The goal of the Load from Nonvolatile Storage template is to load an image from a non-volatile component into a volatile component, for example loading a firmware image from external Flash into RAM.<a href="#section-7.6-1" class="pilcrow">¶</a></p>
 <p id="section-7.6-2">The following commands are placed into the load sequence:<a href="#section-7.6-2" class="pilcrow">¶</a></p>
@@ -2398,8 +2401,8 @@ for current in current-list:
 </div>
 <div id="a-b-template">
 <section id="section-7.7">
-        <h3 id="name-a-b-image-template-2">
-<a href="#section-7.7" class="section-number selfRef">7.7. </a><a href="#name-a-b-image-template-2" class="section-name selfRef">A/B Image Template</a>
+        <h3 id="name-a-b-image-template">
+<a href="#section-7.7" class="section-number selfRef">7.7. </a><a href="#name-a-b-image-template" class="section-name selfRef">A/B Image Template</a>
         </h3>
 <p id="section-7.7-1">The goal of the A/B Image Template is to acquire, validate, and invoke one of two images, based on a test.<a href="#section-7.7-1" class="pilcrow">¶</a></p>
 <p id="section-7.7-2">The following commands are placed in the common block:<a href="#section-7.7-2" class="pilcrow">¶</a></p>
@@ -2505,15 +2508,15 @@ for current in current-list:
 </div>
 <div id="metadata-structure">
 <section id="section-8">
-      <h2 id="name-metadata-structure-2">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-metadata-structure-2" class="section-name selfRef">Metadata Structure</a>
+      <h2 id="name-metadata-structure">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-metadata-structure" class="section-name selfRef">Metadata Structure</a>
       </h2>
 <p id="section-8-1">The metadata for SUIT updates is composed of several primary constituent parts: the Envelope, Authentication Information, Manifest, and Severable Elements.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <p id="section-8-2">For a diagram of the metadata structure, see <a href="#metadata-structure-overview" class="xref">Section 5</a>.<a href="#section-8-2" class="pilcrow">¶</a></p>
 <div id="encoding-considerations">
 <section id="section-8.1">
-        <h3 id="name-encoding-considerations-2">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-encoding-considerations-2" class="section-name selfRef">Encoding Considerations</a>
+        <h3 id="name-encoding-considerations">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-encoding-considerations" class="section-name selfRef">Encoding Considerations</a>
         </h3>
 <p id="section-8.1-1">The map indices in the envelope encoding are reset to 1 for each map within the structure. This is to keep the indices as small as possible. The goal is to keep the index objects to single bytes (CBOR positive integers 1-23).<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.1-2">Wherever enumerations are used, they are started at 1. This allows detection of several common software errors that are caused by uninitialized variables. Positive numbers in enumerations are reserved for IANA registration. Negative numbers are used to identify application-specific values, as described in <a href="#iana" class="xref">Section 11</a>.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
@@ -2522,8 +2525,8 @@ for current in current-list:
 </div>
 <div id="envelope">
 <section id="section-8.2">
-        <h3 id="name-envelope-4">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-envelope-4" class="section-name selfRef">Envelope</a>
+        <h3 id="name-envelope-2">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-envelope-2" class="section-name selfRef">Envelope</a>
         </h3>
 <p id="section-8.2-1">The Envelope contains each of the other primary constituent parts of the SUIT metadata. It allows for modular processing of the manifest by ordering components in the expected order of processing.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">The Envelope is encoded as a CBOR Map. Each element of the Envelope is enclosed in a bstr, which allows computation of a message digest against known bounds.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
@@ -2531,18 +2534,23 @@ for current in current-list:
 </div>
 <div id="authentication-info">
 <section id="section-8.3">
-        <h3 id="name-authenticated-manifests-2">
-<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-authenticated-manifests-2" class="section-name selfRef">Authenticated Manifests</a>
+        <h3 id="name-authenticated-manifests">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-authenticated-manifests" class="section-name selfRef">Authenticated Manifests</a>
         </h3>
-<p id="section-8.3-1">The suit-authentication-wrapper contains a list containing a SUIT Digest Container (see <a href="#SUIT_Digest" class="xref">Section 10</a>) and one or more cryptographic authentication wrappers for the Manifest. These blocks are implemented as COSE_Mac_Tagged or COSE_Sign_Tagged structures with null payloads, indicating that the payload to be used is the SUIT Digest Container. This enables modular processing of the manifest. The COSE_Mac_Tagged and COSE_Sign_Tagged blocks are described in RFC 8152 <span>[<a href="#RFC8152" class="xref">RFC8152</a>]</span>. The suit-authentication-wrapper MUST come before any element in the SUIT_Envelope, regardless of canonical encoding of CBOR. All validators MUST reject any SUIT_Envelope that begins with any element other than a suit-authentication-wrapper (NOTE: key delegation MAY relax this requirement to include a delegation structure as well).<a href="#section-8.3-1" class="pilcrow">¶</a></p>
-<p id="section-8.3-2">A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
-<p id="section-8.3-3">A signing application MUST verify the suit-manifest element against the SUIT_Digest prior to signing.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
+<p id="section-8.3-1">The suit-authentication-wrapper contains a SUIT Digest Container (see <a href="#SUIT_Digest" class="xref">Section 10</a>) and one or more SUIT Authentication Blocks. The SUIT_Digest carries the result of computing the indicated hash algorithm over the suit-manifest element. A signing application MUST verify the suit-manifest element against the SUIT_Digest prior to signing. A SUIT Authentication Block is implemented as COSE_Mac_Tagged, COSE_Mac0_Tagged, COSE_Sign_Tagged or COSE_Sign1_Tagged structures with detached payloads, as described in RFC 8152 <span>[<a href="#RFC8152" class="xref">RFC8152</a>]</span>.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3-2">For COSE_Sign and COSE_Sign1 a special signature structure (called Sig_structure) has to be created onto which the selected digital signature algorithm is applied to, see Section 4.4 of <span>[<a href="#RFC8152" class="xref">RFC8152</a>]</span> for details. This specification requires Sig_structure to be populated as follows:
+* The external_aad field MUST be set to a zero-length binary string (i.e. there is no external additional authenticated data).
+* The payload field contains the SUIT_Digest wrapped in a bstr, as per the requirements in Section 4.4 of RFC 8152.
+All other fields in the Sig_structure are populated as described in Section 4.4 of <span>[<a href="#RFC8152" class="xref">RFC8152</a>]</span>.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
+<p id="section-8.3-3">Likewise, Section 6.3 of <span>[<a href="#RFC8152" class="xref">RFC8152</a>]</span> describes the details for computing a MAC and the fields of the MAC_structure need to be populated. The rules for external_aad and the payload fields described in the paragraph above also apply to this structure.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
+<p id="section-8.3-4">The suit-authentication-wrapper MUST come before the suit-manifest element, regardless of canonical encoding of CBOR.<a href="#section-8.3-4" class="pilcrow">¶</a></p>
+<p id="section-8.3-5">A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.<a href="#section-8.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manifest-structure">
 <section id="section-8.4">
-        <h3 id="name-manifest-4">
-<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-manifest-4" class="section-name selfRef">Manifest</a>
+        <h3 id="name-manifest-2">
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-manifest-2" class="section-name selfRef">Manifest</a>
         </h3>
 <p id="section-8.4-1">The manifest contains:<a href="#section-8.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2564,32 +2572,32 @@ for current in current-list:
 <p id="section-8.4-3">The Text section, or any Command Sequence of the Update Procedure (Image Fetch, Image Installation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable element. Severable elements are RECOMMENDED to implement. In particular, the human-readable text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See <a href="#integrity-checks" class="xref">Section 8.4.11</a> for more detail.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
 <div id="manifest-version">
 <section id="section-8.4.1">
-          <h4 id="name-suit-manifest-version-2">
-<a href="#section-8.4.1" class="section-number selfRef">8.4.1. </a><a href="#name-suit-manifest-version-2" class="section-name selfRef">suit-manifest-version</a>
+          <h4 id="name-suit-manifest-version">
+<a href="#section-8.4.1" class="section-number selfRef">8.4.1. </a><a href="#name-suit-manifest-version" class="section-name selfRef">suit-manifest-version</a>
           </h4>
 <p id="section-8.4.1-1">The suit-manifest-version indicates the version of serialization used to encode the manifest. Version 1 is the version described in this document. suit-manifest-version is REQUIRED to implement.<a href="#section-8.4.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manifest-seqnr">
 <section id="section-8.4.2">
-          <h4 id="name-suit-manifest-sequence-numbe">
-<a href="#section-8.4.2" class="section-number selfRef">8.4.2. </a><a href="#name-suit-manifest-sequence-numbe" class="section-name selfRef">suit-manifest-sequence-number</a>
+          <h4 id="name-suit-manifest-sequence-numb">
+<a href="#section-8.4.2" class="section-number selfRef">8.4.2. </a><a href="#name-suit-manifest-sequence-numb" class="section-name selfRef">suit-manifest-sequence-number</a>
           </h4>
 <p id="section-8.4.2-1">The suit-manifest-sequence-number is a monotonically increasing anti-rollback counter. Each Recipient MUST reject any manifest that has a sequence number lower than its current sequence number. For convenience, an implementer MAY use a UTC timestamp in seconds as the sequence number. suit-manifest-sequence-number is REQUIRED to implement.<a href="#section-8.4.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manifest-reference-uri">
 <section id="section-8.4.3">
-          <h4 id="name-suit-reference-uri-2">
-<a href="#section-8.4.3" class="section-number selfRef">8.4.3. </a><a href="#name-suit-reference-uri-2" class="section-name selfRef">suit-reference-uri</a>
+          <h4 id="name-suit-reference-uri">
+<a href="#section-8.4.3" class="section-number selfRef">8.4.3. </a><a href="#name-suit-reference-uri" class="section-name selfRef">suit-reference-uri</a>
           </h4>
 <p id="section-8.4.3-1">suit-reference-uri is a text string that encodes a URI where a full version of this manifest can be found. This is convenient for allowing management systems to show the severed elements of a manifest when this URI is reported by a Recipient after installation.<a href="#section-8.4.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manifest-digest-text">
 <section id="section-8.4.4">
-          <h4 id="name-suit-text-2">
-<a href="#section-8.4.4" class="section-number selfRef">8.4.4. </a><a href="#name-suit-text-2" class="section-name selfRef">suit-text</a>
+          <h4 id="name-suit-text">
+<a href="#section-8.4.4" class="section-number selfRef">8.4.4. </a><a href="#name-suit-text" class="section-name selfRef">suit-text</a>
           </h4>
 <p id="section-8.4.4-1">suit-text SHOULD be a severable element. suit-text is a map containing two different types of pair:<a href="#section-8.4.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2670,16 +2678,16 @@ for current in current-list:
 </div>
 <div id="manifest-common">
 <section id="section-8.4.5">
-          <h4 id="name-suit-common-2">
-<a href="#section-8.4.5" class="section-number selfRef">8.4.5. </a><a href="#name-suit-common-2" class="section-name selfRef">suit-common</a>
+          <h4 id="name-suit-common">
+<a href="#section-8.4.5" class="section-number selfRef">8.4.5. </a><a href="#name-suit-common" class="section-name selfRef">suit-common</a>
           </h4>
 <p id="section-8.4.5-1">suit-common encodes all the information that is shared between each of the command sequences, including: suit-components, and suit-common-sequence. suit-common is REQUIRED to implement.<a href="#section-8.4.5-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.5-2">suit-components is a list of <span><a href="#suit-component-identifier" class="xref">SUIT_Component_Identifier</a> (<a href="#suit-component-identifier" class="xref">Section 8.4.5.1</a>)</span> blocks that specify the component identifiers that will be affected by the content of the current manifest. suit-components is REQUIRED to implement.<a href="#section-8.4.5-2" class="pilcrow">¶</a></p>
 <p id="section-8.4.5-3">suit-common-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-common-sequence include setting expected Recipient identity and image digests when they are conditional (see <a href="#suit-directive-try-each" class="xref">Section 8.4.10.2</a> and <a href="#a-b-template" class="xref">Section 7.7</a> for more information on conditional sequences). suit-common-sequence is RECOMMENDED to implement. It is REQUIRED if the optimizations described in <a href="#minimal-sigs" class="xref">Section 6.2.1</a> will be used. Whenever a parameter or Try Each command is required by more than one Command Sequence, placing that parameter or command in suit-common-sequence results in a smaller encoding.<a href="#section-8.4.5-3" class="pilcrow">¶</a></p>
 <div id="suit-component-identifier">
 <section id="section-8.4.5.1">
-            <h5 id="name-suit_component_identifier-2">
-<a href="#section-8.4.5.1" class="section-number selfRef">8.4.5.1. </a><a href="#name-suit_component_identifier-2" class="section-name selfRef">SUIT_Component_Identifier</a>
+            <h5 id="name-suit_component_identifier">
+<a href="#section-8.4.5.1" class="section-number selfRef">8.4.5.1. </a><a href="#name-suit_component_identifier" class="section-name selfRef">SUIT_Component_Identifier</a>
             </h5>
 <p id="section-8.4.5.1-1">A component is a unit of code or data that can be targeted by an update. To facilitate composite devices, components are identified by a list of CBOR byte strings, which allows construction of hierarchical component structures. Components are identified by Component Identifiers, but referenced in commands by Component Index; Component Identifiers are arrays of binary strings and a Component Index is an index into the array of Component Identifiers.<a href="#section-8.4.5.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.5.1-2">A Component Identifier can be trivial, such as the simple array [h'00']. It can also represent a filesystem path by encoding each segment of the path as an element in the list. For example, the path "/usr/bin/env" would encode to ['usr','bin','env'].<a href="#section-8.4.5.1-2" class="pilcrow">¶</a></p>
@@ -2690,8 +2698,8 @@ for current in current-list:
 </div>
 <div id="manifest-commands">
 <section id="section-8.4.6">
-          <h4 id="name-suit_command_sequence-2">
-<a href="#section-8.4.6" class="section-number selfRef">8.4.6. </a><a href="#name-suit_command_sequence-2" class="section-name selfRef">SUIT_Command_Sequence</a>
+          <h4 id="name-suit_command_sequence">
+<a href="#section-8.4.6" class="section-number selfRef">8.4.6. </a><a href="#name-suit_command_sequence" class="section-name selfRef">SUIT_Command_Sequence</a>
           </h4>
 <p id="section-8.4.6-1">A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take to accomplish a particular goal. These goals are defined in the manifest and include:<a href="#section-8.4.6-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.4.6-2">
@@ -2747,8 +2755,8 @@ for current in current-list:
 </div>
 <div id="reporting-policy">
 <section id="section-8.4.7">
-          <h4 id="name-reporting-policy-2">
-<a href="#section-8.4.7" class="section-number selfRef">8.4.7. </a><a href="#name-reporting-policy-2" class="section-name selfRef">Reporting Policy</a>
+          <h4 id="name-reporting-policy">
+<a href="#section-8.4.7" class="section-number selfRef">8.4.7. </a><a href="#name-reporting-policy" class="section-name selfRef">Reporting Policy</a>
           </h4>
 <p id="section-8.4.7-1">To facilitate construction of Reports that describe the success or failure of a given Procedure, each command is given a Reporting Policy. This is an integer bitfield that follows the command and indicates what the Recipient should do with the Record of executing the command. The options are summarized in the table below.<a href="#section-8.4.7-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-4">
@@ -2799,8 +2807,8 @@ for current in current-list:
 </div>
 <div id="secparameters">
 <section id="section-8.4.8">
-          <h4 id="name-suit_parameters-2">
-<a href="#section-8.4.8" class="section-number selfRef">8.4.8. </a><a href="#name-suit_parameters-2" class="section-name selfRef">SUIT_Parameters</a>
+          <h4 id="name-suit_parameters">
+<a href="#section-8.4.8" class="section-number selfRef">8.4.8. </a><a href="#name-suit_parameters" class="section-name selfRef">SUIT_Parameters</a>
           </h4>
 <p id="section-8.4.8-1">Many conditions and directives require additional information. That information is contained within parameters that can be set in a consistent way. This allows reuse of parameters between commands, thus reducing manifest size.<a href="#section-8.4.8-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.8-2">Most parameters are scoped to a specific component. This means that setting a parameter for one component has no effect on the parameters of any other component. The only exceptions to this are two Manifest Processor parameters: Strict Order and Soft Failure.<a href="#section-8.4.8-2" class="pilcrow">¶</a></p>
@@ -2911,11 +2919,11 @@ for current in current-list:
 <p id="section-8.4.8-5">CBOR-encoded object parameters are still wrapped in a bstr. This is because it allows a parser that is aggregating parameters to reference the object with a single pointer and traverse it without understanding the contents. This is important for modularization and division of responsibility within a pull parser. The same consideration does not apply to Directives because those elements are invoked with their arguments immediately.<a href="#section-8.4.8-5" class="pilcrow">¶</a></p>
 <div id="cbor-pen-uuid-namespace-identifier">
 <section id="section-8.4.8.1">
-            <h5 id="name-cbor-pen-uuid-namespace-iden">
-<a href="#section-8.4.8.1" class="section-number selfRef">8.4.8.1. </a><a href="#name-cbor-pen-uuid-namespace-iden" class="section-name selfRef">CBOR PEN UUID Namespace Identifier</a>
+            <h5 id="name-cbor-pen-uuid-namespace-ide">
+<a href="#section-8.4.8.1" class="section-number selfRef">8.4.8.1. </a><a href="#name-cbor-pen-uuid-namespace-ide" class="section-name selfRef">CBOR PEN UUID Namespace Identifier</a>
             </h5>
 <p id="section-8.4.8.1-1">The CBOR PEN UUID Namespace Identifier is constructed as follows:<a href="#section-8.4.8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.4.8.1-2">It uses the OID Namespace as a starting point, then uses the CBOR OID encoding for the IANA PEN OID (1.3.6.1.4.1):<a href="#section-8.4.8.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.1-2">It uses the OID Namespace as a starting point, then uses the CBOR absolute OID encoding for the IANA PEN OID (1.3.6.1.4.1):<a href="#section-8.4.8.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.4.8.1-3">
 <pre>
 D8 6F                # tag(111)
@@ -2936,8 +2944,8 @@ NAMESPACE_CBOR_PEN = 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e
 </div>
 <div id="uuid-identifiers">
 <section id="section-8.4.8.2">
-            <h5 id="name-constructing-uuids-2">
-<a href="#section-8.4.8.2" class="section-number selfRef">8.4.8.2. </a><a href="#name-constructing-uuids-2" class="section-name selfRef">Constructing UUIDs</a>
+            <h5 id="name-constructing-uuids">
+<a href="#section-8.4.8.2" class="section-number selfRef">8.4.8.2. </a><a href="#name-constructing-uuids" class="section-name selfRef">Constructing UUIDs</a>
             </h5>
 <p id="section-8.4.8.2-1">Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 <span>[<a href="#RFC4122" class="xref">RFC4122</a>]</span> UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.<a href="#section-8.4.8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.2-2">A Recipient MAY match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a Recipient that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This Recipient might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.<a href="#section-8.4.8.2-2" class="pilcrow">¶</a></p>
@@ -2996,8 +3004,8 @@ Class ID = UUID5(
 </div>
 <div id="suit-parameter-vendor-identifier">
 <section id="section-8.4.8.3">
-            <h5 id="name-suit-parameter-vendor-identi">
-<a href="#section-8.4.8.3" class="section-number selfRef">8.4.8.3. </a><a href="#name-suit-parameter-vendor-identi" class="section-name selfRef">suit-parameter-vendor-identifier</a>
+            <h5 id="name-suit-parameter-vendor-ident">
+<a href="#section-8.4.8.3" class="section-number selfRef">8.4.8.3. </a><a href="#name-suit-parameter-vendor-ident" class="section-name selfRef">suit-parameter-vendor-identifier</a>
             </h5>
 <p id="section-8.4.8.3-1">suit-parameter-vendor-identifier may be presented in one of two ways:<a href="#section-8.4.8.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -3011,80 +3019,80 @@ Class ID = UUID5(
 </div>
 <div id="suit-parameter-class-identifier">
 <section id="section-8.4.8.4">
-            <h5 id="name-suit-parameter-class-identif">
-<a href="#section-8.4.8.4" class="section-number selfRef">8.4.8.4. </a><a href="#name-suit-parameter-class-identif" class="section-name selfRef">suit-parameter-class-identifier</a>
+            <h5 id="name-suit-parameter-class-identi">
+<a href="#section-8.4.8.4" class="section-number selfRef">8.4.8.4. </a><a href="#name-suit-parameter-class-identi" class="section-name selfRef">suit-parameter-class-identifier</a>
             </h5>
 <p id="section-8.4.8.4-1">A RFC 4122 UUID representing the class of the device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in <a href="#uuid-identifiers" class="xref">Section 8.4.8.2</a><a href="#section-8.4.8.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-device-identifier">
 <section id="section-8.4.8.5">
-            <h5 id="name-suit-parameter-device-identi">
-<a href="#section-8.4.8.5" class="section-number selfRef">8.4.8.5. </a><a href="#name-suit-parameter-device-identi" class="section-name selfRef">suit-parameter-device-identifier</a>
+            <h5 id="name-suit-parameter-device-ident">
+<a href="#section-8.4.8.5" class="section-number selfRef">8.4.8.5. </a><a href="#name-suit-parameter-device-ident" class="section-name selfRef">suit-parameter-device-identifier</a>
             </h5>
 <p id="section-8.4.8.5-1">A RFC 4122 UUID representing the specific device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in <a href="#uuid-identifiers" class="xref">Section 8.4.8.2</a><a href="#section-8.4.8.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-image-digest">
 <section id="section-8.4.8.6">
-            <h5 id="name-suit-parameter-image-digest-2">
-<a href="#section-8.4.8.6" class="section-number selfRef">8.4.8.6. </a><a href="#name-suit-parameter-image-digest-2" class="section-name selfRef">suit-parameter-image-digest</a>
+            <h5 id="name-suit-parameter-image-digest">
+<a href="#section-8.4.8.6" class="section-number selfRef">8.4.8.6. </a><a href="#name-suit-parameter-image-digest" class="section-name selfRef">suit-parameter-image-digest</a>
             </h5>
 <p id="section-8.4.8.6-1">A fingerprint computed over the component itself, encoded in the SUIT_Digest <a href="#SUIT_Digest" class="xref">Section 10</a> structure. The SUIT_Digest is wrapped in a bstr, as required in <a href="#secparameters" class="xref">Section 8.4.8</a>.<a href="#section-8.4.8.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-image-size">
 <section id="section-8.4.8.7">
-            <h5 id="name-suit-parameter-image-size-2">
-<a href="#section-8.4.8.7" class="section-number selfRef">8.4.8.7. </a><a href="#name-suit-parameter-image-size-2" class="section-name selfRef">suit-parameter-image-size</a>
+            <h5 id="name-suit-parameter-image-size">
+<a href="#section-8.4.8.7" class="section-number selfRef">8.4.8.7. </a><a href="#name-suit-parameter-image-size" class="section-name selfRef">suit-parameter-image-size</a>
             </h5>
 <p id="section-8.4.8.7-1">The size of the firmware image in bytes. This size is encoded as a positive integer.<a href="#section-8.4.8.7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-component-slot">
 <section id="section-8.4.8.8">
-            <h5 id="name-suit-parameter-component-slo">
-<a href="#section-8.4.8.8" class="section-number selfRef">8.4.8.8. </a><a href="#name-suit-parameter-component-slo" class="section-name selfRef">suit-parameter-component-slot</a>
+            <h5 id="name-suit-parameter-component-sl">
+<a href="#section-8.4.8.8" class="section-number selfRef">8.4.8.8. </a><a href="#name-suit-parameter-component-sl" class="section-name selfRef">suit-parameter-component-slot</a>
             </h5>
 <p id="section-8.4.8.8-1">This parameter sets the slot index of a component. Some components support multiple possible Slots (offsets into a storage area). This parameter describes the intended Slot to use, identified by its index into the component's storage area. This slot MUST be encoded as a positive integer.<a href="#section-8.4.8.8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-uri">
 <section id="section-8.4.8.9">
-            <h5 id="name-suit-parameter-uri-2">
-<a href="#section-8.4.8.9" class="section-number selfRef">8.4.8.9. </a><a href="#name-suit-parameter-uri-2" class="section-name selfRef">suit-parameter-uri</a>
+            <h5 id="name-suit-parameter-uri">
+<a href="#section-8.4.8.9" class="section-number selfRef">8.4.8.9. </a><a href="#name-suit-parameter-uri" class="section-name selfRef">suit-parameter-uri</a>
             </h5>
 <p id="section-8.4.8.9-1">A URI Reference (<span>[<a href="#RFC3986" class="xref">RFC3986</a>]</span>) from which to fetch a resource, encoded as a text string. CBOR Tag 32 is not used because the meaning of the text string is unambiguous in this context.<a href="#section-8.4.8.9-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-source-component">
 <section id="section-8.4.8.10">
-            <h5 id="name-suit-parameter-source-compon">
-<a href="#section-8.4.8.10" class="section-number selfRef">8.4.8.10. </a><a href="#name-suit-parameter-source-compon" class="section-name selfRef">suit-parameter-source-component</a>
+            <h5 id="name-suit-parameter-source-compo">
+<a href="#section-8.4.8.10" class="section-number selfRef">8.4.8.10. </a><a href="#name-suit-parameter-source-compo" class="section-name selfRef">suit-parameter-source-component</a>
             </h5>
 <p id="section-8.4.8.10-1">This parameter sets the source component to be used with either suit-directive-copy (<a href="#suit-directive-copy" class="xref">Section 8.4.10.5</a>) or with suit-directive-swap (<a href="#suit-directive-swap" class="xref">Section 8.4.10.8</a>). The current Component, as set by suit-directive-set-component-index defines the destination, and suit-parameter-source-component defines the source.<a href="#section-8.4.8.10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-run-args">
 <section id="section-8.4.8.11">
-            <h5 id="name-suit-parameter-run-args-2">
-<a href="#section-8.4.8.11" class="section-number selfRef">8.4.8.11. </a><a href="#name-suit-parameter-run-args-2" class="section-name selfRef">suit-parameter-run-args</a>
+            <h5 id="name-suit-parameter-run-args">
+<a href="#section-8.4.8.11" class="section-number selfRef">8.4.8.11. </a><a href="#name-suit-parameter-run-args" class="section-name selfRef">suit-parameter-run-args</a>
             </h5>
 <p id="section-8.4.8.11-1">This parameter contains an encoded set of arguments for suit-directive-run (<a href="#suit-directive-run" class="xref">Section 8.4.10.6</a>). The arguments MUST be provided as an implementation-defined bstr.<a href="#section-8.4.8.11-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-fetch-arguments">
 <section id="section-8.4.8.12">
-            <h5 id="name-suit-parameter-fetch-argumen">
-<a href="#section-8.4.8.12" class="section-number selfRef">8.4.8.12. </a><a href="#name-suit-parameter-fetch-argumen" class="section-name selfRef">suit-parameter-fetch-arguments</a>
+            <h5 id="name-suit-parameter-fetch-argume">
+<a href="#section-8.4.8.12" class="section-number selfRef">8.4.8.12. </a><a href="#name-suit-parameter-fetch-argume" class="section-name selfRef">suit-parameter-fetch-arguments</a>
             </h5>
 <p id="section-8.4.8.12-1">An implementation-defined set of arguments to suit-directive-fetch (<a href="#suit-directive-fetch" class="xref">Section 8.4.10.4</a>). Arguments are encoded in a bstr.<a href="#section-8.4.8.12-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-strict-order">
 <section id="section-8.4.8.13">
-            <h5 id="name-suit-parameter-strict-order-2">
-<a href="#section-8.4.8.13" class="section-number selfRef">8.4.8.13. </a><a href="#name-suit-parameter-strict-order-2" class="section-name selfRef">suit-parameter-strict-order</a>
+            <h5 id="name-suit-parameter-strict-order">
+<a href="#section-8.4.8.13" class="section-number selfRef">8.4.8.13. </a><a href="#name-suit-parameter-strict-order" class="section-name selfRef">suit-parameter-strict-order</a>
             </h5>
 <p id="section-8.4.8.13-1">The Strict Order Parameter allows a manifest to govern when directives can be executed out-of-order. This allows for systems that have a sensitivity to order of updates to choose the order in which they are executed. It also allows for more advanced systems to parallelize their handling of updates. Strict Order defaults to True. It MAY be set to False when the order of operations does not matter. When arriving at the end of a command sequence, ALL commands MUST have completed, regardless of the state of SUIT_Parameter_Strict_Order. If SUIT_Parameter_Strict_Order is returned to True, ALL preceding commands MUST complete before the next command is executed.<a href="#section-8.4.8.13-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.13-2">See <a href="#parallel-processing" class="xref">Section 6.7</a> for behavioral description of Strict Order.<a href="#section-8.4.8.13-2" class="pilcrow">¶</a></p>
@@ -3092,8 +3100,8 @@ Class ID = UUID5(
 </div>
 <div id="suit-parameter-soft-failure">
 <section id="section-8.4.8.14">
-            <h5 id="name-suit-parameter-soft-failure-2">
-<a href="#section-8.4.8.14" class="section-number selfRef">8.4.8.14. </a><a href="#name-suit-parameter-soft-failure-2" class="section-name selfRef">suit-parameter-soft-failure</a>
+            <h5 id="name-suit-parameter-soft-failure">
+<a href="#section-8.4.8.14" class="section-number selfRef">8.4.8.14. </a><a href="#name-suit-parameter-soft-failure" class="section-name selfRef">suit-parameter-soft-failure</a>
             </h5>
 <p id="section-8.4.8.14-1">When executing a command sequence inside suit-directive-try-each (<a href="#suit-directive-try-each" class="xref">Section 8.4.10.2</a>) or suit-directive-run-sequence (<a href="#suit-directive-run-sequence" class="xref">Section 8.4.10.7</a>) and a condition failure occurs, the manifest processor aborts the sequence. For suit-directive-try-each, if Soft Failure is True, the next sequence in Try Each is invoked, otherwise suit-directive-try-each fails with the condition failure code. In suit-directive-run-sequence, if Soft Failure is True the suit-directive-run-sequence simply halts with no side-effects and the Manifest Processor continues with the following command, otherwise, the suit-directive-run-sequence fails with the condition failure code.<a href="#section-8.4.8.14-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.14-2">suit-parameter-soft-failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates. It MUST NOT be set outside of suit-directive-try-each or suit-directive-run-sequence.<a href="#section-8.4.8.14-2" class="pilcrow">¶</a></p>
@@ -3103,8 +3111,8 @@ Class ID = UUID5(
 </div>
 <div id="suit-parameter-custom">
 <section id="section-8.4.8.15">
-            <h5 id="name-suit-parameter-custom-2">
-<a href="#section-8.4.8.15" class="section-number selfRef">8.4.8.15. </a><a href="#name-suit-parameter-custom-2" class="section-name selfRef">suit-parameter-custom</a>
+            <h5 id="name-suit-parameter-custom">
+<a href="#section-8.4.8.15" class="section-number selfRef">8.4.8.15. </a><a href="#name-suit-parameter-custom" class="section-name selfRef">suit-parameter-custom</a>
             </h5>
 <p id="section-8.4.8.15-1">This parameter is an extension point for any proprietary, application specific conditions and directives. It MUST NOT be used in the common sequence. This effectively scopes each custom command to a particular Vendor Identifier/Class Identifier pair.<a href="#section-8.4.8.15-1" class="pilcrow">¶</a></p>
 </section>
@@ -3113,8 +3121,8 @@ Class ID = UUID5(
 </div>
 <div id="suitcondition">
 <section id="section-8.4.9">
-          <h4 id="name-suit_condition-2">
-<a href="#section-8.4.9" class="section-number selfRef">8.4.9. </a><a href="#name-suit_condition-2" class="section-name selfRef">SUIT_Condition</a>
+          <h4 id="name-suit_condition">
+<a href="#section-8.4.9" class="section-number selfRef">8.4.9. </a><a href="#name-suit_condition" class="section-name selfRef">SUIT_Condition</a>
           </h4>
 <p id="section-8.4.9-1">Conditions are used to define mandatory properties of a system in order for an update to be applied. They can be pre-conditions or post-conditions of any directive or series of directives, depending on where they are placed in the list. All Conditions specify a Reporting Policy as described <a href="#reporting-policy" class="xref">Section 8.4.7</a>. Conditions include:<a href="#section-8.4.9-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-6">
@@ -3184,8 +3192,8 @@ Class ID = UUID5(
 <p id="section-8.4.9-6">Condition labels in the positive number range are reserved for IANA registration while those in the negative range are custom conditions reserved for proprietary definition by the author of a manifest processor. See <a href="#iana" class="xref">Section 11</a> for more details.<a href="#section-8.4.9-6" class="pilcrow">¶</a></p>
 <div id="identifier-conditions">
 <section id="section-8.4.9.1">
-            <h5 id="name-suit-condition-vendor-identi">
-<a href="#section-8.4.9.1" class="section-number selfRef">8.4.9.1. </a><a href="#name-suit-condition-vendor-identi" class="section-name selfRef">suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier</a>
+            <h5 id="name-suit-condition-vendor-ident">
+<a href="#section-8.4.9.1" class="section-number selfRef">8.4.9.1. </a><a href="#name-suit-condition-vendor-ident" class="section-name selfRef">suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier</a>
             </h5>
 <p id="section-8.4.9.1-1">There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a RFC 4122 <span>[<a href="#RFC4122" class="xref">RFC4122</a>]</span> UUID that MUST have already been set as a parameter. The installing Recipient MUST match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. Each component MAY match more than one identifier. Care is needed to ensure that manifests correctly identify their targets using these conditions. Using only a generic class ID for a device-specific firmware could result in matching devices that are not compatible.<a href="#section-8.4.9.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.9.1-2">The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.<a href="#section-8.4.9.1-2" class="pilcrow">¶</a></p>
@@ -3194,32 +3202,32 @@ Class ID = UUID5(
 </div>
 <div id="suit-condition-image-match">
 <section id="section-8.4.9.2">
-            <h5 id="name-suit-condition-image-match-2">
-<a href="#section-8.4.9.2" class="section-number selfRef">8.4.9.2. </a><a href="#name-suit-condition-image-match-2" class="section-name selfRef">suit-condition-image-match</a>
+            <h5 id="name-suit-condition-image-match">
+<a href="#section-8.4.9.2" class="section-number selfRef">8.4.9.2. </a><a href="#name-suit-condition-image-match" class="section-name selfRef">suit-condition-image-match</a>
             </h5>
 <p id="section-8.4.9.2-1">Verify that the current component matches the suit-parameter-image-digest (<a href="#suit-parameter-image-digest" class="xref">Section 8.4.8.6</a>) for the current component. The digest is verified against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-match is REQUIRED to implement.<a href="#section-8.4.9.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-condition-component-slot">
 <section id="section-8.4.9.3">
-            <h5 id="name-suit-condition-component-slo">
-<a href="#section-8.4.9.3" class="section-number selfRef">8.4.9.3. </a><a href="#name-suit-condition-component-slo" class="section-name selfRef">suit-condition-component-slot</a>
+            <h5 id="name-suit-condition-component-sl">
+<a href="#section-8.4.9.3" class="section-number selfRef">8.4.9.3. </a><a href="#name-suit-condition-component-sl" class="section-name selfRef">suit-condition-component-slot</a>
             </h5>
 <p id="section-8.4.9.3-1">Verify that the slot index of the current component matches the slot index set in suit-parameter-component-slot (<a href="#suit-parameter-component-slot" class="xref">Section 8.4.8.8</a>). This condition allows a manifest to select between several images to match a target slot.<a href="#section-8.4.9.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-condition-abort">
 <section id="section-8.4.9.4">
-            <h5 id="name-suit-condition-abort-2">
-<a href="#section-8.4.9.4" class="section-number selfRef">8.4.9.4. </a><a href="#name-suit-condition-abort-2" class="section-name selfRef">suit-condition-abort</a>
+            <h5 id="name-suit-condition-abort">
+<a href="#section-8.4.9.4" class="section-number selfRef">8.4.9.4. </a><a href="#name-suit-condition-abort" class="section-name selfRef">suit-condition-abort</a>
             </h5>
 <p id="section-8.4.9.4-1">Unconditionally fail. This operation is typically used in conjunction with suit-directive-try-each (<a href="#suit-directive-try-each" class="xref">Section 8.4.10.2</a>).<a href="#section-8.4.9.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="SUIT_Condition_Custom">
 <section id="section-8.4.9.5">
-            <h5 id="name-suit-condition-custom-2">
-<a href="#section-8.4.9.5" class="section-number selfRef">8.4.9.5. </a><a href="#name-suit-condition-custom-2" class="section-name selfRef">suit-condition-custom</a>
+            <h5 id="name-suit-condition-custom">
+<a href="#section-8.4.9.5" class="section-number selfRef">8.4.9.5. </a><a href="#name-suit-condition-custom" class="section-name selfRef">suit-condition-custom</a>
             </h5>
 <p id="section-8.4.9.5-1">suit-condition-custom describes any proprietary, application specific condition. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided to the condition, it should be encoded in a custom parameter (a nint) as described in <a href="#secparameters" class="xref">Section 8.4.8</a>. SUIT_Condition_Custom is OPTIONAL to implement.<a href="#section-8.4.9.5-1" class="pilcrow">¶</a></p>
 </section>
@@ -3228,8 +3236,8 @@ Class ID = UUID5(
 </div>
 <div id="suitdirective">
 <section id="section-8.4.10">
-          <h4 id="name-suit_directive-2">
-<a href="#section-8.4.10" class="section-number selfRef">8.4.10. </a><a href="#name-suit_directive-2" class="section-name selfRef">SUIT_Directive</a>
+          <h4 id="name-suit_directive">
+<a href="#section-8.4.10" class="section-number selfRef">8.4.10. </a><a href="#name-suit_directive" class="section-name selfRef">SUIT_Directive</a>
           </h4>
 <p id="section-8.4.10-1">Directives are used to define the behavior of the recipient. Directives include:<a href="#section-8.4.10-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-7">
@@ -3304,8 +3312,8 @@ Class ID = UUID5(
 <p id="section-8.4.10-4">When a Recipient executes a Directive, it MUST report a result code. If the Directive reports failure, then the current Command Sequence MUST be terminated.<a href="#section-8.4.10-4" class="pilcrow">¶</a></p>
 <div id="suit-directive-set-component-index">
 <section id="section-8.4.10.1">
-            <h5 id="name-suit-directive-set-component">
-<a href="#section-8.4.10.1" class="section-number selfRef">8.4.10.1. </a><a href="#name-suit-directive-set-component" class="section-name selfRef">suit-directive-set-component-index</a>
+            <h5 id="name-suit-directive-set-componen">
+<a href="#section-8.4.10.1" class="section-number selfRef">8.4.10.1. </a><a href="#name-suit-directive-set-componen" class="section-name selfRef">suit-directive-set-component-index</a>
             </h5>
 <p id="section-8.4.10.1-1">Set Component Index defines the component to which successive directives and conditions will apply. The supplied argument MUST be one of three types:<a href="#section-8.4.10.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.4.10.1-2">
@@ -3323,8 +3331,8 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 <div id="suit-directive-try-each">
 <section id="section-8.4.10.2">
-            <h5 id="name-suit-directive-try-each-2">
-<a href="#section-8.4.10.2" class="section-number selfRef">8.4.10.2. </a><a href="#name-suit-directive-try-each-2" class="section-name selfRef">suit-directive-try-each</a>
+            <h5 id="name-suit-directive-try-each">
+<a href="#section-8.4.10.2" class="section-number selfRef">8.4.10.2. </a><a href="#name-suit-directive-try-each" class="section-name selfRef">suit-directive-try-each</a>
             </h5>
 <p id="section-8.4.10.2-1">This command runs several SUIT_Command_Sequence instances, one after another, in a strict order. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.<a href="#section-8.4.10.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.10.2-2">suit-parameter-soft-failure (<a href="#suit-parameter-soft-failure" class="xref">Section 8.4.8.14</a>) is initialized to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.<a href="#section-8.4.10.2-2" class="pilcrow">¶</a></p>
@@ -3333,8 +3341,8 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 <div id="suit-directive-override-parameters">
 <section id="section-8.4.10.3">
-            <h5 id="name-suit-directive-override-para">
-<a href="#section-8.4.10.3" class="section-number selfRef">8.4.10.3. </a><a href="#name-suit-directive-override-para" class="section-name selfRef">suit-directive-override-parameters</a>
+            <h5 id="name-suit-directive-override-par">
+<a href="#section-8.4.10.3" class="section-number selfRef">8.4.10.3. </a><a href="#name-suit-directive-override-par" class="section-name selfRef">suit-directive-override-parameters</a>
             </h5>
 <p id="section-8.4.10.3-1">suit-directive-override-parameters replaces any listed parameters that are already set with the values that are provided in its argument. This allows a manifest to prevent replacement of critical parameters.<a href="#section-8.4.10.3-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.10.3-2">Available parameters are defined in <a href="#secparameters" class="xref">Section 8.4.8</a>.<a href="#section-8.4.10.3-2" class="pilcrow">¶</a></p>
@@ -3343,19 +3351,19 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 <div id="suit-directive-fetch">
 <section id="section-8.4.10.4">
-            <h5 id="name-suit-directive-fetch-2">
-<a href="#section-8.4.10.4" class="section-number selfRef">8.4.10.4. </a><a href="#name-suit-directive-fetch-2" class="section-name selfRef">suit-directive-fetch</a>
+            <h5 id="name-suit-directive-fetch">
+<a href="#section-8.4.10.4" class="section-number selfRef">8.4.10.4. </a><a href="#name-suit-directive-fetch" class="section-name selfRef">suit-directive-fetch</a>
             </h5>
 <p id="section-8.4.10.4-1">suit-directive-fetch instructs the manifest processor to obtain one or more manifests or payloads, as specified by the manifest index and component index, respectively.<a href="#section-8.4.10.4-1" class="pilcrow">¶</a></p>
-<p id="section-8.4.10.4-2">suit-directive-fetch can target one or more payloads. suit-directive-fetch retrieves each component listed in component-index. If component-index is True, instead of an integer, then all current manifest components are fetched If component-index is an array, then all listed components are fetched.<a href="#section-8.4.10.4-2" class="pilcrow">¶</a></p>
+<p id="section-8.4.10.4-2">suit-directive-fetch can target one or more payloads. suit-directive-fetch retrieves each component listed in component-index. If component-index is True, instead of an integer, then all current manifest components are fetched. If component-index is an array, then all listed components are fetched.<a href="#section-8.4.10.4-2" class="pilcrow">¶</a></p>
 <p id="section-8.4.10.4-3">suit-directive-fetch typically takes no arguments unless one is needed to modify fetch behavior. If an argument is needed, it must be wrapped in a bstr and set in suit-parameter-fetch-arguments.<a href="#section-8.4.10.4-3" class="pilcrow">¶</a></p>
 <p id="section-8.4.10.4-4">suit-directive-fetch reads the URI parameter to find the source of the fetch it performs.<a href="#section-8.4.10.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-directive-copy">
 <section id="section-8.4.10.5">
-            <h5 id="name-suit-directive-copy-2">
-<a href="#section-8.4.10.5" class="section-number selfRef">8.4.10.5. </a><a href="#name-suit-directive-copy-2" class="section-name selfRef">suit-directive-copy</a>
+            <h5 id="name-suit-directive-copy">
+<a href="#section-8.4.10.5" class="section-number selfRef">8.4.10.5. </a><a href="#name-suit-directive-copy" class="section-name selfRef">suit-directive-copy</a>
             </h5>
 <p id="section-8.4.10.5-1">suit-directive-copy instructs the manifest processor to obtain one or more payloads, as specified by the component index. As described in <a href="#index-true" class="xref">Section 6.5</a> component index may be a single integer, a list of integers, or True. suit-directive-copy retrieves each component specified by the current component-index, respectively.<a href="#section-8.4.10.5-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.10.5-2">suit-directive-copy reads its source from suit-parameter-source-component (<a href="#suit-parameter-source-component" class="xref">Section 8.4.8.10</a>).<a href="#section-8.4.10.5-2" class="pilcrow">¶</a></p>
@@ -3364,8 +3372,8 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 <div id="suit-directive-run">
 <section id="section-8.4.10.6">
-            <h5 id="name-suit-directive-run-2">
-<a href="#section-8.4.10.6" class="section-number selfRef">8.4.10.6. </a><a href="#name-suit-directive-run-2" class="section-name selfRef">suit-directive-run</a>
+            <h5 id="name-suit-directive-run">
+<a href="#section-8.4.10.6" class="section-number selfRef">8.4.10.6. </a><a href="#name-suit-directive-run" class="section-name selfRef">suit-directive-run</a>
             </h5>
 <p id="section-8.4.10.6-1">suit-directive-run directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor MAY be unloaded and execution continues in the Component Index. Arguments are provided to suit-directive-run through suit-parameter-run-arguments (<a href="#suit-parameter-run-args" class="xref">Section 8.4.8.11</a>) and are forwarded to the executable code located in Component Index in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.<a href="#section-8.4.10.6-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.10.6-2">If the executable code at Component Index is constructed in such a way that it does not unload the manifest processor, then the manifest processor may resume execution after the executable completes. This allows the manifest processor to invoke suitable helpers and to verify them with image conditions.<a href="#section-8.4.10.6-2" class="pilcrow">¶</a></p>
@@ -3373,8 +3381,8 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 <div id="suit-directive-run-sequence">
 <section id="section-8.4.10.7">
-            <h5 id="name-suit-directive-run-sequence-2">
-<a href="#section-8.4.10.7" class="section-number selfRef">8.4.10.7. </a><a href="#name-suit-directive-run-sequence-2" class="section-name selfRef">suit-directive-run-sequence</a>
+            <h5 id="name-suit-directive-run-sequence">
+<a href="#section-8.4.10.7" class="section-number selfRef">8.4.10.7. </a><a href="#name-suit-directive-run-sequence" class="section-name selfRef">suit-directive-run-sequence</a>
             </h5>
 <p id="section-8.4.10.7-1">To enable conditional commands, and to allow several strictly ordered sequences to be executed out-of-order, suit-directive-run-sequence allows the manifest processor to execute its argument as a SUIT_Command_Sequence. The argument must be wrapped in a bstr.<a href="#section-8.4.10.7-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.10.7-2">When a sequence is executed, any failure of a condition causes immediate termination of the sequence.<a href="#section-8.4.10.7-2" class="pilcrow">¶</a></p>
@@ -3384,8 +3392,8 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 <div id="suit-directive-swap">
 <section id="section-8.4.10.8">
-            <h5 id="name-suit-directive-swap-2">
-<a href="#section-8.4.10.8" class="section-number selfRef">8.4.10.8. </a><a href="#name-suit-directive-swap-2" class="section-name selfRef">suit-directive-swap</a>
+            <h5 id="name-suit-directive-swap">
+<a href="#section-8.4.10.8" class="section-number selfRef">8.4.10.8. </a><a href="#name-suit-directive-swap" class="section-name selfRef">suit-directive-swap</a>
             </h5>
 <p id="section-8.4.10.8-1">suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. As with suit-directive-copy, if the source component is missing, this command fails.<a href="#section-8.4.10.8-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.10.8-2">If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they MUST be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.<a href="#section-8.4.10.8-2" class="pilcrow">¶</a></p>
@@ -3395,8 +3403,8 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 <div id="integrity-checks">
 <section id="section-8.4.11">
-          <h4 id="name-integrity-check-values-4">
-<a href="#section-8.4.11" class="section-number selfRef">8.4.11. </a><a href="#name-integrity-check-values-4" class="section-name selfRef">Integrity Check Values</a>
+          <h4 id="name-integrity-check-values-2">
+<a href="#section-8.4.11" class="section-number selfRef">8.4.11. </a><a href="#name-integrity-check-values-2" class="section-name selfRef">Integrity Check Values</a>
           </h4>
 <p id="section-8.4.11-1">When the Text section or any Command Sequence of the Update Procedure is made severable, it is moved to the Envelope and replaced with a SUIT_Digest. The SUIT_Digest is computed over the entire bstr enclosing the Manifest element that has been moved to the Envelope. Each element that is made severable from the Manifest is placed in the Envelope. The keys for the envelope elements have the same values as the keys for the manifest elements.<a href="#section-8.4.11-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.11-2">Each Integrity Check Value covers the corresponding Envelope Element as described in <a href="#severable-fields" class="xref">Section 8.5</a>.<a href="#section-8.4.11-2" class="pilcrow">¶</a></p>
@@ -3406,8 +3414,8 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 <div id="severable-fields">
 <section id="section-8.5">
-        <h3 id="name-severable-elements-4">
-<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-severable-elements-4" class="section-name selfRef">Severable Elements</a>
+        <h3 id="name-severable-elements-2">
+<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-severable-elements-2" class="section-name selfRef">Severable Elements</a>
         </h3>
 <p id="section-8.5-1">Because the manifest can be used by different actors at different times, some parts of the manifest can be removed or "Severed" without affecting later stages of the lifecycle. Severing of information is achieved by separating that information from the signed container so that removing it does not affect the signature. This means that ensuring integrity of severable parts of the manifest is a requirement for the signed portion of the manifest. Severing some parts makes it possible to discard parts of the manifest that are no longer necessary. This is important because it allows the storage used by the manifest to be greatly reduced. For example, no text size limits are needed if text is removed from the manifest prior to delivery to a constrained device.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
 <p id="section-8.5-2">Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 SHOULD NOT be severable. Elements larger than (Digest Bits)/8 + 4 MAY be severable, while elements that are much larger than (Digest Bits)/8 + 4 SHOULD be severable.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
@@ -3418,8 +3426,8 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 <div id="access-control-lists">
 <section id="section-9">
-      <h2 id="name-access-control-lists-2">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-access-control-lists-2" class="section-name selfRef">Access Control Lists</a>
+      <h2 id="name-access-control-lists">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-access-control-lists" class="section-name selfRef">Access Control Lists</a>
       </h2>
 <p id="section-9-1">To manage permissions in the manifest, there are three models that can be used.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">First, the simplest model requires that all manifests are authenticated by a single trusted key. This mode has the advantage that only a root manifest needs to be authenticated, since all of its dependencies have digests included in the root manifest.<a href="#section-9-2" class="pilcrow">¶</a></p>
@@ -3430,8 +3438,8 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 <div id="SUIT_Digest">
 <section id="section-10">
-      <h2 id="name-suit-digest-container-2">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-suit-digest-container-2" class="section-name selfRef">SUIT Digest Container</a>
+      <h2 id="name-suit-digest-container">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-suit-digest-container" class="section-name selfRef">SUIT Digest Container</a>
       </h2>
 <p id="section-10-1">The SUIT digest is a CBOR List containing two elements: an algorithm identifier and a bstr containing the bytes of the digest. Some forms of digest may require additional parameters. These can be added following the digest.<a href="#section-10-1" class="pilcrow">¶</a></p>
 <p id="section-10-2">The values of the algorithm identifier are defined by <span>[<a href="#I-D.ietf-cose-hash-algs" class="xref">I-D.ietf-cose-hash-algs</a>]</span>. The following algorithms MUST be implemented by all Manifest Processors:<a href="#section-10-2" class="pilcrow">¶</a></p>
@@ -3454,8 +3462,8 @@ See <a href="#index-true" class="xref">Section 6.5</a> for more details.<a href=
 </div>
 <div id="iana">
 <section id="section-11">
-      <h2 id="name-iana-considerations-2">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-iana-considerations-2" class="section-name selfRef">IANA Considerations</a>
+      <h2 id="name-iana-considerations">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
 <p id="section-11-1">IANA is requested to:<a href="#section-11-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -3474,8 +3482,8 @@ Several registries defined in the subsections below need to be created.<a href="
 <p id="section-11-5">Negative values -23 to 0 are Experimental Use, -24 and lower are Private Use.<a href="#section-11-5" class="pilcrow">¶</a></p>
 <div id="suit-commands">
 <section id="section-11.1">
-        <h3 id="name-suit-commands-2">
-<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-suit-commands-2" class="section-name selfRef">SUIT Commands</a>
+        <h3 id="name-suit-commands">
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-suit-commands" class="section-name selfRef">SUIT Commands</a>
         </h3>
 <table class="center" id="table-8">
           <caption><a href="#table-8" class="selfRef">Table 8</a></caption>
@@ -3661,8 +3669,8 @@ Several registries defined in the subsections below need to be created.<a href="
 </div>
 <div id="suit-parameters">
 <section id="section-11.2">
-        <h3 id="name-suit-parameters-2">
-<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-suit-parameters-2" class="section-name selfRef">SUIT Parameters</a>
+        <h3 id="name-suit-parameters">
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-suit-parameters" class="section-name selfRef">SUIT Parameters</a>
         </h3>
 <table class="center" id="table-9">
           <caption><a href="#table-9" class="selfRef">Table 9</a></caption>
@@ -3809,8 +3817,8 @@ Several registries defined in the subsections below need to be created.<a href="
 </div>
 <div id="suit-text-values">
 <section id="section-11.3">
-        <h3 id="name-suit-text-values-2">
-<a href="#section-11.3" class="section-number selfRef">11.3. </a><a href="#name-suit-text-values-2" class="section-name selfRef">SUIT Text Values</a>
+        <h3 id="name-suit-text-values">
+<a href="#section-11.3" class="section-number selfRef">11.3. </a><a href="#name-suit-text-values" class="section-name selfRef">SUIT Text Values</a>
         </h3>
 <table class="center" id="table-10">
           <caption><a href="#table-10" class="selfRef">Table 10</a></caption>
@@ -3863,8 +3871,8 @@ Several registries defined in the subsections below need to be created.<a href="
 </div>
 <div id="suit-component-text-values">
 <section id="section-11.4">
-        <h3 id="name-suit-component-text-values-2">
-<a href="#section-11.4" class="section-number selfRef">11.4. </a><a href="#name-suit-component-text-values-2" class="section-name selfRef">SUIT Component Text Values</a>
+        <h3 id="name-suit-component-text-values">
+<a href="#section-11.4" class="section-number selfRef">11.4. </a><a href="#name-suit-component-text-values" class="section-name selfRef">SUIT Component Text Values</a>
         </h3>
 <table class="center" id="table-11">
           <caption><a href="#table-11" class="selfRef">Table 11</a></caption>
@@ -3940,16 +3948,16 @@ Several registries defined in the subsections below need to be created.<a href="
 </div>
 <div id="security-considerations">
 <section id="section-12">
-      <h2 id="name-security-considerations-2">
-<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-security-considerations-2" class="section-name selfRef">Security Considerations</a>
+      <h2 id="name-security-considerations">
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-12-1">This document is about a manifest format protecting and describing how to retrieve, install, and invoke firmware images and as such it is part of a larger solution for delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture <span>[<a href="#RFC9019" class="xref">RFC9019</a>]</span> and in the information model <span>[<a href="#I-D.ietf-suit-information-model" class="xref">I-D.ietf-suit-information-model</a>]</span> documents.<a href="#section-12-1" class="pilcrow">¶</a></p>
+<p id="section-12-1">This document is about a manifest format protecting and describing how to retrieve, install, and invoke firmware images and as such it is part of a larger solution for delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture <span>[<a href="#RFC9019" class="xref">RFC9019</a>]</span> and in the information model <span>[<a href="#RFC9124" class="xref">RFC9124</a>]</span> documents.<a href="#section-12-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="acknowledgements">
 <section id="section-13">
-      <h2 id="name-acknowledgements-2">
-<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-acknowledgements-2" class="section-name selfRef">Acknowledgements</a>
+      <h2 id="name-acknowledgements">
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
 <p id="section-13-1">We would like to thank the following persons for their support in designing this mechanism:<a href="#section-13-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -3983,18 +3991,14 @@ Several registries defined in the subsections below need to be created.<a href="
 </section>
 </div>
 <section id="section-14">
-      <h2 id="name-references-2">
-<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-references-2" class="section-name selfRef">References</a>
+      <h2 id="name-references">
+<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <section id="section-14.1">
-        <h3 id="name-normative-references-2">
-<a href="#section-14.1" class="section-number selfRef">14.1. </a><a href="#name-normative-references-2" class="section-name selfRef">Normative References</a>
+        <h3 id="name-normative-references">
+<a href="#section-14.1" class="section-number selfRef">14.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="I-D.ietf-suit-information-model">[I-D.ietf-suit-information-model]</dt>
-        <dd>
-<span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"A Manifest Information Model for Firmware Updates in IoT Devices"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-information-model-13</span>, <time datetime="2021-07-08" class="refDate">8 July 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-information-model-13.txt">https://www.ietf.org/archive/id/draft-ietf-suit-information-model-13.txt</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
@@ -4016,14 +4020,18 @@ Several registries defined in the subsections below need to be created.<a href="
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9019">[RFC9019]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Brown, D.</span>, and <span class="refAuthor">M. Meriac</span>, <span class="refTitle">"A Firmware Update Architecture for Internet of Things"</span>, <span class="seriesInfo">RFC 9019</span>, <span class="seriesInfo">DOI 10.17487/RFC9019</span>, <time datetime="2021-04" class="refDate">April 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9019">https://www.rfc-editor.org/info/rfc9019</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9124">[RFC9124]</dt>
+      <dd>
+<span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"A Manifest Information Model for Firmware Updates in Internet of Things (IoT) Devices"</span>, <span class="seriesInfo">RFC 9124</span>, <span class="seriesInfo">DOI 10.17487/RFC9124</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9124">https://www.rfc-editor.org/info/rfc9124</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
 <section id="section-14.2">
-        <h3 id="name-informative-references-2">
-<a href="#section-14.2" class="section-number selfRef">14.2. </a><a href="#name-informative-references-2" class="section-name selfRef">Informative References</a>
+        <h3 id="name-informative-references">
+<a href="#section-14.2" class="section-number selfRef">14.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="I-D.ietf-cbor-tags-oid">[I-D.ietf-cbor-tags-oid]</dt>
@@ -4036,11 +4044,23 @@ Several registries defined in the subsections below need to be created.<a href="
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-firmware-encryption">[I-D.ietf-suit-firmware-encryption]</dt>
         <dd>
-<span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">B. Moran</span>, <span class="refTitle">"Firmware Encryption with SUIT Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-firmware-encryption-01</span>, <time datetime="2021-07-12" class="refDate">12 July 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-01.txt">https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-01.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">B. Moran</span>, <span class="refTitle">"Firmware Encryption with SUIT Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-firmware-encryption-04</span>, <time datetime="2022-04-20" class="refDate">20 April 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-04.txt">https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-04.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-suit-report">[I-D.ietf-suit-report]</dt>
+        <dd>
+<span class="refAuthor">Moran, B.</span> and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Secure Reporting of Update Status"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-report-01</span>, <time datetime="2022-01-12" class="refDate">12 January 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-report-01.txt">https://www.ietf.org/archive/id/draft-ietf-suit-report-01.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-suit-trust-domains">[I-D.ietf-suit-trust-domains]</dt>
+        <dd>
+<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"SUIT Manifest Extensions for Multiple Trust Domains"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-trust-domains-00</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-trust-domains-00.txt">https://www.ietf.org/archive/id/draft-ietf-suit-trust-domains-00.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-suit-update-management">[I-D.ietf-suit-update-management]</dt>
+        <dd>
+<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"Update Management Extensions for Software Updates for Internet of Things (SUIT) Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-update-management-00</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-update-management-00.txt">https://www.ietf.org/archive/id/draft-ietf-suit-update-management-00.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-teep-architecture">[I-D.ietf-teep-architecture]</dt>
         <dd>
-<span class="refAuthor">Pei, M.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Thaler, D.</span>, and <span class="refAuthor">D. Wheeler</span>, <span class="refTitle">"Trusted Execution Environment Provisioning (TEEP) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teep-architecture-15</span>, <time datetime="2021-07-12" class="refDate">12 July 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-teep-architecture-15.txt">https://www.ietf.org/archive/id/draft-ietf-teep-architecture-15.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Pei, M.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Thaler, D.</span>, and <span class="refAuthor">D. Wheeler</span>, <span class="refTitle">"Trusted Execution Environment Provisioning (TEEP) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teep-architecture-17</span>, <time datetime="2022-04-19" class="refDate">19 April 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-teep-architecture-17.txt">https://www.ietf.org/archive/id/draft-ietf-teep-architecture-17.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7228">[RFC7228]</dt>
         <dd>
@@ -4055,16 +4075,15 @@ Several registries defined in the subsections below need to be created.<a href="
 </section>
 <div id="full-cddl">
 <section id="appendix-A">
-      <h2 id="name-a-full-cddl-2">
-<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-a-full-cddl-2" class="section-name selfRef">A. Full CDDL</a>
+      <h2 id="name-a-full-cddl">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-a-full-cddl" class="section-name selfRef">A. Full CDDL</a>
       </h2>
 <p id="appendix-A-1">In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL data definition.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2">To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in <span>[<a href="#RFC8152" class="xref">RFC8152</a>]</span>, section 1.4.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
-<div class="alignLeft art-CDDL art-text artwork" id="appendix-A-3">
-<pre>
+<p id="appendix-A-2">To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in <span>[<a href="#RFC8152" class="xref">RFC8152</a>]</span>, Section 1.3.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<div id="appendix-A-3">
+<pre class="lang-CDDL sourcecode">
 SUIT_Envelope_Tagged = #6.107(SUIT_Envelope)
 SUIT_Envelope = {
-  ? suit-delegation =&gt; bstr .cbor SUIT_Delegation,
   suit-authentication-wrapper =&gt; bstr .cbor SUIT_Authentication,
   suit-manifest  =&gt; bstr .cbor SUIT_Manifest,
   SUIT_Severable_Manifest_Members,
@@ -4093,12 +4112,11 @@ SUIT_Severable_Manifest_Members = (
   ? suit-payload-fetch =&gt; bstr .cbor SUIT_Command_Sequence,
   ? suit-install =&gt; bstr .cbor SUIT_Command_Sequence,
   ? suit-text =&gt; bstr .cbor SUIT_Text_Map,
-  ? suit-coswid =&gt; bstr .cbor concise-software-identity,
   * $$SUIT_severable-members-extensions,
 )
 
 SUIT_Integrated_Payload = (suit-integrated-payload-key =&gt; bstr)
-suit-integrated-payload-key = str
+suit-integrated-payload-key = tstr
 
 SUIT_Manifest_Tagged = #6.1070(SUIT_Manifest)
 
@@ -4120,7 +4138,7 @@ SUIT_Unseverable_Members = (
 )
 
 SUIT_Severable_Members_Choice = (
-  ? suit-payload-fetch =&gt; \
+  ? suit-payload-fetch =&gt;
     bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
   ? suit-install =&gt; bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
   ? suit-text =&gt; bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
@@ -4255,7 +4273,6 @@ SUIT_Text_Keys = (
     * $$suit-text-key-extensions
 )
 
-;suit-delegation = 1
 suit-authentication-wrapper = 2
 suit-manifest = 3
 
@@ -4272,52 +4289,35 @@ suit-manifest-version = 1
 suit-manifest-sequence-number = 2
 suit-common = 3
 suit-reference-uri = 4
-;suit-dependency-resolution = 7
 suit-payload-fetch = 8
 suit-install = 9
 suit-validate = 10
 suit-load = 11
 suit-run = 12
 suit-text = 13
-;suit-coswid = 14
 
-;suit-dependencies = 1
 suit-components = 2
 suit-common-sequence = 4
-
-;suit-dependency-digest = 1
-;suit-dependency-prefix = 2
 
 suit-command-custom = nint
 
 suit-condition-vendor-identifier = 1
 suit-condition-class-identifier  = 2
 suit-condition-image-match       = 3
-;suit-condition-use-before        = 4
 suit-condition-component-slot    = 5
 
 suit-condition-abort                    = 14
 suit-condition-device-identifier        = 24
-;suit-condition-image-not-match          = 25
-;suit-condition-minimum-battery          = 26
-;suit-condition-update-authorized        = 27
-;suit-condition-version                  = 28
 
 suit-directive-set-component-index      = 12
-;suit-directive-set-dependency-index     = 13
 suit-directive-try-each                 = 15
-;suit-directive-process-dependency       = 18
-;suit-directive-set-parameters           = 19
 suit-directive-override-parameters      = 20
 suit-directive-fetch                    = 21
 suit-directive-copy                     = 22
 suit-directive-run                      = 23
 
-;suit-directive-wait                     = 29
-;suit-directive-fetch-uri-list           = 30
 suit-directive-swap                     = 31
 suit-directive-run-sequence             = 32
-;suit-directive-unlink                   = 33
 
 suit-parameter-vendor-identifier = 1
 suit-parameter-class-identifier  = 2
@@ -4353,8 +4353,8 @@ suit-text-component-version     = 6
 </div>
 <div id="examples">
 <section id="appendix-B">
-      <h2 id="name-b-examples-2">
-<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-b-examples-2" class="section-name selfRef">B. Examples</a>
+      <h2 id="name-b-examples">
+<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-b-examples" class="section-name selfRef">B. Examples</a>
       </h2>
 <p id="appendix-B-1">The following examples demonstrate a small subset of the functionality of the manifest. Even a simple manifest processor can execute most of these manifests.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <p id="appendix-B-2">The examples are signed using the following ECDSA secp256r1 key:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
@@ -4470,8 +4470,8 @@ bz/m4rVlnIXbwK07HypLbAmBMcCjbazR14vTgdzfsJwFLbM5kdtzOLSolg==
       </table>
 <div id="example-0-secure-boot">
 <section id="appendix-B.1">
-        <h3 id="name-example-0-secure-boot-2">
-<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-example-0-secure-boot-2" class="section-name selfRef">Example 0: Secure Boot</a>
+        <h3 id="name-example-0-secure-boot">
+<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-example-0-secure-boot" class="section-name selfRef">Example 0: Secure Boot</a>
         </h3>
 <p id="appendix-B.1-1">This example covers the following templates:<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -4569,8 +4569,8 @@ effedcba98765432100e1987d0010f020f0a4382030f0c43821702
 </div>
 <div id="example-1-simultaneous-download-and-installation-of-payload">
 <section id="appendix-B.2">
-        <h3 id="name-example-1-simultaneous-downl">
-<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-example-1-simultaneous-downl" class="section-name selfRef">Example 1: Simultaneous Download and Installation of Payload</a>
+        <h3 id="name-example-1-simultaneous-down">
+<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-example-1-simultaneous-down" class="section-name selfRef">Example 1: Simultaneous Download and Installation of Payload</a>
         </h3>
 <p id="appendix-B.2-1">This example covers the following templates:<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -4675,8 +4675,8 @@ effedcba98765432100e1987d0010f020f0958258613a115781b68747470
 </div>
 <div id="example-2-simultaneous-download-installation-secure-boot-severed-fields">
 <section id="appendix-B.3">
-        <h3 id="name-example-2-simultaneous-downl">
-<a href="#appendix-B.3" class="section-number selfRef">B.3. </a><a href="#name-example-2-simultaneous-downl" class="section-name selfRef">Example 2: Simultaneous Download, Installation, Secure Boot, Severed Fields</a>
+        <h3 id="name-example-2-simultaneous-down">
+<a href="#appendix-B.3" class="section-number selfRef">B.3. </a><a href="#name-example-2-simultaneous-down" class="section-name selfRef">Example 2: Simultaneous Download, Installation, Secure Boot, Severed Fields</a>
         </h3>
 <p id="appendix-B.3-1">This example covers the following templates:<a href="#appendix-B.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -4842,8 +4842,8 @@ e46b929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d20a4382030f0c
 </div>
 <div id="example-3-ab-images">
 <section id="appendix-B.4">
-        <h3 id="name-example-3-a-b-images-2">
-<a href="#appendix-B.4" class="section-number selfRef">B.4. </a><a href="#name-example-3-a-b-images-2" class="section-name selfRef">Example 3: A/B images</a>
+        <h3 id="name-example-3-a-b-images">
+<a href="#appendix-B.4" class="section-number selfRef">B.4. </a><a href="#name-example-3-a-b-images" class="section-name selfRef">Example 3: A/B images</a>
         </h3>
 <p id="appendix-B.4-1">This example covers the following templates:<a href="#appendix-B.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -5001,8 +5001,8 @@ dcba987654321000112233445566778899aabbccddeeff0e1a00012c2201
 </div>
 <div id="example-4-load-from-external-storage">
 <section id="appendix-B.5">
-        <h3 id="name-example-4-load-from-external">
-<a href="#appendix-B.5" class="section-number selfRef">B.5. </a><a href="#name-example-4-load-from-external" class="section-name selfRef">Example 4: Load from External Storage</a>
+        <h3 id="name-example-4-load-from-externa">
+<a href="#appendix-B.5" class="section-number selfRef">B.5. </a><a href="#name-example-4-load-from-externa" class="section-name selfRef">Example 4: Load from External Storage</a>
         </h3>
 <p id="appendix-B.5-1">This example covers the following templates:<a href="#appendix-B.5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -5152,8 +5152,8 @@ ff0123456789abcdeffedcba98765432100e1987d0010f020f085827880c
 </div>
 <div id="example-5-two-images">
 <section id="appendix-B.6">
-        <h3 id="name-example-5-two-images-2">
-<a href="#appendix-B.6" class="section-number selfRef">B.6. </a><a href="#name-example-5-two-images-2" class="section-name selfRef">Example 5: Two Images</a>
+        <h3 id="name-example-5-two-images">
+<a href="#appendix-B.6" class="section-number selfRef">B.6. </a><a href="#name-example-5-two-images" class="section-name selfRef">Example 5: Two Images</a>
         </h3>
 <p id="appendix-B.6-1">This example covers the following templates:<a href="#appendix-B.6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -5294,8 +5294,8 @@ aabbccddeeff0e1a00012c2209584f900c0013a115781c687474703a2f2f
 </div>
 <div id="design-rationale">
 <section id="appendix-C">
-      <h2 id="name-c-design-rational-2">
-<a href="#appendix-C" class="section-number selfRef">Appendix C. </a><a href="#name-c-design-rational-2" class="section-name selfRef">C. Design Rational</a>
+      <h2 id="name-c-design-rational">
+<a href="#appendix-C" class="section-number selfRef">Appendix C. </a><a href="#name-c-design-rational" class="section-name selfRef">C. Design Rational</a>
       </h2>
 <p id="appendix-C-1">In order to provide flexible behavior to constrained devices, while still allowing more powerful devices to use their full capabilities, the SUIT manifest encodes the required behavior of a Recipient device. Behavior is encoded as a specialized byte code, contained in a CBOR list. This promotes a flat encoding, which simplifies the parser. The information encoded by this byte code closely matches the operations that a device will perform, which promotes ease of processing. The core operations used by most update and trusted invocation operations are represented in the byte code. The byte code can be extended by registering new operations.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 <p id="appendix-C-2">The specialized byte code approach gives benefits equivalent to those provided by a scripting language or conventional byte code, with two substantial differences. First, the language is extremely high level, consisting of only the operations that a device may perform during update and trusted invocation of a firmware image. Second, the language specifies linear behavior, without reverse branches. Conditional processing is supported, and parallel and out-of-order processing may be performed by sufficiently capable devices.<a href="#appendix-C-2" class="pilcrow">¶</a></p>
@@ -5307,8 +5307,8 @@ aabbccddeeff0e1a00012c2209584f900c0013a115781c687474703a2f2f
 <p id="appendix-C-8">The simplicity of design in the Recipient due to all of these benefits allows even a highly constrained platform to use advanced update capabilities.<a href="#appendix-C-8" class="pilcrow">¶</a></p>
 <div id="design-rationale-envelope">
 <section id="appendix-C.1">
-        <h3 id="name-c1-design-rationale-envelope">
-<a href="#appendix-C.1" class="section-number selfRef">C.1. </a><a href="#name-c1-design-rationale-envelope" class="section-name selfRef">C.1 Design Rationale: Envelope</a>
+        <h3 id="name-c1-design-rationale-envelop">
+<a href="#appendix-C.1" class="section-number selfRef">C.1. </a><a href="#name-c1-design-rationale-envelop" class="section-name selfRef">C.1 Design Rationale: Envelope</a>
         </h3>
 <p id="appendix-C.1-1">The Envelope is used instead of a COSE structure for several reasons:<a href="#appendix-C.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="appendix-C.1-2">
@@ -5338,8 +5338,8 @@ aabbccddeeff0e1a00012c2209584f900c0013a115781c687474703a2f2f
 </div>
 <div id="c2-byte-string-wrappers">
 <section id="appendix-C.2">
-        <h3 id="name-c2-byte-string-wrappers-2">
-<a href="#appendix-C.2" class="section-number selfRef">C.2. </a><a href="#name-c2-byte-string-wrappers-2" class="section-name selfRef">C.2 Byte String Wrappers</a>
+        <h3 id="name-c2-byte-string-wrappers">
+<a href="#appendix-C.2" class="section-number selfRef">C.2. </a><a href="#name-c2-byte-string-wrappers" class="section-name selfRef">C.2 Byte String Wrappers</a>
         </h3>
 <p id="appendix-C.2-1">Byte string wrappers are used in several places in the suit manifest. The primary reason for wrappers it to limit the parser extent when invoked at different times, with a possible loss of context.<a href="#appendix-C.2-1" class="pilcrow">¶</a></p>
 <p id="appendix-C.2-2">The elements of the suit envelope are wrapped both to set the extents used by the parser and to simplify integrity checks by clearly defining the length of each element.<a href="#appendix-C.2-2" class="pilcrow">¶</a></p>
@@ -5352,8 +5352,8 @@ aabbccddeeff0e1a00012c2209584f900c0013a115781c687474703a2f2f
 </div>
 <div id="implementation-matrix">
 <section id="appendix-D">
-      <h2 id="name-d-implementation-conformance">
-<a href="#appendix-D" class="section-number selfRef">Appendix D. </a><a href="#name-d-implementation-conformance" class="section-name selfRef">D. Implementation Conformance Matrix</a>
+      <h2 id="name-d-implementation-conformanc">
+<a href="#appendix-D" class="section-number selfRef">Appendix D. </a><a href="#name-d-implementation-conformanc" class="section-name selfRef">D. Implementation Conformance Matrix</a>
       </h2>
 <p id="appendix-D-1">This section summarizes the functionality a minimal manifest processor
 implementation needs
@@ -5591,8 +5591,8 @@ an application profile standard specifying otherwise.<a href="#appendix-D-1" cla
 </div>
 <div id="authors-addresses">
 <section id="appendix-E">
-      <h2 id="name-authors-addresses-2">
-<a href="#name-authors-addresses-2" class="section-name selfRef">Authors' Addresses</a>
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
 <address class="vcard">
         <div dir="auto" class="left"><span class="fn nameRole">Brendan Moran</span></div>
