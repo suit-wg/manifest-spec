@@ -41,8 +41,8 @@ SUIT_Manifest = {
     suit-manifest-sequence-number => uint,
     suit-common                   => bstr .cbor SUIT_Common,
     ? suit-reference-uri          => tstr,
-    SUIT_Severable_Members_Choice,
     SUIT_Unseverable_Members,
+    SUIT_Severable_Members_Choice,
     * $$SUIT_Manifest_Extensions,
 }
 
