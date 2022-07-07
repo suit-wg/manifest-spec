@@ -207,16 +207,19 @@ cose-alg-sha-384 = -43
 cose-alg-sha-512 = -44
 cose-alg-shake256 = -45
 
+;Unseverable, recipient-necessary
 suit-manifest-version = 1
 suit-manifest-sequence-number = 2
 suit-common = 3
 suit-reference-uri = 4
-suit-payload-fetch = 8
-suit-install = 9
-suit-text = 10
-suit-validate = 11
-suit-load = 12
-suit-run = 13
+suit-validate = 7
+suit-load = 8
+suit-run = 9
+;Severable, recipient-necessary
+suit-payload-fetch = 16
+suit-install = 17
+;Severable, recipient-unnecessary
+suit-text = 23
 
 suit-components = 2
 suit-common-sequence = 4
