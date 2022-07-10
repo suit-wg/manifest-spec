@@ -5,7 +5,6 @@ SUIT_Envelope = {
   SUIT_Severable_Manifest_Members,
   * SUIT_Integrated_Payload,
   * $$SUIT_Envelope_Extensions,
-  * (int => bstr)
 }
 
 SUIT_Authentication = [
@@ -41,8 +40,8 @@ SUIT_Manifest = {
     suit-manifest-sequence-number => uint,
     suit-common                   => bstr .cbor SUIT_Common,
     ? suit-reference-uri          => tstr,
-    SUIT_Severable_Members_Choice,
     SUIT_Unseverable_Members,
+    SUIT_Severable_Members_Choice,
     * $$SUIT_Manifest_Extensions,
 }
 
@@ -92,15 +91,21 @@ SUIT_Common_Sequence = [
 
 SUIT_Common_Commands //= (suit-directive-set-component-index,  IndexArg)
 SUIT_Common_Commands //= (suit-directive-run-sequence,
-    bstr .cbor SUIT_Command_Sequence)
+    bstr .cbor SUIT_Common_Sequence)
 SUIT_Common_Commands //= (suit-directive-try-each,
-    SUIT_Directive_Try_Each_Argument)
+    SUIT_Directive_Try_Each_Argument_Common)
 SUIT_Common_Commands //= (suit-directive-override-parameters,
     {+ SUIT_Parameters})
 
 IndexArg /= uint
 IndexArg /= bool
 IndexArg /= [+uint]
+
+
+SUIT_Directive_Try_Each_Argument_Common = [
+    2* bstr .cbor SUIT_Common_Sequence,
+    ?nil
+]
 
 SUIT_Command_Sequence = [ + (
     SUIT_Condition // SUIT_Directive // SUIT_Command_Custom
@@ -201,16 +206,19 @@ cose-alg-sha-384 = -43
 cose-alg-sha-512 = -44
 cose-alg-shake256 = -45
 
+;Unseverable, recipient-necessary
 suit-manifest-version = 1
 suit-manifest-sequence-number = 2
 suit-common = 3
 suit-reference-uri = 4
-suit-payload-fetch = 8
-suit-install = 9
-suit-validate = 10
-suit-load = 11
-suit-run = 12
-suit-text = 13
+suit-validate = 7
+suit-load = 8
+suit-run = 9
+;Severable, recipient-necessary
+suit-payload-fetch = 16
+suit-install = 17
+;Severable, recipient-unnecessary
+suit-text = 23
 
 suit-components = 2
 suit-common-sequence = 4
