@@ -705,6 +705,8 @@ Wherever enumerations are used, they are started at 1. This allows detection of 
 
 All elements of the envelope must be wrapped in a bstr to minimize the complexity of the code that evaluates the cryptographic integrity of the element and to ensure correct serialization for integrity and authenticity checks.
 
+All CBOR maps in the Manifest and manifest envelope MUST be encoded with the canonical CBOR ordering as defined in {{RFC8949}}.
+
 ## Envelope {#envelope}
 
 The Envelope contains each of the other primary constituent parts of the SUIT metadata. It allows for modular processing of the manifest by ordering components in the expected order of processing.

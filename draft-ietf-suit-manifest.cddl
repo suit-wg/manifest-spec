@@ -53,10 +53,10 @@ SUIT_Unseverable_Members = (
 )
 
 SUIT_Severable_Members_Choice = (
-  ? suit-payload-fetch =>
-    bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
-  ? suit-install => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
-  ? suit-text => bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  ? suit-payload-fetch => SUIT_Digest / 
+      bstr .cbor SUIT_Command_Sequence,
+  ? suit-install => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
+  ? suit-text => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
   * $$severable-manifest-members-choice-extensions
 )
 
