@@ -18,29 +18,29 @@ the manifest. Software updates and Trusted Invocation both tend to use
 sequences of common operations, so the manifest encodes those sequences
 of operations, rather than declaring the metadata. 
     " name="description">
-<meta content="xml2rfc 3.12.4" name="generator">
+<meta content="xml2rfc 3.13.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-suit-manifest-17" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.4
-    Python 3.6.9
+  xml2rfc 3.13.0
+    Python 3.8.9
     appdirs 1.4.4
-    ConfigArgParse 1.2.3
-    google-i18n-address 2.4.0
+    ConfigArgParse 1.5.3
+    google-i18n-address 2.5.0
     html5lib 1.1
     intervaltree 3.1.0
-    Jinja2 2.11.2
+    Jinja2 3.1.2
     kitchen 1.2.6
-    lxml 4.5.2
-    MarkupSafe 2.0.1
-    pycountry 20.7.3
-    pyflakes 2.2.0
-    PyYAML 5.3.1
-    requests 2.24.0
-    setuptools 40.6.2
+    lxml 4.9.1
+    MarkupSafe 2.1.1
+    pycountry 22.3.5
+    pyflakes 2.4.0
+    PyYAML 6.0
+    requests 2.26.0
+    setuptools 49.2.1
     six 1.15.0
 -->
-<link href="/tmp/CPvsSvLrqb.dir/input.xml" rel="alternate" type="application/rfc+xml">
+<link href="./draft-ietf-suit-manifest.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">/*
 
@@ -181,10 +181,6 @@ svg {
 }
 .alignCenter > *:first-child {
   border: none;
-  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
-     support flexbox yet.
-  */
-  display: table;
   margin: 0 auto;
 }
 
@@ -663,6 +659,9 @@ hr.addr {
   }
   figure {
     overflow: scroll;
+  }
+  pre.breakable {
+    break-inside: auto;
   }
   h1, h2, h3, h4, h5, h6 {
     page-break-after: avoid;
@@ -1187,7 +1186,6 @@ li > p:last-of-type {
 }
 </style>
 <link href="rfc-local.css" rel="stylesheet" type="text/css">
-<script type="application/javascript">async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#external-updates");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("external-metadata");if(e)try{var t,a="",o=function(e){const t=document.getElementsByTagName("meta");for(let a=0;a<t.length;a++)if(t[a].getAttribute("name")===e)return t[a].getAttribute("content");return""}("rfc.number");if(o){t="https://www.rfc-editor.org/rfc/rfc"+o+".json";try{const e=await fetch(t);a=await e.json()}catch(e){t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t);a=await o.json()}}if(!a)return;e.style.display="block";const s="",d="https://datatracker.ietf.org/doc",n="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",l=a.doc_id.toLowerCase(),i=a.doc_id.slice(0,3).toLowerCase(),f=a.doc_id.slice(3).replace(/^0+/,""),u={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let h="<dl style='overflow:hidden' id='external-updates'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){a[e]=a[e].toLowerCase();var t=a[e].split(" "),o=t.length,w="",p=1;for(let e=0;e<o;e++)p<o?w=w+r(t[e])+" ":w+=r(t[e]),p++;a[e]=w}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var g,m="",b=1;g=a[e].length;for(let t=0;t<g;t++)a[e][t]&&(a[e][t]=String(a[e][t]).toLowerCase(),m=b<g?m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>, ":m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>",b++);a[e]=m}else if("see_also"==e){var y,L="",C=1;y=a[e].length;for(let t=0;t<y;t++)if(a[e][t]){a[e][t]=String(a[e][t]);var _=a[e][t].slice(0,3),v=a[e][t].slice(3).replace(/^0+/,"");L=C<y?"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>, ":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>, ":"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>",C++}a[e]=L}else if("errata_url"==e){var R="";R=a[e]?R+"<a href='"+a[e]+"'>Errata exist</a> | <a href='"+d+"/"+l+"'>Datatracker</a>| <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>":"<a href='"+d+"/"+l+"'>Datatracker</a> | <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>",a[e]=R}""!=a[e]?"Errata"==u[e]?h+=`<dt>More info:</dt><dd>${a[e]}</dd>`:h+=`<dt>${u[e]}:</dt><dd>${a[e]}</dd>`:"Errata"==u[e]&&(h+=`<dt>More info:</dt><dd>${a[e]}</dd>`)}),h+="</dl>",e.innerHTML=h}catch(e){console.log(e)}else console.log("Could not locate metadata <div> element");function r(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.removeEventListener("load",addMetadata),window.addEventListener("load",addMetadata);</script>
 </head>
 <body>
 <script src="metadata.min.js"></script>
@@ -1195,11 +1193,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CBOR-based SUIT Manifest</td>
-<td class="right">April 2022</td>
+<td class="right">July 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Moran, et al.</td>
-<td class="center">Expires 30 October 2022</td>
+<td class="center">Expires 12 January 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1212,12 +1210,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-ietf-suit-manifest-17</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-04-28" class="published">28 April 2022</time>
+<time datetime="2022-07-11" class="published">11 July 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-10-30">30 October 2022</time></dd>
+<dd class="expires"><time datetime="2023-01-12">12 January 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1269,7 +1267,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 30 October 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2521,6 +2519,7 @@ for current in current-list:
 <p id="section-8.1-1">The map indices in the envelope encoding are reset to 1 for each map within the structure. This is to keep the indices as small as possible. The goal is to keep the index objects to single bytes (CBOR positive integers 1-23).<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.1-2">Wherever enumerations are used, they are started at 1. This allows detection of several common software errors that are caused by uninitialized variables. Positive numbers in enumerations are reserved for IANA registration. Negative numbers are used to identify application-specific values, as described in <a href="#iana" class="xref">Section 11</a>.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
 <p id="section-8.1-3">All elements of the envelope must be wrapped in a bstr to minimize the complexity of the code that evaluates the cryptographic integrity of the element and to ensure correct serialization for integrity and authenticity checks.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.1-4">All CBOR maps in the Manifest and manifest envelope MUST be encoded with the canonical CBOR ordering as defined in <span>[<a href="#RFC8949" class="xref">RFC8949</a>]</span>.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="envelope">
@@ -2545,6 +2544,7 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
 <p id="section-8.3-3">Likewise, Section 6.3 of <span>[<a href="#RFC8152" class="xref">RFC8152</a>]</span> describes the details for computing a MAC and the fields of the MAC_structure need to be populated. The rules for external_aad and the payload fields described in the paragraph above also apply to this structure.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
 <p id="section-8.3-4">The suit-authentication-wrapper MUST come before the suit-manifest element, regardless of canonical encoding of CBOR.<a href="#section-8.3-4" class="pilcrow">¶</a></p>
 <p id="section-8.3-5">A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.<a href="#section-8.3-5" class="pilcrow">¶</a></p>
+<p id="section-8.3-6">The algorithms used in SUIT_Authentication are defined by the profiles declared in <span>[<a href="#I-D.moran-suit-mti" class="xref">I-D.moran-suit-mti</a>]</span>.<a href="#section-8.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manifest-structure">
@@ -3999,6 +3999,10 @@ Several registries defined in the subsections below need to be created.<a href="
 <a href="#section-14.1" class="section-number selfRef">14.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="I-D.moran-suit-mti">[I-D.moran-suit-mti]</dt>
+        <dd>
+<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"Mandatory-to-Implement Algorithms for Creators and Consumers of Software Update for the Internet of Things manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-moran-suit-mti-00</span>, <time datetime="2022-07-11" class="refDate">11 July 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-moran-suit-mti-00.txt">https://www.ietf.org/archive/id/draft-moran-suit-mti-00.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
@@ -4018,6 +4022,10 @@ Several registries defined in the subsections below need to be created.<a href="
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8949">[RFC8949]</dt>
+        <dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8949">https://www.rfc-editor.org/info/rfc8949</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9019">[RFC9019]</dt>
         <dd>
@@ -4044,7 +4052,7 @@ Several registries defined in the subsections below need to be created.<a href="
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-firmware-encryption">[I-D.ietf-suit-firmware-encryption]</dt>
         <dd>
-<span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">B. Moran</span>, <span class="refTitle">"Firmware Encryption with SUIT Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-firmware-encryption-04</span>, <time datetime="2022-04-20" class="refDate">20 April 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-04.txt">https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-04.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">B. Moran</span>, <span class="refTitle">"Firmware Encryption with SUIT Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-firmware-encryption-06</span>, <time datetime="2022-07-11" class="refDate">11 July 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-06.txt">https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-06.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-report">[I-D.ietf-suit-report]</dt>
         <dd>
@@ -4060,7 +4068,7 @@ Several registries defined in the subsections below need to be created.<a href="
 <dd class="break"></dd>
 <dt id="I-D.ietf-teep-architecture">[I-D.ietf-teep-architecture]</dt>
         <dd>
-<span class="refAuthor">Pei, M.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Thaler, D.</span>, and <span class="refAuthor">D. Wheeler</span>, <span class="refTitle">"Trusted Execution Environment Provisioning (TEEP) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teep-architecture-17</span>, <time datetime="2022-04-19" class="refDate">19 April 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-teep-architecture-17.txt">https://www.ietf.org/archive/id/draft-ietf-teep-architecture-17.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Pei, M.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Thaler, D.</span>, and <span class="refAuthor">D. Wheeler</span>, <span class="refTitle">"Trusted Execution Environment Provisioning (TEEP) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teep-architecture-18</span>, <time datetime="2022-07-11" class="refDate">11 July 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-teep-architecture-18.txt">https://www.ietf.org/archive/id/draft-ietf-teep-architecture-18.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7228">[RFC7228]</dt>
         <dd>
@@ -4081,7 +4089,7 @@ Several registries defined in the subsections below need to be created.<a href="
 <p id="appendix-A-1">In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL data definition.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <p id="appendix-A-2">To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in <span>[<a href="#RFC8152" class="xref">RFC8152</a>]</span>, Section 1.3.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 <div id="appendix-A-3">
-<pre class="lang-CDDL sourcecode">
+<pre class="breakable lang-CDDL sourcecode">
 SUIT_Envelope_Tagged = #6.107(SUIT_Envelope)
 SUIT_Envelope = {
   suit-authentication-wrapper =&gt; bstr .cbor SUIT_Authentication,
@@ -4089,7 +4097,6 @@ SUIT_Envelope = {
   SUIT_Severable_Manifest_Members,
   * SUIT_Integrated_Payload,
   * $$SUIT_Envelope_Extensions,
-  * (int =&gt; bstr)
 }
 
 SUIT_Authentication = [
@@ -4125,8 +4132,8 @@ SUIT_Manifest = {
     suit-manifest-sequence-number =&gt; uint,
     suit-common                   =&gt; bstr .cbor SUIT_Common,
     ? suit-reference-uri          =&gt; tstr,
-    SUIT_Severable_Members_Choice,
     SUIT_Unseverable_Members,
+    SUIT_Severable_Members_Choice,
     * $$SUIT_Manifest_Extensions,
 }
 
@@ -4138,10 +4145,10 @@ SUIT_Unseverable_Members = (
 )
 
 SUIT_Severable_Members_Choice = (
-  ? suit-payload-fetch =&gt;
-    bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
-  ? suit-install =&gt; bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
-  ? suit-text =&gt; bstr .cbor SUIT_Command_Sequence / SUIT_Digest,
+  ? suit-payload-fetch =&gt; SUIT_Digest /
+      bstr .cbor SUIT_Command_Sequence,
+  ? suit-install =&gt; SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
+  ? suit-text =&gt; SUIT_Digest / bstr .cbor SUIT_Text_Map,
   * $$severable-manifest-members-choice-extensions
 )
 
@@ -4176,15 +4183,21 @@ SUIT_Common_Sequence = [
 
 SUIT_Common_Commands //= (suit-directive-set-component-index,  IndexArg)
 SUIT_Common_Commands //= (suit-directive-run-sequence,
-    bstr .cbor SUIT_Command_Sequence)
+    bstr .cbor SUIT_Common_Sequence)
 SUIT_Common_Commands //= (suit-directive-try-each,
-    SUIT_Directive_Try_Each_Argument)
+    SUIT_Directive_Try_Each_Argument_Common)
 SUIT_Common_Commands //= (suit-directive-override-parameters,
     {+ SUIT_Parameters})
 
 IndexArg /= uint
 IndexArg /= bool
 IndexArg /= [+uint]
+
+
+SUIT_Directive_Try_Each_Argument_Common = [
+    2* bstr .cbor SUIT_Common_Sequence,
+    ?nil
+]
 
 SUIT_Command_Sequence = [ + (
     SUIT_Condition // SUIT_Directive // SUIT_Command_Custom
@@ -4203,7 +4216,6 @@ SUIT_Directive //= (suit-directive-run-sequence,
     bstr .cbor SUIT_Command_Sequence)
 SUIT_Directive //= (suit-directive-try-each,
     SUIT_Directive_Try_Each_Argument)
-SUIT_Directive //= (suit-directive-process-dependency, SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-override-parameters,
     {+ SUIT_Parameters})
 SUIT_Directive //= (suit-directive-fetch,             SUIT_Rep_Policy)
@@ -4285,16 +4297,19 @@ cose-alg-sha-384 = -43
 cose-alg-sha-512 = -44
 cose-alg-shake256 = -45
 
+;Unseverable, recipient-necessary
 suit-manifest-version = 1
 suit-manifest-sequence-number = 2
 suit-common = 3
 suit-reference-uri = 4
-suit-payload-fetch = 8
-suit-install = 9
-suit-validate = 10
-suit-load = 11
-suit-run = 12
-suit-text = 13
+suit-validate = 7
+suit-load = 8
+suit-run = 9
+;Severable, recipient-necessary
+suit-payload-fetch = 16
+suit-install = 17
+;Severable, recipient-unnecessary
+suit-text = 23
 
 suit-components = 2
 suit-common-sequence = 4
@@ -4488,7 +4503,7 @@ bz/m4rVlnIXbwK07HypLbAmBMcCjbazR14vTgdzfsJwFLbM5kdtzOLSolg==
             digest: &lt;&lt;[
                 / algorithm-id / -16 / "sha256" /,
                 / digest-bytes /
-h'a6c4590ac53043a98e8c4106e1e31b305516d7cf0a655eddfac6d45c810e036a'
+h'6658ea560262696dd1f13b782239a064da7c6c5cbaf52fded428a6fc83c7e5af'
             ]&gt;&gt;,
             signature: &lt;&lt;18([
                     / protected / &lt;&lt;{
@@ -4497,9 +4512,9 @@ h'a6c4590ac53043a98e8c4106e1e31b305516d7cf0a655eddfac6d45c810e036a'
                     / unprotected / {
                     },
                     / payload / F6 / nil /,
-                    / signature / h'd11a2dd9610fb62a707335f58407922570
-9f96e8117e7eeed98a2f207d05c8ecfba1755208f6abea977b8a6efe3bc2ca3215e119
-3be201467d052b42db6b7287'
+                    / signature / h'01d9cbf51b1ccadf839ec867da85735118
+ba4c1b513f5df60583e8dd7f8ce4274cd2e2a0f70f8832bfea63983172e77a951e9a36
+e74cada19321b903a097e4e7'
                 ])&gt;&gt;
             ]
         ]&gt;&gt;,
@@ -4529,10 +4544,10 @@ h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                     / condition-class-identifier / 2,15
                 ]&gt;&gt;,
             }&gt;&gt;,
-            / validate / 10:&lt;&lt;[
+            / validate / 7:&lt;&lt;[
                 / condition-image-match / 3,15
             ]&gt;&gt;,
-            / run / 12:&lt;&lt;[
+            / run / 9:&lt;&lt;[
                 / directive-run / 23,2
             ]&gt;&gt;,
         }&gt;&gt;,
@@ -4543,26 +4558,26 @@ h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
 <p id="appendix-B.1-6">Envelope:<a href="#appendix-B.1-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.1-7">
 <pre>
-d86ba2025827815824822f5820a6c4590ac53043a98e8c4106e1e31b3055
-16d7cf0a655eddfac6d45c810e036a035871a50101020003585fa2028181
+d86ba2025827815824822f58206658ea560262696dd1f13b782239a064da
+7c6c5cbaf52fded428a6fc83c7e5af035871a50101020003585fa2028181
 41000458568614a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492
 af1425695e48bf429b2d51f2ab45035824822f5820001122334455667788
 99aabbccddeeff0123456789abcdeffedcba98765432100e1987d0010f02
-0f0a4382030f0c43821702
+0f074382030f0943821702
 </pre><a href="#appendix-B.1-7" class="pilcrow">¶</a>
 </div>
 <p id="appendix-B.1-8">Total size of Envelope with COSE authentication object:  237<a href="#appendix-B.1-8" class="pilcrow">¶</a></p>
 <p id="appendix-B.1-9">Envelope with COSE authentication object:<a href="#appendix-B.1-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.1-10">
 <pre>
-d86ba2025873825824822f5820a6c4590ac53043a98e8c4106e1e31b3055
-16d7cf0a655eddfac6d45c810e036a584ad28443a10126a0f65840d11a2d
-d9610fb62a707335f584079225709f96e8117e7eeed98a2f207d05c8ecfb
-a1755208f6abea977b8a6efe3bc2ca3215e1193be201467d052b42db6b72
-87035871a50101020003585fa202818141000458568614a40150fa6b4a53
+d86ba2025873825824822f58206658ea560262696dd1f13b782239a064da
+7c6c5cbaf52fded428a6fc83c7e5af584ad28443a10126a0f6584001d9cb
+f51b1ccadf839ec867da85735118ba4c1b513f5df60583e8dd7f8ce4274c
+d2e2a0f70f8832bfea63983172e77a951e9a36e74cada19321b903a097e4
+e7035871a50101020003585fa202818141000458568614a40150fa6b4a53
 d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
 035824822f582000112233445566778899aabbccddeeff0123456789abcd
-effedcba98765432100e1987d0010f020f0a4382030f0c43821702
+effedcba98765432100e1987d0010f020f074382030f0943821702
 </pre><a href="#appendix-B.1-10" class="pilcrow">¶</a>
 </div>
 </section>
@@ -4587,7 +4602,7 @@ effedcba98765432100e1987d0010f020f0a4382030f0c43821702
             digest: &lt;&lt;[
                 / algorithm-id / -16 / "sha256" /,
                 / digest-bytes /
-h'60c61d6eb7a1aaeddc49ce8157a55cff0821537eeee77a4ded44155b03045132'
+h'176653ec03837a8d32b1eb0b91ea5e8a2256bc2e7c02e5bb7f45f431fa926f3e'
             ]&gt;&gt;,
             signature: &lt;&lt;18([
                     / protected / &lt;&lt;{
@@ -4596,9 +4611,9 @@ h'60c61d6eb7a1aaeddc49ce8157a55cff0821537eeee77a4ded44155b03045132'
                     / unprotected / {
                     },
                     / payload / F6 / nil /,
-                    / signature / h'5249dacaf0ffc8326931b09586eb7e3769
-e71a0e6a40ad8153db4980db9b05bd1742ddb46085fa11e62b65a79895c12ac7abe266
-8ccc5afdd74466aed7bca389'
+                    / signature / h'a78dbd584dbdea66ab024179dac2f4b244
+940e9dfe1337bb833e3e3df2562a0fceb77e64980e0ddcc24b8abb63b78aad9ad42fd2
+44b684dd39859f84740239e8'
                 ])&gt;&gt;
             ]
         ]&gt;&gt;,
@@ -4628,14 +4643,14 @@ h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                     / condition-class-identifier / 2,15
                 ]&gt;&gt;,
             }&gt;&gt;,
-            / install / 9:&lt;&lt;[
+            / validate / 7:&lt;&lt;[
+                / condition-image-match / 3,15
+            ]&gt;&gt;,
+            / install / 17:&lt;&lt;[
                 / directive-set-parameters / 19,{
                     / uri / 21:'http://example.com/file.bin',
                 } ,
                 / directive-fetch / 21,2 ,
-                / condition-image-match / 3,15
-            ]&gt;&gt;,
-            / validate / 10:&lt;&lt;[
                 / condition-image-match / 3,15
             ]&gt;&gt;,
         }&gt;&gt;,
@@ -4646,28 +4661,28 @@ h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
 <p id="appendix-B.2-6">Envelope:<a href="#appendix-B.2-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.2-7">
 <pre>
-d86ba2025827815824822f582060c61d6eb7a1aaeddc49ce8157a55cff08
-21537eeee77a4ded44155b03045132035894a50101020103585fa2028181
+d86ba2025827815824822f5820176653ec03837a8d32b1eb0b91ea5e8a22
+56bc2e7c02e5bb7f45f431fa926f3e035894a50101020103585fa2028181
 41000458568614a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492
 af1425695e48bf429b2d51f2ab45035824822f5820001122334455667788
 99aabbccddeeff0123456789abcdeffedcba98765432100e1987d0010f02
-0f0958258613a115781b687474703a2f2f6578616d706c652e636f6d2f66
-696c652e62696e1502030f0a4382030f
+0f074382030f1158258613a115781b687474703a2f2f6578616d706c652e
+636f6d2f66696c652e62696e1502030f
 </pre><a href="#appendix-B.2-7" class="pilcrow">¶</a>
 </div>
 <p id="appendix-B.2-8">Total size of Envelope with COSE authentication object:  272<a href="#appendix-B.2-8" class="pilcrow">¶</a></p>
 <p id="appendix-B.2-9">Envelope with COSE authentication object:<a href="#appendix-B.2-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.2-10">
 <pre>
-d86ba2025873825824822f582060c61d6eb7a1aaeddc49ce8157a55cff08
-21537eeee77a4ded44155b03045132584ad28443a10126a0f658405249da
-caf0ffc8326931b09586eb7e3769e71a0e6a40ad8153db4980db9b05bd17
-42ddb46085fa11e62b65a79895c12ac7abe2668ccc5afdd74466aed7bca3
-89035894a50101020103585fa202818141000458568614a40150fa6b4a53
+d86ba2025873825824822f5820176653ec03837a8d32b1eb0b91ea5e8a22
+56bc2e7c02e5bb7f45f431fa926f3e584ad28443a10126a0f65840a78dbd
+584dbdea66ab024179dac2f4b244940e9dfe1337bb833e3e3df2562a0fce
+b77e64980e0ddcc24b8abb63b78aad9ad42fd244b684dd39859f84740239
+e8035894a50101020103585fa202818141000458568614a40150fa6b4a53
 d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
 035824822f582000112233445566778899aabbccddeeff0123456789abcd
-effedcba98765432100e1987d0010f020f0958258613a115781b68747470
-3a2f2f6578616d706c652e636f6d2f66696c652e62696e1502030f0a4382
+effedcba98765432100e1987d0010f020f074382030f1158258613a11578
+1b687474703a2f2f6578616d706c652e636f6d2f66696c652e62696e1502
 030f
 </pre><a href="#appendix-B.2-10" class="pilcrow">¶</a>
 </div>
@@ -4695,7 +4710,7 @@ effedcba98765432100e1987d0010f020f0958258613a115781b68747470
             digest: &lt;&lt;[
                 / algorithm-id / -16 / "sha256" /,
                 / digest-bytes /
-h'e45dcdb2074b951f1c88b866469939c2a83ed433a31fc7dfcb3f63955bd943ec'
+h'a85153c05f709e681877ee23c0de3e2f92bcc66c1ad6f41b39157ac7cb6a5a62'
             ]&gt;&gt;,
             signature: &lt;&lt;18([
                     / protected / &lt;&lt;{
@@ -4704,9 +4719,9 @@ h'e45dcdb2074b951f1c88b866469939c2a83ed433a31fc7dfcb3f63955bd943ec'
                     / unprotected / {
                     },
                     / payload / F6 / nil /,
-                    / signature / h'b4fd3a6a18fe1062573488cf24ac96ef9f
-30ac746696e50be96533b356b8156e4332587fe6f4e8743ae525d72005fddd4c1213d5
-5a8061b2ce67b83640f4777c'
+                    / signature / h'4ba6e9c4bdd65212e2e4775b7f5bb32faf
+14209f88d9f8b198e21c338770aa542dde07e31fa17ca9dadee4d94c43dfba81819d35
+88d7fde5eff010b8c7c89277'
                 ])&gt;&gt;
             ]
         ]&gt;&gt;,
@@ -4736,24 +4751,24 @@ h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                     / condition-class-identifier / 2,15
                 ]&gt;&gt;,
             }&gt;&gt;,
-            / install / 9:[
+            / validate / 7:&lt;&lt;[
+                / condition-image-match / 3,15
+            ]&gt;&gt;,
+            / run / 9:&lt;&lt;[
+                / directive-run / 23,2
+            ]&gt;&gt;,
+            / install / 17:[
                 / algorithm-id / -16 / "sha256" /,
                 / digest-bytes /
 h'3ee96dc79641970ae46b929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d2'
             ],
-            / validate / 10:&lt;&lt;[
-                / condition-image-match / 3,15
-            ]&gt;&gt;,
-            / run / 12:&lt;&lt;[
-                / directive-run / 23,2
-            ]&gt;&gt;,
-            / text / 13:[
+            / text / 23:[
                 / algorithm-id / -16 / "sha256" /,
                 / digest-bytes /
 h'2bfc4d0cc6680be7dd9f5ca30aa2bb5d1998145de33d54101b80e2ca49faf918'
             ],
         }&gt;&gt;,
-        / install / 9:&lt;&lt;[
+        / install / 17:&lt;&lt;[
             / directive-set-parameters / 19,{
                 / uri /
 21:'http://example.com/very/long/path/to/file/file.bin',
@@ -4775,13 +4790,13 @@ demonstration. The digest is a sample pattern, not a real one.',
 <p id="appendix-B.3-6">Envelope:<a href="#appendix-B.3-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.3-7">
 <pre>
-d86ba2025827815824822f5820e45dcdb2074b951f1c88b866469939c2a8
-3ed433a31fc7dfcb3f63955bd943ec0358bba70101020203585fa2028181
+d86ba2025827815824822f5820a85153c05f709e681877ee23c0de3e2f92
+bcc66c1ad6f41b39157ac7cb6a5a620358bba70101020203585fa2028181
 41000458568614a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492
 af1425695e48bf429b2d51f2ab45035824822f5820001122334455667788
 99aabbccddeeff0123456789abcdeffedcba98765432100e1987d0010f02
-0f09822f58203ee96dc79641970ae46b929ccf0b72ba9536dd846020dbdc
-9f949d84ea0e18d20a4382030f0c438217020d822f58202bfc4d0cc6680b
+0f074382030f094382170211822f58203ee96dc79641970ae46b929ccf0b
+72ba9536dd846020dbdc9f949d84ea0e18d217822f58202bfc4d0cc6680b
 e7dd9f5ca30aa2bb5d1998145de33d54101b80e2ca49faf918
 </pre><a href="#appendix-B.3-7" class="pilcrow">¶</a>
 </div>
@@ -4789,16 +4804,16 @@ e7dd9f5ca30aa2bb5d1998145de33d54101b80e2ca49faf918
 <p id="appendix-B.3-9">Envelope:<a href="#appendix-B.3-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.3-10">
 <pre>
-d86ba2025873825824822f5820e45dcdb2074b951f1c88b866469939c2a8
-3ed433a31fc7dfcb3f63955bd943ec584ad28443a10126a0f65840b4fd3a
-6a18fe1062573488cf24ac96ef9f30ac746696e50be96533b356b8156e43
-32587fe6f4e8743ae525d72005fddd4c1213d55a8061b2ce67b83640f477
-7c0358bba70101020203585fa202818141000458568614a40150fa6b4a53
+d86ba2025873825824822f5820a85153c05f709e681877ee23c0de3e2f92
+bcc66c1ad6f41b39157ac7cb6a5a62584ad28443a10126a0f658404ba6e9
+c4bdd65212e2e4775b7f5bb32faf14209f88d9f8b198e21c338770aa542d
+de07e31fa17ca9dadee4d94c43dfba81819d3588d7fde5eff010b8c7c892
+770358bba70101020203585fa202818141000458568614a40150fa6b4a53
 d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
 035824822f582000112233445566778899aabbccddeeff0123456789abcd
-effedcba98765432100e1987d0010f020f09822f58203ee96dc79641970a
-e46b929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d20a4382030f0c
-438217020d822f58202bfc4d0cc6680be7dd9f5ca30aa2bb5d1998145de3
+effedcba98765432100e1987d0010f020f074382030f094382170211822f
+58203ee96dc79641970ae46b929ccf0b72ba9536dd846020dbdc9f949d84
+ea0e18d217822f58202bfc4d0cc6680be7dd9f5ca30aa2bb5d1998145de3
 3d54101b80e2ca49faf918
 </pre><a href="#appendix-B.3-10" class="pilcrow">¶</a>
 </div>
@@ -4806,36 +4821,36 @@ e46b929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d20a4382030f0c
 <p id="appendix-B.3-12">Envelope with COSE authentication object:<a href="#appendix-B.3-12" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.3-13">
 <pre>
-d86ba4025873825824822f5820e45dcdb2074b951f1c88b866469939c2a8
-3ed433a31fc7dfcb3f63955bd943ec584ad28443a10126a0f65840b4fd3a
-6a18fe1062573488cf24ac96ef9f30ac746696e50be96533b356b8156e43
-32587fe6f4e8743ae525d72005fddd4c1213d55a8061b2ce67b83640f477
-7c0358bba70101020203585fa202818141000458568614a40150fa6b4a53
+d86ba4025873825824822f5820a85153c05f709e681877ee23c0de3e2f92
+bcc66c1ad6f41b39157ac7cb6a5a62584ad28443a10126a0f658404ba6e9
+c4bdd65212e2e4775b7f5bb32faf14209f88d9f8b198e21c338770aa542d
+de07e31fa17ca9dadee4d94c43dfba81819d3588d7fde5eff010b8c7c892
+770358bba70101020203585fa202818141000458568614a40150fa6b4a53
 d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
 035824822f582000112233445566778899aabbccddeeff0123456789abcd
-effedcba98765432100e1987d0010f020f09822f58203ee96dc79641970a
-e46b929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d20a4382030f0c
-438217020d822f58202bfc4d0cc6680be7dd9f5ca30aa2bb5d1998145de3
-3d54101b80e2ca49faf91809583c8613a1157832687474703a2f2f657861
-6d706c652e636f6d2f766572792f6c6f6e672f706174682f746f2f66696c
-652f66696c652e62696e1502030f0d590204a20179019d2323204578616d
-706c6520323a2053696d756c74616e656f757320446f776e6c6f61642c20
-496e7374616c6c6174696f6e2c2053656375726520426f6f742c20536576
-65726564204669656c64730a0a2020202054686973206578616d706c6520
-636f766572732074686520666f6c6c6f77696e672074656d706c61746573
-3a0a202020200a202020202a20436f6d7061746962696c69747920436865
-636b20287b7b74656d706c6174652d636f6d7061746962696c6974792d63
-6865636b7d7d290a202020202a2053656375726520426f6f7420287b7b74
-656d706c6174652d7365637572652d626f6f747d7d290a202020202a2046
-69726d7761726520446f776e6c6f616420287b7b6669726d776172652d64
-6f776e6c6f61642d74656d706c6174657d7d290a202020200a2020202054
-686973206578616d706c6520616c736f2064656d6f6e7374726174657320
-736576657261626c6520656c656d656e747320287b7b6f76722d73657665
-7261626c657d7d292c20616e64207465787420287b7b6d616e6966657374
-2d6469676573742d746578747d7d292e814100a2036761726d2e636f6d05
-78525468697320636f6d706f6e656e7420697320612064656d6f6e737472
-6174696f6e2e205468652064696765737420697320612073616d706c6520
-7061747465726e2c206e6f742061207265616c206f6e652e
+effedcba98765432100e1987d0010f020f074382030f094382170211822f
+58203ee96dc79641970ae46b929ccf0b72ba9536dd846020dbdc9f949d84
+ea0e18d217822f58202bfc4d0cc6680be7dd9f5ca30aa2bb5d1998145de3
+3d54101b80e2ca49faf9180d590204a20179019d2323204578616d706c65
+20323a2053696d756c74616e656f757320446f776e6c6f61642c20496e73
+74616c6c6174696f6e2c2053656375726520426f6f742c20536576657265
+64204669656c64730a0a2020202054686973206578616d706c6520636f76
+6572732074686520666f6c6c6f77696e672074656d706c617465733a0a20
+2020200a202020202a20436f6d7061746962696c69747920436865636b20
+287b7b74656d706c6174652d636f6d7061746962696c6974792d63686563
+6b7d7d290a202020202a2053656375726520426f6f7420287b7b74656d70
+6c6174652d7365637572652d626f6f747d7d290a202020202a204669726d
+7761726520446f776e6c6f616420287b7b6669726d776172652d646f776e
+6c6f61642d74656d706c6174657d7d290a202020200a2020202054686973
+206578616d706c6520616c736f2064656d6f6e7374726174657320736576
+657261626c6520656c656d656e747320287b7b6f76722d73657665726162
+6c657d7d292c20616e64207465787420287b7b6d616e69666573742d6469
+676573742d746578747d7d292e814100a2036761726d2e636f6d05785254
+68697320636f6d706f6e656e7420697320612064656d6f6e737472617469
+6f6e2e205468652064696765737420697320612073616d706c6520706174
+7465726e2c206e6f742061207265616c206f6e652e11583c8613a1157832
+687474703a2f2f6578616d706c652e636f6d2f766572792f6c6f6e672f70
+6174682f746f2f66696c652f66696c652e62696e1502030f
 </pre><a href="#appendix-B.3-13" class="pilcrow">¶</a>
 </div>
 </section>
@@ -4863,7 +4878,7 @@ e46b929ccf0b72ba9536dd846020dbdc9f949d84ea0e18d20a4382030f0c
             digest: &lt;&lt;[
                 / algorithm-id / -16 / "sha256" /,
                 / digest-bytes /
-h'7c9b3cb72c262608a42f944d59d659ff2b801c78af44def51b8ff51e9f45721b'
+h'c98d9240343ee1ac12ba833c04fb9006e70f62c7e4c36edb0b2a356d59c2f86c'
             ]&gt;&gt;,
             signature: &lt;&lt;18([
                     / protected / &lt;&lt;{
@@ -4872,9 +4887,9 @@ h'7c9b3cb72c262608a42f944d59d659ff2b801c78af44def51b8ff51e9f45721b'
                     / unprotected / {
                     },
                     / payload / F6 / nil /,
-                    / signature / h'e33d618df0ad21e609529ab1a876afb231
-faff1d6a3189b5360324c2794250b87cf00cf83be50ea17dc721ca85393cd8e839a066
-d5dec0ad87a903ab31ea9afa'
+                    / signature / h'451b3099c7914ef4c54b633688471b8d0f
+940d09eeca41c159927a9f044bddec536f83da5f1b1047bc415be013d71524ad82e4ac
+792a61f93dbdc875a7a6adeb'
                 ])&gt;&gt;
             ]
         ]&gt;&gt;,
@@ -4897,9 +4912,9 @@ be9d-e663e4d41ffe /,
                     / directive-try-each / 15,[
                         &lt;&lt;[
                             / directive-override-parameters / 20,{
-                                / offset / 5:33792,
+                                / slot / 5:0,
                             } ,
-                            / condition-component-offset / 5,5 ,
+                            / condition-component-slot / 5,5 ,
                             / directive-override-parameters / 20,{
                                 / image-digest / 3:&lt;&lt;[
                                     / algorithm-id / -16 / "sha256" /,
@@ -4911,9 +4926,9 @@ h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                         ]&gt;&gt; ,
                         &lt;&lt;[
                             / directive-override-parameters / 20,{
-                                / offset / 5:541696,
+                                / slot / 5:1,
                             } ,
-                            / condition-component-offset / 5,5 ,
+                            / condition-component-slot / 5,5 ,
                             / directive-override-parameters / 20,{
                                 / image-digest / 3:&lt;&lt;[
                                     / algorithm-id / -16 / "sha256" /,
@@ -4928,22 +4943,25 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                     / condition-class-identifier / 2,15
                 ]&gt;&gt;,
             }&gt;&gt;,
-            / install / 9:&lt;&lt;[
+            / validate / 7:&lt;&lt;[
+                / condition-image-match / 3,15
+            ]&gt;&gt;,
+            / install / 17:&lt;&lt;[
                 / directive-try-each / 15,[
                     &lt;&lt;[
                         / directive-set-parameters / 19,{
-                            / offset / 5:33792,
+                            / slot / 5:0,
                         } ,
-                        / condition-component-offset / 5,5 ,
+                        / condition-component-slot / 5,5 ,
                         / directive-set-parameters / 19,{
                             / uri / 21:'http://example.com/file1.bin',
                         }
                     ]&gt;&gt; ,
                     &lt;&lt;[
                         / directive-set-parameters / 19,{
-                            / offset / 5:541696,
+                            / slot / 5:1,
                         } ,
-                        / condition-component-offset / 5,5 ,
+                        / condition-component-slot / 5,5 ,
                         / directive-set-parameters / 19,{
                             / uri / 21:'http://example.com/file2.bin',
                         }
@@ -4952,49 +4970,45 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                 / directive-fetch / 21,2 ,
                 / condition-image-match / 3,15
             ]&gt;&gt;,
-            / validate / 10:&lt;&lt;[
-                / condition-image-match / 3,15
-            ]&gt;&gt;,
         }&gt;&gt;,
     })
 </pre><a href="#appendix-B.4-3" class="pilcrow">¶</a>
 </div>
-<p id="appendix-B.4-4">Total size of Envelope without COSE authentication object:  332<a href="#appendix-B.4-4" class="pilcrow">¶</a></p>
+<p id="appendix-B.4-4">Total size of Envelope without COSE authentication object:  320<a href="#appendix-B.4-4" class="pilcrow">¶</a></p>
 <p id="appendix-B.4-5">Envelope:<a href="#appendix-B.4-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.4-6">
 <pre>
-d86ba2025827815824822f58207c9b3cb72c262608a42f944d59d659ff2b
-801c78af44def51b8ff51e9f45721b0359011ba5010102030358aaa20281
-8141000458a18814a20150fa6b4a53d5ad5fdfbe9de663e4d41ffe025014
-92af1425695e48bf429b2d51f2ab450f8258368614a105198400050514a2
-035824822f582000112233445566778899aabbccddeeff0123456789abcd
-effedcba98765432100e1987d0583a8614a1051a00084400050514a20358
-24822f58200123456789abcdeffedcba9876543210001122334455667788
-99aabbccddeeff0e1a00012c22010f020f095861860f82582a8613a10519
-8400050513a115781c687474703a2f2f6578616d706c652e636f6d2f6669
-6c65312e62696e582c8613a1051a00084400050513a115781c687474703a
-2f2f6578616d706c652e636f6d2f66696c65322e62696e1502030f0a4382
-030f
+d86ba2025827815824822f5820c98d9240343ee1ac12ba833c04fb9006e7
+0f62c7e4c36edb0b2a356d59c2f86c0359010fa5010102030358a4a20281
+81410004589b8814a20150fa6b4a53d5ad5fdfbe9de663e4d41ffe025014
+92af1425695e48bf429b2d51f2ab450f8258348614a10500050514a20358
+24822f582000112233445566778899aabbccddeeff0123456789abcdeffe
+dcba98765432100e1987d058368614a10501050514a2035824822f582001
+23456789abcdeffedcba987654321000112233445566778899aabbccddee
+ff0e1a00012c22010f020f074382030f11585b860f8258288613a1050005
+0513a115781c687474703a2f2f6578616d706c652e636f6d2f66696c6531
+2e62696e58288613a10501050513a115781c687474703a2f2f6578616d70
+6c652e636f6d2f66696c65322e62696e1502030f
 </pre><a href="#appendix-B.4-6" class="pilcrow">¶</a>
 </div>
-<p id="appendix-B.4-7">Total size of Envelope with COSE authentication object:  408<a href="#appendix-B.4-7" class="pilcrow">¶</a></p>
+<p id="appendix-B.4-7">Total size of Envelope with COSE authentication object:  396<a href="#appendix-B.4-7" class="pilcrow">¶</a></p>
 <p id="appendix-B.4-8">Envelope with COSE authentication object:<a href="#appendix-B.4-8" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.4-9">
 <pre>
-d86ba2025873825824822f58207c9b3cb72c262608a42f944d59d659ff2b
-801c78af44def51b8ff51e9f45721b584ad28443a10126a0f65840e33d61
-8df0ad21e609529ab1a876afb231faff1d6a3189b5360324c2794250b87c
-f00cf83be50ea17dc721ca85393cd8e839a066d5dec0ad87a903ab31ea9a
-fa0359011ba5010102030358aaa202818141000458a18814a20150fa6b4a
+d86ba2025873825824822f5820c98d9240343ee1ac12ba833c04fb9006e7
+0f62c7e4c36edb0b2a356d59c2f86c584ad28443a10126a0f65840451b30
+99c7914ef4c54b633688471b8d0f940d09eeca41c159927a9f044bddec53
+6f83da5f1b1047bc415be013d71524ad82e4ac792a61f93dbdc875a7a6ad
+eb0359010fa5010102030358a4a2028181410004589b8814a20150fa6b4a
 53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab
-450f8258368614a105198400050514a2035824822f582000112233445566
-778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d058
-3a8614a1051a00084400050514a2035824822f58200123456789abcdeffe
-dcba987654321000112233445566778899aabbccddeeff0e1a00012c2201
-0f020f095861860f82582a8613a105198400050513a115781c687474703a
-2f2f6578616d706c652e636f6d2f66696c65312e62696e582c8613a1051a
-00084400050513a115781c687474703a2f2f6578616d706c652e636f6d2f
-66696c65322e62696e1502030f0a4382030f
+450f8258348614a10500050514a2035824822f5820001122334455667788
+99aabbccddeeff0123456789abcdeffedcba98765432100e1987d0583686
+14a10501050514a2035824822f58200123456789abcdeffedcba98765432
+1000112233445566778899aabbccddeeff0e1a00012c22010f020f074382
+030f11585b860f8258288613a10500050513a115781c687474703a2f2f65
+78616d706c652e636f6d2f66696c65312e62696e58288613a10501050513
+a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e62
+696e1502030f
 </pre><a href="#appendix-B.4-9" class="pilcrow">¶</a>
 </div>
 </section>
@@ -5024,7 +5038,7 @@ dcba987654321000112233445566778899aabbccddeeff0e1a00012c2201
             digest: &lt;&lt;[
                 / algorithm-id / -16 / "sha256" /,
                 / digest-bytes /
-h'15736702a00f510805dcf89d6913a2cfb417ed414faa760f974d6755c68ba70a'
+h'601ebc1bb2e12cbaf408b1bca72fae0d9987498acfa16130ce4cf5cc9ea74c7c'
             ]&gt;&gt;,
             signature: &lt;&lt;18([
                     / protected / &lt;&lt;{
@@ -5033,9 +5047,9 @@ h'15736702a00f510805dcf89d6913a2cfb417ed414faa760f974d6755c68ba70a'
                     / unprotected / {
                     },
                     / payload / F6 / nil /,
-                    / signature / h'3ada2532326d512132c388677798c24ffd
-cc979bfae2a26b19c8c8bbf511fd7dd85f1501662c1a9e1976b759c4019bab44ba5434
-efb45d3868aedbca593671f3'
+                    / signature / h'2e263599b0f3613fd3feb0cec1ff55c6b3
+7c521339ef2680dc63de3a5cdfb0e3f44237313e1c17c35f7fa84af82234f50cea551c
+fdd8179a40dac5136167cd5e'
                 ])&gt;&gt;
             ]
         ]&gt;&gt;,
@@ -5068,27 +5082,11 @@ h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                     / condition-class-identifier / 2,15
                 ]&gt;&gt;,
             }&gt;&gt;,
-            / payload-fetch / 8:&lt;&lt;[
-                / directive-set-component-index / 12,1 ,
-                / directive-set-parameters / 19,{
-                    / uri / 21:'http://example.com/file.bin',
-                } ,
-                / directive-fetch / 21,2 ,
-                / condition-image-match / 3,15
-            ]&gt;&gt;,
-            / install / 9:&lt;&lt;[
-                / directive-set-component-index / 12,0 ,
-                / directive-set-parameters / 19,{
-                    / source-component / 22:1 / [h'02'] /,
-                } ,
-                / directive-copy / 22,2 ,
-                / condition-image-match / 3,15
-            ]&gt;&gt;,
-            / validate / 10:&lt;&lt;[
+            / validate / 7:&lt;&lt;[
                 / directive-set-component-index / 12,0 ,
                 / condition-image-match / 3,15
             ]&gt;&gt;,
-            / load / 11:&lt;&lt;[
+            / load / 8:&lt;&lt;[
                 / directive-set-component-index / 12,2 ,
                 / directive-set-parameters / 19,{
                     / image-digest / 3:&lt;&lt;[
@@ -5099,53 +5097,77 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                     / image-size / 14:76834,
                     / source-component / 22:0 / [h'00'] /,
                     / compression-info / 19:&lt;&lt;{
-                        / compression-algorithm / 1:1 / "gzip" /,
+                        / compression-algorithm / 1:1 / "zlib" /,
                     }&gt;&gt;,
                 } ,
                 / directive-copy / 22,2 ,
                 / condition-image-match / 3,15
             ]&gt;&gt;,
-            / run / 12:&lt;&lt;[
+            / run / 9:&lt;&lt;[
                 / directive-set-component-index / 12,2 ,
                 / directive-run / 23,2
+            ]&gt;&gt;,
+            / payload-fetch / 16:&lt;&lt;[
+                / directive-set-component-index / 12,1 ,
+                / directive-set-parameters / 19,{
+                    / image-digest / 3:&lt;&lt;[
+                        / algorithm-id / -16 / "sha256" /,
+                        / digest-bytes /
+h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
+                    ]&gt;&gt;,
+                    / uri / 21:'http://example.com/file.bin',
+                } ,
+                / directive-fetch / 21,2 ,
+                / condition-image-match / 3,15
+            ]&gt;&gt;,
+            / install / 17:&lt;&lt;[
+                / directive-set-component-index / 12,0 ,
+                / directive-set-parameters / 19,{
+                    / source-component / 22:1 / [h'02'] /,
+                } ,
+                / directive-copy / 22,2 ,
+                / condition-image-match / 3,15
             ]&gt;&gt;,
         }&gt;&gt;,
     })
 </pre><a href="#appendix-B.5-3" class="pilcrow">¶</a>
 </div>
-<p id="appendix-B.5-4">Total size of Envelope without COSE authentication object:  292<a href="#appendix-B.5-4" class="pilcrow">¶</a></p>
+<p id="appendix-B.5-4">Total size of Envelope without COSE authentication object:  332<a href="#appendix-B.5-4" class="pilcrow">¶</a></p>
 <p id="appendix-B.5-5">Envelope:<a href="#appendix-B.5-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.5-6">
 <pre>
-d86ba2025827815824822f582015736702a00f510805dcf89d6913a2cfb4
-17ed414faa760f974d6755c68ba70a0358f4a801010204035867a2028381
-4100814102814101045858880c0014a40150fa6b4a53d5ad5fdfbe9de663
-e4d41ffe02501492af1425695e48bf429b2d51f2ab45035824822f582000
-112233445566778899aabbccddeeff0123456789abcdeffedcba98765432
-100e1987d0010f020f085827880c0113a115781b687474703a2f2f657861
-6d706c652e636f6d2f66696c652e62696e1502030f094b880c0013a11601
-1602030f0a45840c00030f0b583d880c0213a4035824822f582001234567
-89abcdeffedcba987654321000112233445566778899aabbccddeeff0e1a
-00012c221343a1010116001602030f0c45840c021702
+d86ba2025827815824822f5820601ebc1bb2e12cbaf408b1bca72fae0d99
+87498acfa16130ce4cf5cc9ea74c7c0359011ba801010204035867a20283
+814100814102814101045858880c0014a40150fa6b4a53d5ad5fdfbe9de6
+63e4d41ffe02501492af1425695e48bf429b2d51f2ab45035824822f5820
+00112233445566778899aabbccddeeff0123456789abcdeffedcba987654
+32100e1987d0010f020f0745840c00030f08583d880c0213a4035824822f
+58200123456789abcdeffedcba987654321000112233445566778899aabb
+ccddeeff0e1a00012c221343a1010116001602030f0945840c0217021058
+4e880c0113a2035824822f582000112233445566778899aabbccddeeff01
+23456789abcdeffedcba987654321015781b687474703a2f2f6578616d70
+6c652e636f6d2f66696c652e62696e1502030f114b880c0013a116011602
+030f
 </pre><a href="#appendix-B.5-6" class="pilcrow">¶</a>
 </div>
-<p id="appendix-B.5-7">Total size of Envelope with COSE authentication object:  368<a href="#appendix-B.5-7" class="pilcrow">¶</a></p>
+<p id="appendix-B.5-7">Total size of Envelope with COSE authentication object:  408<a href="#appendix-B.5-7" class="pilcrow">¶</a></p>
 <p id="appendix-B.5-8">Envelope with COSE authentication object:<a href="#appendix-B.5-8" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.5-9">
 <pre>
-d86ba2025873825824822f582015736702a00f510805dcf89d6913a2cfb4
-17ed414faa760f974d6755c68ba70a584ad28443a10126a0f658403ada25
-32326d512132c388677798c24ffdcc979bfae2a26b19c8c8bbf511fd7dd8
-5f1501662c1a9e1976b759c4019bab44ba5434efb45d3868aedbca593671
-f30358f4a801010204035867a20283814100814102814101045858880c00
-14a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48
-bf429b2d51f2ab45035824822f582000112233445566778899aabbccddee
-ff0123456789abcdeffedcba98765432100e1987d0010f020f085827880c
-0113a115781b687474703a2f2f6578616d706c652e636f6d2f66696c652e
-62696e1502030f094b880c0013a116011602030f0a45840c00030f0b583d
-880c0213a4035824822f58200123456789abcdeffedcba98765432100011
-2233445566778899aabbccddeeff0e1a00012c221343a101011600160203
-0f0c45840c021702
+d86ba2025873825824822f5820601ebc1bb2e12cbaf408b1bca72fae0d99
+87498acfa16130ce4cf5cc9ea74c7c584ad28443a10126a0f658402e2635
+99b0f3613fd3feb0cec1ff55c6b37c521339ef2680dc63de3a5cdfb0e3f4
+4237313e1c17c35f7fa84af82234f50cea551cfdd8179a40dac5136167cd
+5e0359011ba801010204035867a20283814100814102814101045858880c
+0014a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e
+48bf429b2d51f2ab45035824822f582000112233445566778899aabbccdd
+eeff0123456789abcdeffedcba98765432100e1987d0010f020f0745840c
+00030f08583d880c0213a4035824822f58200123456789abcdeffedcba98
+7654321000112233445566778899aabbccddeeff0e1a00012c221343a101
+0116001602030f0945840c02170210584e880c0113a2035824822f582000
+112233445566778899aabbccddeeff0123456789abcdeffedcba98765432
+1015781b687474703a2f2f6578616d706c652e636f6d2f66696c652e6269
+6e1502030f114b880c0013a116011602030f
 </pre><a href="#appendix-B.5-9" class="pilcrow">¶</a>
 </div>
 </section>
@@ -5172,7 +5194,7 @@ ff0123456789abcdeffedcba98765432100e1987d0010f020f085827880c
             digest: &lt;&lt;[
                 / algorithm-id / -16 / "sha256" /,
                 / digest-bytes /
-h'd1e73f16e4126007bc4d804cd33b0209fbab34728e60ee8c00f3387126748dd2'
+h'a4c6d5f5c3800c19c4af55aacc1c2dc6e37e2bf10b2aab335f70226961e310d3'
             ]&gt;&gt;,
             signature: &lt;&lt;18([
                     / protected / &lt;&lt;{
@@ -5181,9 +5203,9 @@ h'd1e73f16e4126007bc4d804cd33b0209fbab34728e60ee8c00f3387126748dd2'
                     / unprotected / {
                     },
                     / payload / F6 / nil /,
-                    / signature / h'b7ae0a46a28f02e25cda6d9a255bbaf863
-30141831fae5a78012d648bc6cee55102e0f1890bdeacc3adaa4fae0560f83a45eecae
-65cabce642f56d84ab97ef8d'
+                    / signature / h'91d95d3bb2eaae7b31ff11f4761056e491
+bcb07470119f9c69388982c3238eabfcb477ec7887f36c31e7d957fe8830b3ae8b9d7d
+71372de2e71a9a3b67444c4a'
                 ])&gt;&gt;
             ]
         ]&gt;&gt;,
@@ -5224,7 +5246,17 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                     }
                 ]&gt;&gt;,
             }&gt;&gt;,
-            / install / 9:&lt;&lt;[
+            / validate / 7:&lt;&lt;[
+                / directive-set-component-index / 12,0 ,
+                / condition-image-match / 3,15 ,
+                / directive-set-component-index / 12,1 ,
+                / condition-image-match / 3,15
+            ]&gt;&gt;,
+            / run / 9:&lt;&lt;[
+                / directive-set-component-index / 12,0 ,
+                / directive-run / 23,2
+            ]&gt;&gt;,
+            / install / 17:&lt;&lt;[
                 / directive-set-component-index / 12,0 ,
                 / directive-set-parameters / 19,{
                     / uri / 21:'http://example.com/file1.bin',
@@ -5238,16 +5270,6 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                 / directive-fetch / 21,2 ,
                 / condition-image-match / 3,15
             ]&gt;&gt;,
-            / validate / 10:&lt;&lt;[
-                / directive-set-component-index / 12,0 ,
-                / condition-image-match / 3,15 ,
-                / directive-set-component-index / 12,1 ,
-                / condition-image-match / 3,15
-            ]&gt;&gt;,
-            / run / 12:&lt;&lt;[
-                / directive-set-component-index / 12,0 ,
-                / directive-run / 23,2
-            ]&gt;&gt;,
         }&gt;&gt;,
     })
 </pre><a href="#appendix-B.6-4" class="pilcrow">¶</a>
@@ -5256,36 +5278,36 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
 <p id="appendix-B.6-6">Envelope:<a href="#appendix-B.6-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.6-7">
 <pre>
-d86ba2025827815824822f5820d1e73f16e4126007bc4d804cd33b0209fb
-ab34728e60ee8c00f3387126748dd203590101a601010205035895a20282
+d86ba2025827815824822f5820a4c6d5f5c3800c19c4af55aacc1c2dc6e3
+7e2bf10b2aab335f70226961e310d303590101a601010205035895a20282
 8141008141010458898c0c0014a40150fa6b4a53d5ad5fdfbe9de663e4d4
 1ffe02501492af1425695e48bf429b2d51f2ab45035824822f5820001122
 33445566778899aabbccddeeff0123456789abcdeffedcba98765432100e
 1987d0010f020f0c0114a2035824822f58200123456789abcdeffedcba98
-7654321000112233445566778899aabbccddeeff0e1a00012c2209584f90
-0c0013a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65
-312e62696e1502030f0c0113a115781c687474703a2f2f6578616d706c65
-2e636f6d2f66696c65322e62696e1502030f0a49880c00030f0c01030f0c
-45840c001702
+7654321000112233445566778899aabbccddeeff0e1a00012c220749880c
+00030f0c01030f0945840c00170211584f900c0013a115781c687474703a
+2f2f6578616d706c652e636f6d2f66696c65312e62696e1502030f0c0113
+a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e62
+696e1502030f
 </pre><a href="#appendix-B.6-7" class="pilcrow">¶</a>
 </div>
 <p id="appendix-B.6-8">Total size of Envelope with COSE authentication object:  382<a href="#appendix-B.6-8" class="pilcrow">¶</a></p>
 <p id="appendix-B.6-9">Envelope with COSE authentication object:<a href="#appendix-B.6-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B.6-10">
 <pre>
-d86ba2025873825824822f5820d1e73f16e4126007bc4d804cd33b0209fb
-ab34728e60ee8c00f3387126748dd2584ad28443a10126a0f65840b7ae0a
-46a28f02e25cda6d9a255bbaf86330141831fae5a78012d648bc6cee5510
-2e0f1890bdeacc3adaa4fae0560f83a45eecae65cabce642f56d84ab97ef
-8d03590101a601010205035895a202828141008141010458898c0c0014a4
+d86ba2025873825824822f5820a4c6d5f5c3800c19c4af55aacc1c2dc6e3
+7e2bf10b2aab335f70226961e310d3584ad28443a10126a0f6584091d95d
+3bb2eaae7b31ff11f4761056e491bcb07470119f9c69388982c3238eabfc
+b477ec7887f36c31e7d957fe8830b3ae8b9d7d71372de2e71a9a3b67444c
+4a03590101a601010205035895a202828141008141010458898c0c0014a4
 0150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf42
 9b2d51f2ab45035824822f582000112233445566778899aabbccddeeff01
 23456789abcdeffedcba98765432100e1987d0010f020f0c0114a2035824
 822f58200123456789abcdeffedcba987654321000112233445566778899
-aabbccddeeff0e1a00012c2209584f900c0013a115781c687474703a2f2f
-6578616d706c652e636f6d2f66696c65312e62696e1502030f0c0113a115
-781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e62696e
-1502030f0a49880c00030f0c01030f0c45840c001702
+aabbccddeeff0e1a00012c220749880c00030f0c01030f0945840c001702
+11584f900c0013a115781c687474703a2f2f6578616d706c652e636f6d2f
+66696c65312e62696e1502030f0c0113a115781c687474703a2f2f657861
+6d706c652e636f6d2f66696c65322e62696e1502030f
 </pre><a href="#appendix-B.6-10" class="pilcrow">¶</a>
 </div>
 </section>
