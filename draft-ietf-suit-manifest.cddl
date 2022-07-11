@@ -56,7 +56,7 @@ SUIT_Severable_Members_Choice = (
   ? suit-payload-fetch => SUIT_Digest / 
       bstr .cbor SUIT_Command_Sequence,
   ? suit-install => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
-  ? suit-text => SUIT_Digest / bstr .cbor SUIT_Command_Sequence,
+  ? suit-text => SUIT_Digest / bstr .cbor SUIT_Text_Map,
   * $$severable-manifest-members-choice-extensions
 )
 
@@ -124,7 +124,6 @@ SUIT_Directive //= (suit-directive-run-sequence,
     bstr .cbor SUIT_Command_Sequence)
 SUIT_Directive //= (suit-directive-try-each,
     SUIT_Directive_Try_Each_Argument)
-SUIT_Directive //= (suit-directive-process-dependency, SUIT_Rep_Policy)
 SUIT_Directive //= (suit-directive-override-parameters,
     {+ SUIT_Parameters})
 SUIT_Directive //= (suit-directive-fetch,             SUIT_Rep_Policy)
