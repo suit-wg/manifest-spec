@@ -1369,6 +1369,11 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
                 <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="xref">6.3</a>.  <a href="#name-interpreter-fundamental-pro" class="xref">Interpreter Fundamental Properties</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3.2.1">
+                    <p id="section-toc.1-1.6.2.3.2.1.1"><a href="#section-6.3.1" class="xref">6.3.1</a>.  <a href="#name-resilience-to-disruption" class="xref">Resilience to Disruption</a></p>
+</li>
+                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4">
                 <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="xref">6.4</a>.  <a href="#name-abstract-machine-descriptio" class="xref">Abstract Machine Description</a></p>
@@ -2098,6 +2103,24 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </li>
         </ol>
 <p id="section-6.3-3">NOTE: when using A/B images, the manifest functions as two (or more) logical manifests, each of which applies to a system in a particular starting state. With that provision, design goal 3 holds.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
+<div id="resilience-to-disruption">
+<section id="section-6.3.1">
+          <h4 id="name-resilience-to-disruption">
+<a href="#section-6.3.1" class="section-number selfRef">6.3.1. </a><a href="#name-resilience-to-disruption" class="section-name selfRef">Resilience to Disruption</a>
+          </h4>
+<p id="section-6.3.1-1">As required in Section 3 of RFC9019 and as an extension of design goal 1, devices must remain operable after a disruption, such as a power failure or network interruption, interrupts the update process.<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-2">The manifest processor must be resilient to these faults. In order to enable this resilience, systems implementing the manifest processor MUST make the following guarantees:<a href="#section-6.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-3">Either:
+1. A fallback/recovery image is provided so that a disrupted system can apply the SUIT Manifest again.
+2. Manifests are constructed so that repeated partial invocations of any manifest sequence always results in a correct system configuration.
+3. A journal of manifest operations is stored in nonvolatile memory so that a repeated invocation does not alter nonvolatile memory up until the point of the previous failure. The journal enables the parser to recreate the processor state just prior to the disruption. This journal can be, for example, a SUIT Report. This report can be used to resume processing of the manifest from the point of failure.<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-4">AND<a href="#section-6.3.1-4" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.3.1-5">
+<li id="section-6.3.1-5.1">Where a command is not repeatable because of the way in which it alters system state (e.g. swapping images or in-place delta) it MUST be resumable or revertible. This applies to commands that modify at least one source component as well as the destination component.<a href="#section-6.3.1-5.1" class="pilcrow">¶</a>
+</li>
+          </ol>
+</section>
+</div>
 </section>
 </div>
 <div id="command-behavior">

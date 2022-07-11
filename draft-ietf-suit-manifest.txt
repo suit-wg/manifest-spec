@@ -91,21 +91,21 @@ Table of Contents
      6.2.   Required Checks  . . . . . . . . . . . . . . . . . . . .  17
        6.2.1.  Minimizing Signature Verifications  . . . . . . . . .  18
      6.3.  Interpreter Fundamental Properties  . . . . . . . . . . .  18
+       6.3.1.  Resilience to Disruption  . . . . . . . . . . . . . .  19
      6.4.  Abstract Machine Description  . . . . . . . . . . . . . .  19
      6.5.  Special Cases of Component Index  . . . . . . . . . . . .  21
      6.6.  Serialized Processing Interpreter . . . . . . . . . . . .  22
-     6.7.  Parallel Processing Interpreter . . . . . . . . . . . . .  22
-   7.  Creating Manifests  . . . . . . . . . . . . . . . . . . . . .  23
-     7.1.  Compatibility Check Template  . . . . . . . . . . . . . .  23
-     7.2.  Trusted Invocation Template . . . . . . . . . . . . . . .  24
-     7.3.  Component Download Template . . . . . . . . . . . . . . .  24
-     7.4.  Install Template  . . . . . . . . . . . . . . . . . . . .  25
-     7.5.  Integrated Payload Template . . . . . . . . . . . . . . .  25
+     6.7.  Parallel Processing Interpreter . . . . . . . . . . . . .  23
+   7.  Creating Manifests  . . . . . . . . . . . . . . . . . . . . .  24
+     7.1.  Compatibility Check Template  . . . . . . . . . . . . . .  24
+     7.2.  Trusted Invocation Template . . . . . . . . . . . . . . .  25
+     7.3.  Component Download Template . . . . . . . . . . . . . . .  25
+     7.4.  Install Template  . . . . . . . . . . . . . . . . . . . .  26
+     7.5.  Integrated Payload Template . . . . . . . . . . . . . . .  26
      7.6.  Load from Nonvolatile Storage Template  . . . . . . . . .  26
-     7.7.  A/B Image Template  . . . . . . . . . . . . . . . . . . .  26
-   8.  Metadata Structure  . . . . . . . . . . . . . . . . . . . . .  28
-     8.1.  Encoding Considerations . . . . . . . . . . . . . . . . .  28
-     8.2.  Envelope  . . . . . . . . . . . . . . . . . . . . . . . .  29
+     7.7.  A/B Image Template  . . . . . . . . . . . . . . . . . . .  27
+   8.  Metadata Structure  . . . . . . . . . . . . . . . . . . . . .  29
+     8.1.  Encoding Considerations . . . . . . . . . . . . . . . . .  29
 
 
 
@@ -114,15 +114,16 @@ Moran, et al.            Expires 12 January 2023                [Page 2]
 Internet-Draft          CBOR-based SUIT Manifest               July 2022
 
 
-     8.3.  Authenticated Manifests . . . . . . . . . . . . . . . . .  29
+     8.2.  Envelope  . . . . . . . . . . . . . . . . . . . . . . . .  29
+     8.3.  Authenticated Manifests . . . . . . . . . . . . . . . . .  30
      8.4.  Manifest  . . . . . . . . . . . . . . . . . . . . . . . .  30
-       8.4.1.  suit-manifest-version . . . . . . . . . . . . . . . .  30
-       8.4.2.  suit-manifest-sequence-number . . . . . . . . . . . .  30
+       8.4.1.  suit-manifest-version . . . . . . . . . . . . . . . .  31
+       8.4.2.  suit-manifest-sequence-number . . . . . . . . . . . .  31
        8.4.3.  suit-reference-uri  . . . . . . . . . . . . . . . . .  31
-       8.4.4.  suit-text . . . . . . . . . . . . . . . . . . . . . .  31
+       8.4.4.  suit-text . . . . . . . . . . . . . . . . . . . . . .  32
        8.4.5.  suit-common . . . . . . . . . . . . . . . . . . . . .  33
-       8.4.6.  SUIT_Command_Sequence . . . . . . . . . . . . . . . .  33
-       8.4.7.  Reporting Policy  . . . . . . . . . . . . . . . . . .  35
+       8.4.6.  SUIT_Command_Sequence . . . . . . . . . . . . . . . .  34
+       8.4.7.  Reporting Policy  . . . . . . . . . . . . . . . . . .  36
        8.4.8.  SUIT_Parameters . . . . . . . . . . . . . . . . . . .  37
        8.4.9.  SUIT_Condition  . . . . . . . . . . . . . . . . . . .  43
        8.4.10. SUIT_Directive  . . . . . . . . . . . . . . . . . . .  46
@@ -155,7 +156,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
      C.2.  C.2 Byte String Wrappers  . . . . . . . . . . . . . . . .  86
    Appendix D.  D.  Implementation Conformance Matrix  . . . . . . .  86
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  88
-
 
 
 
@@ -1020,6 +1020,35 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    logical manifests, each of which applies to a system in a particular
    starting state.  With that provision, design goal 3 holds.
 
+6.3.1.  Resilience to Disruption
+
+   As required in Section 3 of RFC9019 and as an extension of design
+   goal 1, devices must remain operable after a disruption, such as a
+   power failure or network interruption, interrupts the update process.
+
+   The manifest processor must be resilient to these faults.  In order
+   to enable this resilience, systems implementing the manifest
+   processor MUST make the following guarantees:
+
+   Either: 1.  A fallback/recovery image is provided so that a disrupted
+   system can apply the SUIT Manifest again. 2.  Manifests are
+   constructed so that repeated partial invocations of any manifest
+   sequence always results in a correct system configuration. 3.  A
+   journal of manifest operations is stored in nonvolatile memory so
+   that a repeated invocation does not alter nonvolatile memory up until
+   the point of the previous failure.  The journal enables the parser to
+   recreate the processor state just prior to the disruption.  This
+   journal can be, for example, a SUIT Report.  This report can be used
+   to resume processing of the manifest from the point of failure.
+
+   AND
+
+   1.  Where a command is not repeatable because of the way in which it
+       alters system state (e.g. swapping images or in-place delta) it
+       MUST be resumable or revertible.  This applies to commands that
+       modify at least one source component as well as the destination
+       component.
+
 6.4.  Abstract Machine Description
 
    The heart of the manifest is the list of commands, which are
@@ -1027,6 +1056,15 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    Manifest Processor can be modeled as a simple abstract machine.  This
    machine consists of several data storage locations that are modified
    by commands.
+
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 19]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
    There are two types of commands, namely those that modify state
    (directives) and those that perform tests (conditions).  Parameters
@@ -1057,15 +1095,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    As a result, Set Component Index is described as current :=
    components[arg].
 
-
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 19]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
    The following table describes the behavior of each command. "params"
    represents the parameters for the current component.  Most commands
    operate on a component.
@@ -1085,6 +1114,14 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
     | Set Component Index     | current := components[arg]           |
     +-------------------------+--------------------------------------+
     | Override Parameters     | current.params[k] := v for-each k,v  |
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 20]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
+
     |                         | in arg                               |
     +-------------------------+--------------------------------------+
     | Set Parameters          | current.params[k] := v if not k in   |
@@ -1114,14 +1151,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
     |                         | component])                          |
     +-------------------------+--------------------------------------+
     | Run Sequence            | exec(arg)                            |
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 20]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
     +-------------------------+--------------------------------------+
     | Run with Arguments      | run(current, arg)                    |
     +-------------------------+--------------------------------------+
@@ -1137,6 +1166,17 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    2.  Array of integers
 
    3.  True
+
+
+
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 21]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
    Integers MUST always be supported by Set Component Index.  Arrays of
    integers MUST be supported by Set Component Index if the Recipient
@@ -1165,19 +1205,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    for current in current-list:
        cmd(current)
 
-
-
-
-
-
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 21]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
    Try Each and Run Sequence are affected in the same way as other
    commands: they are invoked once for each possible Component.  This
    means that the sequences that are arguments to Try Each and Run
@@ -1196,6 +1223,16 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    overall volatile storage required to process the update so that the
    only limit on number of components is the size of the manifest.
    However, this approach requires additional processing power.
+
+
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 22]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
    In order to operate in this mode, the manifest processor loops on
    each section for every supported component, simply ignoring commands
@@ -1227,13 +1264,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
 
    *  Override Parameters.
 
-
-
-Moran, et al.            Expires 12 January 2023               [Page 22]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
    *  Set Strict Order = True.
 
    *  Set Component Index.
@@ -1249,6 +1279,16 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    allows the interpreter that issues Run Sequence commands to check
    that the first element is correct, then issue the sequence to a
    parallel execution context to handle the remainder of the sequence.
+
+
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 23]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
 7.  Creating Manifests
 
@@ -1282,14 +1322,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    The goal of the compatibility check template ensure that Recipients
    only install compatible images.
 
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 23]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
    In this template all information is contained in the common sequence
    and the following sequence of commands is used:
 
@@ -1301,6 +1333,18 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    *  Check Vendor Identifier condition (see Section 8.4.8.2)
 
    *  Check Class Identifier condition (see Section 8.4.8.2)
+
+
+
+
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 24]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
 7.2.  Trusted Invocation Template
 
@@ -1339,13 +1383,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    *  Override Parameters directive (see Section 8.4.10.3) for Image
       Digest and Image Size (see Section 8.4.8)
 
-
-
-Moran, et al.            Expires 12 January 2023               [Page 24]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
    Then, the install sequence contains the following commands:
 
    *  Set Component Index directive (see Section 8.4.10.1)
@@ -1356,6 +1393,14 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    *  Fetch directive (see Section 8.4.10.4)
 
    *  Check Image Match condition (see Section 8.4.9.2)
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 25]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
    The Fetch directive needs the URI parameter to be set to determine
    where the image is retrieved from.  Additionally, the destination of
@@ -1394,14 +1439,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    manifest.  The payload envelope key MUST be a string.  The payload
    MUST be serialized in a bstr element.
 
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 25]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
    The URI for a payload enclosed in this way MAY be expressed as a
    fragment-only reference, as defined in [RFC3986], Section 4.4.
 
@@ -1413,6 +1450,13 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    The goal of the Load from Nonvolatile Storage template is to load an
    image from a non-volatile component into a volatile component, for
    example loading a firmware image from external Flash into RAM.
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 26]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
    The following commands are placed into the load sequence:
 
@@ -1451,13 +1495,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
 
       -  Second Sequence:
 
-
-
-Moran, et al.            Expires 12 January 2023               [Page 26]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
          o  Override Parameters directive (see Section 8.4.10.3,
             Section 8.4.8) for Slot B
 
@@ -1469,6 +1506,13 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    The following commands are placed in the fetch block or install block
 
    *  Set Component Index directive (see Section 8.4.10.1)
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 27]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
    *  Try Each
 
@@ -1507,13 +1551,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
          o  Override Parameters directive (see Section 8.4.10.3,
             Section 8.4.8) for Slot A
 
-
-
-Moran, et al.            Expires 12 January 2023               [Page 27]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
          o  Check Slot Condition (see Section 8.4.9.3)
 
       -  Second Sequence:
@@ -1524,6 +1561,14 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
          o  Check Slot Condition (see Section 8.4.9.3)
 
    *  Run
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 28]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
    NOTE: Any test can be used to select between images, Check Slot
    Condition is used in this template because it is a typical test for
@@ -1558,18 +1603,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    All CBOR maps in the Manifest and manifest envelope MUST be encoded
    with the canonical CBOR ordering as defined in [RFC8949].
 
-
-
-
-
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 28]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
 8.2.  Envelope
 
    The Envelope contains each of the other primary constituent parts of
@@ -1579,6 +1612,19 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    The Envelope is encoded as a CBOR Map. Each element of the Envelope
    is enclosed in a bstr, which allows computation of a message digest
    against known bounds.
+
+
+
+
+
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 29]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
 8.3.  Authenticated Manifests
 
@@ -1618,14 +1664,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    The algorithms used in SUIT_Authentication are defined by the
    profiles declared in [I-D.moran-suit-mti].
 
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 29]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
 8.4.  Manifest
 
    The manifest contains:
@@ -1635,6 +1673,14 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    *  a sequence number (see Section 8.4.2)
 
    *  a reference URI (see Section 8.4.3)
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 30]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
    *  a common structure with information that is shared between command
       sequences (see Section 8.4.5)
@@ -1675,19 +1721,22 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    sequence number. suit-manifest-sequence-number is REQUIRED to
    implement.
 
-
-
-Moran, et al.            Expires 12 January 2023               [Page 30]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
 8.4.3.  suit-reference-uri
 
    suit-reference-uri is a text string that encodes a URI where a full
    version of this manifest can be found.  This is convenient for
    allowing management systems to show the severed elements of a
    manifest when this URI is reported by a Recipient after installation.
+
+
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 31]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
 8.4.4.  suit-text
 
@@ -1714,30 +1763,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
 
    The following table describes the text fields available in suit-text:
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 31]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
    +================================+==================================+
    | CDDL Structure                 | Description                      |
    +================================+==================================+
@@ -1760,6 +1785,14 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
 
    The following table describes the text fields available in each map
    identified by a SUIT_Component_Identifier.
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 32]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
     +=================================+===============================+
     | CDDL Structure                  | Description                   |
@@ -1785,15 +1818,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
 
    suit-text is OPTIONAL to implement.
 
-
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 32]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
 8.4.5.  suit-common
 
    suit-common encodes all the information that is shared between each
@@ -1815,6 +1839,16 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    parameter or Try Each command is required by more than one Command
    Sequence, placing that parameter or command in suit-common-sequence
    results in a smaller encoding.
+
+
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 33]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
 8.4.5.1.  SUIT_Component_Identifier
 
@@ -1840,16 +1874,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    Recipient MUST take to accomplish a particular goal.  These goals are
    defined in the manifest and include:
 
-
-
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 33]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
    1.  Payload Fetch: suit-payload-fetch is a SUIT_Command_Sequence to
        execute in order to obtain a payload.  Some manifests may include
        these actions in the suit-install section instead if they operate
@@ -1873,6 +1897,14 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
        include copying an image from permanent storage into RAM,
        optionally including actions such as decryption or decompression.
        suit-load is OPTIONAL to implement.
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 34]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
    5.  Run or Boot: suit-run is a SUIT_Command_Sequence to execute in
        order to run an image. suit-run typically contains a single
@@ -1898,14 +1930,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
 
    2.  A SUIT_Reporting_Policy (Section 8.4.7)
 
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 34]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
    Each directive is composed of:
 
    1.  A command code identifier
@@ -1925,6 +1949,18 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    Reporting policies provide a hint to the manifest processor of
    whether to add the success or failure of a command to any report that
    it generates.
+
+
+
+
+
+
+
+
+Moran, et al.            Expires 12 January 2023               [Page 35]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
 
    Many conditions and directives apply to a given component, and these
    generally grouped together.  Therefore, a special command to set the
@@ -1947,20 +1983,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    Policy.  This is an integer bitfield that follows the command and
    indicates what the Recipient should do with the Record of executing
    the command.  The options are summarized in the table below.
-
-
-
-
-
-
-
-
-
-
-Moran, et al.            Expires 12 January 2023               [Page 35]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
 
     +=============================+==================================+
     | Policy                      | Description                      |
@@ -1989,6 +2011,13 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
 
    The information elements provided to the Reporting Engine are:
 
+
+
+Moran, et al.            Expires 12 January 2023               [Page 36]
+
+Internet-Draft          CBOR-based SUIT Manifest               July 2022
+
+
    *  The reporting policy
 
    *  The result of the command
@@ -2011,13 +2040,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    Reporting Engine MAY choose to ignore these hints and apply its own
    policy instead.
 
-
-
-Moran, et al.            Expires 12 January 2023               [Page 36]
-
-Internet-Draft          CBOR-based SUIT Manifest               July 2022
-
-
    When used in a Invocation Procedure, the report MAY form the basis of
    an attestation report.  When used in an Update Process, the report
    MAY form the basis for one or more log entries.
@@ -2035,28 +2057,6 @@ Internet-Draft          CBOR-based SUIT Manifest               July 2022
    Processor parameters: Strict Order and Soft Failure.
 
    The defined manifest parameters are described below.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
