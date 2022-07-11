@@ -4,7 +4,7 @@
             digest: <<[
                 / algorithm-id / -16 / "sha256" /,
                 / digest-bytes /
-h'7c9b3cb72c262608a42f944d59d659ff2b801c78af44def51b8ff51e9f45721b'
+h'c98d9240343ee1ac12ba833c04fb9006e70f62c7e4c36edb0b2a356d59c2f86c'
             ]>>,
             signature: <<18([
                     / protected / <<{
@@ -13,9 +13,9 @@ h'7c9b3cb72c262608a42f944d59d659ff2b801c78af44def51b8ff51e9f45721b'
                     / unprotected / {
                     },
                     / payload / F6 / nil /,
-                    / signature / h'e33d618df0ad21e609529ab1a876afb231
-faff1d6a3189b5360324c2794250b87cf00cf83be50ea17dc721ca85393cd8e839a066
-d5dec0ad87a903ab31ea9afa'
+                    / signature / h'451b3099c7914ef4c54b633688471b8d0f
+940d09eeca41c159927a9f044bddec536f83da5f1b1047bc415be013d71524ad82e4ac
+792a61f93dbdc875a7a6adeb'
                 ])>>
             ]
         ]>>,
@@ -38,9 +38,9 @@ be9d-e663e4d41ffe /,
                     / directive-try-each / 15,[
                         <<[
                             / directive-override-parameters / 20,{
-                                / offset / 5:33792,
+                                / slot / 5:0,
                             } ,
-                            / condition-component-offset / 5,5 ,
+                            / condition-component-slot / 5,5 ,
                             / directive-override-parameters / 20,{
                                 / image-digest / 3:<<[
                                     / algorithm-id / -16 / "sha256" /,
@@ -52,9 +52,9 @@ h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                         ]>> ,
                         <<[
                             / directive-override-parameters / 20,{
-                                / offset / 5:541696,
+                                / slot / 5:1,
                             } ,
-                            / condition-component-offset / 5,5 ,
+                            / condition-component-slot / 5,5 ,
                             / directive-override-parameters / 20,{
                                 / image-digest / 3:<<[
                                     / algorithm-id / -16 / "sha256" /,
@@ -69,22 +69,25 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                     / condition-class-identifier / 2,15
                 ]>>,
             }>>,
-            / install / 9:<<[
+            / validate / 7:<<[
+                / condition-image-match / 3,15
+            ]>>,
+            / install / 17:<<[
                 / directive-try-each / 15,[
                     <<[
                         / directive-set-parameters / 19,{
-                            / offset / 5:33792,
+                            / slot / 5:0,
                         } ,
-                        / condition-component-offset / 5,5 ,
+                        / condition-component-slot / 5,5 ,
                         / directive-set-parameters / 19,{
                             / uri / 21:'http://example.com/file1.bin',
                         }
                     ]>> ,
                     <<[
                         / directive-set-parameters / 19,{
-                            / offset / 5:541696,
+                            / slot / 5:1,
                         } ,
-                        / condition-component-offset / 5,5 ,
+                        / condition-component-slot / 5,5 ,
                         / directive-set-parameters / 19,{
                             / uri / 21:'http://example.com/file2.bin',
                         }
@@ -93,50 +96,46 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                 / directive-fetch / 21,2 ,
                 / condition-image-match / 3,15
             ]>>,
-            / validate / 10:<<[
-                / condition-image-match / 3,15
-            ]>>,
         }>>,
     })
 ~~~
 
-Total size of Envelope without COSE authentication object:  332
+Total size of Envelope without COSE authentication object:  320
 
 Envelope:
 
 ~~~
-d86ba2025827815824822f58207c9b3cb72c262608a42f944d59d659ff2b
-801c78af44def51b8ff51e9f45721b0359011ba5010102030358aaa20281
-8141000458a18814a20150fa6b4a53d5ad5fdfbe9de663e4d41ffe025014
-92af1425695e48bf429b2d51f2ab450f8258368614a105198400050514a2
-035824822f582000112233445566778899aabbccddeeff0123456789abcd
-effedcba98765432100e1987d0583a8614a1051a00084400050514a20358
-24822f58200123456789abcdeffedcba9876543210001122334455667788
-99aabbccddeeff0e1a00012c22010f020f095861860f82582a8613a10519
-8400050513a115781c687474703a2f2f6578616d706c652e636f6d2f6669
-6c65312e62696e582c8613a1051a00084400050513a115781c687474703a
-2f2f6578616d706c652e636f6d2f66696c65322e62696e1502030f0a4382
-030f
+d86ba2025827815824822f5820c98d9240343ee1ac12ba833c04fb9006e7
+0f62c7e4c36edb0b2a356d59c2f86c0359010fa5010102030358a4a20281
+81410004589b8814a20150fa6b4a53d5ad5fdfbe9de663e4d41ffe025014
+92af1425695e48bf429b2d51f2ab450f8258348614a10500050514a20358
+24822f582000112233445566778899aabbccddeeff0123456789abcdeffe
+dcba98765432100e1987d058368614a10501050514a2035824822f582001
+23456789abcdeffedcba987654321000112233445566778899aabbccddee
+ff0e1a00012c22010f020f074382030f11585b860f8258288613a1050005
+0513a115781c687474703a2f2f6578616d706c652e636f6d2f66696c6531
+2e62696e58288613a10501050513a115781c687474703a2f2f6578616d70
+6c652e636f6d2f66696c65322e62696e1502030f
 ~~~
 
-Total size of Envelope with COSE authentication object:  408
+Total size of Envelope with COSE authentication object:  396
 
 Envelope with COSE authentication object:
 
 ~~~
-d86ba2025873825824822f58207c9b3cb72c262608a42f944d59d659ff2b
-801c78af44def51b8ff51e9f45721b584ad28443a10126a0f65840e33d61
-8df0ad21e609529ab1a876afb231faff1d6a3189b5360324c2794250b87c
-f00cf83be50ea17dc721ca85393cd8e839a066d5dec0ad87a903ab31ea9a
-fa0359011ba5010102030358aaa202818141000458a18814a20150fa6b4a
+d86ba2025873825824822f5820c98d9240343ee1ac12ba833c04fb9006e7
+0f62c7e4c36edb0b2a356d59c2f86c584ad28443a10126a0f65840451b30
+99c7914ef4c54b633688471b8d0f940d09eeca41c159927a9f044bddec53
+6f83da5f1b1047bc415be013d71524ad82e4ac792a61f93dbdc875a7a6ad
+eb0359010fa5010102030358a4a2028181410004589b8814a20150fa6b4a
 53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab
-450f8258368614a105198400050514a2035824822f582000112233445566
-778899aabbccddeeff0123456789abcdeffedcba98765432100e1987d058
-3a8614a1051a00084400050514a2035824822f58200123456789abcdeffe
-dcba987654321000112233445566778899aabbccddeeff0e1a00012c2201
-0f020f095861860f82582a8613a105198400050513a115781c687474703a
-2f2f6578616d706c652e636f6d2f66696c65312e62696e582c8613a1051a
-00084400050513a115781c687474703a2f2f6578616d706c652e636f6d2f
-66696c65322e62696e1502030f0a4382030f
+450f8258348614a10500050514a2035824822f5820001122334455667788
+99aabbccddeeff0123456789abcdeffedcba98765432100e1987d0583686
+14a10501050514a2035824822f58200123456789abcdeffedcba98765432
+1000112233445566778899aabbccddeeff0e1a00012c22010f020f074382
+030f11585b860f8258288613a10500050513a115781c687474703a2f2f65
+78616d706c652e636f6d2f66696c65312e62696e58288613a10501050513
+a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e62
+696e1502030f
 ~~~
 
