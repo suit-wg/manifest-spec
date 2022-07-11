@@ -52,8 +52,10 @@ normative:
   RFC4122:
   RFC8152:
   RFC3986:
+  RFC8949:
   RFC9019:
   RFC9124:
+  I-D.moran-suit-mti:
 
 
 informative:
@@ -727,6 +729,8 @@ Likewise, Section 6.3 of {{RFC8152}} describes the details for computing a MAC a
 The suit-authentication-wrapper MUST come before the suit-manifest element, regardless of canonical encoding of CBOR.
 
 A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.
+
+The algorithms used in SUIT_Authentication are defined by the profiles declared in {{I-D.moran-suit-mti}}.
 
 ## Manifest {#manifest-structure}
 
