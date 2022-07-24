@@ -23,6 +23,11 @@ SUIT_Authentication_Block /= COSE_Sign_Tagged
 SUIT_Authentication_Block /= COSE_Mac0_Tagged
 SUIT_Authentication_Block /= COSE_Sign1_Tagged
 
+COSE_Sign_Tagged     = 98
+COSE_Sign1_Tagged    = 18
+COSE_Mac_Tagged      = 97
+COSE_Mac0_Tagged     = 17
+
 SUIT_Severable_Manifest_Members = (
   ? suit-payload-fetch => bstr .cbor SUIT_Command_Sequence,
   ? suit-install => bstr .cbor SUIT_Command_Sequence,
