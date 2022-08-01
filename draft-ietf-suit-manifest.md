@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-18
+docname: draft-ietf-suit-manifest-19
 category: std
 
 ipr: trust200902
@@ -28,13 +28,13 @@ author:
       ins: B. Moran
       name: Brendan Moran
       organization: Arm Limited
-      email: Brendan.Moran@arm.com
+      email: brendan.moran.ietf@gmail.com
 
  -
       ins: H. Tschofenig
       name: Hannes Tschofenig
       organization: Arm Limited
-      email: hannes.tschofenig@arm.com
+      email: hannes.tschofenig@gmx.net
 
  -
       ins: H. Birkholz
@@ -1232,17 +1232,86 @@ The following algorithms MAY be implemented in a Manifest Processor:
 
 IANA is requested to:
 
-* allocate CBOR tag 107 in the CBOR Tags registry for the SUIT Envelope.
-* allocate CBOR tag 1070 in the CBOR Tags registry for the SUIT Manifest.
+* allocate CBOR tag 107 (suggested) in the CBOR Tags registry for the SUIT Envelope.
+* allocate CBOR tag 1070 (suggested) in the CBOR Tags registry for the SUIT Manifest.
 * allocate media type application/suit-envelope in the Media Types registry.
 * setup several registries as described below.
 
-IANA is requested to setup a registry for SUIT manifests.
-Several registries defined in the subsections below need to be created.
+IANA is requested to create a new category for Software Update for the Internet of Things (SUIT).
 
-For each registry, values 0-23 are Standards Action, 24-255 are IETF Review, 256-65535 are Expert Review, and 65536 or greater are First Come First Served.
+IANA is requested to create a page within the Software Update for the Internet of Things category for SUIT manifests.
 
-Negative values -23 to 0 are Experimental Use, -24 and lower are Private Use.
+IANA is also requested to create several registries defined in the subsections below.
+
+For each registry, values 0-23 are Standards Action, 24-255 are IETF Review, 256-65535 are Expert Review, and 65536 or greater are First Come First Served. Negative values -23 to 0 are Standards Action, -24 to -255 are for Experimental Use, -256 and lower are Private Use.
+
+## Registration Template
+
+* Type: 
+    * metadata-element
+    * command
+    * parameter
+* Abstract Machine Behaviour: 
+    * Definition of new behaviour in the abstract machine caused by introducing this command
+    * Definition of changed behaviour in the abstract machine caused by introducing this parameter / metadata
+* Command sequence applicability:
+    * For a command or parameter that is not applicable in all sequences, define which sequences are applicable
+* Sub-structure CDDL:
+    * For a flow-control command, the argument to the command that defines the flow control operation
+    * For a parameter, the structure of the parameter
+    * For metadata, the structure of the metadata
+* CDDL Extension point:
+    * The name of the CDDL element that is extended by this registration
+* Required parameters:
+    * Some commands require SUIT parameters to be set in advance.
+* Optional parameters:
+    * Some commands allow optional SUIT parameters to be set in advance.
+* Encoding considerations:
+    * Define any tradeoffs in encoding this registration.
+* Security considerations:
+* Interoperability considerations:
+* Published specification:
+* Person & email address to contact for further information:
+* Intended usage:
+    * One of COMMON, LIMITED USE, or OBSOLETE.
+* Restrictions on usage:
+* Author:
+* Change controller:
+* Provisional registration? (standards tree only):
+
+## SUIT Envelope Elements
+
+Label | Name | Reference
+---|---|---
+2 | Authentication Wrapper | {{authentication-info}}
+3 | Manifest | {{manifest-structure}}
+16 | Payload Fetch | {{manifest-commands}}
+17 | Payload Installation | {{manifest-commands}}
+23 | Text Description | {{manifest-digest-text}}
+
+
+## SUIT Manifest Elements
+
+Label | Name | Reference
+---|---|---
+1 | Encoding Version | {{manifest-version}}
+2 | Sequence Number | {{manifest-seqnr}}
+3 | Common Data | {{manifest-common}}
+4 | Reference URI | {{manifest-reference-uri}}
+7 | Image Validation | {{manifest-commands}}
+8 | Image Loading | {{manifest-commands}}
+9 | Image Invocation | {{manifest-commands}}
+16 | Payload Fetch | {{manifest-commands}}
+17 | Payload Installation | {{manifest-commands}}
+23 | Text Description | {{manifest-digest-text}}
+
+
+## SUIT Common Elements
+
+Label | Name | Reference
+---|---|---
+2 | Component Identifiers | {{manifest-common}}
+4 | Common Command Sequence | {{manifest-common}}
 
 ## SUIT Commands
 
