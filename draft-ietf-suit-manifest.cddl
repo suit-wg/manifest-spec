@@ -145,9 +145,14 @@ suit-reporting-bits = &(
     suit-send-sysinfo-failure : 3
 )
 
+<<<<<<< HEAD
 $$SUIT_Parameters //= (suit-parameter-vendor-identifier =>
     (RFC4122_UUID / cbor-pen))
 
+=======
+$$SUIT_Parameters //= (suit-parameter-vendor-identifier => (
+    RFC4122_UUID / cbor-pen))
+>>>>>>> 63185f4 (Convert SUIT_Parameters to a socket)
 cbor-pen = #6.112(bstr)
 
 $$SUIT_Parameters //= (suit-parameter-class-identifier => RFC4122_UUID)
