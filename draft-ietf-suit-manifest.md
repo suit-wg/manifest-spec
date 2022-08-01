@@ -1260,6 +1260,9 @@ For each registry, values 0-23 are Standards Action, 24-255 are IETF Review, 256
     * For a flow-control command, the argument to the command that defines the flow control operation
     * For a parameter, the structure of the parameter
     * For metadata, the structure of the metadata
+* Severable:
+    * Boolean (y/n)
+    * Only applicable to manifest metadata elements
 * CDDL Extension point:
     * The name of the CDDL element that is extended by this registration
 * Required parameters:
