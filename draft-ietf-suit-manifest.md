@@ -1232,57 +1232,23 @@ The following algorithms MAY be implemented in a Manifest Processor:
 
 IANA is requested to:
 
-* allocate CBOR tag 107 (suggested) in the CBOR Tags registry for the SUIT Envelope.
-* allocate CBOR tag 1070 (suggested) in the CBOR Tags registry for the SUIT Manifest.
-* allocate media type application/suit-envelope in the Media Types registry.
+* allocate CBOR tag 107 (suggested) in the "CBOR Tags" registry for the SUIT Envelope.
+* allocate CBOR tag 1070 (suggested) in the "CBOR Tags" registry for the SUIT Manifest.
+* allocate media type application/suit-envelope in the "Media Types" registry, see below.
 * setup several registries as described below.
 
-IANA is requested to create a new category for Software Update for the Internet of Things (SUIT).
-
-IANA is requested to create a page within the Software Update for the Internet of Things category for SUIT manifests.
+IANA is requested to create a new category for Software Update for the Internet of Things (SUIT) 
+and a page within this category for SUIT manifests.
 
 IANA is also requested to create several registries defined in the subsections below.
 
-For each registry, values 0-23 are Standards Action, 24-255 are IETF Review, 256-65535 are Expert Review, and 65536 or greater are First Come First Served. Negative values -23 to 0 are Standards Action, -24 to -255 are for Experimental Use, -256 and lower are Private Use.
+For each registry, values 0-255 are Standards Action and 256 or greater are Expert Review. Negative values -255 to 0 are Standards Action, and -256 and lower are Private Use.
 
-## Registration Template
-
-* Type: 
-    * metadata-element
-    * command
-    * parameter
-* Abstract Machine Behaviour: 
-    * Definition of new behaviour in the abstract machine caused by introducing this command
-    * Definition of changed behaviour in the abstract machine caused by introducing this parameter / metadata
-* Command sequence applicability:
-    * For a command or parameter that is not applicable in all sequences, define which sequences are applicable
-* Sub-structure CDDL:
-    * For a flow-control command, the argument to the command that defines the flow control operation
-    * For a parameter, the structure of the parameter
-    * For metadata, the structure of the metadata
-* Severable:
-    * Boolean (y/n)
-    * Only applicable to manifest metadata elements
-* CDDL Extension point:
-    * The name of the CDDL element that is extended by this registration
-* Required parameters:
-    * Some commands require SUIT parameters to be set in advance.
-* Optional parameters:
-    * Some commands allow optional SUIT parameters to be set in advance.
-* Encoding considerations:
-    * Define any tradeoffs in encoding this registration.
-* Security considerations:
-* Interoperability considerations:
-* Published specification:
-* Person & email address to contact for further information:
-* Intended usage:
-    * One of COMMON, LIMITED USE, or OBSOLETE.
-* Restrictions on usage:
-* Author:
-* Change controller:
-* Provisional registration? (standards tree only):
+New entries to those registries need to provide a label, a name and a reference to a specification that describes the functionality. More guidance on the expert review can be found below.
 
 ## SUIT Envelope Elements
+
+IANA is requested to create a new registry for SUIT envelope elements.
 
 Label | Name | Reference
 ---|---|---
@@ -1294,6 +1260,8 @@ Label | Name | Reference
 
 
 ## SUIT Manifest Elements
+
+IANA is requested to create a new registry for SUIT manifest elements.
 
 Label | Name | Reference
 ---|---|---
@@ -1308,8 +1276,9 @@ Label | Name | Reference
 17 | Payload Installation | {{manifest-commands}}
 23 | Text Description | {{manifest-digest-text}}
 
-
 ## SUIT Common Elements
+
+IANA is requested to create a new registry for SUIT common elements.
 
 Label | Name | Reference
 ---|---|---
@@ -1317,6 +1286,8 @@ Label | Name | Reference
 4 | Common Command Sequence | {{manifest-common}}
 
 ## SUIT Commands
+
+IANA is requested to create a new registry for SUIT commands.
 
 Label | Name | Reference
 ---|---|---
@@ -1351,6 +1322,8 @@ nint | Custom Condition | {{SUIT_Condition_Custom}}
 
 ## SUIT Parameters
 
+IANA is requested to create a new registry for SUIT parameters.
+
 Label | Name | Reference
 ---|---|---
 1 | Vendor ID | {{suit-parameter-vendor-identifier}}
@@ -1377,6 +1350,8 @@ nint | Custom | {{suit-parameter-custom}}
 
 ## SUIT Text Values
 
+IANA is requested to create a new registry for SUIT text values.
+
 Label | Name | Reference
 ---|---|---
 1 | Manifest Description | {{manifest-digest-text}}
@@ -1386,6 +1361,8 @@ Label | Name | Reference
 nint | Custom | {{manifest-digest-text}}
 
 ## SUIT Component Text Values
+
+IANA is requested to create a new registry for SUIT component text values.
 
 Label | Name | Reference
 ---|---|---
@@ -1397,6 +1374,96 @@ Label | Name | Reference
 6 | Component Version | {{manifest-digest-text}}
 7 | Component Version Required | {{manifest-digest-text}}
 nint | Custom | {{manifest-digest-text}}
+
+## Expert Review Instructions
+
+The IANA registries established in this document allow values to be added
+based on expert review. This section gives some general guidelines for
+what the experts should be looking for, but they are being designated
+as experts for a reason, so they should be given substantial
+latitude.
+
+Expert reviewers should take into consideration the following points:
+
+-  Point squatting should be discouraged.  Reviewers are encouraged
+      to get sufficient information for registration requests to ensure
+      that the usage is not going to duplicate one that is already
+      registered, and that the point is likely to be used in
+      deployments.  The zones tagged as private use 
+      are intended for testing purposes and closed environments; 
+      code points in other ranges should not be assigned for testing.
+
+-  Specifications are required for the standards track range of point
+      assignment.  Specifications should exist for  all other ranges,
+      but early assignment before a specification is
+      available is considered to be permissible.
+      When specifications are not provided, the description provided
+      needs to have sufficient information to identify what the point is
+      being used for.
+
+-  Experts should take into account the expected usage of fields when
+      approving point assignment.  The fact that there is a range for
+      standards track documents does not mean that a standards track
+      document cannot have points assigned outside of that range.  The
+      length of the encoded value should be weighed against how many
+      code points of that length are left, the size of device it will be
+      used on, and the number of code points left that encode to that
+      size.
+
+## Media Type Registration
+
+This section registers the 'application/suit-envelope' media type in the
+"Media Types" registry.  This media type are used to indicate that
+the content is a SUIT envelope.
+
+```
+      Type name: application
+
+      Subtype name: suit-envelope
+
+      Required parameters: N/A
+
+      Optional parameters: N/A
+
+      Encoding considerations: binary
+
+      Security considerations: See the Security Considerations section
+      of [[This RFC]].
+
+      Interoperability considerations: N/A
+
+      Published specification: [[This RFC]]
+
+      Applications that use this media type: Primarily used for 
+	    Firmware and software updates although the content may
+	    also contain configuration data and other information
+	    related to software and firmware.
+
+      Fragment identifier considerations: N/A
+
+      Additional information:
+
+      *  Deprecated alias names for this type: N/A
+
+      *  Magic number(s): N/A
+
+      *  File extension(s): cbor
+
+      *  Macintosh file type code(s): N/A
+
+      Person & email address to contact for further information:
+      iesg@ietf.org
+
+      Intended usage: COMMON
+
+      Restrictions on usage: N/A
+
+      Author: Brendan Moran, <Brendan.Moran@arm.com>
+
+      Change Controller: IESG
+
+      Provisional registration?  No
+```
 
 #  Security Considerations
 
