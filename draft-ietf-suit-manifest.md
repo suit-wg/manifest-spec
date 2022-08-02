@@ -1458,7 +1458,7 @@ the content is a SUIT envelope.
 
       Restrictions on usage: N/A
 
-      Author: Brendan Moran, <Brendan.Moran@arm.com>
+      Author: Brendan Moran, <brendan.moran.ietf@gmail.com>
 
       Change Controller: IESG
 
