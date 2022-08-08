@@ -1551,7 +1551,7 @@ This example covers the following templates:
 
 It also serves as the minimum example.
 
-{::include examples/example0.json.txt}
+{::include examples/example0.txt}
 
 ## Example 1: Simultaneous Download and Installation of Payload
 
@@ -1562,7 +1562,7 @@ This example covers the following templates:
 
 Simultaneous download and installation of payload. No secure boot is present in this example to demonstrate a download-only manifest.
 
-{::include examples/example1.json.txt}
+{::include examples/example1.txt}
 
 ## Example 2: Simultaneous Download, Installation, Secure Boot, Severed Fields
 
@@ -1574,7 +1574,7 @@ This example covers the following templates:
 
 This example also demonstrates severable elements ({{ovr-severable}}), and text ({{manifest-digest-text}}).
 
-{::include examples/example2.json.txt}
+{::include examples/example2.txt}
 
 ## Example 3: A/B images
 
@@ -1585,7 +1585,7 @@ This example covers the following templates:
 * Firmware Download ({{firmware-download-template}})
 * A/B Image Template ({{a-b-template}})
 
-{::include examples/example3.json.txt}
+{::include examples/example3.txt}
 
 
 ## Example 4: Load from External Storage
@@ -1598,7 +1598,7 @@ This example covers the following templates:
 * Install ({{template-install}})
 * Load ({{template-load-ext}})
 
-{::include examples/example4.json.txt}
+{::include examples/example4.txt}
 
 ## Example 5: Two Images
 
@@ -1610,7 +1610,7 @@ This example covers the following templates:
 
 Furthermore, it shows using these templates with two images.
 
-{::include examples/example5.json.txt}
+{::include examples/example5.txt}
 
 # C. Design Rational {#design-rationale}
 

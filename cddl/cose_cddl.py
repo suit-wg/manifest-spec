@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Copyright 2022 ARM Limited or its affiliates
@@ -17,16 +18,15 @@
 # limitations under the License.
 # ----------------------------------------------------------------------------
 
-DRAFT = draft-ietf-suit-manifest
+import xml.etree.ElementTree as ET
+import sys
 
+cose_filename = sys.argv[1]
 
-$(DRAFT).xml: $(DRAFT).md
-	make -C cddl
-	make -C examples
-	kdrfc -ht3 $<
+# Load cose xml
+xml_cose = ET.parse(cose_filename)
+# Filter for cddl
+cddl_elements = xml_cose.findall(".//artwork[@type='CDDL']")
 
-.PHONY: clean
-clean:
-	rm $(DRAFT).xml
-	make -C cddl clean
-	make -C examples clean
+cddl = '\n'.join([e.text for e in cddl_elements])
+print(cddl)
