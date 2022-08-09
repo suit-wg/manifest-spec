@@ -55,10 +55,10 @@ normative:
   RFC8949:
   RFC9019:
   RFC9124:
-  I-D.moran-suit-mti:
 
 
 informative:
+  I-D.moran-suit-mti:
   I-D.ietf-cose-hash-algs:
   I-D.ietf-teep-architecture:
   I-D.ietf-cbor-tags-oid:
