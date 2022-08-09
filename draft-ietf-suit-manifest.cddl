@@ -147,6 +147,7 @@ suit-reporting-bits = &(
 
 $$SUIT_Parameters //= (suit-parameter-vendor-identifier =>
     (RFC4122_UUID / cbor-pen))
+
 cbor-pen = #6.112(bstr)
 
 $$SUIT_Parameters //= (suit-parameter-class-identifier => RFC4122_UUID)
