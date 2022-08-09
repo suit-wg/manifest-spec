@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-18
+docname: draft-ietf-suit-manifest-19
 category: std
 
 ipr: trust200902
@@ -28,13 +28,13 @@ author:
       ins: B. Moran
       name: Brendan Moran
       organization: Arm Limited
-      email: Brendan.Moran@arm.com
+      email: brendan.moran.ietf@gmail.com
 
  -
       ins: H. Tschofenig
       name: Hannes Tschofenig
       organization: Arm Limited
-      email: hannes.tschofenig@arm.com
+      email: hannes.tschofenig@gmx.net
 
  -
       ins: H. Birkholz
@@ -55,10 +55,10 @@ normative:
   RFC8949:
   RFC9019:
   RFC9124:
-  I-D.moran-suit-mti:
 
 
 informative:
+  I-D.moran-suit-mti:
   I-D.ietf-cose-hash-algs:
   I-D.ietf-teep-architecture:
   I-D.ietf-cbor-tags-oid:
@@ -1232,19 +1232,62 @@ The following algorithms MAY be implemented in a Manifest Processor:
 
 IANA is requested to:
 
-* allocate CBOR tag 107 in the CBOR Tags registry for the SUIT Envelope.
-* allocate CBOR tag 1070 in the CBOR Tags registry for the SUIT Manifest.
-* allocate media type application/suit-envelope in the Media Types registry.
+* allocate CBOR tag 107 (suggested) in the "CBOR Tags" registry for the SUIT Envelope.
+* allocate CBOR tag 1070 (suggested) in the "CBOR Tags" registry for the SUIT Manifest.
+* allocate media type application/suit-envelope in the "Media Types" registry, see below.
 * setup several registries as described below.
 
-IANA is requested to setup a registry for SUIT manifests.
-Several registries defined in the subsections below need to be created.
+IANA is requested to create a new category for Software Update for the Internet of Things (SUIT) 
+and a page within this category for SUIT manifests.
 
-For each registry, values 0-23 are Standards Action, 24-255 are IETF Review, 256-65535 are Expert Review, and 65536 or greater are First Come First Served.
+IANA is also requested to create several registries defined in the subsections below.
 
-Negative values -23 to 0 are Experimental Use, -24 and lower are Private Use.
+For each registry, values 0-255 are Standards Action and 256 or greater are Expert Review. Negative values -255 to 0 are Standards Action, and -256 and lower are Private Use.
+
+New entries to those registries need to provide a label, a name and a reference to a specification that describes the functionality. More guidance on the expert review can be found below.
+
+## SUIT Envelope Elements
+
+IANA is requested to create a new registry for SUIT envelope elements.
+
+Label | Name | Reference
+---|---|---
+2 | Authentication Wrapper | {{authentication-info}}
+3 | Manifest | {{manifest-structure}}
+16 | Payload Fetch | {{manifest-commands}}
+17 | Payload Installation | {{manifest-commands}}
+23 | Text Description | {{manifest-digest-text}}
+
+
+## SUIT Manifest Elements
+
+IANA is requested to create a new registry for SUIT manifest elements.
+
+Label | Name | Reference
+---|---|---
+1 | Encoding Version | {{manifest-version}}
+2 | Sequence Number | {{manifest-seqnr}}
+3 | Common Data | {{manifest-common}}
+4 | Reference URI | {{manifest-reference-uri}}
+7 | Image Validation | {{manifest-commands}}
+8 | Image Loading | {{manifest-commands}}
+9 | Image Invocation | {{manifest-commands}}
+16 | Payload Fetch | {{manifest-commands}}
+17 | Payload Installation | {{manifest-commands}}
+23 | Text Description | {{manifest-digest-text}}
+
+## SUIT Common Elements
+
+IANA is requested to create a new registry for SUIT common elements.
+
+Label | Name | Reference
+---|---|---
+2 | Component Identifiers | {{manifest-common}}
+4 | Common Command Sequence | {{manifest-common}}
 
 ## SUIT Commands
+
+IANA is requested to create a new registry for SUIT commands.
 
 Label | Name | Reference
 ---|---|---
@@ -1279,6 +1322,8 @@ nint | Custom Condition | {{SUIT_Condition_Custom}}
 
 ## SUIT Parameters
 
+IANA is requested to create a new registry for SUIT parameters.
+
 Label | Name | Reference
 ---|---|---
 1 | Vendor ID | {{suit-parameter-vendor-identifier}}
@@ -1305,6 +1350,8 @@ nint | Custom | {{suit-parameter-custom}}
 
 ## SUIT Text Values
 
+IANA is requested to create a new registry for SUIT text values.
+
 Label | Name | Reference
 ---|---|---
 1 | Manifest Description | {{manifest-digest-text}}
@@ -1314,6 +1361,8 @@ Label | Name | Reference
 nint | Custom | {{manifest-digest-text}}
 
 ## SUIT Component Text Values
+
+IANA is requested to create a new registry for SUIT component text values.
 
 Label | Name | Reference
 ---|---|---
@@ -1325,6 +1374,96 @@ Label | Name | Reference
 6 | Component Version | {{manifest-digest-text}}
 7 | Component Version Required | {{manifest-digest-text}}
 nint | Custom | {{manifest-digest-text}}
+
+## Expert Review Instructions
+
+The IANA registries established in this document allow values to be added
+based on expert review. This section gives some general guidelines for
+what the experts should be looking for, but they are being designated
+as experts for a reason, so they should be given substantial
+latitude.
+
+Expert reviewers should take into consideration the following points:
+
+-  Point squatting should be discouraged.  Reviewers are encouraged
+      to get sufficient information for registration requests to ensure
+      that the usage is not going to duplicate one that is already
+      registered, and that the point is likely to be used in
+      deployments.  The zones tagged as private use 
+      are intended for testing purposes and closed environments; 
+      code points in other ranges should not be assigned for testing.
+
+-  Specifications are required for the standards track range of point
+      assignment.  Specifications should exist for  all other ranges,
+      but early assignment before a specification is
+      available is considered to be permissible.
+      When specifications are not provided, the description provided
+      needs to have sufficient information to identify what the point is
+      being used for.
+
+-  Experts should take into account the expected usage of fields when
+      approving point assignment.  The fact that there is a range for
+      standards track documents does not mean that a standards track
+      document cannot have points assigned outside of that range.  The
+      length of the encoded value should be weighed against how many
+      code points of that length are left, the size of device it will be
+      used on, and the number of code points left that encode to that
+      size.
+
+## Media Type Registration
+
+This section registers the 'application/suit-envelope' media type in the
+"Media Types" registry.  This media type are used to indicate that
+the content is a SUIT envelope.
+
+```
+      Type name: application
+
+      Subtype name: suit-envelope
+
+      Required parameters: N/A
+
+      Optional parameters: N/A
+
+      Encoding considerations: binary
+
+      Security considerations: See the Security Considerations section
+      of [[This RFC]].
+
+      Interoperability considerations: N/A
+
+      Published specification: [[This RFC]]
+
+      Applications that use this media type: Primarily used for 
+	    Firmware and software updates although the content may
+	    also contain configuration data and other information
+	    related to software and firmware.
+
+      Fragment identifier considerations: N/A
+
+      Additional information:
+
+      *  Deprecated alias names for this type: N/A
+
+      *  Magic number(s): N/A
+
+      *  File extension(s): cbor
+
+      *  Macintosh file type code(s): N/A
+
+      Person & email address to contact for further information:
+      iesg@ietf.org
+
+      Intended usage: COMMON
+
+      Restrictions on usage: N/A
+
+      Author: Brendan Moran, <brendan.moran.ietf@gmail.com>
+
+      Change Controller: IESG
+
+      Provisional registration?  No
+```
 
 #  Security Considerations
 
