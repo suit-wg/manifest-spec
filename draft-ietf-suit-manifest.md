@@ -48,6 +48,12 @@ author:
       organization: Inria
       email: koen.zandberg@inria.fr
 
+ -
+      ins: Ø. Rønningstad
+      name: Øyvind Rønningstad
+      organization: Nordic Semiconductor
+      email: oyvind.ronningstad@gmail.com
+
 normative:
   RFC4122:
   RFC8152:
@@ -234,13 +240,13 @@ Based on these assumptions, the manifest is structured to work with a pull parse
 3. Fetch payload(s).
 4. Install payload(s).
 
-When installation is complete, similar information can be used for validating and running images in a further three steps:
+When installation is complete, similar information can be used for validating and invoking images in a further three steps:
 
 5. Verify image(s).
 6. Load image(s).
-7. Run image(s).
+7. Invoke image(s).
 
-If verification and running is implemented in a bootloader, then the bootloader MUST also verify the signature of the manifest and the applicability of the manifest in order to implement secure boot workflows. The bootloader may add its own authentication, e.g. a Message Authentication Code (MAC), to the manifest in order to prevent further verifications.
+If verification and invocation is implemented in a bootloader, then the bootloader MUST also verify the signature of the manifest and the applicability of the manifest in order to implement secure boot workflows. The bootloader may add its own authentication, e.g. a Message Authentication Code (MAC), to the manifest in order to prevent further verifications.
 
 # Metadata Structure Overview {#metadata-structure-overview}
 
@@ -412,9 +418,9 @@ Once a valid, authentic manifest has been selected, the manifest processor MUST 
 
 For each listed component, the manifest processor MUST provide storage for the supported parameters. If the manifest processor does not have sufficient temporary storage to process the parameters for all components, it MAY process components serially for each command sequence. See {{serial-processing}} for more details.
 
-The manifest processor SHOULD check that the common sequence contains at least Check Vendor Identifier command and at least one Check Class Identifier command.
+The manifest processor SHOULD check that the shared sequence contains at least Check Vendor Identifier command and at least one Check Class Identifier command.
 
-Because the common sequence contains Check Vendor Identifier and Check Class Identifier command(s), no custom commands are permitted in the common sequence. This ensures that any custom commands are only executed by devices that understand them.
+Because the shared sequence contains Check Vendor Identifier and Check Class Identifier command(s), no custom commands are permitted in the shared sequence. This ensures that any custom commands are only executed by devices that understand them.
 
 If the manifest contains more than one component, each command sequence MUST begin with a Set Component Index.
 
@@ -433,7 +439,7 @@ Signature verification can be energy and time expensive on a constrained device.
 
 When executing Common prior to authenticity validation, the Manifest Processor MUST first evaluate the integrity of the manifest using the SUIT_Digest present in the authentication block.
 
-The guidelines in Creating Manifests ({{creating-manifests}}) require that the common section contains the applicability checks, so this section is sufficient for applicability verification. The parser MUST restrict acceptable commands to conditions and the following directives: Override Parameters, Set Parameters, Try Each, and Run Sequence ONLY. The manifest parser MUST NOT execute any command with side-effects outside the parser (for example, Run, Copy, Swap, or Fetch commands) prior to authentication and any such command MUST Abort. The Common Sequence MUST be executed again, in its entirety, after authenticity validation.
+The guidelines in Creating Manifests ({{creating-manifests}}) require that the common section contains the applicability checks, so this section is sufficient for applicability verification. The parser MUST restrict acceptable commands to conditions and the following directives: Override Parameters, Set Parameters, Try Each, and Run Sequence ONLY. The manifest parser MUST NOT execute any command with side-effects outside the parser (for example, Run, Copy, Swap, or Fetch commands) prior to authentication and any such command MUST Abort. The Shared sequence MUST be executed again, in its entirety, after authenticity validation.
 
 A Recipient MAY rely on network infrastructure to filter inapplicable manifests.
 
@@ -487,11 +493,13 @@ The following table describes the behavior of each command. "params" represents 
 | Check Vendor Identifier | assert(binary-match(current, current.params\[vendor-id\]))
 | Check Class Identifier | assert(binary-match(current, current.params\[class-id\]))
 | Verify Image | assert(binary-match(digest(current), current.params\[digest\]))
+| Check Content | assert(binary-match(current, current.params\[content\]))
 | Set Component Index | current := components\[arg\]
 | Override Parameters | current.params\[k\] := v for-each k,v in arg
 | Set Parameters | current.params\[k\] := v if not k in params for-each k,v in arg
-| Run  | run(current)
+| Invoke  | invoke(current)
 | Fetch | store(current, fetch(current.params\[uri\]))
+| Write | store(current, current.params\[content\])
 | Use Before  | assert(now() < arg)
 | Check Component Slot  | assert(current.slot-index == arg)
 | Check Device Identifier | assert(binary-match(current, current.params\[device-id\]))
@@ -500,7 +508,7 @@ The following table describes the behavior of each command. "params" represents 
 | Copy | store(current, current.params\[src-component\])
 | Swap | swap(current, current.params\[src-component\])
 | Run Sequence | exec(arg)
-| Run with Arguments | run(current, arg)
+| Invoke with Arguments | invoke(current, arg)
 
 ## Special Cases of Component Index {#index-true}
 
@@ -548,7 +556,14 @@ When the manifest processor encounters any of these scenarios the parallel proce
 * Set Strict Order = True.
 * Set Component Index.
 
-To perform more useful parallel operations, a manifest author may collect sequences of commands in a Run Sequence command. Then, each of these sequences MAY be run in parallel. Each sequence defaults to Strict Order = True. To isolate each sequence from each other sequence, each sequence MUST begin with a Set Component Index directive with the following exception: when the index is either True or an array of indices, the Set Component Index is implied. Any further Set Component Index directives MUST cause an Abort. This allows the interpreter that issues Run Sequence commands to check that the first element is correct, then issue the sequence to a parallel execution context to handle the remainder of the sequence.
+To perform more useful parallel operations, a manifest author may collect sequences of commands in a Run Sequence command. Then, each of these sequences MAY be run in parallel. There are several invocation options for Run Sequence:
+
+* Component Index is a positive integer, Strict Order is False: Strict Order is set to True before the sequence argument is run. The sequence argument MUST begin with set-component-index.
+* Component Index is True or an array of positive integers, Strict Order is False: The sequence argument is run once for each component (or each component in the array) the component index is set by the interpreter without a directive, and Strict Order is set to True before each iteration.
+* Component Index is a positive integer, Strict Order is True: No special considerations
+* Component Index is True or an array of positive integers, Strict Order is True: The sequence argument is run once for each component (or each component in the array) the component index is set by the interpreter without a directive.
+
+These rules isolate each sequence from each other sequence, ensuring that they operate as expected. When Strict Order = False, any further Set Component Index directives in the command sequence argument MUST cause an Abort. This allows the interpreter that issues Run Sequence commands to check that the first element is correct, then issue the sequence to a parallel execution context to handle the remainder of the sequence.
 
 # Creating Manifests {#creating-manifests}
 
@@ -568,7 +583,7 @@ NOTE: **A digest MUST always be set using Override Parameters.**
 
 The goal of the compatibility check template ensure that Recipients only install compatible images.
 
-In this template all information is contained in the common sequence and the following sequence of commands is used:
+In this template all information is contained in the shared sequence and the following sequence of commands is used:
 
 - Set Component Index directive (see {{suit-directive-set-component-index}})
 - Override Parameters directive (see {{suit-directive-override-parameters}}) for Vendor ID and Class ID (see {{secparameters}})
@@ -579,7 +594,7 @@ In this template all information is contained in the common sequence and the fol
 
 The goal of the Trusted Invocation template is to ensure that only authorized code is invoked; such as in Secure Boot or when a Trusted Application is loaded into a TEE.
 
-The following commands are placed into the common sequence:
+The following commands are placed into the shared sequence:
 
 - Set Component Index directive (see {{suit-directive-set-component-index}})
 - Override Parameters directive (see {{suit-directive-override-parameters}}) for Image Digest and Image Size (see {{secparameters}})
@@ -592,14 +607,14 @@ The system validation sequence contains the following commands:
 Then, the run sequence contains the following commands:
 
 - Set Component Index directive (see {{suit-directive-set-component-index}})
-- Run directive (see {{suit-directive-run-sequence}})
+- Invoke directive (see {{suit-directive-invoke}})
 
 
 ## Component Download Template {#firmware-download-template}
 
 The goal of the Component Download template is to acquire and store an image.
 
-The following commands are placed into the common sequence:
+The following commands are placed into the shared sequence:
 
 - Set Component Index directive (see {{suit-directive-set-component-index}})
 - Override Parameters directive (see {{suit-directive-override-parameters}}) for Image Digest and Image Size (see {{secparameters}})
@@ -679,7 +694,7 @@ The following commands are placed in the fetch block or install block
         - Set Parameters directive (see {{suit-directive-override-parameters}}) for URI B (see {{secparameters}})
 - Fetch
 
-If Trusted Invocation ({{template-secure-boot}}) is used, only the run sequence is added to this template, since the common sequence is populated by this template:
+If Trusted Invocation ({{template-secure-boot}}) is used, only the run sequence is added to this template, since the shared sequence is populated by this template:
 
 - Set Component Index directive (see {{suit-directive-set-component-index}})
 - Try Each
@@ -689,7 +704,7 @@ If Trusted Invocation ({{template-secure-boot}}) is used, only the run sequence 
     - Second Sequence:
         - Override Parameters directive (see {{suit-directive-override-parameters}}, {{secparameters}}) for Slot B
         - Check Slot Condition (see {{suit-condition-component-slot}})
-- Run
+- Invoke
 
 NOTE: Any test can be used to select between images, Check Slot Condition is used in this template because it is a typical test for execute-in-place devices.
 
@@ -795,11 +810,11 @@ suit-text is OPTIONAL to implement.
 
 ### suit-common {#manifest-common}
 
-suit-common encodes all the information that is shared between each of the command sequences, including: suit-components, and suit-common-sequence. suit-common is REQUIRED to implement.
+suit-common encodes all the information that is shared between each of the command sequences, including: suit-components, and suit-shared-sequence. suit-common is REQUIRED to implement.
 
 suit-components is a list of [SUIT_Component_Identifier](#suit-component-identifier) blocks that specify the component identifiers that will be affected by the content of the current manifest. suit-components is REQUIRED to implement.
 
-suit-common-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-common-sequence include setting expected Recipient identity and image digests when they are conditional (see {{suit-directive-try-each}} and {{a-b-template}} for more information on conditional sequences). suit-common-sequence is RECOMMENDED to implement. It is REQUIRED if the optimizations described in {{minimal-sigs}} will be used. Whenever a parameter or Try Each command is required by more than one Command Sequence, placing that parameter or command in suit-common-sequence results in a smaller encoding.
+suit-shared-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-shared-sequence include setting expected Recipient identity and image digests when they are conditional (see {{suit-directive-try-each}} and {{a-b-template}} for more information on conditional sequences). suit-shared-sequence is RECOMMENDED to implement. It is REQUIRED if the optimizations described in {{minimal-sigs}} will be used. Whenever a parameter or Try Each command is required by more than one Command Sequence, placing that parameter or command in suit-shared-sequence results in a smaller encoding.
 
 #### SUIT_Component_Identifier {#suit-component-identifier}
 
@@ -821,7 +836,7 @@ A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take
 
 4. Image Loading: suit-load is a SUIT_Command_Sequence to execute in order to prepare a payload for execution. Typical actions include copying an image from permanent storage into RAM, optionally including actions such as decryption or decompression. suit-load is OPTIONAL to implement.
 
-5. Run or Boot: suit-run is a SUIT_Command_Sequence to execute in order to run an image. suit-run typically contains a single instruction: the "run" directive. suit-run is OPTIONAL to implement.
+5. Invoke or Boot: suit-invoke is a SUIT_Command_Sequence to execute in order to invoke an image. suit-invoke typically contains a single instruction: the "invoke" directive, but may also contain an image condition. suit-invoke is OPTIONAL to implement.
 
 Goals 1,2 form the Update Procedure. Goals 4,5,6 form the Invocation Procedure.
 
@@ -900,10 +915,11 @@ Class ID | suit-parameter-class-identifier | {{suit-parameter-class-identifier}}
 Device ID | suit-parameter-device-identifier | {{suit-parameter-device-identifier}}
 Image Digest | suit-parameter-image-digest | {{suit-parameter-image-digest}}
 Image Size | suit-parameter-image-size | {{suit-parameter-image-size}}
+Content | suit-parameter-content | {{suit-parameter-content}}
 Component Slot | suit-parameter-component-slot | {{suit-parameter-component-slot}}
 URI | suit-parameter-uri | {{suit-parameter-uri}}
 Source Component | suit-parameter-source-component | {{suit-parameter-source-component}}
-Run Args | suit-parameter-run-args | {{suit-parameter-run-args}}
+Invoke Args | suit-parameter-invoke-args | {{suit-parameter-invoke-args}}
 Fetch Arguments | suit-parameter-fetch-arguments | {{suit-parameter-fetch-arguments}}
 Strict Order | suit-parameter-strict-order | {{suit-parameter-strict-order}}
 Soft Failure | suit-parameter-soft-failure | {{suit-parameter-soft-failure}}
@@ -1018,6 +1034,14 @@ The size of the firmware image in bytes. This size is encoded as a positive inte
 
 This parameter sets the slot index of a component. Some components support multiple possible Slots (offsets into a storage area). This parameter describes the intended Slot to use, identified by its index into the component's storage area. This slot MUST be encoded as a positive integer.
 
+#### suit-parameter-content {#suit-parameter-content}
+
+A block of raw data for use with {{suit-directive-write}}. Contains a byte string of data to be written to a specified component ID in the same way as a fetch or a copy.
+
+If data is encoded this way, it should be small. Large payloads written via this method will prevent the manifest from being held in memory during validation. Typical applications include small configuration parameters.
+
+If suit-parameter-content is instantiated in a severable command sequence, then this becomes functionally very similar to an integrated payload, which may be a better choice.
+
 #### suit-parameter-uri {#suit-parameter-uri}
 
 A URI Reference ({{RFC3986}}) from which to fetch a resource, encoded as a text string. CBOR Tag 32 is not used because the meaning of the text string is unambiguous in this context.
@@ -1026,9 +1050,9 @@ A URI Reference ({{RFC3986}}) from which to fetch a resource, encoded as a text 
 
 This parameter sets the source component to be used with either suit-directive-copy ({{suit-directive-copy}}) or with suit-directive-swap ({{suit-directive-swap}}). The current Component, as set by suit-directive-set-component-index defines the destination, and suit-parameter-source-component defines the source.
 
-#### suit-parameter-run-args {#suit-parameter-run-args}
+#### suit-parameter-invoke-args {#suit-parameter-invoke-args}
 
-This parameter contains an encoded set of arguments for suit-directive-run ({{suit-directive-run}}). The arguments MUST be provided as an implementation-defined bstr.
+This parameter contains an encoded set of arguments for suit-directive-invoke ({{suit-directive-invoke}}). The arguments MUST be provided as an implementation-defined bstr.
 
 #### suit-parameter-fetch-arguments
 
@@ -1052,7 +1076,7 @@ When suit-directive-run-sequence is invoked, Soft Failure defaults to False. An 
 
 #### suit-parameter-custom
 
-This parameter is an extension point for any proprietary, application specific conditions and directives. It MUST NOT be used in the common sequence. This effectively scopes each custom command to a particular Vendor Identifier/Class Identifier pair.
+This parameter is an extension point for any proprietary, application specific conditions and directives. It MUST NOT be used in the shared sequence. This effectively scopes each custom command to a particular Vendor Identifier/Class Identifier pair.
 
 ### SUIT_Condition
 
@@ -1064,6 +1088,7 @@ Vendor Identifier | suit-condition-vendor-identifier | {{identifier-conditions}}
 Class Identifier | suit-condition-class-identifier | {{identifier-conditions}}
 Device Identifier | suit-condition-device-identifier | {{identifier-conditions}}
 Image Match | suit-condition-image-match | {{suit-condition-image-match}}
+Check Content | suit-condition-check-content | {{suit-condition-check-content}}
 Component Slot | suit-condition-component-slot | {{suit-condition-component-slot}}
 Abort | suit-condition-abort | {{suit-condition-abort}}
 Custom Condition | suit-condition-custom | {{SUIT_Condition_Custom}}
@@ -1088,6 +1113,22 @@ Each identifier condition compares the corresponding identifier parameter to a p
 
 Verify that the current component matches the suit-parameter-image-digest ({{suit-parameter-image-digest}}) for the current component. The digest is verified against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-match is REQUIRED to implement.
 
+#### suit-condition-check-content {#suit-condition-check-content}
+
+This directive compares the specified component identifier to the data indicated by suit-parameter-content. This functions similarly to suit-condition-image-match, however it does a direct, byte-by-byte comparison rather than a digest-based comparison. Because it is possible that an early stop to check-content could reveal information through timing, suit-condition-check-content MUST be constant time: no early exits. This MAY be implemented as follows:
+
+```
+// content & component must be same length
+// returns 0 for match
+bool check_content(content, component, length) {
+    int residual = 0
+    for (i = 0; i < length; i++) {
+        residual |= content[i] ^ component[i];
+    }
+    return residual;
+}
+```
+
 #### suit-condition-component-slot
 
 Verify that the slot index of the current component matches the slot index set in suit-parameter-component-slot ({{suit-parameter-component-slot}}). This condition allows a manifest to select between several images to match a target slot.
@@ -1110,7 +1151,8 @@ Try Each | suit-directive-try-each | {{suit-directive-try-each}}
 Override Parameters | suit-directive-override-parameters | {{suit-directive-override-parameters}}
 Fetch | suit-directive-fetch | {{suit-directive-fetch}}
 Copy | suit-directive-copy | {{suit-directive-copy}}
-Run | suit-directive-run | {{suit-directive-run}}
+Write | suit-directive-write | {{suit-directive-write}}
+Invoke | suit-directive-invoke | {{suit-directive-invoke}}
 Run Sequence | suit-directive-run-sequence | {{suit-directive-run-sequence}}
 Swap | suit-directive-swap | {{suit-directive-swap}}
 
@@ -1133,7 +1175,7 @@ If component index is set to True when a command is invoked, then the command ap
 
 #### suit-directive-try-each {#suit-directive-try-each}
 
-This command runs several SUIT_Command_Sequence instances, one after another, in a strict order. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.
+This command runs several SUIT_Command_Sequence instances, one after another, in a strict order, until one succeeds or the list is exhausted. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.
 
 suit-parameter-soft-failure ({{suit-parameter-soft-failure}}) is initialized to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.
 
@@ -1165,15 +1207,22 @@ suit-directive-copy reads its source from suit-parameter-source-component ({{sui
 
 If either the source component parameter or the source component itself is absent, this command fails.
 
-#### suit-directive-run {#suit-directive-run}
+#### suit-directive-write {#suit-directive-write}
 
-suit-directive-run directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor MAY be unloaded and execution continues in the Component Index. Arguments are provided to suit-directive-run through suit-parameter-run-arguments ({{suit-parameter-run-args}}) and are forwarded to the executable code located in Component Index in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.
+This directive writes a small block of data, specified in {{suit-parameter-content}}, to a component. 
+
+Encoding Considerations: Careful consideration must be taken to determine whether it is more appropriate to use an integrated payload or to use {{suit-paramter-content}} for a particular application. While the encoding of suit-directive-write is smaller than an integrated payload, a large suit-parameter-content payload may prevent the manifest processor from holding the command sequence in memory while executing it.
+
+#### suit-directive-invoke {#suit-directive-invoke}
+
+suit-directive-invoke directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor MAY be unloaded and execution continues in the Component Index. Arguments are provided to suit-directive-invoke through suit-parameter-invoke-arguments ({{suit-parameter-invoke-args}}) and are forwarded to the executable code located in Component Index in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.
 
 If the executable code at Component Index is constructed in such a way that it does not unload the manifest processor, then the manifest processor may resume execution after the executable completes. This allows the manifest processor to invoke suitable helpers and to verify them with image conditions.
 
 #### suit-directive-run-sequence {#suit-directive-run-sequence}
 
-To enable conditional commands, and to allow several strictly ordered sequences to be executed out-of-order, suit-directive-run-sequence allows the manifest processor to execute its argument as a SUIT_Command_Sequence. The argument must be wrapped in a bstr.
+To enable conditional commands, and to allow several strictly ordered sequences to be executed out-of-order, suit-directive-run-sequence allows the manifest processor to execute its argument as a SUIT_Command_Sequence. The argument must be wrapped in a bstr. This also allows a sequence of instructions to be iterated over, once for each current component index, when component-index = true or component-index = list. See {{index-true}}.
+
 
 When a sequence is executed, any failure of a condition causes immediate termination of the sequence.
 
@@ -1296,18 +1345,19 @@ Label | Name | Reference
 3 | Image Match | {{suit-condition-image-match}}
 4 | Reserved
 5 | Component Slot | {{suit-condition-component-slot}}
+6 | Check Content | {{suit-condition-check-content}}
 12 | Set Component Index | {{suit-directive-set-component-index}}
 13 | Reserved
 14 | Abort
 15 | Try Each | {{suit-directive-try-each}}
 16 | Reserved
 17 | Reserved
-18 | Reserved
+18 | Write Content | {{suit-directive-write}}
 19 | Reserved
 20 | Override Parameters | {{suit-directive-override-parameters}}
 21 | Fetch | {{suit-directive-fetch}}
 22 | Copy | {{suit-directive-copy}}
-23 | Run | {{suit-directive-run}}
+23 | Invoke | {{suit-directive-invoke}}
 24 | Device Identifier | {{identifier-conditions}}
 25 | Reserved
 26 | Reserved
@@ -1316,7 +1366,7 @@ Label | Name | Reference
 29 | Reserved
 30 | Reserved
 31 | Swap | {{suit-directive-swap}}
-32 | Run Sequence | {{suit-directive-run-sequence}}
+32 | Run Sequence | {{suit-directive-invoke-sequence}}
 33 | Reserved
 nint | Custom Condition | {{SUIT_Condition_Custom}}
 
@@ -1334,12 +1384,12 @@ Label | Name | Reference
 12 | Strict Order | {{suit-parameter-strict-order}}
 13 | Soft Failure | {{suit-parameter-soft-failure}}
 14 | Image Size | {{suit-parameter-image-size}}
-18 | Reserved
+18 | Content | {{suit-parameter-content}}
 19 | Reserved
 20 | Reserved
 21 | URI | {{suit-parameter-uri}}
 22 | Source Component | {{suit-parameter-source-component}}
-23 | Run Args | {{suit-parameter-run-args}}
+23 | Invoke Args | {{suit-parameter-invoke-args}}
 24 | Device ID | {{suit-parameter-device-identifier}}
 26 | Reserved
 27 | Reserved
@@ -1540,7 +1590,7 @@ suit-condition-image-match | 1 | 1 | 1 | 1
 suit-condition-component-slot | 0 | 1 | 0 | 1
 suit-directive-fetch | 0 | 0 | 1 | 0
 suit-directive-copy | 0 | 0 | 1 | 0
-suit-directive-run | 0 | 0 | 1 | 0
+suit-directive-invoke | 0 | 0 | 1 | 0
 
 ## Example 0: Secure Boot
 
@@ -1656,7 +1706,7 @@ Byte string wrappers are used in several places in the suit manifest. The primar
 
 The elements of the suit envelope are wrapped both to set the extents used by the parser and to simplify integrity checks by clearly defining the length of each element.
 
-The common block is re-parsed in order to find components identifiers from their indices, to find dependency prefixes and digests from their identifiers, and to find the common sequence. The common sequence is wrapped so that it matches other sequences, simplifying the code path.
+The common block is re-parsed in order to find components identifiers from their indices, to find dependency prefixes and digests from their identifiers, and to find the shared sequence. The shared sequence is wrapped so that it matches other sequences, simplifying the code path.
 
 A severed SUIT command sequence will appear in the envelope, so it must be wrapped as with all envelope elements. For consistency, command sequences are also wrapped in the manifest. This also allows the parser to discern the difference between a command sequence and a SUIT_Digest.
 
@@ -1678,6 +1728,7 @@ Vendor Identifier | {{uuid-identifiers}} | REQUIRED
 Class Identifier | {{uuid-identifiers}} | REQUIRED
 Device Identifier | {{uuid-identifiers}} | OPTIONAL
 Image Match | {{suit-condition-image-match}} | REQUIRED
+Check Content | {{suit-condition-check-content}} | OPTIONAL
 Component Slot | {{suit-condition-component-slot}} | OPTIONAL
 Abort | {{suit-condition-abort}} | OPTIONAL
 Custom Condition | {{SUIT_Condition_Custom}} | OPTIONAL
@@ -1687,12 +1738,13 @@ The subsequent table shows the directives.
 Name | Reference | Implementation
 ---|---|---
 Set Component Index | {{suit-directive-set-component-index}} | REQUIRED if more than one component
+Write Content | {{suit-directive-write}} | OPTIONAL
 Try Each | {{suit-directive-try-each}} | OPTIONAL
 Override Parameters | {{suit-directive-override-parameters}} | REQUIRED
 Fetch | {{suit-directive-fetch}} | REQUIRED for Updater
 Copy | {{suit-directive-copy}} | OPTIONAL
-Run | {{suit-directive-run}} | REQUIRED for Bootloader
-Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
+Invoke | {{suit-directive-invoke}} | REQUIRED for Bootloader
+Run Sequence | {{suit-directive-invoke-sequence}} | OPTIONAL
 Swap | {{suit-directive-swap}} | OPTIONAL
 
 The subsequent table shows the parameters.
@@ -1704,9 +1756,10 @@ Class ID | {{suit-parameter-class-identifier}} | REQUIRED
 Image Digest | {{suit-parameter-image-digest}} | REQUIRED
 Image Size | {{suit-parameter-image-size}} | REQUIRED
 Component Slot | {{suit-parameter-component-slot}} | OPTIONAL
+Content | {{suit-parameter-content}} | OPTIONAL
 URI | {{suit-parameter-uri}} | REQUIRED for Updater
 Source Component | {{suit-parameter-source-component}} | OPTIONAL
-Run Args | {{suit-parameter-run-args}} | OPTIONAL
+Invoke Args | {{suit-parameter-invoke-args}} | OPTIONAL
 Device ID | {{suit-parameter-device-identifier}} | OPTIONAL
 Strict Order | {{suit-parameter-strict-order}} | OPTIONAL
 Soft Failure | {{suit-parameter-soft-failure}} | OPTIONAL
