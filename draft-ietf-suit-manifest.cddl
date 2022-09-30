@@ -86,15 +86,15 @@ suit-cose-hash-algs /= cose-alg-shake256
 SUIT_Component_Identifier =  [* bstr]
 
 SUIT_Shared_Sequence = [
-    + ( SUIT_Condition // SUIT_Common_Commands )
+    + ( SUIT_Condition // SUIT_Shared_Commands )
 ]
 
-SUIT_Common_Commands //= (suit-directive-set-component-index,  IndexArg)
-SUIT_Common_Commands //= (suit-directive-run-sequence,
+SUIT_Shared_Commands //= (suit-directive-set-component-index,  IndexArg)
+SUIT_Shared_Commands //= (suit-directive-run-sequence,
     bstr .cbor SUIT_Shared_Sequence)
-SUIT_Common_Commands //= (suit-directive-try-each,
+SUIT_Shared_Commands //= (suit-directive-try-each,
     SUIT_Directive_Try_Each_Argument_Common)
-SUIT_Common_Commands //= (suit-directive-override-parameters,
+SUIT_Shared_Commands //= (suit-directive-override-parameters,
     {+ $$SUIT_Parameters})
 
 IndexArg /= uint
