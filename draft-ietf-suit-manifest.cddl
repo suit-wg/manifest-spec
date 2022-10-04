@@ -93,7 +93,7 @@ SUIT_Shared_Commands //= (suit-directive-set-component-index,  IndexArg)
 SUIT_Shared_Commands //= (suit-directive-run-sequence,
     bstr .cbor SUIT_Shared_Sequence)
 SUIT_Shared_Commands //= (suit-directive-try-each,
-    SUIT_Directive_Try_Each_Argument_Common)
+    SUIT_Directive_Try_Each_Argument_Shared)
 SUIT_Shared_Commands //= (suit-directive-override-parameters,
     {+ $$SUIT_Parameters})
 
@@ -102,7 +102,7 @@ IndexArg /= true
 IndexArg /= [+uint]
 
 
-SUIT_Directive_Try_Each_Argument_Common = [
+SUIT_Directive_Try_Each_Argument_Shared = [
     2* bstr .cbor SUIT_Shared_Sequence,
     ?nil
 ]

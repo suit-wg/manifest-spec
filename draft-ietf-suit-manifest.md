@@ -559,11 +559,11 @@ When the manifest processor encounters any of these scenarios the parallel proce
 To perform more useful parallel operations, a manifest author may collect sequences of commands in a Run Sequence command. Then, each of these sequences MAY be run in parallel. There are several invocation options for Run Sequence:
 
 * Component Index is a positive integer, Strict Order is False: Strict Order is set to True before the sequence argument is run. The sequence argument MUST begin with set-component-index.
-* Component Index is true or an array of positive integers, Strict Order is False: The sequence argument is run once for each component (or each component in the array) the component index is set by the interpreter without a directive, and Strict Order is set to True before each iteration.
+* Component Index is true or an array of positive integers, Strict Order is False: The sequence argument is run once for each component (or each component in the array); the manifest processor presets the component index and Strict Order = True before each iteration of the sequence argument.
 * Component Index is a positive integer, Strict Order is True: No special considerations
-* Component Index is True or an array of positive integers, Strict Order is True: The sequence argument is run once for each component (or each component in the array) the component index is set by the interpreter without a directive.
+* Component Index is True or an array of positive integers, Strict Order is True: The sequence argument is run once for each component (or each component in the array); the manifest processor presets the component index before each iteration of the sequence argument.
 
-These rules isolate each sequence from each other sequence, ensuring that they operate as expected. When Strict Order = False, any further Set Component Index directives in the command sequence argument MUST cause an Abort. This allows the interpreter that issues Run Sequence commands to check that the first element is correct, then issue the sequence to a parallel execution context to handle the remainder of the sequence.
+These rules isolate each sequence from each other sequence, ensuring that they operate as expected. When Strict Order = False, any further Set Component Index directives in the Run Sequence command sequence argument MUST cause an Abort. This allows the interpreter that issues Run Sequence commands to check that the first element is correct, then issue the sequence to a parallel execution context to handle the remainder of the sequence.
 
 # Creating Manifests {#creating-manifests}
 
