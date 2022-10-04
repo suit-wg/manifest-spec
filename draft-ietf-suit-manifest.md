@@ -1036,7 +1036,7 @@ This parameter sets the slot index of a component. Some components support multi
 
 #### suit-parameter-content {#suit-parameter-content}
 
-A block of raw data for use with {{suit-directive-write}}. Contains a byte string of data to be written to a specified component ID in the same way as a fetch or a copy.
+A block of raw data for use with {{suit-directive-write}}. It contains a byte string of data to be written to a specified component ID in the same way as a fetch or a copy.
 
 If data is encoded this way, it should be small. Large payloads written via this method will prevent the manifest from being held in memory during validation. Typical applications include small configuration parameters.
 
