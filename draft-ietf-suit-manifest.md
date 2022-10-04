@@ -1211,7 +1211,7 @@ If either the source component parameter or the source component itself is absen
 
 This directive writes a small block of data, specified in {{suit-parameter-content}}, to a component. 
 
-Encoding Considerations: Careful consideration must be taken to determine whether it is more appropriate to use an integrated payload or to use {{suit-paramter-content}} for a particular application. While the encoding of suit-directive-write is smaller than an integrated payload, a large suit-parameter-content payload may prevent the manifest processor from holding the command sequence in memory while executing it.
+Encoding Considerations: Careful consideration must be taken to determine whether it is more appropriate to use an integrated payload or to use {{suit-parameter-content}} for a particular application. While the encoding of suit-directive-write is smaller than an integrated payload, a large suit-parameter-content payload may prevent the manifest processor from holding the command sequence in memory while executing it.
 
 #### suit-directive-invoke {#suit-directive-invoke}
 
