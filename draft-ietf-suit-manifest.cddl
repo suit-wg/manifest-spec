@@ -166,7 +166,7 @@ $$SUIT_Parameters //= (suit-parameter-device-identifier => RFC4122_UUID)
 
 $$SUIT_Parameters //= (suit-parameter-custom => int/bool/tstr/bstr)
 
-$$SUIT_Parameters //= (suit-parameter-raw-data => bstr)
+$$SUIT_Parameters //= (suit-parameter-content => bstr)
 $$SUIT_Parameters //= (suit-parameter-strict-order => bool)
 $$SUIT_Parameters //= (suit-parameter-soft-failure => bool)
 
