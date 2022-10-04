@@ -559,7 +559,7 @@ When the manifest processor encounters any of these scenarios the parallel proce
 To perform more useful parallel operations, a manifest author may collect sequences of commands in a Run Sequence command. Then, each of these sequences MAY be run in parallel. There are several invocation options for Run Sequence:
 
 * Component Index is a positive integer, Strict Order is False: Strict Order is set to True before the sequence argument is run. The sequence argument MUST begin with set-component-index.
-* Component Index is True or an array of positive integers, Strict Order is False: The sequence argument is run once for each component (or each component in the array) the component index is set by the interpreter without a directive, and Strict Order is set to True before each iteration.
+* Component Index is true or an array of positive integers, Strict Order is False: The sequence argument is run once for each component (or each component in the array) the component index is set by the interpreter without a directive, and Strict Order is set to True before each iteration.
 * Component Index is a positive integer, Strict Order is True: No special considerations
 * Component Index is True or an array of positive integers, Strict Order is True: The sequence argument is run once for each component (or each component in the array) the component index is set by the interpreter without a directive.
 
