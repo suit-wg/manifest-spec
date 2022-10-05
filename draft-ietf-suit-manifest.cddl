@@ -68,12 +68,6 @@ SUIT_Common = {
 
 SUIT_Components           = [ + SUIT_Component_Identifier ]
 
-SUIT_Dependency = {
-    suit-dependency-digest => SUIT_Digest,
-    ? suit-dependency-prefix => SUIT_Component_Identifier,
-    * $$SUIT_Dependency-extensions,
-}
-
 ;REQUIRED to implement:
 suit-cose-hash-algs /= cose-alg-sha-256
 
