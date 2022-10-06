@@ -13,9 +13,9 @@ h'b3e6a52776bf3ed218feba031c609c98260e1a52fc1f019683edb6d1c5c4a379'
                     / unprotected / {
                     },
                     / payload / F6 / nil /,
-                    / signature / h'9ff1d63474897d302f7ec4ab98cb07e22c
-9853b92a56e3ec9286a4e248d4ac59665de35824c1caad4b056b35e8a40c60086f36eb
-519e31c7710db4fdc0b99eff'
+                    / signature / h'3a4c404585cf111bb5556a0ce269aa56e7
+56d998f09a1179640933c44230f6a7d2ea2331f9d904d84f39496721cf2f76ee85f06b
+b71ab2179c833292f0d227bb'
                 ]) >>
             ]
         ] >>,
@@ -26,7 +26,7 @@ h'b3e6a52776bf3ed218feba031c609c98260e1a52fc1f019683edb6d1c5c4a379'
                 / components / 2:[
                     [h'00']
                 ],
-                / common-sequence / 4:<< [
+                / shared-sequence / 4:<< [
                     / directive-override-parameters / 20,{
                         / vendor-id /
 1:h'fa6b4a53d5ad5fdfbe9de663e4d41ffe' / fa6b4a53-d5ad-5fdf-
@@ -124,10 +124,10 @@ Envelope with COSE authentication object:
 
 ~~~
 d86ba2025873825824822f5820b3e6a52776bf3ed218feba031c609c9826
-0e1a52fc1f019683edb6d1c5c4a379584ad28443a10126a0f658409ff1d6
-3474897d302f7ec4ab98cb07e22c9853b92a56e3ec9286a4e248d4ac5966
-5de35824c1caad4b056b35e8a40c60086f36eb519e31c7710db4fdc0b99e
-ff0359010fa5010102030358a4a2028181410004589b8814a20150fa6b4a
+0e1a52fc1f019683edb6d1c5c4a379584ad28443a10126a0f658403a4c40
+4585cf111bb5556a0ce269aa56e756d998f09a1179640933c44230f6a7d2
+ea2331f9d904d84f39496721cf2f76ee85f06bb71ab2179c833292f0d227
+bb0359010fa5010102030358a4a2028181410004589b8814a20150fa6b4a
 53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab
 450f8258348614a10500050514a2035824822f5820001122334455667788
 99aabbccddeeff0123456789abcdeffedcba98765432100e1987d0583686

@@ -1,7 +1,7 @@
 ---
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-19
+docname: draft-ietf-suit-manifest-20
 category: std
 
 ipr: trust200902
@@ -1366,7 +1366,7 @@ Label | Name | Reference
 29 | Reserved
 30 | Reserved
 31 | Swap | {{suit-directive-swap}}
-32 | Run Sequence | {{suit-directive-invoke-sequence}}
+32 | Run Sequence | {{suit-directive-run-sequence}}
 33 | Reserved
 nint | Custom Condition | {{SUIT_Condition_Custom}}
 
@@ -1485,9 +1485,9 @@ the content is a SUIT envelope.
       Published specification: [[This RFC]]
 
       Applications that use this media type: Primarily used for 
-	    Firmware and software updates although the content may
-	    also contain configuration data and other information
-	    related to software and firmware.
+        Firmware and software updates although the content may
+        also contain configuration data and other information
+        related to software and firmware.
 
       Fragment identifier considerations: N/A
 
@@ -1744,7 +1744,7 @@ Override Parameters | {{suit-directive-override-parameters}} | REQUIRED
 Fetch | {{suit-directive-fetch}} | REQUIRED for Updater
 Copy | {{suit-directive-copy}} | OPTIONAL
 Invoke | {{suit-directive-invoke}} | REQUIRED for Bootloader
-Run Sequence | {{suit-directive-invoke-sequence}} | OPTIONAL
+Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
 Swap | {{suit-directive-swap}} | OPTIONAL
 
 The subsequent table shows the parameters.
