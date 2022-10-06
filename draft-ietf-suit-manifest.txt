@@ -16,7 +16,7 @@ Expires: 9 April 2023                                        H. Birkholz
 
 A Concise Binary Object Representation (CBOR)-based Serialization Format
     for the Software Updates for Internet of Things (SUIT) Manifest
-                      draft-ietf-suit-manifest-19
+                      draft-ietf-suit-manifest-20
 
 Abstract
 
