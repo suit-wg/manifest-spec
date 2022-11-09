@@ -21,7 +21,7 @@ of operations, rather than declaring the metadata.
     " name="description">
 <meta content="xml2rfc 3.15.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
-<meta content="draft-ietf-suit-manifest-20" name="ietf.draft">
+<meta content="draft-ietf-suit-manifest-21" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.15.0
     Python 3.9.6
@@ -1198,11 +1198,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CBOR-based SUIT Manifest</td>
-<td class="right">October 2022</td>
+<td class="right">November 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Moran, et al.</td>
-<td class="center">Expires 9 April 2023</td>
+<td class="center">Expires 13 May 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1212,15 +1212,15 @@ li > p:last-of-type {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">SUIT</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-suit-manifest-20</dd>
+<dd class="internet-draft">draft-ietf-suit-manifest-21</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-10-06" class="published">6 October 2022</time>
+<time datetime="2022-11-09" class="published">9 November 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-04-09">9 April 2023</time></dd>
+<dd class="expires"><time datetime="2023-05-13">13 May 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1276,7 +1276,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 9 April 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 May 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1832,6 +1832,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 </li>
           <li id="section-4.2-6.4">Install payload(s).<a href="#section-4.2-6.4" class="pilcrow">¶</a>
 </li>
+          <li id="section-4.2-6.5">Verify image(s).<a href="#section-4.2-6.5" class="pilcrow">¶</a>
+</li>
         </ol>
 <p id="section-4.2-7">When installation is complete, similar information can be used for validating and invoking images in a further three steps:<a href="#section-4.2-7" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.2-8">
@@ -1967,7 +1969,7 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
           </h4>
 <p id="section-5.3.3-1">Command sequences provide the instructions that a Recipient requires in order to install or use an image. These sequences tell a device to set parameter values, test system parameters, copy data from one place to another, transform data, digest data, and run code.<a href="#section-5.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.3-2">Command sequences are broken up into three groups: Common Command Sequence (see <a href="#ovr-common" class="auto internal xref">Section 5.3.2</a>), update commands, and secure boot commands.<a href="#section-5.3.3-2" class="pilcrow">¶</a></p>
-<p id="section-5.3.3-3">Update Command Sequences are: Payload Fetch, and Payload Installation. An Update Procedure is the complete set of each Update Command Sequence, each preceded by the Common Command Sequence.<a href="#section-5.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.3.3-3">Update Command Sequences are: Payload Fetch, Payload Installation and, System Validation. An Update Procedure is the complete set of each Update Command Sequence, each preceded by the Common Command Sequence.<a href="#section-5.3.3-3" class="pilcrow">¶</a></p>
 <p id="section-5.3.3-4">Invocation Command Sequences are: System Validation, Image Loading, and Image Invocation. An Invocation Procedure is the complete set of each Invocation Command Sequence, each preceded by the Common Command Sequence.<a href="#section-5.3.3-4" class="pilcrow">¶</a></p>
 <p id="section-5.3.3-5">Command Sequences are grouped into these sets to ensure that there is common coordination between dependencies and dependents on when to execute each command (dependencies are not defined in this specification).<a href="#section-5.3.3-5" class="pilcrow">¶</a></p>
 <p id="section-5.3.3-6">See <a href="#manifest-commands" class="auto internal xref">Section 8.4.6</a> for more detail.<a href="#section-5.3.3-6" class="pilcrow">¶</a></p>
@@ -2635,7 +2637,7 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
           <li class="normal" id="section-8.4-2.7">human-readable text describing the manifest found in the SUIT_Envelope (see <a href="#manifest-digest-text" class="auto internal xref">Section 8.4.4</a>)<a href="#section-8.4-2.7" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-8.4-3">The Text section, or any Command Sequence of the Update Procedure (Image Fetch, Image Installation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable element. Severable elements are RECOMMENDED to implement. In particular, the human-readable text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See <a href="#integrity-checks" class="auto internal xref">Section 8.4.11</a> for more detail.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
+<p id="section-8.4-3">The Text section, or any Command Sequence of the Update Procedure (Image Fetch, Image Installation and, System Validation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable element. Severable elements are RECOMMENDED to implement. In particular, the human-readable text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See <a href="#integrity-checks" class="auto internal xref">Section 8.4.11</a> for more detail.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
 <div id="manifest-version">
 <section id="section-8.4.1">
           <h4 id="name-suit-manifest-version">
@@ -2780,7 +2782,7 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
             <li id="section-8.4.6-2.5">Invoke or Boot: suit-invoke is a SUIT_Command_Sequence to execute in order to invoke an image. suit-invoke typically contains a single instruction: the "invoke" directive, but may also contain an image condition. suit-invoke is OPTIONAL to implement.<a href="#section-8.4.6-2.5" class="pilcrow">¶</a>
 </li>
           </ol>
-<p id="section-8.4.6-3">Goals 1,2 form the Update Procedure. Goals 4,5,6 form the Invocation Procedure.<a href="#section-8.4.6-3" class="pilcrow">¶</a></p>
+<p id="section-8.4.6-3">Goals 1,2,3 form the Update Procedure. Goals 3,4,5 form the Invocation Procedure.<a href="#section-8.4.6-3" class="pilcrow">¶</a></p>
 <p id="section-8.4.6-4">Each Command Sequence follows exactly the same structure to ensure that the parser is as simple as possible.<a href="#section-8.4.6-4" class="pilcrow">¶</a></p>
 <p id="section-8.4.6-5">Lists of commands are constructed from two kinds of element:<a href="#section-8.4.6-5" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.4.6-6">
@@ -4468,27 +4470,27 @@ the content is a SUIT envelope.<a href="#section-11.9-1" class="pilcrow">¶</a><
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-firmware-encryption">[I-D.ietf-suit-firmware-encryption]</dt>
         <dd>
-<span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Housley, R.</span>, <span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Brown, D.</span>, and <span class="refAuthor">K. Takayama</span>, <span class="refTitle">"Encrypted Payloads in SUIT Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-firmware-encryption-08</span>, <time datetime="2022-10-06" class="refDate">6 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-08.txt">https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-08.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Housley, R.</span>, <span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Brown, D.</span>, and <span class="refAuthor">K. Takayama</span>, <span class="refTitle">"Encrypted Payloads in SUIT Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-firmware-encryption-09</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-09.txt">https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-09.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-report">[I-D.ietf-suit-report]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span> and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Secure Reporting of Update Status"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-report-02</span>, <time datetime="2022-07-11" class="refDate">11 July 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-report-02.txt">https://www.ietf.org/archive/id/draft-ietf-suit-report-02.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span> and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Secure Reporting of Update Status"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-report-04</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-report-04.txt">https://www.ietf.org/archive/id/draft-ietf-suit-report-04.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-trust-domains">[I-D.ietf-suit-trust-domains]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"SUIT Manifest Extensions for Multiple Trust Domains"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-trust-domains-00</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-trust-domains-00.txt">https://www.ietf.org/archive/id/draft-ietf-suit-trust-domains-00.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span> and <span class="refAuthor">K. Takayama</span>, <span class="refTitle">"SUIT Manifest Extensions for Multiple Trust Domains"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-trust-domains-01</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-trust-domains-01.txt">https://www.ietf.org/archive/id/draft-ietf-suit-trust-domains-01.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-update-management">[I-D.ietf-suit-update-management]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"Update Management Extensions for Software Updates for Internet of Things (SUIT) Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-update-management-00</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-update-management-00.txt">https://www.ietf.org/archive/id/draft-ietf-suit-update-management-00.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"Update Management Extensions for Software Updates for Internet of Things (SUIT) Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-update-management-01</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-update-management-01.txt">https://www.ietf.org/archive/id/draft-ietf-suit-update-management-01.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-teep-architecture">[I-D.ietf-teep-architecture]</dt>
         <dd>
-<span class="refAuthor">Pei, M.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Thaler, D.</span>, and <span class="refAuthor">D. M. Wheeler</span>, <span class="refTitle">"Trusted Execution Environment Provisioning (TEEP) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teep-architecture-18</span>, <time datetime="2022-07-11" class="refDate">11 July 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-teep-architecture-18.txt">https://www.ietf.org/archive/id/draft-ietf-teep-architecture-18.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Pei, M.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Thaler, D.</span>, and <span class="refAuthor">D. M. Wheeler</span>, <span class="refTitle">"Trusted Execution Environment Provisioning (TEEP) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teep-architecture-19</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-teep-architecture-19.txt">https://www.ietf.org/archive/id/draft-ietf-teep-architecture-19.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.moran-suit-mti">[I-D.moran-suit-mti]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"Mandatory-to-Implement Algorithms for Creators and Consumers of Software Update for the Internet of Things manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-moran-suit-mti-01</span>, <time datetime="2022-07-27" class="refDate">27 July 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-moran-suit-mti-01.txt">https://www.ietf.org/archive/id/draft-moran-suit-mti-01.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"Mandatory-to-Implement Algorithms for Creators and Consumers of Software Update for the Internet of Things manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-moran-suit-mti-02</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-moran-suit-mti-02.txt">https://www.ietf.org/archive/id/draft-moran-suit-mti-02.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7228">[RFC7228]</dt>
         <dd>
