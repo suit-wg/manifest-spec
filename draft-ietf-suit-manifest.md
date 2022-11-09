@@ -239,12 +239,13 @@ Based on these assumptions, the manifest is structured to work with a pull parse
 2. Verify the applicability of the manifest.
 3. Fetch payload(s).
 4. Install payload(s).
+5. Verify image(s).
 
 When installation is complete, similar information can be used for validating and invoking images in a further three steps:
 
-5. Verify image(s).
-6. Load image(s).
-7. Invoke image(s).
+6. Verify image(s).
+7. Load image(s).
+8. Invoke image(s).
 
 If verification and invocation is implemented in a bootloader, then the bootloader MUST also verify the signature of the manifest and the applicability of the manifest in order to implement secure boot workflows. The bootloader may add its own authentication, e.g. a Message Authentication Code (MAC), to the manifest in order to prevent further verifications.
 
@@ -338,7 +339,7 @@ Command sequences provide the instructions that a Recipient requires in order to
 
 Command sequences are broken up into three groups: Common Command Sequence (see {{ovr-common}}), update commands, and secure boot commands.
 
-Update Command Sequences are: Payload Fetch, and Payload Installation. An Update Procedure is the complete set of each Update Command Sequence, each preceded by the Common Command Sequence.
+Update Command Sequences are: Payload Fetch, Payload Installation and, System Validation. An Update Procedure is the complete set of each Update Command Sequence, each preceded by the Common Command Sequence.
 
 Invocation Command Sequences are: System Validation, Image Loading, and Image Invocation. An Invocation Procedure is the complete set of each Invocation Command Sequence, each preceded by the Common Command Sequence.
 
@@ -759,7 +760,7 @@ The manifest contains:
 - a reference to the full manifest (see {{manifest-reference-uri}})
 - human-readable text describing the manifest found in the SUIT_Envelope (see {{manifest-digest-text}})
 
-The Text section, or any Command Sequence of the Update Procedure (Image Fetch, Image Installation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable element. Severable elements are RECOMMENDED to implement. In particular, the human-readable text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See {{integrity-checks}} for more detail.
+The Text section, or any Command Sequence of the Update Procedure (Image Fetch, Image Installation and, System Validation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable element. Severable elements are RECOMMENDED to implement. In particular, the human-readable text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See {{integrity-checks}} for more detail.
 
 ### suit-manifest-version {#manifest-version}
 
@@ -838,7 +839,7 @@ A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take
 
 5. Invoke or Boot: suit-invoke is a SUIT_Command_Sequence to execute in order to invoke an image. suit-invoke typically contains a single instruction: the "invoke" directive, but may also contain an image condition. suit-invoke is OPTIONAL to implement.
 
-Goals 1,2 form the Update Procedure. Goals 4,5,6 form the Invocation Procedure.
+Goals 1,2,3 form the Update Procedure. Goals 3,4,5 form the Invocation Procedure.
 
 Each Command Sequence follows exactly the same structure to ensure that the parser is as simple as possible.
 
