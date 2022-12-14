@@ -143,7 +143,7 @@ In this document, these operations are called commands. Commands are classed as 
 
 The available commands support simple steps, such as copying a firmware image from one place to another, checking that a firmware image is correct, verifying that the specified firmware is the correct firmware for the device, or unpacking a firmware. By using these steps in different orders and changing the parameters they use, a broad range of use cases can be supported. The SUIT manifest uses this observation to optimize metadata for consumption by constrained devices.
 
-While the SUIT manifest is informed by and optimized for firmware update and Trusted Invocation use cases, there is nothing in the SUIT Information Model ({{RFC9124}}) that restricts its use to only those use cases. Other use cases include the management of trusted applications (TAs) in a Trusted Execution Environment (TEE), as discussed in {{I-D.ietf-teep-architecture}}.
+While the SUIT manifest is informed by and optimized for firmware update and Trusted Invocation use cases, there is nothing in the SUIT Information Model {{RFC9124}} that restricts its use to only those use cases. Other use cases include the management of trusted applications (TAs) in a Trusted Execution Environment (TEE), as discussed in {{I-D.ietf-teep-architecture}}.
 
 #  Conventions and Terminology
 
@@ -796,7 +796,7 @@ CDDL Structure | Description
 suit-text-manifest-description | Free text description of the manifest
 suit-text-update-description | Free text description of the update
 suit-text-manifest-json-source | The JSON-formatted document that was used to create the manifest
-suit-text-manifest-yaml-source | The YAML ({{YAML}})-formatted document that was used to create the manifest
+suit-text-manifest-yaml-source | The YAML {{YAML}}-formatted document that was used to create the manifest
 
 The following table describes the text fields available in each map identified by a SUIT_Component_Identifier.
 
@@ -1013,7 +1013,7 @@ Class-specific-information is composed of a variety of data, for example:
 suit-parameter-vendor-identifier may be presented in one of two ways:
 
 - A Private Enterprise Number
-- A byte string containing a UUID ({{RFC4122}})
+- A byte string containing a UUID {{RFC4122}}
 
 Private Enterprise Numbers are encoded as a relative OID, according to the definition in {{-oid}}. All PENs are relative to the IANA PEN: 1.3.6.1.4.1.
 
@@ -1047,7 +1047,7 @@ If suit-parameter-content is instantiated in a severable command sequence, then 
 
 #### suit-parameter-uri {#suit-parameter-uri}
 
-A URI Reference ({{RFC3986}}) from which to fetch a resource, encoded as a text string. CBOR Tag 32 is not used because the meaning of the text string is unambiguous in this context.
+A URI Reference {{RFC3986}} from which to fetch a resource, encoded as a text string. CBOR Tag 32 is not used because the meaning of the text string is unambiguous in this context.
 
 #### suit-parameter-source-component {#suit-parameter-source-component}
 
