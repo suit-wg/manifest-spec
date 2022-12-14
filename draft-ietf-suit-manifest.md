@@ -147,7 +147,7 @@ While the SUIT manifest is informed by and optimized for firmware update and Tru
 
 #  Conventions and Terminology
 
-{::boilerplate bcp14}
+{::boilerplate bcp14-tagged}
 
 Additionally, the following terminology is used throughout this document:
 
