@@ -1526,19 +1526,32 @@ This document is about a manifest format protecting and describing how to retrie
 
 We would like to thank the following persons for their support in designing this mechanism:
 
-* Milosch Meriac
-* Geraint Luff
-* Dan Ros
-* John-Paul Stanford
-* Hugo Vincent
-* Carsten Bormann
-* Øyvind Rønningstad
-* Frank Audun Kvamtrø
-* Krzysztof Chruściński
-* Andrzej Puzdrowski
-* Michael Richardson
-* David Brown
-* Emmanuel Baccelli
+*  
+: {{{Milosch Meriac}}}
+*  
+: {{{Geraint Luff}}}
+*  
+: {{{Dan Ros}}}
+*  
+: {{{John-Paul Stanford}}}
+*  
+: {{{Hugo Vincent}}}
+*  
+: {{{Carsten Bormann}}}
+*  
+: {{{Øyvind Rønningstad}}}
+*  
+: {{{Frank Audun Kvamtrø}}}
+*  
+: {{{Krzysztof Chruściński}}}
+*  
+: {{{Andrzej Puzdrowski}}}
+*  
+: {{{Michael Richardson}}}
+*  
+: {{{David Brown}}}
+*  
+: {{{Emmanuel Baccelli}}}
 
 --- back
 
