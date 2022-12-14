@@ -1,15 +1,16 @@
 ---
+v: 3
+
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
 docname: draft-ietf-suit-manifest-21
 category: std
+stream: IETF
 
-ipr: trust200902
 area: Security
 workgroup: SUIT
 keyword: Internet-Draft
 
-stand_alone: yes
 pi:
   rfcedstyle: yes
   toc: yes
@@ -56,7 +57,8 @@ author:
 
 normative:
   RFC4122:
-  RFC8152:
+  RFC9052: cose
+#  RFC9053: cose-algs
   RFC3986:
   RFC8949:
   RFC9019:
@@ -65,9 +67,9 @@ normative:
 
 informative:
   I-D.moran-suit-mti:
-  I-D.ietf-cose-hash-algs:
+  RFC9054: hash-algs
   I-D.ietf-teep-architecture:
-  I-D.ietf-cbor-tags-oid:
+  RFC9090: oid
   I-D.ietf-suit-firmware-encryption:
   I-D.ietf-suit-update-management:
   I-D.ietf-suit-trust-domains:
@@ -304,7 +306,7 @@ See {{envelope}} for more detail.
 
 ## Authentication Block {#ovr-auth}
 
-The Authentication Block contains a bstr-wrapped SUIT Digest Container, see {{SUIT_Digest}}, and one or more {{RFC8152}} CBOR Object Signing and Encryption (COSE) authentication blocks. These blocks are one of:
+The Authentication Block contains a bstr-wrapped SUIT Digest Container, see {{SUIT_Digest}}, and one or more {{-cose}} CBOR Object Signing and Encryption (COSE) authentication blocks. These blocks are one of:
 
 * COSE_Sign_Tagged
 * COSE_Sign1_Tagged
@@ -343,7 +345,7 @@ Update Command Sequences are: Payload Fetch, Payload Installation and, System Va
 
 Invocation Command Sequences are: System Validation, Image Loading, and Image Invocation. An Invocation Procedure is the complete set of each Invocation Command Sequence, each preceded by the Common Command Sequence.
 
-Command Sequences are grouped into these sets to ensure that there is common coordination between dependencies and dependents on when to execute each command (dependencies are not defined in this specification). 
+Command Sequences are grouped into these sets to ensure that there is common coordination between dependencies and dependents on when to execute each command (dependencies are not defined in this specification).
 
 See {{manifest-commands}} for more detail.
 
@@ -405,7 +407,7 @@ Here, valid means that a manifest has a supported encoding version and it has no
 
 These failure reasons MAY be combined with retry mechanisms prior to marking a manifest as invalid.
 
-Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in {{RFC9019}}, section 3.5. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See {{RFC9124}}, Section 4.2.1 for more discussion on the security considerations that apply to rollback.
+Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in {{RFC9019, Section 3.5}}. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See {{RFC9124, Section 4.2.1}} for more discussion on the security considerations that apply to rollback.
 
 Following these initial tests, the manifest processor clears all parameter storage. This ensures that the manifest processor begins without any leaked data.
 
@@ -456,7 +458,7 @@ NOTE: when using A/B images, the manifest functions as two (or more) logical man
 
 ### Resilience to Disruption
 
-As required in Section 3 of RFC9019 and as an extension of design goal 1, devices must remain operable after a disruption, such as a power failure or network interruption, interrupts the update process.
+As required in {{Section 3 of RFC9019}} and as an extension of design goal 1, devices must remain operable after a disruption, such as a power failure or network interruption, interrupts the update process.
 
 The manifest processor must be resilient to these faults. In order to enable this resilience, systems implementing the manifest processor MUST make the following guarantees:
 
@@ -568,7 +570,7 @@ These rules isolate each sequence from each other sequence, ensuring that they o
 
 # Creating Manifests {#creating-manifests}
 
-Manifests are created using tools for constructing COSE structures, calculating cryptographic values and compiling desired system state into a sequence of operations required to achieve that state. The process of constructing COSE structures and the calculation of cryptographic values is covered in {{RFC8152}}.
+Manifests are created using tools for constructing COSE structures, calculating cryptographic values and compiling desired system state into a sequence of operations required to achieve that state. The process of constructing COSE structures and the calculation of cryptographic values is covered in {{-cose}}.
 
 Compiling desired system state into a sequence of operations can be accomplished in many ways. Several templates are provided below to cover common use-cases. These templates can be combined to produce more complex behavior.
 
@@ -648,7 +650,7 @@ The goal of the Integrated Payload template is to install a payload that is incl
 
 An implementer MAY choose to place a payload in the envelope of a manifest. The payload envelope key MUST be a string. The payload MUST be serialized in a bstr element.
 
-The URI for a payload enclosed in this way MAY be expressed as a fragment-only reference, as defined in {{RFC3986}}, Section 4.4.
+The URI for a payload enclosed in this way MAY be expressed as a fragment-only reference, as defined in {{RFC3986, Section 4.4}}.
 
 A distributor MAY choose to pre-fetch a payload and add it to the manifest envelope, using the URI as the key.
 
@@ -662,7 +664,7 @@ The following commands are placed into the load sequence:
 - Override Parameters directive (see {{suit-directive-override-parameters}}) for Source Component (see {{secparameters}})
 - Copy directive (see {{suit-directive-copy}})
 
-As outlined in {{command-behavior}}, the Copy directive needs a source and a destination to be configured. The source is configured via Component Index (with the Set Parameters directive) and the destination is configured via the Set Component Index directive.  
+As outlined in {{command-behavior}}, the Copy directive needs a source and a destination to be configured. The source is configured via Component Index (with the Set Parameters directive) and the destination is configured via the Set Component Index directive.
 
 ## A/B Image Template {#a-b-template}
 
@@ -733,14 +735,14 @@ The Envelope is encoded as a CBOR Map. Each element of the Envelope is enclosed 
 
 ## Authenticated Manifests {#authentication-info}
 
-The suit-authentication-wrapper contains a SUIT Digest Container (see {{SUIT_Digest}}) and one or more SUIT Authentication Blocks. The SUIT_Digest carries the result of computing the indicated hash algorithm over the suit-manifest element. A signing application MUST verify the suit-manifest element against the SUIT_Digest prior to signing. A SUIT Authentication Block is implemented as COSE_Mac_Tagged, COSE_Mac0_Tagged, COSE_Sign_Tagged or COSE_Sign1_Tagged structures with detached payloads, as described in RFC 8152 {{RFC8152}}.
+The suit-authentication-wrapper contains a SUIT Digest Container (see {{SUIT_Digest}}) and one or more SUIT Authentication Blocks. The SUIT_Digest carries the result of computing the indicated hash algorithm over the suit-manifest element. A signing application MUST verify the suit-manifest element against the SUIT_Digest prior to signing. A SUIT Authentication Block is implemented as COSE_Mac_Tagged, COSE_Mac0_Tagged, COSE_Sign_Tagged or COSE_Sign1_Tagged structures with detached payloads, as described in RFC 9052 {{-cose}}.
 
-For COSE_Sign and COSE_Sign1 a special signature structure (called Sig_structure) has to be created onto which the selected digital signature algorithm is applied to, see Section 4.4 of {{RFC8152}} for details. This specification requires Sig_structure to be populated as follows:
+For COSE_Sign and COSE_Sign1 a special signature structure (called Sig_structure) has to be created onto which the selected digital signature algorithm is applied to, see {{Section 4.4 of -cose}} for details. This specification requires Sig_structure to be populated as follows:
 * The external_aad field MUST be set to a zero-length binary string (i.e. there is no external additional authenticated data).
-* The payload field contains the SUIT_Digest wrapped in a bstr, as per the requirements in Section 4.4 of RFC 8152.
-All other fields in the Sig_structure are populated as described in Section 4.4 of {{RFC8152}}.
+* The payload field contains the SUIT_Digest wrapped in a bstr, as per the requirements in {{Section 4.4 of -cose}}.
+All other fields in the Sig_structure are populated as described in {{Section 4.4 of -cose}}.
 
-Likewise, Section 6.3 of {{RFC8152}} describes the details for computing a MAC and the fields of the MAC_structure need to be populated. The rules for external_aad and the payload fields described in the paragraph above also apply to this structure.
+Likewise, {{Section 6.3 of -cose}} describes the details for computing a MAC and the fields of the MAC_structure need to be populated. The rules for external_aad and the payload fields described in the paragraph above also apply to this structure.
 
 The suit-authentication-wrapper MUST come before the suit-manifest element, regardless of canonical encoding of CBOR.
 
@@ -1013,7 +1015,7 @@ suit-parameter-vendor-identifier may be presented in one of two ways:
 - A Private Enterprise Number
 - A byte string containing a UUID ({{RFC4122}})
 
-Private Enterprise Numbers are encoded as a relative OID, according to the definition in {{I-D.ietf-cbor-tags-oid}}. All PENs are relative to the IANA PEN: 1.3.6.1.4.1.
+Private Enterprise Numbers are encoded as a relative OID, according to the definition in {{-oid}}. All PENs are relative to the IANA PEN: 1.3.6.1.4.1.
 
 #### suit-parameter-class-identifier {#suit-parameter-class-identifier}
 
@@ -1210,7 +1212,7 @@ If either the source component parameter or the source component itself is absen
 
 #### suit-directive-write {#suit-directive-write}
 
-This directive writes a small block of data, specified in {{suit-parameter-content}}, to a component. 
+This directive writes a small block of data, specified in {{suit-parameter-content}}, to a component.
 
 Encoding Considerations: Careful consideration must be taken to determine whether it is more appropriate to use an integrated payload or to use {{suit-parameter-content}} for a particular application. While the encoding of suit-directive-write is smaller than an integrated payload, a large suit-parameter-content payload may prevent the manifest processor from holding the command sequence in memory while executing it.
 
@@ -1267,7 +1269,7 @@ A third model allows a Recipient to provide even more fine-grained controls: The
 
 The SUIT digest is a CBOR List containing two elements: an algorithm identifier and a bstr containing the bytes of the digest. Some forms of digest may require additional parameters. These can be added following the digest.
 
-The values of the algorithm identifier are defined by {{I-D.ietf-cose-hash-algs}}. The following algorithms MUST be implemented by all Manifest Processors:
+The values of the algorithm identifier are defined by {{-hash-algs}}. The following algorithms MUST be implemented by all Manifest Processors:
 
 * SHA-256 (-16)
 
@@ -1287,7 +1289,7 @@ IANA is requested to:
 * allocate media type application/suit-envelope in the "Media Types" registry, see below.
 * setup several registries as described below.
 
-IANA is requested to create a new category for Software Update for the Internet of Things (SUIT) 
+IANA is requested to create a new category for Software Update for the Internet of Things (SUIT)
 and a page within this category for SUIT manifests.
 
 IANA is also requested to create several registries defined in the subsections below.
@@ -1440,8 +1442,8 @@ Expert reviewers should take into consideration the following points:
       to get sufficient information for registration requests to ensure
       that the usage is not going to duplicate one that is already
       registered, and that the point is likely to be used in
-      deployments.  The zones tagged as private use 
-      are intended for testing purposes and closed environments; 
+      deployments.  The zones tagged as private use
+      are intended for testing purposes and closed environments;
       code points in other ranges should not be assigned for testing.
 
 -  Specifications are required for the standards track range of point
@@ -1485,7 +1487,7 @@ the content is a SUIT envelope.
 
       Published specification: [[This RFC]]
 
-      Applications that use this media type: Primarily used for 
+      Applications that use this media type: Primarily used for
         Firmware and software updates although the content may
         also contain configuration data and other information
         related to software and firmware.
@@ -1543,7 +1545,7 @@ We would like to thank the following persons for their support in designing this
 # A. Full CDDL {#full-cddl}
 In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL data definition.
 
-To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in {{RFC8152}}, Section 1.3.
+To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in {{-cose, Section 1.4}}.
 
 ~~~ CDDL
 {::include draft-ietf-suit-manifest.cddl}
