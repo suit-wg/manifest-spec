@@ -21,7 +21,7 @@ of operations, rather than declaring the metadata.
     " name="description">
 <meta content="xml2rfc 3.15.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
-<meta content="draft-ietf-suit-manifest-21" name="ietf.draft">
+<meta content="draft-ietf-suit-manifest-22" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.15.0
     Python 3.9.6
@@ -1198,11 +1198,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CBOR-based SUIT Manifest</td>
-<td class="right">November 2022</td>
+<td class="right">February 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Moran, et al.</td>
-<td class="center">Expires 13 May 2023</td>
+<td class="center">Expires 31 August 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1212,15 +1212,15 @@ li > p:last-of-type {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">SUIT</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-suit-manifest-21</dd>
+<dd class="internet-draft">draft-ietf-suit-manifest-22</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-11-09" class="published">9 November 2022</time>
+<time datetime="2023-02-27" class="published">27 February 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-05-13">13 May 2023</time></dd>
+<dd class="expires"><time datetime="2023-08-31">31 August 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1276,7 +1276,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 May 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 31 August 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1285,7 +1285,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2022 IETF Trust and the persons identified as the
+            Copyright (c) 2023 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1657,7 +1657,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
       </ul>
 <p id="section-1-12">In this document, these operations are called commands. Commands are classed as either conditions or directives. Conditions have no side-effects, while directives do have side-effects. Conceptually, a sequence of commands is like a script but the language is tailored to software updates and Trusted Invocation.<a href="#section-1-12" class="pilcrow">¶</a></p>
 <p id="section-1-13">The available commands support simple steps, such as copying a firmware image from one place to another, checking that a firmware image is correct, verifying that the specified firmware is the correct firmware for the device, or unpacking a firmware. By using these steps in different orders and changing the parameters they use, a broad range of use cases can be supported. The SUIT manifest uses this observation to optimize metadata for consumption by constrained devices.<a href="#section-1-13" class="pilcrow">¶</a></p>
-<p id="section-1-14">While the SUIT manifest is informed by and optimized for firmware update and Trusted Invocation use cases, there is nothing in the SUIT Information Model (<span>[<a href="#RFC9124" class="cite xref">RFC9124</a>]</span>) that restricts its use to only those use cases. Other use cases include the management of trusted applications (TAs) in a Trusted Execution Environment (TEE), as discussed in <span>[<a href="#I-D.ietf-teep-architecture" class="cite xref">I-D.ietf-teep-architecture</a>]</span>.<a href="#section-1-14" class="pilcrow">¶</a></p>
+<p id="section-1-14">While the SUIT manifest is informed by and optimized for firmware update and Trusted Invocation use cases, there is nothing in the SUIT Information Model <span>[<a href="#RFC9124" class="cite xref">RFC9124</a>]</span> that restricts its use to only those use cases. Other use cases include the management of trusted applications (TAs) in a Trusted Execution Environment (TEE), as discussed in <span>[<a href="#I-D.ietf-teep-architecture" class="cite xref">I-D.ietf-teep-architecture</a>]</span>.<a href="#section-1-14" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-terminology">
@@ -1665,9 +1665,9 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
       <h2 id="name-conventions-and-terminology">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-terminology" class="section-name selfRef">Conventions and Terminology</a>
       </h2>
-<p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
-"MAY", and "OPTIONAL" in this document are to be interpreted as
+<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL</span>
+NOT", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">Additionally, the following terminology is used throughout this document:<a href="#section-2-2" class="pilcrow">¶</a></p>
@@ -1844,7 +1844,7 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
           <li id="section-4.2-8.3">Invoke image(s).<a href="#section-4.2-8.3" class="pilcrow">¶</a>
 </li>
         </ol>
-<p id="section-4.2-9">If verification and invocation is implemented in a bootloader, then the bootloader MUST also verify the signature of the manifest and the applicability of the manifest in order to implement secure boot workflows. The bootloader may add its own authentication, e.g. a Message Authentication Code (MAC), to the manifest in order to prevent further verifications.<a href="#section-4.2-9" class="pilcrow">¶</a></p>
+<p id="section-4.2-9">If verification and invocation is implemented in a bootloader, then the bootloader <span class="bcp14">MUST</span> also verify the signature of the manifest and the applicability of the manifest in order to implement secure boot workflows. The bootloader may add its own authentication, e.g. a Message Authentication Code (MAC), to the manifest in order to prevent further verifications.<a href="#section-4.2-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1922,7 +1922,7 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
         <h3 id="name-authentication-block">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-authentication-block" class="section-name selfRef">Authentication Block</a>
         </h3>
-<p id="section-5.2-1">The Authentication Block contains a bstr-wrapped SUIT Digest Container, see <a href="#SUIT_Digest" class="auto internal xref">Section 10</a>, and one or more <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span> CBOR Object Signing and Encryption (COSE) authentication blocks. These blocks are one of:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-1">The Authentication Block contains a bstr-wrapped SUIT Digest Container, see <a href="#SUIT_Digest" class="auto internal xref">Section 10</a>, and one or more <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span> CBOR Object Signing and Encryption (COSE) authentication blocks. These blocks are one of:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.2-2.1">COSE_Sign_Tagged<a href="#section-5.2-2.1" class="pilcrow">¶</a>
 </li>
@@ -1949,7 +1949,7 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
           <h4 id="name-critical-metadata">
 <a href="#section-5.3.1" class="section-number selfRef">5.3.1. </a><a href="#name-critical-metadata" class="section-name selfRef">Critical Metadata</a>
           </h4>
-<p id="section-5.3.1-1">Some metadata needs to be accessed before the manifest is processed. This metadata can be used to determine which manifest is newest and whether the structure version is supported. It also MAY provide a URI for obtaining a canonical copy of the manifest and Envelope.<a href="#section-5.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-1">Some metadata needs to be accessed before the manifest is processed. This metadata can be used to determine which manifest is newest and whether the structure version is supported. It also <span class="bcp14">MAY</span> provide a URI for obtaining a canonical copy of the manifest and Envelope.<a href="#section-5.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.1-2">See <a href="#manifest-version" class="auto internal xref">Section 8.4.1</a>, <a href="#manifest-seqnr" class="auto internal xref">Section 8.4.2</a>, and <a href="#manifest-reference-uri" class="auto internal xref">Section 8.4.3</a> for more detail.<a href="#section-5.3.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1958,7 +1958,7 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
           <h4 id="name-common">
 <a href="#section-5.3.2" class="section-number selfRef">5.3.2. </a><a href="#name-common" class="section-name selfRef">Common</a>
           </h4>
-<p id="section-5.3.2-1">Some metadata is used repeatedly and in more than one command sequence. In order to reduce the size of the manifest, this metadata is collected into the Common section. Common is composed of two parts: a list of components referenced by the manifest, and a command sequence to execute prior to each other command sequence. The common command sequence is typically used to set commonly used values and perform compatibility checks. The common command sequence MUST NOT have any side-effects outside of setting parameter values.<a href="#section-5.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.2-1">Some metadata is used repeatedly and in more than one command sequence. In order to reduce the size of the manifest, this metadata is collected into the Common section. Common is composed of two parts: a list of components referenced by the manifest, and a command sequence to execute prior to each other command sequence. The common command sequence is typically used to set commonly used values and perform compatibility checks. The common command sequence <span class="bcp14">MUST NOT</span> have any side-effects outside of setting parameter values.<a href="#section-5.3.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.2-2">See <a href="#manifest-common" class="auto internal xref">Section 8.4.5</a> for more detail.<a href="#section-5.3.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1980,7 +1980,7 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
           <h4 id="name-integrity-check-values">
 <a href="#section-5.3.4" class="section-number selfRef">5.3.4. </a><a href="#name-integrity-check-values" class="section-name selfRef">Integrity Check Values</a>
           </h4>
-<p id="section-5.3.4-1">To enable <a href="#ovr-severable" class="auto internal xref">Section 5.4</a>, there needs to be a mechanism to verify integrity of any metadata outside the manifest. Integrity Check Values are used to verify the integrity of metadata that is not contained in the manifest. This MAY include Severable Command Sequences, or Text data. Integrated Payloads are integrity-checked using Command Sequences, so they do not have Integrity Check Values present in the Manifest.<a href="#section-5.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.4-1">To enable <a href="#ovr-severable" class="auto internal xref">Section 5.4</a>, there needs to be a mechanism to verify integrity of any metadata outside the manifest. Integrity Check Values are used to verify the integrity of metadata that is not contained in the manifest. This <span class="bcp14">MAY</span> include Severable Command Sequences, or Text data. Integrated Payloads are integrity-checked using Command Sequences, so they do not have Integrity Check Values present in the Manifest.<a href="#section-5.3.4-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.4-2">See <a href="#integrity-checks" class="auto internal xref">Section 8.4.11</a> for more detail.<a href="#section-5.3.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2039,11 +2039,11 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
         <h3 id="name-manifest-processor-setup">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-manifest-processor-setup" class="section-name selfRef">Manifest Processor Setup</a>
         </h3>
-<p id="section-6.1-1">Prior to executing any command sequence, the manifest processor or its host application MUST inspect the manifest version field and fail when it encounters an unsupported encoding version. Next, the manifest processor or its host application MUST extract the manifest sequence number and perform a rollback check using this sequence number. The exact logic of rollback protection may vary by application, but it has the following properties:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-1">Prior to executing any command sequence, the manifest processor or its host application <span class="bcp14">MUST</span> inspect the manifest version field and fail when it encounters an unsupported encoding version. Next, the manifest processor or its host application <span class="bcp14">MUST</span> extract the manifest sequence number and perform a rollback check using this sequence number. The exact logic of rollback protection may vary by application, but it has the following properties:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.1-2.1">Whenever the manifest processor can choose between several manifests, it MUST select the latest valid, authentic manifest.<a href="#section-6.1-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-6.1-2.1">Whenever the manifest processor can choose between several manifests, it <span class="bcp14">MUST</span> select the latest valid, authentic manifest.<a href="#section-6.1-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-6.1-2.2">If the latest valid, authentic manifest fails, it MAY select the next latest valid, authentic manifest, according to application-specific policy.<a href="#section-6.1-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-6.1-2.2">If the latest valid, authentic manifest fails, it <span class="bcp14">MAY</span> select the next latest valid, authentic manifest, according to application-specific policy.<a href="#section-6.1-2.2" class="pilcrow">¶</a>
 </li>
         </ul>
 <p id="section-6.1-3">Here, valid means that a manifest has a supported encoding version and it has not been excluded for other reasons. Reasons for excluding typically involve first executing the manifest and may include:<a href="#section-6.1-3" class="pilcrow">¶</a></p>
@@ -2069,8 +2069,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
           <li class="normal" id="section-6.1-4.10">Required parameter not supplied.<a href="#section-6.1-4.10" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-6.1-5">These failure reasons MAY be combined with retry mechanisms prior to marking a manifest as invalid.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
-<p id="section-6.1-6">Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in <span>[<a href="#RFC9019" class="cite xref">RFC9019</a>]</span>, section 3.5. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See <span>[<a href="#RFC9124" class="cite xref">RFC9124</a>]</span>, Section 4.2.1 for more discussion on the security considerations that apply to rollback.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
+<p id="section-6.1-5">These failure reasons <span class="bcp14">MAY</span> be combined with retry mechanisms prior to marking a manifest as invalid.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1-6">Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in <span>[<a href="#RFC9019" class="cite xref">RFC9019</a>], <a href="https://rfc-editor.org/rfc/rfc9019#section-3.5" class="relref">Section 3.5</a></span>. It may not be appropriate for all applications. In particular Trusted Execution Environments <span class="bcp14">MAY</span> require a failure to invoke a new installation, rather than a rollback approach. See <span>[<a href="#RFC9124" class="cite xref">RFC9124</a>], <a href="https://rfc-editor.org/rfc/rfc9124#section-4.2.1" class="relref">Section 4.2.1</a></span> for more discussion on the security considerations that apply to rollback.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
 <p id="section-6.1-7">Following these initial tests, the manifest processor clears all parameter storage. This ensures that the manifest processor begins without any leaked data.<a href="#section-6.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2079,14 +2079,14 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
         <h3 id="name-required-checks">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-required-checks" class="section-name selfRef">Required Checks</a>
         </h3>
-<p id="section-6.2-1">The RECOMMENDED process is to verify the signature of the manifest prior to parsing/executing any section of the manifest. This guards the parser against arbitrary input by unauthenticated third parties, but it costs extra energy when a Recipient receives an incompatible manifest.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2-2">When validating authenticity of manifests, the manifest processor MAY use an ACL (see <a href="#access-control-lists" class="auto internal xref">Section 9</a>) to determine the extent of the rights conferred by that authenticity.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
-<p id="section-6.2-3">Once a valid, authentic manifest has been selected, the manifest processor MUST examine the component list and verify that its maximum number of components is not exceeded and that each listed component is supported.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
-<p id="section-6.2-4">For each listed component, the manifest processor MUST provide storage for the supported parameters. If the manifest processor does not have sufficient temporary storage to process the parameters for all components, it MAY process components serially for each command sequence. See <a href="#serial-processing" class="auto internal xref">Section 6.6</a> for more details.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
-<p id="section-6.2-5">The manifest processor SHOULD check that the shared sequence contains at least Check Vendor Identifier command and at least one Check Class Identifier command.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.2-1">The <span class="bcp14">RECOMMENDED</span> process is to verify the signature of the manifest prior to parsing/executing any section of the manifest. This guards the parser against arbitrary input by unauthenticated third parties, but it costs extra energy when a Recipient receives an incompatible manifest.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">When validating authenticity of manifests, the manifest processor <span class="bcp14">MAY</span> use an ACL (see <a href="#access-control-lists" class="auto internal xref">Section 9</a>) to determine the extent of the rights conferred by that authenticity.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2-3">Once a valid, authentic manifest has been selected, the manifest processor <span class="bcp14">MUST</span> examine the component list and verify that its maximum number of components is not exceeded and that each listed component is supported.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.2-4">For each listed component, the manifest processor <span class="bcp14">MUST</span> provide storage for the supported parameters. If the manifest processor does not have sufficient temporary storage to process the parameters for all components, it <span class="bcp14">MAY</span> process components serially for each command sequence. See <a href="#serial-processing" class="auto internal xref">Section 6.6</a> for more details.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.2-5">The manifest processor <span class="bcp14">SHOULD</span> check that the shared sequence contains at least Check Vendor Identifier command and at least one Check Class Identifier command.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
 <p id="section-6.2-6">Because the shared sequence contains Check Vendor Identifier and Check Class Identifier command(s), no custom commands are permitted in the shared sequence. This ensures that any custom commands are only executed by devices that understand them.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
-<p id="section-6.2-7">If the manifest contains more than one component, each command sequence MUST begin with a Set Component Index.<a href="#section-6.2-7" class="pilcrow">¶</a></p>
-<p id="section-6.2-8">If a Recipient supports groups of interdependent components (a Component Set), then it SHOULD verify that all Components in the Component Set are specified by one update, that is the manifest:<a href="#section-6.2-8" class="pilcrow">¶</a></p>
+<p id="section-6.2-7">If the manifest contains more than one component, each command sequence <span class="bcp14">MUST</span> begin with a Set Component Index.<a href="#section-6.2-7" class="pilcrow">¶</a></p>
+<p id="section-6.2-8">If a Recipient supports groups of interdependent components (a Component Set), then it <span class="bcp14">SHOULD</span> verify that all Components in the Component Set are specified by one update, that is the manifest:<a href="#section-6.2-8" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.2-9">
 <li id="section-6.2-9.1">has sufficient permissions imparted by its signatures<a href="#section-6.2-9.1" class="pilcrow">¶</a>
 </li>
@@ -2098,7 +2098,7 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
           <h4 id="name-minimizing-signature-verifi">
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-minimizing-signature-verifi" class="section-name selfRef">Minimizing Signature Verifications</a>
           </h4>
-<p id="section-6.2.1-1">Signature verification can be energy and time expensive on a constrained device. MAC verification is typically unaffected by these concerns. A Recipient MAY choose to parse and execute only the SUIT_Common section of the manifest prior to signature verification, if all of the below apply:<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-1">Signature verification can be energy and time expensive on a constrained device. MAC verification is typically unaffected by these concerns. A Recipient <span class="bcp14">MAY</span> choose to parse and execute only the SUIT_Common section of the manifest prior to signature verification, if all of the below apply:<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.2.1-2.1">The Authentication Block contains a COSE_Sign_Tagged or COSE_Sign1_Tagged<a href="#section-6.2.1-2.1" class="pilcrow">¶</a>
 </li>
@@ -2107,9 +2107,9 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
             <li class="normal" id="section-6.2.1-2.3">The Recipient has a power budget that makes signature verification undesirable<a href="#section-6.2.1-2.3" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-6.2.1-3">When executing Common prior to authenticity validation, the Manifest Processor MUST first evaluate the integrity of the manifest using the SUIT_Digest present in the authentication block.<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-4">The guidelines in Creating Manifests (<a href="#creating-manifests" class="auto internal xref">Section 7</a>) require that the common section contains the applicability checks, so this section is sufficient for applicability verification. The parser MUST restrict acceptable commands to conditions and the following directives: Override Parameters, Set Parameters, Try Each, and Run Sequence ONLY. The manifest parser MUST NOT execute any command with side-effects outside the parser (for example, Run, Copy, Swap, or Fetch commands) prior to authentication and any such command MUST Abort. The Shared sequence MUST be executed again, in its entirety, after authenticity validation.<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-5">A Recipient MAY rely on network infrastructure to filter inapplicable manifests.<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-3">When executing Common prior to authenticity validation, the Manifest Processor <span class="bcp14">MUST</span> first evaluate the integrity of the manifest using the SUIT_Digest present in the authentication block.<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-4">The guidelines in Creating Manifests (<a href="#creating-manifests" class="auto internal xref">Section 7</a>) require that the common section contains the applicability checks, so this section is sufficient for applicability verification. The parser <span class="bcp14">MUST</span> restrict acceptable commands to conditions and the following directives: Override Parameters, Set Parameters, Try Each, and Run Sequence ONLY. The manifest parser <span class="bcp14">MUST NOT</span> execute any command with side-effects outside the parser (for example, Run, Copy, Swap, or Fetch commands) prior to authentication and any such command <span class="bcp14">MUST</span> Abort. The Shared sequence <span class="bcp14">MUST</span> be executed again, in its entirety, after authenticity validation.<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-5">A Recipient <span class="bcp14">MAY</span> rely on network infrastructure to filter inapplicable manifests.<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2121,11 +2121,11 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
         </h3>
 <p id="section-6.3-1">The interpreter has a small set of design goals:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.3-2">
-<li id="section-6.3-2.1">Executing an update MUST either result in an error, or a verifiably correct system state.<a href="#section-6.3-2.1" class="pilcrow">¶</a>
+<li id="section-6.3-2.1">Executing an update <span class="bcp14">MUST</span> either result in an error, or a verifiably correct system state.<a href="#section-6.3-2.1" class="pilcrow">¶</a>
 </li>
-          <li id="section-6.3-2.2">Executing a Trusted Invocation MUST either result in an error, or an invoked image.<a href="#section-6.3-2.2" class="pilcrow">¶</a>
+          <li id="section-6.3-2.2">Executing a Trusted Invocation <span class="bcp14">MUST</span> either result in an error, or an invoked image.<a href="#section-6.3-2.2" class="pilcrow">¶</a>
 </li>
-          <li id="section-6.3-2.3">Executing the same manifest on multiple Recipients MUST result in the same system state.<a href="#section-6.3-2.3" class="pilcrow">¶</a>
+          <li id="section-6.3-2.3">Executing the same manifest on multiple Recipients <span class="bcp14">MUST</span> result in the same system state.<a href="#section-6.3-2.3" class="pilcrow">¶</a>
 </li>
         </ol>
 <p id="section-6.3-3">NOTE: when using A/B images, the manifest functions as two (or more) logical manifests, each of which applies to a system in a particular starting state. With that provision, design goal 3 holds.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
@@ -2134,15 +2134,15 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
           <h4 id="name-resilience-to-disruption">
 <a href="#section-6.3.1" class="section-number selfRef">6.3.1. </a><a href="#name-resilience-to-disruption" class="section-name selfRef">Resilience to Disruption</a>
           </h4>
-<p id="section-6.3.1-1">As required in Section 3 of RFC9019 and as an extension of design goal 1, devices must remain operable after a disruption, such as a power failure or network interruption, interrupts the update process.<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.3.1-2">The manifest processor must be resilient to these faults. In order to enable this resilience, systems implementing the manifest processor MUST make the following guarantees:<a href="#section-6.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-1">As required in <span><a href="https://rfc-editor.org/rfc/rfc9019#section-3" class="relref">Section 3</a> of [<a href="#RFC9019" class="cite xref">RFC9019</a>]</span> and as an extension of design goal 1, devices must remain operable after a disruption, such as a power failure or network interruption, interrupts the update process.<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-2">The manifest processor must be resilient to these faults. In order to enable this resilience, systems implementing the manifest processor <span class="bcp14">MUST</span> make the following guarantees:<a href="#section-6.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-3">Either:
 1. A fallback/recovery image is provided so that a disrupted system can apply the SUIT Manifest again.
 2. Manifests are constructed so that repeated partial invocations of any manifest sequence always results in a correct system configuration.
 3. A journal of manifest operations is stored in nonvolatile memory so that a repeated invocation does not alter nonvolatile memory up until the point of the previous failure. The journal enables the parser to recreate the processor state just prior to the disruption. This journal can be, for example, a SUIT Report. This report can be used to resume processing of the manifest from the point of failure.<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-4">AND<a href="#section-6.3.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.3.1-5">
-<li id="section-6.3.1-5.1">Where a command is not repeatable because of the way in which it alters system state (e.g. swapping images or in-place delta) it MUST be resumable or revertible. This applies to commands that modify at least one source component as well as the destination component.<a href="#section-6.3.1-5.1" class="pilcrow">¶</a>
+<li id="section-6.3.1-5.1">Where a command is not repeatable because of the way in which it alters system state (e.g. swapping images or in-place delta) it <span class="bcp14">MUST</span> be resumable or revertible. This applies to commands that modify at least one source component as well as the destination component.<a href="#section-6.3.1-5.1" class="pilcrow">¶</a>
 </li>
           </ol>
 </section>
@@ -2156,8 +2156,8 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
         </h3>
 <p id="section-6.4-1">The heart of the manifest is the list of commands, which are processed by a Manifest Processor--a form of interpreter. This Manifest Processor can be modeled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.4-2">There are two types of commands, namely those that modify state (directives) and those that perform tests (conditions). Parameters are used as the inputs to commands. Some directives offer control flow operations. Directives target a specific component. A component is a unit of code or data that can be targeted by an update. Components are identified by Component Identifiers, but referenced in commands by Component Index; Component Identifiers are arrays of binary strings and a Component Index is an index into the array of Component Identifiers.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
-<p id="section-6.4-3">Conditions MUST NOT have any side-effects other than informing the interpreter of success or failure. The Interpreter does not Abort if the Soft Failure flag (<a href="#suit-parameter-soft-failure" class="auto internal xref">Section 8.4.8.15</a>) is set when a Condition reports failure.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
-<p id="section-6.4-4">Directives MAY have side-effects in the parameter table, the interpreter state, or the current component. The Interpreter MUST Abort if a Directive reports failure regardless of the Soft Failure flag.<a href="#section-6.4-4" class="pilcrow">¶</a></p>
+<p id="section-6.4-3">Conditions <span class="bcp14">MUST NOT</span> have any side-effects other than informing the interpreter of success or failure. The Interpreter does not Abort if the Soft Failure flag (<a href="#suit-parameter-soft-failure" class="auto internal xref">Section 8.4.8.15</a>) is set when a Condition reports failure.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
+<p id="section-6.4-4">Directives <span class="bcp14">MAY</span> have side-effects in the parameter table, the interpreter state, or the current component. The Interpreter <span class="bcp14">MUST</span> Abort if a Directive reports failure regardless of the Soft Failure flag.<a href="#section-6.4-4" class="pilcrow">¶</a></p>
 <p id="section-6.4-5">To simplify the logic describing the command semantics, the object "current" is used. It represents the component identified by the Component Index:<a href="#section-6.4-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6.4-6">
 <pre>
@@ -2269,7 +2269,7 @@ current := components\[component-index\]
           <li id="section-6.5-2.3">True<a href="#section-6.5-2.3" class="pilcrow">¶</a>
 </li>
         </ol>
-<p id="section-6.5-3">Integers MUST always be supported by Set Component Index. Arrays of integers MUST be supported by Set Component Index if the Recipient supports 3 or more components. True MUST be supported by Set Component Index if the Recipient supports 2 or more components. Each of these operates on the list of components declared in the manifest.<a href="#section-6.5-3" class="pilcrow">¶</a></p>
+<p id="section-6.5-3">Integers <span class="bcp14">MUST</span> always be supported by Set Component Index. Arrays of integers <span class="bcp14">MUST</span> be supported by Set Component Index if the Recipient supports 3 or more components. True <span class="bcp14">MUST</span> be supported by Set Component Index if the Recipient supports 2 or more components. Each of these operates on the list of components declared in the manifest.<a href="#section-6.5-3" class="pilcrow">¶</a></p>
 <p id="section-6.5-4">Integer indices are the default case as described in the previous section. An array of integers represents a list of the components (Set Component Index) to which each subsequent command applies. The value True replaces the list of component indices with the full list of components, as defined in the manifest.<a href="#section-6.5-4" class="pilcrow">¶</a></p>
 <p id="section-6.5-5">When a command is executed, it either 1. operates on the component identified by the component index if that index is an integer, or 2. it operates on each component identified by an array of indicies, or 3. it operates on every component if the index is the boolean True. This is described by the following pseudocode:<a href="#section-6.5-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6.5-6">
@@ -2292,7 +2292,7 @@ for current in current-list:
         <h3 id="name-serialized-processing-inter">
 <a href="#section-6.6" class="section-number selfRef">6.6. </a><a href="#name-serialized-processing-inter" class="section-name selfRef">Serialized Processing Interpreter</a>
         </h3>
-<p id="section-6.6-1">In highly constrained devices, where storage for parameters is limited, the manifest processor MAY handle one component at a time, traversing the manifest tree once for each listed component. In this mode, the interpreter ignores any commands executed while the component index is not the current component. This reduces the overall volatile storage required to process the update so that the only limit on number of components is the size of the manifest. However, this approach requires additional processing power.<a href="#section-6.6-1" class="pilcrow">¶</a></p>
+<p id="section-6.6-1">In highly constrained devices, where storage for parameters is limited, the manifest processor <span class="bcp14">MAY</span> handle one component at a time, traversing the manifest tree once for each listed component. In this mode, the interpreter ignores any commands executed while the component index is not the current component. This reduces the overall volatile storage required to process the update so that the only limit on number of components is the size of the manifest. However, this approach requires additional processing power.<a href="#section-6.6-1" class="pilcrow">¶</a></p>
 <p id="section-6.6-2">In order to operate in this mode, the manifest processor loops on each section for every supported component, simply ignoring commands when the current component is not selected.<a href="#section-6.6-2" class="pilcrow">¶</a></p>
 <p id="section-6.6-3">When a serialized Manifest Processor encounters a component index of True, it does not ignore any commands. It applies them to the current component on each iteration.<a href="#section-6.6-3" class="pilcrow">¶</a></p>
 </section>
@@ -2302,8 +2302,8 @@ for current in current-list:
         <h3 id="name-parallel-processing-interpr">
 <a href="#section-6.7" class="section-number selfRef">6.7. </a><a href="#name-parallel-processing-interpr" class="section-name selfRef">Parallel Processing Interpreter</a>
         </h3>
-<p id="section-6.7-1">Advanced Recipients MAY make use of the Strict Order parameter and enable parallel processing of some Command Sequences, or it may reorder some Command Sequences. To perform parallel processing, once the Strict Order parameter is set to False, the Recipient may issue each or every command concurrently until the Strict Order parameter is returned to True or the Command Sequence ends. Then, it waits for all issued commands to complete before continuing processing of commands. To perform out-of-order processing, a similar approach is used, except the Recipient consumes all commands after the Strict Order parameter is set to False, then it sorts these commands into its preferred order, invokes them all, then continues processing.<a href="#section-6.7-1" class="pilcrow">¶</a></p>
-<p id="section-6.7-2">When the manifest processor encounters any of these scenarios the parallel processing MUST halt until all issued commands have completed:<a href="#section-6.7-2" class="pilcrow">¶</a></p>
+<p id="section-6.7-1">Advanced Recipients <span class="bcp14">MAY</span> make use of the Strict Order parameter and enable parallel processing of some Command Sequences, or it may reorder some Command Sequences. To perform parallel processing, once the Strict Order parameter is set to False, the Recipient may issue each or every command concurrently until the Strict Order parameter is returned to True or the Command Sequence ends. Then, it waits for all issued commands to complete before continuing processing of commands. To perform out-of-order processing, a similar approach is used, except the Recipient consumes all commands after the Strict Order parameter is set to False, then it sorts these commands into its preferred order, invokes them all, then continues processing.<a href="#section-6.7-1" class="pilcrow">¶</a></p>
+<p id="section-6.7-2">When the manifest processor encounters any of these scenarios the parallel processing <span class="bcp14">MUST</span> halt until all issued commands have completed:<a href="#section-6.7-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.7-3.1">Set Parameters.<a href="#section-6.7-3.1" class="pilcrow">¶</a>
 </li>
@@ -2314,9 +2314,9 @@ for current in current-list:
           <li class="normal" id="section-6.7-3.4">Set Component Index.<a href="#section-6.7-3.4" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-6.7-4">To perform more useful parallel operations, a manifest author may collect sequences of commands in a Run Sequence command. Then, each of these sequences MAY be run in parallel. There are several invocation options for Run Sequence:<a href="#section-6.7-4" class="pilcrow">¶</a></p>
+<p id="section-6.7-4">To perform more useful parallel operations, a manifest author may collect sequences of commands in a Run Sequence command. Then, each of these sequences <span class="bcp14">MAY</span> be run in parallel. There are several invocation options for Run Sequence:<a href="#section-6.7-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.7-5.1">Component Index is a positive integer, Strict Order is False: Strict Order is set to True before the sequence argument is run. The sequence argument MUST begin with set-component-index.<a href="#section-6.7-5.1" class="pilcrow">¶</a>
+<li class="normal" id="section-6.7-5.1">Component Index is a positive integer, Strict Order is False: Strict Order is set to True before the sequence argument is run. The sequence argument <span class="bcp14">MUST</span> begin with set-component-index.<a href="#section-6.7-5.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-6.7-5.2">Component Index is true or an array of positive integers, Strict Order is False: The sequence argument is run once for each component (or each component in the array); the manifest processor presets the component index and Strict Order = True before each iteration of the sequence argument.<a href="#section-6.7-5.2" class="pilcrow">¶</a>
 </li>
@@ -2325,7 +2325,7 @@ for current in current-list:
           <li class="normal" id="section-6.7-5.4">Component Index is True or an array of positive integers, Strict Order is True: The sequence argument is run once for each component (or each component in the array); the manifest processor presets the component index before each iteration of the sequence argument.<a href="#section-6.7-5.4" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-6.7-6">These rules isolate each sequence from each other sequence, ensuring that they operate as expected. When Strict Order = False, any further Set Component Index directives in the Run Sequence command sequence argument MUST cause an Abort. This allows the interpreter that issues Run Sequence commands to check that the first element is correct, then issue the sequence to a parallel execution context to handle the remainder of the sequence.<a href="#section-6.7-6" class="pilcrow">¶</a></p>
+<p id="section-6.7-6">These rules isolate each sequence from each other sequence, ensuring that they operate as expected. When Strict Order = False, any further Set Component Index directives in the Run Sequence command sequence argument <span class="bcp14">MUST</span> cause an Abort. This allows the interpreter that issues Run Sequence commands to check that the first element is correct, then issue the sequence to a parallel execution context to handle the remainder of the sequence.<a href="#section-6.7-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2335,12 +2335,12 @@ for current in current-list:
       <h2 id="name-creating-manifests">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-creating-manifests" class="section-name selfRef">Creating Manifests</a>
       </h2>
-<p id="section-7-1">Manifests are created using tools for constructing COSE structures, calculating cryptographic values and compiling desired system state into a sequence of operations required to achieve that state. The process of constructing COSE structures and the calculation of cryptographic values is covered in <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">Manifests are created using tools for constructing COSE structures, calculating cryptographic values and compiling desired system state into a sequence of operations required to achieve that state. The process of constructing COSE structures and the calculation of cryptographic values is covered in <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <p id="section-7-2">Compiling desired system state into a sequence of operations can be accomplished in many ways. Several templates are provided below to cover common use-cases. These templates can be combined to produce more complex behavior.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<p id="section-7-3">The author MUST ensure that all parameters consumed by a command are set prior to invoking that command. Where Component Index = True, this means that the parameters consumed by each command MUST have been set for each Component.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-3">The author <span class="bcp14">MUST</span> ensure that all parameters consumed by a command are set prior to invoking that command. Where Component Index = True, this means that the parameters consumed by each command <span class="bcp14">MUST</span> have been set for each Component.<a href="#section-7-3" class="pilcrow">¶</a></p>
 <p id="section-7-4">This section details a set of templates for creating manifests. These templates explain which parameters, commands, and orders of commands are necessary to achieve a stated goal.<a href="#section-7-4" class="pilcrow">¶</a></p>
 <p id="section-7-5">NOTE: On systems that support only a single component, Set Component Index has no effect and can be omitted.<a href="#section-7-5" class="pilcrow">¶</a></p>
-<p id="section-7-6">NOTE: <strong>A digest MUST always be set using Override Parameters.</strong><a href="#section-7-6" class="pilcrow">¶</a></p>
+<p id="section-7-6">NOTE: <strong>A digest <span class="bcp14">MUST</span> always be set using Override Parameters.</strong><a href="#section-7-6" class="pilcrow">¶</a></p>
 <div id="template-compatibility-check">
 <section id="section-7.1">
         <h3 id="name-compatibility-check-templat">
@@ -2442,9 +2442,9 @@ for current in current-list:
 <a href="#section-7.5" class="section-number selfRef">7.5. </a><a href="#name-integrated-payload-template" class="section-name selfRef">Integrated Payload Template</a>
         </h3>
 <p id="section-7.5-1">The goal of the Integrated Payload template is to install a payload that is included in the manifest envelope. It is identical to the Component Download template (<a href="#firmware-download-template" class="auto internal xref">Section 7.3</a>).<a href="#section-7.5-1" class="pilcrow">¶</a></p>
-<p id="section-7.5-2">An implementer MAY choose to place a payload in the envelope of a manifest. The payload envelope key MUST be a string. The payload MUST be serialized in a bstr element.<a href="#section-7.5-2" class="pilcrow">¶</a></p>
-<p id="section-7.5-3">The URI for a payload enclosed in this way MAY be expressed as a fragment-only reference, as defined in <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span>, Section 4.4.<a href="#section-7.5-3" class="pilcrow">¶</a></p>
-<p id="section-7.5-4">A distributor MAY choose to pre-fetch a payload and add it to the manifest envelope, using the URI as the key.<a href="#section-7.5-4" class="pilcrow">¶</a></p>
+<p id="section-7.5-2">An implementer <span class="bcp14">MAY</span> choose to place a payload in the envelope of a manifest. The payload envelope key <span class="bcp14">MUST</span> be a string. The payload <span class="bcp14">MUST</span> be serialized in a bstr element.<a href="#section-7.5-2" class="pilcrow">¶</a></p>
+<p id="section-7.5-3">The URI for a payload enclosed in this way <span class="bcp14">MAY</span> be expressed as a fragment-only reference, as defined in <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>], <a href="https://rfc-editor.org/rfc/rfc3986#section-4.4" class="relref">Section 4.4</a></span>.<a href="#section-7.5-3" class="pilcrow">¶</a></p>
+<p id="section-7.5-4">A distributor <span class="bcp14">MAY</span> choose to pre-fetch a payload and add it to the manifest envelope, using the URI as the key.<a href="#section-7.5-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="template-load-ext">
@@ -2587,7 +2587,7 @@ for current in current-list:
 <p id="section-8.1-1">The map indices in the envelope encoding are reset to 1 for each map within the structure. This is to keep the indices as small as possible. The goal is to keep the index objects to single bytes (CBOR positive integers 1-23).<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.1-2">Wherever enumerations are used, they are started at 1. This allows detection of several common software errors that are caused by uninitialized variables. Positive numbers in enumerations are reserved for IANA registration. Negative numbers are used to identify application-specific values, as described in <a href="#iana" class="auto internal xref">Section 11</a>.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
 <p id="section-8.1-3">All elements of the envelope must be wrapped in a bstr to minimize the complexity of the code that evaluates the cryptographic integrity of the element and to ensure correct serialization for integrity and authenticity checks.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
-<p id="section-8.1-4">All CBOR maps in the Manifest and manifest envelope MUST be encoded with the canonical CBOR ordering as defined in <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
+<p id="section-8.1-4">All CBOR maps in the Manifest and manifest envelope <span class="bcp14">MUST</span> be encoded with the canonical CBOR ordering as defined in <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="envelope">
@@ -2604,14 +2604,14 @@ for current in current-list:
         <h3 id="name-authenticated-manifests">
 <a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-authenticated-manifests" class="section-name selfRef">Authenticated Manifests</a>
         </h3>
-<p id="section-8.3-1">The suit-authentication-wrapper contains a SUIT Digest Container (see <a href="#SUIT_Digest" class="auto internal xref">Section 10</a>) and one or more SUIT Authentication Blocks. The SUIT_Digest carries the result of computing the indicated hash algorithm over the suit-manifest element. A signing application MUST verify the suit-manifest element against the SUIT_Digest prior to signing. A SUIT Authentication Block is implemented as COSE_Mac_Tagged, COSE_Mac0_Tagged, COSE_Sign_Tagged or COSE_Sign1_Tagged structures with detached payloads, as described in RFC 8152 <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span>.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
-<p id="section-8.3-2">For COSE_Sign and COSE_Sign1 a special signature structure (called Sig_structure) has to be created onto which the selected digital signature algorithm is applied to, see Section 4.4 of <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span> for details. This specification requires Sig_structure to be populated as follows:
-* The external_aad field MUST be set to a zero-length binary string (i.e. there is no external additional authenticated data).
-* The payload field contains the SUIT_Digest wrapped in a bstr, as per the requirements in Section 4.4 of RFC 8152.
-All other fields in the Sig_structure are populated as described in Section 4.4 of <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span>.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
-<p id="section-8.3-3">Likewise, Section 6.3 of <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span> describes the details for computing a MAC and the fields of the MAC_structure need to be populated. The rules for external_aad and the payload fields described in the paragraph above also apply to this structure.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
-<p id="section-8.3-4">The suit-authentication-wrapper MUST come before the suit-manifest element, regardless of canonical encoding of CBOR.<a href="#section-8.3-4" class="pilcrow">¶</a></p>
-<p id="section-8.3-5">A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.<a href="#section-8.3-5" class="pilcrow">¶</a></p>
+<p id="section-8.3-1">The suit-authentication-wrapper contains a SUIT Digest Container (see <a href="#SUIT_Digest" class="auto internal xref">Section 10</a>) and one or more SUIT Authentication Blocks. The SUIT_Digest carries the result of computing the indicated hash algorithm over the suit-manifest element. A signing application <span class="bcp14">MUST</span> verify the suit-manifest element against the SUIT_Digest prior to signing. A SUIT Authentication Block is implemented as COSE_Mac_Tagged, COSE_Mac0_Tagged, COSE_Sign_Tagged or COSE_Sign1_Tagged structures with detached payloads, as described in RFC 9052 <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span>.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3-2">For COSE_Sign and COSE_Sign1 a special signature structure (called Sig_structure) has to be created onto which the selected digital signature algorithm is applied to, see <span><a href="https://rfc-editor.org/rfc/rfc9052#section-4.4" class="relref">Section 4.4</a> of [<a href="#RFC9052" class="cite xref">RFC9052</a>]</span> for details. This specification requires Sig_structure to be populated as follows:
+* The external_aad field <span class="bcp14">MUST</span> be set to a zero-length binary string (i.e. there is no external additional authenticated data).
+* The payload field contains the SUIT_Digest wrapped in a bstr, as per the requirements in <span><a href="https://rfc-editor.org/rfc/rfc9052#section-4.4" class="relref">Section 4.4</a> of [<a href="#RFC9052" class="cite xref">RFC9052</a>]</span>.
+All other fields in the Sig_structure are populated as described in <span><a href="https://rfc-editor.org/rfc/rfc9052#section-4.4" class="relref">Section 4.4</a> of [<a href="#RFC9052" class="cite xref">RFC9052</a>]</span>.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
+<p id="section-8.3-3">Likewise, <span><a href="https://rfc-editor.org/rfc/rfc9052#section-6.3" class="relref">Section 6.3</a> of [<a href="#RFC9052" class="cite xref">RFC9052</a>]</span> describes the details for computing a MAC and the fields of the MAC_structure need to be populated. The rules for external_aad and the payload fields described in the paragraph above also apply to this structure.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
+<p id="section-8.3-4">The suit-authentication-wrapper <span class="bcp14">MUST</span> come before the suit-manifest element, regardless of canonical encoding of CBOR.<a href="#section-8.3-4" class="pilcrow">¶</a></p>
+<p id="section-8.3-5">A SUIT_Envelope that has not had authentication information added <span class="bcp14">MUST</span> still contain the suit-authentication-wrapper element, but the content <span class="bcp14">MUST</span> be a list containing only the SUIT_Digest.<a href="#section-8.3-5" class="pilcrow">¶</a></p>
 <p id="section-8.3-6">The algorithms used in SUIT_Authentication are defined by the profiles declared in <span>[<a href="#I-D.moran-suit-mti" class="cite xref">I-D.moran-suit-mti</a>]</span>.<a href="#section-8.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2637,13 +2637,13 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
           <li class="normal" id="section-8.4-2.7">human-readable text describing the manifest found in the SUIT_Envelope (see <a href="#manifest-digest-text" class="auto internal xref">Section 8.4.4</a>)<a href="#section-8.4-2.7" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-8.4-3">The Text section, or any Command Sequence of the Update Procedure (Image Fetch, Image Installation and, System Validation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable element. Severable elements are RECOMMENDED to implement. In particular, the human-readable text SHOULD be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See <a href="#integrity-checks" class="auto internal xref">Section 8.4.11</a> for more detail.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
+<p id="section-8.4-3">The Text section, or any Command Sequence of the Update Procedure (Image Fetch, Image Installation and, System Validation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable element. Severable elements are <span class="bcp14">RECOMMENDED</span> to implement. In particular, the human-readable text <span class="bcp14">SHOULD</span> be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See <a href="#integrity-checks" class="auto internal xref">Section 8.4.11</a> for more detail.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
 <div id="manifest-version">
 <section id="section-8.4.1">
           <h4 id="name-suit-manifest-version">
 <a href="#section-8.4.1" class="section-number selfRef">8.4.1. </a><a href="#name-suit-manifest-version" class="section-name selfRef">suit-manifest-version</a>
           </h4>
-<p id="section-8.4.1-1">The suit-manifest-version indicates the version of serialization used to encode the manifest. Version 1 is the version described in this document. suit-manifest-version is REQUIRED to implement.<a href="#section-8.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.1-1">The suit-manifest-version indicates the version of serialization used to encode the manifest. Version 1 is the version described in this document. suit-manifest-version is <span class="bcp14">REQUIRED</span> to implement.<a href="#section-8.4.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manifest-seqnr">
@@ -2651,7 +2651,7 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
           <h4 id="name-suit-manifest-sequence-numb">
 <a href="#section-8.4.2" class="section-number selfRef">8.4.2. </a><a href="#name-suit-manifest-sequence-numb" class="section-name selfRef">suit-manifest-sequence-number</a>
           </h4>
-<p id="section-8.4.2-1">The suit-manifest-sequence-number is a monotonically increasing anti-rollback counter. Each Recipient MUST reject any manifest that has a sequence number lower than its current sequence number. For convenience, an implementer MAY use a UTC timestamp in seconds as the sequence number. suit-manifest-sequence-number is REQUIRED to implement.<a href="#section-8.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.2-1">The suit-manifest-sequence-number is a monotonically increasing anti-rollback counter. Each Recipient <span class="bcp14">MUST</span> reject any manifest that has a sequence number lower than its current sequence number. For convenience, an implementer <span class="bcp14">MAY</span> use a UTC timestamp in seconds as the sequence number. suit-manifest-sequence-number is <span class="bcp14">REQUIRED</span> to implement.<a href="#section-8.4.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manifest-reference-uri">
@@ -2667,16 +2667,16 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
           <h4 id="name-suit-text">
 <a href="#section-8.4.4" class="section-number selfRef">8.4.4. </a><a href="#name-suit-text" class="section-name selfRef">suit-text</a>
           </h4>
-<p id="section-8.4.4-1">suit-text SHOULD be a severable element. suit-text is a map containing two different types of pair:<a href="#section-8.4.4-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.4-1">suit-text <span class="bcp14">SHOULD</span> be a severable element. suit-text is a map containing two different types of pair:<a href="#section-8.4.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8.4.4-2.1">integer =&gt; text<a href="#section-8.4.4-2.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-8.4.4-2.2">SUIT_Component_Identifier =&gt; map<a href="#section-8.4.4-2.2" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-8.4.4-3">Each SUIT_Component_Identifier =&gt; map entry contains a map of integer =&gt; text values. All SUIT_Component_Identifiers present in suit-text MUST also be present in suit-common (<a href="#manifest-common" class="auto internal xref">Section 8.4.5</a>).<a href="#section-8.4.4-3" class="pilcrow">¶</a></p>
+<p id="section-8.4.4-3">Each SUIT_Component_Identifier =&gt; map entry contains a map of integer =&gt; text values. All SUIT_Component_Identifiers present in suit-text <span class="bcp14">MUST</span> also be present in suit-common (<a href="#manifest-common" class="auto internal xref">Section 8.4.5</a>).<a href="#section-8.4.4-3" class="pilcrow">¶</a></p>
 <p id="section-8.4.4-4">suit-text contains all the human-readable information that describes any and all parts of the manifest, its payload(s) and its resource(s). The text section is typically severable, allowing manifests to be distributed without the text, since end-nodes do not require text. The meaning of each field is described below.<a href="#section-8.4.4-4" class="pilcrow">¶</a></p>
-<p id="section-8.4.4-5">Each section MAY be present. If present, each section MUST be as described. Negative integer IDs are reserved for application-specific text values.<a href="#section-8.4.4-5" class="pilcrow">¶</a></p>
+<p id="section-8.4.4-5">Each section <span class="bcp14">MAY</span> be present. If present, each section <span class="bcp14">MUST</span> be as described. Negative integer IDs are reserved for application-specific text values.<a href="#section-8.4.4-5" class="pilcrow">¶</a></p>
 <p id="section-8.4.4-6">The following table describes the text fields available in suit-text:<a href="#section-8.4.4-6" class="pilcrow">¶</a></p>
 <table class="center" id="table-2">
             <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
@@ -2701,7 +2701,7 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">suit-text-manifest-yaml-source</td>
-                <td class="text-left" rowspan="1" colspan="1">The YAML (<span>[<a href="#YAML" class="cite xref">YAML</a>]</span>)-formatted document that was used to create the manifest</td>
+                <td class="text-left" rowspan="1" colspan="1">The YAML <span>[<a href="#YAML" class="cite xref">YAML</a>]</span>-formatted document that was used to create the manifest</td>
               </tr>
             </tbody>
           </table>
@@ -2741,7 +2741,7 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
               </tr>
             </tbody>
           </table>
-<p id="section-8.4.4-10">suit-text is OPTIONAL to implement.<a href="#section-8.4.4-10" class="pilcrow">¶</a></p>
+<p id="section-8.4.4-10">suit-text is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.4-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manifest-common">
@@ -2749,9 +2749,9 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
           <h4 id="name-suit-common">
 <a href="#section-8.4.5" class="section-number selfRef">8.4.5. </a><a href="#name-suit-common" class="section-name selfRef">suit-common</a>
           </h4>
-<p id="section-8.4.5-1">suit-common encodes all the information that is shared between each of the command sequences, including: suit-components, and suit-shared-sequence. suit-common is REQUIRED to implement.<a href="#section-8.4.5-1" class="pilcrow">¶</a></p>
-<p id="section-8.4.5-2">suit-components is a list of <span><a href="#suit-component-identifier" class="internal xref">SUIT_Component_Identifier</a> (<a href="#suit-component-identifier" class="internal xref">Section 8.4.5.1</a>)</span> blocks that specify the component identifiers that will be affected by the content of the current manifest. suit-components is REQUIRED to implement.<a href="#section-8.4.5-2" class="pilcrow">¶</a></p>
-<p id="section-8.4.5-3">suit-shared-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-shared-sequence include setting expected Recipient identity and image digests when they are conditional (see <a href="#suit-directive-try-each" class="auto internal xref">Section 8.4.10.2</a> and <a href="#a-b-template" class="auto internal xref">Section 7.7</a> for more information on conditional sequences). suit-shared-sequence is RECOMMENDED to implement. It is REQUIRED if the optimizations described in <a href="#minimal-sigs" class="auto internal xref">Section 6.2.1</a> will be used. Whenever a parameter or Try Each command is required by more than one Command Sequence, placing that parameter or command in suit-shared-sequence results in a smaller encoding.<a href="#section-8.4.5-3" class="pilcrow">¶</a></p>
+<p id="section-8.4.5-1">suit-common encodes all the information that is shared between each of the command sequences, including: suit-components, and suit-shared-sequence. suit-common is <span class="bcp14">REQUIRED</span> to implement.<a href="#section-8.4.5-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.5-2">suit-components is a list of <span><a href="#suit-component-identifier" class="internal xref">SUIT_Component_Identifier</a> (<a href="#suit-component-identifier" class="internal xref">Section 8.4.5.1</a>)</span> blocks that specify the component identifiers that will be affected by the content of the current manifest. suit-components is <span class="bcp14">REQUIRED</span> to implement.<a href="#section-8.4.5-2" class="pilcrow">¶</a></p>
+<p id="section-8.4.5-3">suit-shared-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-shared-sequence include setting expected Recipient identity and image digests when they are conditional (see <a href="#suit-directive-try-each" class="auto internal xref">Section 8.4.10.2</a> and <a href="#a-b-template" class="auto internal xref">Section 7.7</a> for more information on conditional sequences). suit-shared-sequence is <span class="bcp14">RECOMMENDED</span> to implement. It is <span class="bcp14">REQUIRED</span> if the optimizations described in <a href="#minimal-sigs" class="auto internal xref">Section 6.2.1</a> will be used. Whenever a parameter or Try Each command is required by more than one Command Sequence, placing that parameter or command in suit-shared-sequence results in a smaller encoding.<a href="#section-8.4.5-3" class="pilcrow">¶</a></p>
 <div id="suit-component-identifier">
 <section id="section-8.4.5.1">
             <h5 id="name-suit_component_identifier">
@@ -2769,26 +2769,26 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
           <h4 id="name-suit_command_sequence">
 <a href="#section-8.4.6" class="section-number selfRef">8.4.6. </a><a href="#name-suit_command_sequence" class="section-name selfRef">SUIT_Command_Sequence</a>
           </h4>
-<p id="section-8.4.6-1">A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take to accomplish a particular goal. These goals are defined in the manifest and include:<a href="#section-8.4.6-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.6-1">A SUIT_Command_Sequence defines a series of actions that the Recipient <span class="bcp14">MUST</span> take to accomplish a particular goal. These goals are defined in the manifest and include:<a href="#section-8.4.6-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.4.6-2">
-<li id="section-8.4.6-2.1">Payload Fetch: suit-payload-fetch is a SUIT_Command_Sequence to execute in order to obtain a payload. Some manifests may include these actions in the suit-install section instead if they operate in a streaming installation mode. This is particularly relevant for constrained devices without any temporary storage for staging the update. suit-payload-fetch is OPTIONAL to implement.<a href="#section-8.4.6-2.1" class="pilcrow">¶</a>
+<li id="section-8.4.6-2.1">Payload Fetch: suit-payload-fetch is a SUIT_Command_Sequence to execute in order to obtain a payload. Some manifests may include these actions in the suit-install section instead if they operate in a streaming installation mode. This is particularly relevant for constrained devices without any temporary storage for staging the update. suit-payload-fetch is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.6-2.1" class="pilcrow">¶</a>
 </li>
-            <li id="section-8.4.6-2.2">Payload Installation: suit-install is a SUIT_Command_Sequence to execute in order to install a payload. Typical actions include verifying a payload stored in temporary storage, copying a staged payload from temporary storage, and unpacking a payload. suit-install is OPTIONAL to implement.<a href="#section-8.4.6-2.2" class="pilcrow">¶</a>
+            <li id="section-8.4.6-2.2">Payload Installation: suit-install is a SUIT_Command_Sequence to execute in order to install a payload. Typical actions include verifying a payload stored in temporary storage, copying a staged payload from temporary storage, and unpacking a payload. suit-install is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.6-2.2" class="pilcrow">¶</a>
 </li>
-            <li id="section-8.4.6-2.3">Image Validation: suit-validate is a SUIT_Command_Sequence to execute in order to validate that the result of applying the update is correct. Typical actions involve image validation. suit-validate is REQUIRED to implement.<a href="#section-8.4.6-2.3" class="pilcrow">¶</a>
+            <li id="section-8.4.6-2.3">Image Validation: suit-validate is a SUIT_Command_Sequence to execute in order to validate that the result of applying the update is correct. Typical actions involve image validation. suit-validate is <span class="bcp14">REQUIRED</span> to implement.<a href="#section-8.4.6-2.3" class="pilcrow">¶</a>
 </li>
-            <li id="section-8.4.6-2.4">Image Loading: suit-load is a SUIT_Command_Sequence to execute in order to prepare a payload for execution. Typical actions include copying an image from permanent storage into RAM, optionally including actions such as decryption or decompression. suit-load is OPTIONAL to implement.<a href="#section-8.4.6-2.4" class="pilcrow">¶</a>
+            <li id="section-8.4.6-2.4">Image Loading: suit-load is a SUIT_Command_Sequence to execute in order to prepare a payload for execution. Typical actions include copying an image from permanent storage into RAM, optionally including actions such as decryption or decompression. suit-load is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.6-2.4" class="pilcrow">¶</a>
 </li>
-            <li id="section-8.4.6-2.5">Invoke or Boot: suit-invoke is a SUIT_Command_Sequence to execute in order to invoke an image. suit-invoke typically contains a single instruction: the "invoke" directive, but may also contain an image condition. suit-invoke is OPTIONAL to implement.<a href="#section-8.4.6-2.5" class="pilcrow">¶</a>
+            <li id="section-8.4.6-2.5">Invoke or Boot: suit-invoke is a SUIT_Command_Sequence to execute in order to invoke an image. suit-invoke typically contains a single instruction: the "invoke" directive, but may also contain an image condition. suit-invoke is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.6-2.5" class="pilcrow">¶</a>
 </li>
           </ol>
 <p id="section-8.4.6-3">Goals 1,2,3 form the Update Procedure. Goals 3,4,5 form the Invocation Procedure.<a href="#section-8.4.6-3" class="pilcrow">¶</a></p>
 <p id="section-8.4.6-4">Each Command Sequence follows exactly the same structure to ensure that the parser is as simple as possible.<a href="#section-8.4.6-4" class="pilcrow">¶</a></p>
 <p id="section-8.4.6-5">Lists of commands are constructed from two kinds of element:<a href="#section-8.4.6-5" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.4.6-6">
-<li id="section-8.4.6-6.1">Conditions that MUST be true and any failure is treated as a failure of the update/load/invocation<a href="#section-8.4.6-6.1" class="pilcrow">¶</a>
+<li id="section-8.4.6-6.1">Conditions that <span class="bcp14">MUST</span> be true and any failure is treated as a failure of the update/load/invocation<a href="#section-8.4.6-6.1" class="pilcrow">¶</a>
 </li>
-            <li id="section-8.4.6-6.2">Directives that MUST be executed.<a href="#section-8.4.6-6.2" class="pilcrow">¶</a>
+            <li id="section-8.4.6-6.2">Directives that <span class="bcp14">MUST</span> be executed.<a href="#section-8.4.6-6.2" class="pilcrow">¶</a>
 </li>
           </ol>
 <p id="section-8.4.6-7">Each condition is composed of:<a href="#section-8.4.6-7" class="pilcrow">¶</a></p>
@@ -2855,7 +2855,7 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
             </tbody>
           </table>
 <p id="section-8.4.7-3">Any or all of these policies may be enabled at once.<a href="#section-8.4.7-3" class="pilcrow">¶</a></p>
-<p id="section-8.4.7-4">At the completion of each command, a Manifest Processor MAY forward information about the command to a Reporting Engine, which is responsible for reporting boot or update status to a third party. The Reporting Engine is entirely implementation-defined, the reporting policy simply facilitates the Reporting Engine's interface to the SUIT Manifest Processor.<a href="#section-8.4.7-4" class="pilcrow">¶</a></p>
+<p id="section-8.4.7-4">At the completion of each command, a Manifest Processor <span class="bcp14">MAY</span> forward information about the command to a Reporting Engine, which is responsible for reporting boot or update status to a third party. The Reporting Engine is entirely implementation-defined, the reporting policy simply facilitates the Reporting Engine's interface to the SUIT Manifest Processor.<a href="#section-8.4.7-4" class="pilcrow">¶</a></p>
 <p id="section-8.4.7-5">The information elements provided to the Reporting Engine are:<a href="#section-8.4.7-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8.4.7-6.1">The reporting policy<a href="#section-8.4.7-6.1" class="pilcrow">¶</a>
@@ -2868,9 +2868,9 @@ All other fields in the Sig_structure are populated as described in Section 4.4 
 </li>
           </ul>
 <p id="section-8.4.7-7">Together, these elements are called a Record. A group of Records is a Report.<a href="#section-8.4.7-7" class="pilcrow">¶</a></p>
-<p id="section-8.4.7-8">If the component index is set to True or an array when a command is executed with a non-zero reporting policy, then the Reporting Engine MUST receive one Record for each Component, in the order expressed in the Components list or the component index array.<a href="#section-8.4.7-8" class="pilcrow">¶</a></p>
-<p id="section-8.4.7-9">This specification does not define a particular format of Records or Reports. This specification only defines hints to the Reporting Engine for which Records it should aggregate into the Report. The Reporting Engine MAY choose to ignore these hints and apply its own policy instead.<a href="#section-8.4.7-9" class="pilcrow">¶</a></p>
-<p id="section-8.4.7-10">When used in a Invocation Procedure, the report MAY form the basis of an attestation report. When used in an Update Process, the report MAY form the basis for one or more log entries.<a href="#section-8.4.7-10" class="pilcrow">¶</a></p>
+<p id="section-8.4.7-8">If the component index is set to True or an array when a command is executed with a non-zero reporting policy, then the Reporting Engine <span class="bcp14">MUST</span> receive one Record for each Component, in the order expressed in the Components list or the component index array.<a href="#section-8.4.7-8" class="pilcrow">¶</a></p>
+<p id="section-8.4.7-9">This specification does not define a particular format of Records or Reports. This specification only defines hints to the Reporting Engine for which Records it should aggregate into the Report. The Reporting Engine <span class="bcp14">MAY</span> choose to ignore these hints and apply its own policy instead.<a href="#section-8.4.7-9" class="pilcrow">¶</a></p>
+<p id="section-8.4.7-10">When used in a Invocation Procedure, the report <span class="bcp14">MAY</span> form the basis of an attestation report. When used in an Update Process, the report <span class="bcp14">MAY</span> form the basis for one or more log entries.<a href="#section-8.4.7-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="secparameters">
@@ -3023,8 +3023,8 @@ NAMESPACE_CBOR_PEN = 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e
 <a href="#section-8.4.8.2" class="section-number selfRef">8.4.8.2. </a><a href="#name-constructing-uuids" class="section-name selfRef">Constructing UUIDs</a>
             </h5>
 <p id="section-8.4.8.2-1">Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 <span>[<a href="#RFC4122" class="cite xref">RFC4122</a>]</span> UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.<a href="#section-8.4.8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.4.8.2-2">A Recipient MAY match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a Recipient that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This Recipient might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.<a href="#section-8.4.8.2-2" class="pilcrow">¶</a></p>
-<p id="section-8.4.8.2-3">Identifiers are used for compatibility checks. They MUST NOT be used as assertions of identity. They are evaluated by identifier conditions (<a href="#identifier-conditions" class="auto internal xref">Section 8.4.9.1</a>).<a href="#section-8.4.8.2-3" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.2-2">A Recipient <span class="bcp14">MAY</span> match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a Recipient that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This Recipient might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.<a href="#section-8.4.8.2-2" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.2-3">Identifiers are used for compatibility checks. They <span class="bcp14">MUST NOT</span> be used as assertions of identity. They are evaluated by identifier conditions (<a href="#identifier-conditions" class="auto internal xref">Section 8.4.9.1</a>).<a href="#section-8.4.8.2-3" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.2-4">A more complete example: Imagine a device has the following physical components:
 1. A host MCU
 2. A WiFi module<a href="#section-8.4.8.2-4" class="pilcrow">¶</a></p>
@@ -3045,20 +3045,20 @@ NAMESPACE_CBOR_PEN = 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e
             </ol>
 <p id="section-8.4.8.2-8">This allows the OS, WiFi module, and application to be updated independently. To combat possible incompatibilities, the OS class ID can be changed each time the OS has a change to its API.<a href="#section-8.4.8.2-8" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.2-9">This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.<a href="#section-8.4.8.2-9" class="pilcrow">¶</a></p>
-<p id="section-8.4.8.2-10">UUIDs MUST be created according to RFC 4122 <span>[<a href="#RFC4122" class="cite xref">RFC4122</a>]</span>. UUIDs SHOULD use versions 3, 4, or 5, as described in RFC4122. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.<a href="#section-8.4.8.2-10" class="pilcrow">¶</a></p>
-<p id="section-8.4.8.2-11">The RECOMMENDED method to create a vendor ID is:<a href="#section-8.4.8.2-11" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.2-10">UUIDs <span class="bcp14">MUST</span> be created according to RFC 4122 <span>[<a href="#RFC4122" class="cite xref">RFC4122</a>]</span>. UUIDs <span class="bcp14">SHOULD</span> use versions 3, 4, or 5, as described in RFC4122. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.<a href="#section-8.4.8.2-10" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.2-11">The <span class="bcp14">RECOMMENDED</span> method to create a vendor ID is:<a href="#section-8.4.8.2-11" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.4.8.2-12">
 <pre>
 Vendor ID = UUID5(DNS_PREFIX, vendor domain name)
 </pre><a href="#section-8.4.8.2-12" class="pilcrow">¶</a>
 </div>
-<p id="section-8.4.8.2-13">If the Vendor ID is a UUID, the RECOMMENDED method to create a Class ID is:<a href="#section-8.4.8.2-13" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.2-13">If the Vendor ID is a UUID, the <span class="bcp14">RECOMMENDED</span> method to create a Class ID is:<a href="#section-8.4.8.2-13" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.4.8.2-14">
 <pre>
 Class ID = UUID5(Vendor ID, Class-Specific-Information)
 </pre><a href="#section-8.4.8.2-14" class="pilcrow">¶</a>
 </div>
-<p id="section-8.4.8.2-15">If the Vendor ID is a CBOR PEN (see <a href="#suit-parameter-vendor-identifier" class="auto internal xref">Section 8.4.8.3</a>), the RECOMMENDED method to create a Class ID is:<a href="#section-8.4.8.2-15" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.2-15">If the Vendor ID is a CBOR PEN (see <a href="#suit-parameter-vendor-identifier" class="auto internal xref">Section 8.4.8.3</a>), the <span class="bcp14">RECOMMENDED</span> method to create a Class ID is:<a href="#section-8.4.8.2-15" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.4.8.2-16">
 <pre>
 Class ID = UUID5(
@@ -3086,10 +3086,10 @@ Class ID = UUID5(
 <ul class="normal">
 <li class="normal" id="section-8.4.8.3-2.1">A Private Enterprise Number<a href="#section-8.4.8.3-2.1" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-8.4.8.3-2.2">A byte string containing a UUID (<span>[<a href="#RFC4122" class="cite xref">RFC4122</a>]</span>)<a href="#section-8.4.8.3-2.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-8.4.8.3-2.2">A byte string containing a UUID <span>[<a href="#RFC4122" class="cite xref">RFC4122</a>]</span><a href="#section-8.4.8.3-2.2" class="pilcrow">¶</a>
 </li>
             </ul>
-<p id="section-8.4.8.3-3">Private Enterprise Numbers are encoded as a relative OID, according to the definition in <span>[<a href="#I-D.ietf-cbor-tags-oid" class="cite xref">I-D.ietf-cbor-tags-oid</a>]</span>. All PENs are relative to the IANA PEN: 1.3.6.1.4.1.<a href="#section-8.4.8.3-3" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.3-3">Private Enterprise Numbers are encoded as a relative OID, according to the definition in <span>[<a href="#RFC9090" class="cite xref">RFC9090</a>]</span>. All PENs are relative to the IANA PEN: 1.3.6.1.4.1.<a href="#section-8.4.8.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-class-identifier">
@@ -3097,7 +3097,7 @@ Class ID = UUID5(
             <h5 id="name-suit-parameter-class-identi">
 <a href="#section-8.4.8.4" class="section-number selfRef">8.4.8.4. </a><a href="#name-suit-parameter-class-identi" class="section-name selfRef">suit-parameter-class-identifier</a>
             </h5>
-<p id="section-8.4.8.4-1">A RFC 4122 UUID representing the class of the device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in <a href="#uuid-identifiers" class="auto internal xref">Section 8.4.8.2</a><a href="#section-8.4.8.4-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.4-1">A RFC 4122 UUID representing the class of the device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It <span class="bcp14">MUST</span> be constructed as described in <a href="#uuid-identifiers" class="auto internal xref">Section 8.4.8.2</a><a href="#section-8.4.8.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-device-identifier">
@@ -3105,7 +3105,7 @@ Class ID = UUID5(
             <h5 id="name-suit-parameter-device-ident">
 <a href="#section-8.4.8.5" class="section-number selfRef">8.4.8.5. </a><a href="#name-suit-parameter-device-ident" class="section-name selfRef">suit-parameter-device-identifier</a>
             </h5>
-<p id="section-8.4.8.5-1">A RFC 4122 UUID representing the specific device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in <a href="#uuid-identifiers" class="auto internal xref">Section 8.4.8.2</a><a href="#section-8.4.8.5-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.5-1">A RFC 4122 UUID representing the specific device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It <span class="bcp14">MUST</span> be constructed as described in <a href="#uuid-identifiers" class="auto internal xref">Section 8.4.8.2</a><a href="#section-8.4.8.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-image-digest">
@@ -3129,7 +3129,7 @@ Class ID = UUID5(
             <h5 id="name-suit-parameter-component-sl">
 <a href="#section-8.4.8.8" class="section-number selfRef">8.4.8.8. </a><a href="#name-suit-parameter-component-sl" class="section-name selfRef">suit-parameter-component-slot</a>
             </h5>
-<p id="section-8.4.8.8-1">This parameter sets the slot index of a component. Some components support multiple possible Slots (offsets into a storage area). This parameter describes the intended Slot to use, identified by its index into the component's storage area. This slot MUST be encoded as a positive integer.<a href="#section-8.4.8.8-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.8-1">This parameter sets the slot index of a component. Some components support multiple possible Slots (offsets into a storage area). This parameter describes the intended Slot to use, identified by its index into the component's storage area. This slot <span class="bcp14">MUST</span> be encoded as a positive integer.<a href="#section-8.4.8.8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-content">
@@ -3147,7 +3147,7 @@ Class ID = UUID5(
             <h5 id="name-suit-parameter-uri">
 <a href="#section-8.4.8.10" class="section-number selfRef">8.4.8.10. </a><a href="#name-suit-parameter-uri" class="section-name selfRef">suit-parameter-uri</a>
             </h5>
-<p id="section-8.4.8.10-1">A URI Reference (<span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span>) from which to fetch a resource, encoded as a text string. CBOR Tag 32 is not used because the meaning of the text string is unambiguous in this context.<a href="#section-8.4.8.10-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.10-1">A URI Reference <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> from which to fetch a resource, encoded as a text string. CBOR Tag 32 is not used because the meaning of the text string is unambiguous in this context.<a href="#section-8.4.8.10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-source-component">
@@ -3163,7 +3163,7 @@ Class ID = UUID5(
             <h5 id="name-suit-parameter-invoke-args">
 <a href="#section-8.4.8.12" class="section-number selfRef">8.4.8.12. </a><a href="#name-suit-parameter-invoke-args" class="section-name selfRef">suit-parameter-invoke-args</a>
             </h5>
-<p id="section-8.4.8.12-1">This parameter contains an encoded set of arguments for suit-directive-invoke (<a href="#suit-directive-invoke" class="auto internal xref">Section 8.4.10.7</a>). The arguments MUST be provided as an implementation-defined bstr.<a href="#section-8.4.8.12-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.12-1">This parameter contains an encoded set of arguments for suit-directive-invoke (<a href="#suit-directive-invoke" class="auto internal xref">Section 8.4.10.7</a>). The arguments <span class="bcp14">MUST</span> be provided as an implementation-defined bstr.<a href="#section-8.4.8.12-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-parameter-fetch-arguments">
@@ -3179,7 +3179,7 @@ Class ID = UUID5(
             <h5 id="name-suit-parameter-strict-order">
 <a href="#section-8.4.8.14" class="section-number selfRef">8.4.8.14. </a><a href="#name-suit-parameter-strict-order" class="section-name selfRef">suit-parameter-strict-order</a>
             </h5>
-<p id="section-8.4.8.14-1">The Strict Order Parameter allows a manifest to govern when directives can be executed out-of-order. This allows for systems that have a sensitivity to order of updates to choose the order in which they are executed. It also allows for more advanced systems to parallelize their handling of updates. Strict Order defaults to True. It MAY be set to False when the order of operations does not matter. When arriving at the end of a command sequence, ALL commands MUST have completed, regardless of the state of SUIT_Parameter_Strict_Order. If SUIT_Parameter_Strict_Order is returned to True, ALL preceding commands MUST complete before the next command is executed.<a href="#section-8.4.8.14-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.14-1">The Strict Order Parameter allows a manifest to govern when directives can be executed out-of-order. This allows for systems that have a sensitivity to order of updates to choose the order in which they are executed. It also allows for more advanced systems to parallelize their handling of updates. Strict Order defaults to True. It <span class="bcp14">MAY</span> be set to False when the order of operations does not matter. When arriving at the end of a command sequence, ALL commands <span class="bcp14">MUST</span> have completed, regardless of the state of SUIT_Parameter_Strict_Order. If SUIT_Parameter_Strict_Order is returned to True, ALL preceding commands <span class="bcp14">MUST</span> complete before the next command is executed.<a href="#section-8.4.8.14-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.14-2">See <a href="#parallel-processing" class="auto internal xref">Section 6.7</a> for behavioral description of Strict Order.<a href="#section-8.4.8.14-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3189,7 +3189,7 @@ Class ID = UUID5(
 <a href="#section-8.4.8.15" class="section-number selfRef">8.4.8.15. </a><a href="#name-suit-parameter-soft-failure" class="section-name selfRef">suit-parameter-soft-failure</a>
             </h5>
 <p id="section-8.4.8.15-1">When executing a command sequence inside suit-directive-try-each (<a href="#suit-directive-try-each" class="auto internal xref">Section 8.4.10.2</a>) or suit-directive-run-sequence (<a href="#suit-directive-run-sequence" class="auto internal xref">Section 8.4.10.8</a>) and a condition failure occurs, the manifest processor aborts the sequence. For suit-directive-try-each, if Soft Failure is True, the next sequence in Try Each is invoked, otherwise suit-directive-try-each fails with the condition failure code. In suit-directive-run-sequence, if Soft Failure is True the suit-directive-run-sequence simply halts with no side-effects and the Manifest Processor continues with the following command, otherwise, the suit-directive-run-sequence fails with the condition failure code.<a href="#section-8.4.8.15-1" class="pilcrow">¶</a></p>
-<p id="section-8.4.8.15-2">suit-parameter-soft-failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates. It MUST NOT be set outside of suit-directive-try-each or suit-directive-run-sequence.<a href="#section-8.4.8.15-2" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.15-2">suit-parameter-soft-failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates. It <span class="bcp14">MUST NOT</span> be set outside of suit-directive-try-each or suit-directive-run-sequence.<a href="#section-8.4.8.15-2" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.15-3">When suit-directive-try-each is invoked, Soft Failure defaults to True. An Update Author may choose to set Soft Failure to False if they require a failed condition in a sequence to force an Abort.<a href="#section-8.4.8.15-3" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.15-4">When suit-directive-run-sequence is invoked, Soft Failure defaults to False. An Update Author may choose to make failures soft within a suit-directive-run-sequence.<a href="#section-8.4.8.15-4" class="pilcrow">¶</a></p>
 </section>
@@ -3199,7 +3199,7 @@ Class ID = UUID5(
             <h5 id="name-suit-parameter-custom">
 <a href="#section-8.4.8.16" class="section-number selfRef">8.4.8.16. </a><a href="#name-suit-parameter-custom" class="section-name selfRef">suit-parameter-custom</a>
             </h5>
-<p id="section-8.4.8.16-1">This parameter is an extension point for any proprietary, application specific conditions and directives. It MUST NOT be used in the shared sequence. This effectively scopes each custom command to a particular Vendor Identifier/Class Identifier pair.<a href="#section-8.4.8.16-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.16-1">This parameter is an extension point for any proprietary, application specific conditions and directives. It <span class="bcp14">MUST NOT</span> be used in the shared sequence. This effectively scopes each custom command to a particular Vendor Identifier/Class Identifier pair.<a href="#section-8.4.8.16-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3280,16 +3280,16 @@ Class ID = UUID5(
           </table>
 <p id="section-8.4.9-3">The abstract description of these conditions is defined in <a href="#command-behavior" class="auto internal xref">Section 6.4</a>.<a href="#section-8.4.9-3" class="pilcrow">¶</a></p>
 <p id="section-8.4.9-4">Conditions compare parameters against properties of the system. These properties may be asserted in many different ways, including: calculation on-demand, volatile definition in memory, static definition within the manifest processor, storage in known location within an image, storage within a key storage system, storage in One-Time-Programmable memory, inclusion in mask ROM, or inclusion as a register in hardware. Some of these assertion methods are global in scope, such as a hardware register, some are scoped to an individual component, such as storage at a known location in an image, and some assertion methods can be either global or component-scope, based on implementation.<a href="#section-8.4.9-4" class="pilcrow">¶</a></p>
-<p id="section-8.4.9-5">Each condition MUST report a result code on completion. If a condition reports failure, then the current sequence of commands MUST terminate. A subsequent command or command sequence MAY continue executing if suit-parameter-soft-failure (<a href="#suit-parameter-soft-failure" class="auto internal xref">Section 8.4.8.15</a>) is set. If a condition requires additional information, this MUST be specified in one or more parameters before the condition is executed. If a Recipient attempts to process a condition that expects additional information and that information has not been set, it MUST report a failure. If a Recipient encounters an unknown condition, it MUST report a failure.<a href="#section-8.4.9-5" class="pilcrow">¶</a></p>
+<p id="section-8.4.9-5">Each condition <span class="bcp14">MUST</span> report a result code on completion. If a condition reports failure, then the current sequence of commands <span class="bcp14">MUST</span> terminate. A subsequent command or command sequence <span class="bcp14">MAY</span> continue executing if suit-parameter-soft-failure (<a href="#suit-parameter-soft-failure" class="auto internal xref">Section 8.4.8.15</a>) is set. If a condition requires additional information, this <span class="bcp14">MUST</span> be specified in one or more parameters before the condition is executed. If a Recipient attempts to process a condition that expects additional information and that information has not been set, it <span class="bcp14">MUST</span> report a failure. If a Recipient encounters an unknown condition, it <span class="bcp14">MUST</span> report a failure.<a href="#section-8.4.9-5" class="pilcrow">¶</a></p>
 <p id="section-8.4.9-6">Condition labels in the positive number range are reserved for IANA registration while those in the negative range are custom conditions reserved for proprietary definition by the author of a manifest processor. See <a href="#iana" class="auto internal xref">Section 11</a> for more details.<a href="#section-8.4.9-6" class="pilcrow">¶</a></p>
 <div id="identifier-conditions">
 <section id="section-8.4.9.1">
             <h5 id="name-suit-condition-vendor-ident">
 <a href="#section-8.4.9.1" class="section-number selfRef">8.4.9.1. </a><a href="#name-suit-condition-vendor-ident" class="section-name selfRef">suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier</a>
             </h5>
-<p id="section-8.4.9.1-1">There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a RFC 4122 <span>[<a href="#RFC4122" class="cite xref">RFC4122</a>]</span> UUID that MUST have already been set as a parameter. The installing Recipient MUST match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. Each component MAY match more than one identifier. Care is needed to ensure that manifests correctly identify their targets using these conditions. Using only a generic class ID for a device-specific firmware could result in matching devices that are not compatible.<a href="#section-8.4.9.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.4.9.1-2">The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.<a href="#section-8.4.9.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.4.9.1-3">Each identifier condition compares the corresponding identifier parameter to a parameter asserted to the Manifest Processor by the Recipient. Identifiers MUST be known to the Manifest Processor in order to evaluate compatibility.<a href="#section-8.4.9.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.4.9.1-1">There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a RFC 4122 <span>[<a href="#RFC4122" class="cite xref">RFC4122</a>]</span> UUID that <span class="bcp14">MUST</span> have already been set as a parameter. The installing Recipient <span class="bcp14">MUST</span> match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. Each component <span class="bcp14">MAY</span> match more than one identifier. Care is needed to ensure that manifests correctly identify their targets using these conditions. Using only a generic class ID for a device-specific firmware could result in matching devices that are not compatible.<a href="#section-8.4.9.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.9.1-2">The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are <span class="bcp14">REQUIRED</span> to implement. suit-condition-device-identifier is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.9.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.4.9.1-3">Each identifier condition compares the corresponding identifier parameter to a parameter asserted to the Manifest Processor by the Recipient. Identifiers <span class="bcp14">MUST</span> be known to the Manifest Processor in order to evaluate compatibility.<a href="#section-8.4.9.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-condition-image-match">
@@ -3297,7 +3297,7 @@ Class ID = UUID5(
             <h5 id="name-suit-condition-image-match">
 <a href="#section-8.4.9.2" class="section-number selfRef">8.4.9.2. </a><a href="#name-suit-condition-image-match" class="section-name selfRef">suit-condition-image-match</a>
             </h5>
-<p id="section-8.4.9.2-1">Verify that the current component matches the suit-parameter-image-digest (<a href="#suit-parameter-image-digest" class="auto internal xref">Section 8.4.8.6</a>) for the current component. The digest is verified against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-match is REQUIRED to implement.<a href="#section-8.4.9.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.9.2-1">Verify that the current component matches the suit-parameter-image-digest (<a href="#suit-parameter-image-digest" class="auto internal xref">Section 8.4.8.6</a>) for the current component. The digest is verified against the digest specified in the Component's parameters list. If no digest is specified, the condition fails. suit-condition-image-match is <span class="bcp14">REQUIRED</span> to implement.<a href="#section-8.4.9.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="suit-condition-check-content">
@@ -3305,7 +3305,7 @@ Class ID = UUID5(
             <h5 id="name-suit-condition-check-conten">
 <a href="#section-8.4.9.3" class="section-number selfRef">8.4.9.3. </a><a href="#name-suit-condition-check-conten" class="section-name selfRef">suit-condition-check-content</a>
             </h5>
-<p id="section-8.4.9.3-1">This directive compares the specified component identifier to the data indicated by suit-parameter-content. This functions similarly to suit-condition-image-match, however it does a direct, byte-by-byte comparison rather than a digest-based comparison. Because it is possible that an early stop to check-content could reveal information through timing, suit-condition-check-content MUST be constant time: no early exits. This MAY be implemented as follows:<a href="#section-8.4.9.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.9.3-1">This directive compares the specified component identifier to the data indicated by suit-parameter-content. This functions similarly to suit-condition-image-match, however it does a direct, byte-by-byte comparison rather than a digest-based comparison. Because it is possible that an early stop to check-content could reveal information through timing, suit-condition-check-content <span class="bcp14">MUST</span> be constant time: no early exits. This <span class="bcp14">MAY</span> be implemented as follows:<a href="#section-8.4.9.3-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.9.3-2"><code>
 // content &amp; component must be same length
 // returns 0 for match
@@ -3340,7 +3340,7 @@ bool check_content(content, component, length) {
             <h5 id="name-suit-condition-custom">
 <a href="#section-8.4.9.6" class="section-number selfRef">8.4.9.6. </a><a href="#name-suit-condition-custom" class="section-name selfRef">suit-condition-custom</a>
             </h5>
-<p id="section-8.4.9.6-1">suit-condition-custom describes any proprietary, application specific condition. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided to the condition, it should be encoded in a custom parameter (a nint) as described in <a href="#secparameters" class="auto internal xref">Section 8.4.8</a>. SUIT_Condition_Custom is OPTIONAL to implement.<a href="#section-8.4.9.6-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.9.6-1">suit-condition-custom describes any proprietary, application specific condition. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided to the condition, it should be encoded in a custom parameter (a nint) as described in <a href="#secparameters" class="auto internal xref">Section 8.4.8</a>. SUIT_Condition_Custom is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.9.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3427,19 +3427,19 @@ bool check_content(content, component, length) {
             </tbody>
           </table>
 <p id="section-8.4.10-3">The abstract description of these commands is defined in <a href="#command-behavior" class="auto internal xref">Section 6.4</a>.<a href="#section-8.4.10-3" class="pilcrow">¶</a></p>
-<p id="section-8.4.10-4">When a Recipient executes a Directive, it MUST report a result code. If the Directive reports failure, then the current Command Sequence MUST be terminated.<a href="#section-8.4.10-4" class="pilcrow">¶</a></p>
+<p id="section-8.4.10-4">When a Recipient executes a Directive, it <span class="bcp14">MUST</span> report a result code. If the Directive reports failure, then the current Command Sequence <span class="bcp14">MUST</span> be terminated.<a href="#section-8.4.10-4" class="pilcrow">¶</a></p>
 <div id="suit-directive-set-component-index">
 <section id="section-8.4.10.1">
             <h5 id="name-suit-directive-set-componen">
 <a href="#section-8.4.10.1" class="section-number selfRef">8.4.10.1. </a><a href="#name-suit-directive-set-componen" class="section-name selfRef">suit-directive-set-component-index</a>
             </h5>
-<p id="section-8.4.10.1-1">Set Component Index defines the component to which successive directives and conditions will apply. The supplied argument MUST be one of three types:<a href="#section-8.4.10.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.10.1-1">Set Component Index defines the component to which successive directives and conditions will apply. The supplied argument <span class="bcp14">MUST</span> be one of three types:<a href="#section-8.4.10.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.4.10.1-2">
-<li id="section-8.4.10.1-2.1">An unsigned integer (REQUIRED to implement in parser)<a href="#section-8.4.10.1-2.1" class="pilcrow">¶</a>
+<li id="section-8.4.10.1-2.1">An unsigned integer (<span class="bcp14">REQUIRED</span> to implement in parser)<a href="#section-8.4.10.1-2.1" class="pilcrow">¶</a>
 </li>
-              <li id="section-8.4.10.1-2.2">A boolean (REQUIRED to implement in parser ONLY IF 2 or more components supported)<a href="#section-8.4.10.1-2.2" class="pilcrow">¶</a>
+              <li id="section-8.4.10.1-2.2">A boolean (<span class="bcp14">REQUIRED</span> to implement in parser ONLY IF 2 or more components supported)<a href="#section-8.4.10.1-2.2" class="pilcrow">¶</a>
 </li>
-              <li id="section-8.4.10.1-2.3">An array of unsigned integers (REQUIRED to implement in parser ONLY IF 3 or more components supported)<a href="#section-8.4.10.1-2.3" class="pilcrow">¶</a>
+              <li id="section-8.4.10.1-2.3">An array of unsigned integers (<span class="bcp14">REQUIRED</span> to implement in parser ONLY IF 3 or more components supported)<a href="#section-8.4.10.1-2.3" class="pilcrow">¶</a>
 </li>
             </ol>
 <p id="section-8.4.10.1-3">If the following commands apply to ONE component, an unsigned integer index into the component list is used. If the following commands apply to ALL components, then the boolean value "True" is used instead of an index. If the following commands apply to more than one, but not all components, then an array of unsigned integer indices into the component list is used.
@@ -3452,7 +3452,7 @@ See <a href="#index-true" class="auto internal xref">Section 6.5</a> for more de
             <h5 id="name-suit-directive-try-each">
 <a href="#section-8.4.10.2" class="section-number selfRef">8.4.10.2. </a><a href="#name-suit-directive-try-each" class="section-name selfRef">suit-directive-try-each</a>
             </h5>
-<p id="section-8.4.10.2-1">This command runs several SUIT_Command_Sequence instances, one after another, in a strict order, until one succeeds or the list is exhausted. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors MAY implement this command.<a href="#section-8.4.10.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.10.2-1">This command runs several SUIT_Command_Sequence instances, one after another, in a strict order, until one succeeds or the list is exhausted. Use this command to implement a "try/catch-try/catch" sequence. Manifest processors <span class="bcp14">MAY</span> implement this command.<a href="#section-8.4.10.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.10.2-2">suit-parameter-soft-failure (<a href="#suit-parameter-soft-failure" class="auto internal xref">Section 8.4.8.15</a>) is initialized to True at the beginning of each sequence. If one sequence aborts due to a condition failure, the next is started. If no sequence completes without condition failure, then suit-directive-try-each returns an error. If a particular application calls for all sequences to fail and still continue, then an empty sequence (nil) can be added to the Try Each Argument.<a href="#section-8.4.10.2-2" class="pilcrow">¶</a></p>
 <p id="section-8.4.10.2-3">The argument to suit-directive-try-each is a list of SUIT_Command_Sequence. suit-directive-try-each does not specify a reporting policy.<a href="#section-8.4.10.2-3" class="pilcrow">¶</a></p>
 </section>
@@ -3502,7 +3502,7 @@ See <a href="#index-true" class="auto internal xref">Section 6.5</a> for more de
             <h5 id="name-suit-directive-invoke">
 <a href="#section-8.4.10.7" class="section-number selfRef">8.4.10.7. </a><a href="#name-suit-directive-invoke" class="section-name selfRef">suit-directive-invoke</a>
             </h5>
-<p id="section-8.4.10.7-1">suit-directive-invoke directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor MAY be unloaded and execution continues in the Component Index. Arguments are provided to suit-directive-invoke through suit-parameter-invoke-arguments (<a href="#suit-parameter-invoke-args" class="auto internal xref">Section 8.4.8.12</a>) and are forwarded to the executable code located in Component Index in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.<a href="#section-8.4.10.7-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.10.7-1">suit-directive-invoke directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor <span class="bcp14">MAY</span> be unloaded and execution continues in the Component Index. Arguments are provided to suit-directive-invoke through suit-parameter-invoke-arguments (<a href="#suit-parameter-invoke-args" class="auto internal xref">Section 8.4.8.12</a>) and are forwarded to the executable code located in Component Index in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.<a href="#section-8.4.10.7-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.10.7-2">If the executable code at Component Index is constructed in such a way that it does not unload the manifest processor, then the manifest processor may resume execution after the executable completes. This allows the manifest processor to invoke suitable helpers and to verify them with image conditions.<a href="#section-8.4.10.7-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3523,7 +3523,7 @@ See <a href="#index-true" class="auto internal xref">Section 6.5</a> for more de
 <a href="#section-8.4.10.9" class="section-number selfRef">8.4.10.9. </a><a href="#name-suit-directive-swap" class="section-name selfRef">suit-directive-swap</a>
             </h5>
 <p id="section-8.4.10.9-1">suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. As with suit-directive-copy, if the source component is missing, this command fails.<a href="#section-8.4.10.9-1" class="pilcrow">¶</a></p>
-<p id="section-8.4.10.9-2">If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they MUST be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.<a href="#section-8.4.10.9-2" class="pilcrow">¶</a></p>
+<p id="section-8.4.10.9-2">If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they <span class="bcp14">MUST</span> be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.10.9-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3545,7 +3545,7 @@ See <a href="#index-true" class="auto internal xref">Section 6.5</a> for more de
 <a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-severable-elements-2" class="section-name selfRef">Severable Elements</a>
         </h3>
 <p id="section-8.5-1">Because the manifest can be used by different actors at different times, some parts of the manifest can be removed or "Severed" without affecting later stages of the lifecycle. Severing of information is achieved by separating that information from the signed container so that removing it does not affect the signature. This means that ensuring integrity of severable parts of the manifest is a requirement for the signed portion of the manifest. Severing some parts makes it possible to discard parts of the manifest that are no longer necessary. This is important because it allows the storage used by the manifest to be greatly reduced. For example, no text size limits are needed if text is removed from the manifest prior to delivery to a constrained device.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
-<p id="section-8.5-2">Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 SHOULD NOT be severable. Elements larger than (Digest Bits)/8 + 4 MAY be severable, while elements that are much larger than (Digest Bits)/8 + 4 SHOULD be severable.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
+<p id="section-8.5-2">Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 <span class="bcp14">SHOULD NOT</span> be severable. Elements larger than (Digest Bits)/8 + 4 <span class="bcp14">MAY</span> be severable, while elements that are much larger than (Digest Bits)/8 + 4 <span class="bcp14">SHOULD</span> be severable.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
 <p id="section-8.5-3">Because of this, all command sequences in the manifest are encoded in a bstr so that there is a single code path needed for all command sequences.<a href="#section-8.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3569,12 +3569,12 @@ See <a href="#index-true" class="auto internal xref">Section 6.5</a> for more de
 <a href="#section-10" class="section-number selfRef">10. </a><a href="#name-suit-digest-container" class="section-name selfRef">SUIT Digest Container</a>
       </h2>
 <p id="section-10-1">The SUIT digest is a CBOR List containing two elements: an algorithm identifier and a bstr containing the bytes of the digest. Some forms of digest may require additional parameters. These can be added following the digest.<a href="#section-10-1" class="pilcrow">¶</a></p>
-<p id="section-10-2">The values of the algorithm identifier are defined by <span>[<a href="#I-D.ietf-cose-hash-algs" class="cite xref">I-D.ietf-cose-hash-algs</a>]</span>. The following algorithms MUST be implemented by all Manifest Processors:<a href="#section-10-2" class="pilcrow">¶</a></p>
+<p id="section-10-2">The values of the algorithm identifier are defined by <span>[<a href="#RFC9054" class="cite xref">RFC9054</a>]</span>. The following algorithms <span class="bcp14">MUST</span> be implemented by all Manifest Processors:<a href="#section-10-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-10-3.1">SHA-256 (-16)<a href="#section-10-3.1" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="section-10-4">The following algorithms MAY be implemented in a Manifest Processor:<a href="#section-10-4" class="pilcrow">¶</a></p>
+<p id="section-10-4">The following algorithms <span class="bcp14">MAY</span> be implemented in a Manifest Processor:<a href="#section-10-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-10-5.1">SHAKE128 (-18)<a href="#section-10-5.1" class="pilcrow">¶</a>
 </li>
@@ -3603,7 +3603,7 @@ See <a href="#index-true" class="auto internal xref">Section 6.5</a> for more de
         <li class="normal" id="section-11-2.4">setup several registries as described below.<a href="#section-11-2.4" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="section-11-3">IANA is requested to create a new category for Software Update for the Internet of Things (SUIT) 
+<p id="section-11-3">IANA is requested to create a new category for Software Update for the Internet of Things (SUIT)
 and a page within this category for SUIT manifests.<a href="#section-11-3" class="pilcrow">¶</a></p>
 <p id="section-11-4">IANA is also requested to create several registries defined in the subsections below.<a href="#section-11-4" class="pilcrow">¶</a></p>
 <p id="section-11-5">For each registry, values 0-255 are Standards Action and 256 or greater are Expert Review. Negative values -255 to 0 are Standards Action, and -256 and lower are Private Use.<a href="#section-11-5" class="pilcrow">¶</a></p>
@@ -4282,8 +4282,8 @@ latitude.<a href="#section-11.8-1" class="pilcrow">¶</a></p>
    to get sufficient information for registration requests to ensure
    that the usage is not going to duplicate one that is already
    registered, and that the point is likely to be used in
-   deployments.  The zones tagged as private use 
-   are intended for testing purposes and closed environments; 
+   deployments.  The zones tagged as private use
+   are intended for testing purposes and closed environments;
    code points in other ranges should not be assigned for testing.<a href="#section-11.8-3.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-11.8-3.2">Specifications are required for the standards track range of point
@@ -4383,31 +4383,135 @@ the content is a SUIT envelope.<a href="#section-11.9-1" class="pilcrow">¶</a><
       </h2>
 <p id="section-13-1">We would like to thank the following persons for their support in designing this mechanism:<a href="#section-13-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-13-2.1">Milosch Meriac<a href="#section-13-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-13-2.1">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.1.1">
+            <dt id="section-13-2.1.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.1.1.2">
+              <p id="section-13-2.1.1.2.1"><span class="contact-name">Milosch Meriac</span><a href="#section-13-2.1.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.2">Geraint Luff<a href="#section-13-2.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.2">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.2.1">
+            <dt id="section-13-2.2.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.2.1.2">
+              <p id="section-13-2.2.1.2.1"><span class="contact-name">Geraint Luff</span><a href="#section-13-2.2.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.3">Dan Ros<a href="#section-13-2.3" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.3">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.3.1">
+            <dt id="section-13-2.3.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.3.1.2">
+              <p id="section-13-2.3.1.2.1"><span class="contact-name">Dan Ros</span><a href="#section-13-2.3.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.4">John-Paul Stanford<a href="#section-13-2.4" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.4">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.4.1">
+            <dt id="section-13-2.4.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.4.1.2">
+              <p id="section-13-2.4.1.2.1"><span class="contact-name">John-Paul Stanford</span><a href="#section-13-2.4.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.5">Hugo Vincent<a href="#section-13-2.5" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.5">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.5.1">
+            <dt id="section-13-2.5.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.5.1.2">
+              <p id="section-13-2.5.1.2.1"><span class="contact-name">Hugo Vincent</span><a href="#section-13-2.5.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.6">Carsten Bormann<a href="#section-13-2.6" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.6">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.6.1">
+            <dt id="section-13-2.6.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.6.1.2">
+              <p id="section-13-2.6.1.2.1"><span class="contact-name">Carsten Bormann</span><a href="#section-13-2.6.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.7">Oeyvind Roenningstad<a href="#section-13-2.7" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.7">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.7.1">
+            <dt id="section-13-2.7.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.7.1.2">
+              <p id="section-13-2.7.1.2.1"><span class="contact-name">Øyvind Rønningstad</span><a href="#section-13-2.7.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.8">Frank Audun Kvamtroe<a href="#section-13-2.8" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.8">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.8.1">
+            <dt id="section-13-2.8.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.8.1.2">
+              <p id="section-13-2.8.1.2.1"><span class="contact-name">Frank Audun Kvamtrø</span><a href="#section-13-2.8.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.9">Krzysztof Chru&amp;#347;ci&amp;#324;ski<a href="#section-13-2.9" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.9">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.9.1">
+            <dt id="section-13-2.9.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.9.1.2">
+              <p id="section-13-2.9.1.2.1"><span class="contact-name">Krzysztof Chruściński</span><a href="#section-13-2.9.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.10">Andrzej Puzdrowski<a href="#section-13-2.10" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.10">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.10.1">
+            <dt id="section-13-2.10.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.10.1.2">
+              <p id="section-13-2.10.1.2.1"><span class="contact-name">Andrzej Puzdrowski</span><a href="#section-13-2.10.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.11">Michael Richardson<a href="#section-13-2.11" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.11">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.11.1">
+            <dt id="section-13-2.11.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.11.1.2">
+              <p id="section-13-2.11.1.2.1"><span class="contact-name">Michael Richardson</span><a href="#section-13-2.11.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.12">David Brown<a href="#section-13-2.12" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.12">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.12.1">
+            <dt id="section-13-2.12.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.12.1.2">
+              <p id="section-13-2.12.1.2.1"><span class="contact-name">David Brown</span><a href="#section-13-2.12.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
-        <li class="normal" id="section-13-2.13">Emmanuel Baccelli<a href="#section-13-2.13" class="pilcrow">¶</a>
+        <li class="normal" id="section-13-2.13">
+          <span class="break"></span><dl class="dlParallel" id="section-13-2.13.1">
+            <dt id="section-13-2.13.1.1">
+       </dt>
+            <dd style="margin-left: 1.5em" id="section-13-2.13.1.2">
+              <p id="section-13-2.13.1.2.1"><span class="contact-name">Emmanuel Baccelli</span><a href="#section-13-2.13.1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
 </li>
       </ul>
 </section>
@@ -4433,10 +4537,6 @@ the content is a SUIT envelope.<a href="#section-11.9-1" class="pilcrow">¶</a><
         <dd>
 <span class="refAuthor">Leach, P.</span>, <span class="refAuthor">Mealling, M.</span>, and <span class="refAuthor">R. Salz</span>, <span class="refTitle">"A Universally Unique IDentifier (UUID) URN Namespace"</span>, <span class="seriesInfo">RFC 4122</span>, <span class="seriesInfo">DOI 10.17487/RFC4122</span>, <time datetime="2005-07" class="refDate">July 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4122">https://www.rfc-editor.org/info/rfc4122</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8152">[RFC8152]</dt>
-        <dd>
-<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE)"</span>, <span class="seriesInfo">RFC 8152</span>, <span class="seriesInfo">DOI 10.17487/RFC8152</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8152">https://www.rfc-editor.org/info/rfc8152</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
@@ -4449,6 +4549,10 @@ the content is a SUIT envelope.<a href="#section-11.9-1" class="pilcrow">¶</a><
         <dd>
 <span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Brown, D.</span>, and <span class="refAuthor">M. Meriac</span>, <span class="refTitle">"A Firmware Update Architecture for Internet of Things"</span>, <span class="seriesInfo">RFC 9019</span>, <span class="seriesInfo">DOI 10.17487/RFC9019</span>, <time datetime="2021-04" class="refDate">April 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9019">https://www.rfc-editor.org/info/rfc9019</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC9052">[RFC9052]</dt>
+        <dd>
+<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Structures and Process"</span>, <span class="seriesInfo">STD 96</span>, <span class="seriesInfo">RFC 9052</span>, <span class="seriesInfo">DOI 10.17487/RFC9052</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9052">https://www.rfc-editor.org/info/rfc9052</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC9124">[RFC9124]</dt>
       <dd>
 <span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"A Manifest Information Model for Firmware Updates in Internet of Things (IoT) Devices"</span>, <span class="seriesInfo">RFC 9124</span>, <span class="seriesInfo">DOI 10.17487/RFC9124</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9124">https://www.rfc-editor.org/info/rfc9124</a>&gt;</span>. </dd>
@@ -4460,41 +4564,41 @@ the content is a SUIT envelope.<a href="#section-11.9-1" class="pilcrow">¶</a><
 <a href="#section-14.2" class="section-number selfRef">14.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
-<dt id="I-D.ietf-cbor-tags-oid">[I-D.ietf-cbor-tags-oid]</dt>
-        <dd>
-<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags for Object Identifiers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cbor-tags-oid-08</span>, <time datetime="2021-05-21" class="refDate">21 May 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-cbor-tags-oid-08.txt">https://www.ietf.org/archive/id/draft-ietf-cbor-tags-oid-08.txt</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="I-D.ietf-cose-hash-algs">[I-D.ietf-cose-hash-algs]</dt>
-        <dd>
-<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Hash Algorithms"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-hash-algs-09</span>, <time datetime="2020-09-14" class="refDate">14 September 2020</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-cose-hash-algs-09.txt">https://www.ietf.org/archive/id/draft-ietf-cose-hash-algs-09.txt</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="I-D.ietf-suit-firmware-encryption">[I-D.ietf-suit-firmware-encryption]</dt>
         <dd>
-<span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Housley, R.</span>, <span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Brown, D.</span>, and <span class="refAuthor">K. Takayama</span>, <span class="refTitle">"Encrypted Payloads in SUIT Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-firmware-encryption-09</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-09.txt">https://www.ietf.org/archive/id/draft-ietf-suit-firmware-encryption-09.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Housley, R.</span>, <span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Brown, D.</span>, and <span class="refAuthor">K. Takayama</span>, <span class="refTitle">"Encrypted Payloads in SUIT Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-firmware-encryption-09</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-suit-firmware-encryption-09">https://datatracker.ietf.org/doc/html/draft-ietf-suit-firmware-encryption-09</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-report">[I-D.ietf-suit-report]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span> and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Secure Reporting of Update Status"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-report-04</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-report-04.txt">https://www.ietf.org/archive/id/draft-ietf-suit-report-04.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span> and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Secure Reporting of Update Status"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-report-04</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-suit-report-04">https://datatracker.ietf.org/doc/html/draft-ietf-suit-report-04</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-trust-domains">[I-D.ietf-suit-trust-domains]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span> and <span class="refAuthor">K. Takayama</span>, <span class="refTitle">"SUIT Manifest Extensions for Multiple Trust Domains"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-trust-domains-01</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-trust-domains-01.txt">https://www.ietf.org/archive/id/draft-ietf-suit-trust-domains-01.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span> and <span class="refAuthor">K. Takayama</span>, <span class="refTitle">"SUIT Manifest Extensions for Multiple Trust Domains"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-trust-domains-01</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-suit-trust-domains-01">https://datatracker.ietf.org/doc/html/draft-ietf-suit-trust-domains-01</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-update-management">[I-D.ietf-suit-update-management]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"Update Management Extensions for Software Updates for Internet of Things (SUIT) Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-update-management-01</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-suit-update-management-01.txt">https://www.ietf.org/archive/id/draft-ietf-suit-update-management-01.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"Update Management Extensions for Software Updates for Internet of Things (SUIT) Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-update-management-01</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-suit-update-management-01">https://datatracker.ietf.org/doc/html/draft-ietf-suit-update-management-01</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-teep-architecture">[I-D.ietf-teep-architecture]</dt>
         <dd>
-<span class="refAuthor">Pei, M.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Thaler, D.</span>, and <span class="refAuthor">D. M. Wheeler</span>, <span class="refTitle">"Trusted Execution Environment Provisioning (TEEP) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teep-architecture-19</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-teep-architecture-19.txt">https://www.ietf.org/archive/id/draft-ietf-teep-architecture-19.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Pei, M.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Thaler, D.</span>, and <span class="refAuthor">D. M. Wheeler</span>, <span class="refTitle">"Trusted Execution Environment Provisioning (TEEP) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teep-architecture-19</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-teep-architecture-19">https://datatracker.ietf.org/doc/html/draft-ietf-teep-architecture-19</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.moran-suit-mti">[I-D.moran-suit-mti]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"Mandatory-to-Implement Algorithms for Creators and Consumers of Software Update for the Internet of Things manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-moran-suit-mti-02</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-moran-suit-mti-02.txt">https://www.ietf.org/archive/id/draft-moran-suit-mti-02.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span>, <span class="refTitle">"Mandatory-to-Implement Algorithms for Creators and Consumers of Software Update for the Internet of Things manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-moran-suit-mti-02</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-moran-suit-mti-02">https://datatracker.ietf.org/doc/html/draft-moran-suit-mti-02</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7228">[RFC7228]</dt>
         <dd>
 <span class="refAuthor">Bormann, C.</span>, <span class="refAuthor">Ersue, M.</span>, and <span class="refAuthor">A. Keranen</span>, <span class="refTitle">"Terminology for Constrained-Node Networks"</span>, <span class="seriesInfo">RFC 7228</span>, <span class="seriesInfo">DOI 10.17487/RFC7228</span>, <time datetime="2014-05" class="refDate">May 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7228">https://www.rfc-editor.org/info/rfc7228</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9054">[RFC9054]</dt>
+        <dd>
+<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Hash Algorithms"</span>, <span class="seriesInfo">RFC 9054</span>, <span class="seriesInfo">DOI 10.17487/RFC9054</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9054">https://www.rfc-editor.org/info/rfc9054</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9090">[RFC9090]</dt>
+        <dd>
+<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags for Object Identifiers"</span>, <span class="seriesInfo">RFC 9090</span>, <span class="seriesInfo">DOI 10.17487/RFC9090</span>, <time datetime="2021-07" class="refDate">July 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9090">https://www.rfc-editor.org/info/rfc9090</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="YAML">[YAML]</dt>
       <dd>
@@ -4508,8 +4612,8 @@ the content is a SUIT envelope.<a href="#section-11.9-1" class="pilcrow">¶</a><
       <h2 id="name-a-full-cddl">
 <a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-a-full-cddl" class="section-name selfRef">A. Full CDDL</a>
       </h2>
-<p id="appendix-A-1">In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL data definition.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2">To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span>, Section 1.3.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message <span class="bcp14">MUST</span> adhere to the following CDDL data definition.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">To be valid, the following CDDL <span class="bcp14">MUST</span> have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>], <a href="https://rfc-editor.org/rfc/rfc9052#section-1.4" class="relref">Section 1.4</a></span>.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 <div id="appendix-A-3">
 <pre class="breakable lang-CDDL sourcecode">
 SUIT_Envelope_Tagged = #6.107(SUIT_Envelope)
@@ -5801,56 +5905,72 @@ an application profile standard specifying otherwise.<a href="#appendix-D-1" cla
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#uuid-identifiers" class="auto internal xref">Section 8.4.8.2</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Class Identifier</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#uuid-identifiers" class="auto internal xref">Section 8.4.8.2</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Device Identifier</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#uuid-identifiers" class="auto internal xref">Section 8.4.8.2</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Image Match</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-condition-image-match" class="auto internal xref">Section 8.4.9.2</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Check Content</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-condition-check-content" class="auto internal xref">Section 8.4.9.3</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Component Slot</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-condition-component-slot" class="auto internal xref">Section 8.4.9.4</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Abort</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-condition-abort" class="auto internal xref">Section 8.4.9.5</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Custom Condition</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#SUIT_Condition_Custom" class="auto internal xref">Section 8.4.9.6</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
         </tbody>
       </table>
@@ -5870,63 +5990,78 @@ an application profile standard specifying otherwise.<a href="#appendix-D-1" cla
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-directive-set-component-index" class="auto internal xref">Section 8.4.10.1</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED if more than one component</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span> if more than one component</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Write Content</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-directive-write" class="auto internal xref">Section 8.4.10.6</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Try Each</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-directive-try-each" class="auto internal xref">Section 8.4.10.2</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Override Parameters</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-directive-override-parameters" class="auto internal xref">Section 8.4.10.3</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Fetch</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-directive-fetch" class="auto internal xref">Section 8.4.10.4</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED for Updater</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span> for Updater</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Copy</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-directive-copy" class="auto internal xref">Section 8.4.10.5</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Invoke</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-directive-invoke" class="auto internal xref">Section 8.4.10.7</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED for Bootloader</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span> for Bootloader</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Run Sequence</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-directive-run-sequence" class="auto internal xref">Section 8.4.10.8</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Swap</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-directive-swap" class="auto internal xref">Section 8.4.10.9</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
         </tbody>
       </table>
@@ -5946,91 +6081,116 @@ an application profile standard specifying otherwise.<a href="#appendix-D-1" cla
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-vendor-identifier" class="auto internal xref">Section 8.4.8.3</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Class ID</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-class-identifier" class="auto internal xref">Section 8.4.8.4</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Image Digest</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-image-digest" class="auto internal xref">Section 8.4.8.6</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Image Size</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-image-size" class="auto internal xref">Section 8.4.8.7</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Component Slot</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-component-slot" class="auto internal xref">Section 8.4.8.8</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Content</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-content" class="auto internal xref">Section 8.4.8.9</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">URI</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-uri" class="auto internal xref">Section 8.4.8.10</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">REQUIRED for Updater</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">REQUIRED</span> for Updater</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Source Component</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-source-component" class="auto internal xref">Section 8.4.8.11</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Invoke Args</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-invoke-args" class="auto internal xref">Section 8.4.8.12</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Device ID</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-device-identifier" class="auto internal xref">Section 8.4.8.5</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Strict Order</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-strict-order" class="auto internal xref">Section 8.4.8.14</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Soft Failure</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-soft-failure" class="auto internal xref">Section 8.4.8.15</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Custom</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#suit-parameter-custom" class="auto internal xref">Section 8.4.8.16</a>
 </td>
-            <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span class="bcp14">OPTIONAL</span>
+</td>
           </tr>
         </tbody>
       </table>
