@@ -3,7 +3,7 @@ v: 3
 
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-22
+docname: draft-ietf-suit-manifest-23
 ipr: trust200902
 category: std
 stream: IETF
@@ -35,7 +35,6 @@ author:
  -
       ins: H. Tschofenig
       name: Hannes Tschofenig
-      organization: Arm Limited
       email: hannes.tschofenig@gmx.net
 
  -
@@ -85,7 +84,7 @@ informative:
 --- abstract
 This specification describes the format of a manifest.  A manifest is
 a bundle of metadata about code/data obtained by a recipient (chiefly
-the firmware for an IoT device), where to find the that code/data, the
+the firmware for an IoT device), where to find the code/data, the
 devices to which it applies, and cryptographic information protecting
 the manifest. Software updates and Trusted Invocation both tend to use
 sequences of common operations, so the manifest encodes those sequences
@@ -95,34 +94,25 @@ of operations, rather than declaring the metadata.
 
 #  Introduction
 
-A firmware update mechanism is an essential security feature for IoT devices to deal with vulnerabilities. While the transport of firmware images to the devices themselves is important there are already various techniques available. Equally important is the inclusion of metadata about the conveyed firmware image (in the form of a manifest) and the use of a security wrapper to provide end-to-end security protection to detect modifications and (optionally) to make reverse engineering more difficult. End-to-end security allows the author, who builds the firmware image, to be sure that no other party (including potential adversaries) can install firmware updates on IoT devices without adequate privileges. For confidentiality protected firmware images it is additionally required to encrypt the firmware image. Starting security protection at the author is a risk mitigation technique so firmware images and manifests can be stored on untrusted repositories; it also reduces the scope of a compromise of any repository or intermediate system to be no worse than a denial of service.
+A firmware update mechanism is an essential security feature for IoT devices to deal with vulnerabilities. The transport of firmware images to the devices themselves is important security aspect. Luckily, there are already various device management solutions available offering the distribution of firmware images to IoT devices. Equally important is the inclusion of metadata about the conveyed firmware image (in the form of a manifest) and the use of a security wrapper to provide end-to-end security protection to detect modifications and (optionally) to make reverse engineering more difficult. Firmware signing allows the author, who builds the firmware image, to be sure that no other party (including potential adversaries) can install firmware updates on IoT devices without adequate privileges. For confidentiality protected firmware images it is additionally required to encrypt the firmware image and to distribute the content encryption key securely. The support for firmware and payload encryption via the SUIT manifest format is described in a companion document {{I-D.ietf-suit-firmware-encryption}}. Starting security protection at the author is a risk mitigation technique so firmware images and manifests can be stored on untrusted repositories; it also reduces the scope of a compromise of any repository or intermediate system to be no worse than a denial of service.
 
-A manifest is a bundle of metadata describing one or more code or data payloads and how to:
-
-* Obtain any dependencies
-* Obtain the payload(s)
-* Install them
-* Verify them
-* Load them into memory
-* Invoke them
+A manifest is a bundle of metadata about the firmware for an IoT device, where to
+find the firmware, and the devices to which it applies.
 
 This specification defines the SUIT manifest format and it is intended to meet several goals:
 
 * Meet the requirements defined in {{RFC9124}}.
-* Simple to parse on a constrained node
-* Simple to process on a constrained node
-* Compact encoding
-* Comprehensible by an intermediate system
-* Expressive enough to enable advanced use cases on advanced nodes
-* Extensible
+* Simple to parse on a constrained node.
+* Simple to process on a constrained node.
+* Compact encoding.
+* Comprehensible by an intermediate system.
+* Expressive enough to enable advanced use cases on advanced nodes.
+* Extensible.
 
 The SUIT manifest can be used for a variety of purposes throughout its lifecycle, such as:
 
-* a Firmware Author to reason about releasing a firmware.
-* a Network Operator to reason about compatibility of a firmware.
+* a Network Operator to reason about compatibility of a firmware, such as timing and acceptance of firmware updates.
 * a Device Operator to reason about the impact of a firmware.
-* the Device Operator to manage distribution of firmware to devices.
-* a Plant Manager to reason about timing and acceptance of firmware updates.
 * a device to reason about the authority & authenticity of a firmware prior to installation.
 * a device to reason about the applicability of a firmware.
 * a device to reason about the installation of a firmware.
@@ -157,7 +147,7 @@ Additionally, the following terminology is used throughout this document:
 * Resource: A piece of information that is used to construct a payload.
 * Manifest: A manifest is a bundle of metadata about the firmware for an IoT device, where to
 find the firmware, and the devices to which it applies.
-* Envelope: A container with the manifest, an authentication wrapper with cryptographic information protecting the manifest, authorization information, and severable elements.
+* Envelope: A container with the manifest, an authentication wrapper with cryptographic information protecting the manifest, authorization information, and severable elements. Severable elements can be removed from the manifest without impacting its security, see {#severable-fields}.
 * Update: One or more manifests that describe one or more payloads.
 * Update Authority: The owner of a cryptographic key used to sign updates, trusted by Recipients.
 * Recipient: The system, typically an IoT device, that receives and processes a manifest.
@@ -203,7 +193,8 @@ This specification covers the core features of SUIT. Additional specifications d
 * Update Management is covered in {{I-D.ietf-suit-update-management}}
 * Features, such as dependencies, key delegation, multiple processors, required by the use of multiple trust domains are covered in {{I-D.ietf-suit-trust-domains}}
 * Secure reporting of the update status is covered in {{I-D.ietf-suit-report}}
-* Compression of firmware images
+
+A technique to efficiently compress firmware images may be standardized in the future.
 
 # Background {#background}
 
@@ -259,7 +250,7 @@ This section provides a high level overview of the manifest structure. The full 
 The manifest is structured from several key components:
 
 1. The Envelope (see {{ovr-envelope}}) contains the Authentication Block, the Manifest, any Severable Elements, and any Integrated Payloads.
-2. The Authentication Block (see {{ovr-auth}}) contains a list of signatures or MACs of the manifest..
+2. The Authentication Block (see {{ovr-auth}}) contains a list of signatures or MACs of the manifest.
 3. The Manifest (see {{ovr-manifest}}) contains all critical, non-severable metadata that the Recipient requires. It is further broken down into:
 
     1. Critical metadata, such as sequence number.
@@ -279,9 +270,9 @@ The diagram below illustrates the hierarchy of the Envelope.
 | Authentication Block    |
 | Manifest           --------------> +------------------------------+
 | Severable Elements      |          | Manifest                     |
-| Human-Readable Text     |          +------------------------------+
-| Integrated Payloads     |          | Structure Version            |
-+-------------------------+          | Sequence Number              |
+| Integrated Payloads     |          +------------------------------+
++-------------------------+          | Structure Version            |
+                                     | Sequence Number              |
                                      | Reference to Full Manifest   |
                                +------ Common Structure             |
                                | +---- Command Sequences            |
@@ -301,7 +292,7 @@ The diagram below illustrates the hierarchy of the Envelope.
 
 ## Envelope {#ovr-envelope}
 
-The SUIT Envelope is a container that encloses the Authentication Block, the Manifest, any Severable Elements, and any integrated payloads. The Envelope is used instead of conventional cryptographic envelopes, such as COSE_Envelope because it allows modular processing, severing of elements, and integrated payloads in a way that would add substantial complexity with existing solutions. See {{design-rationale-envelope}} for a description of the reasoning for this.
+The SUIT Envelope is a container that encloses the Authentication Block, the Manifest, any Severable Elements, and any integrated payloads. The Envelope is used instead of conventional cryptographic envelopes, such as COSE_Envelope because it allows modular processing, severing of elements, and integrated payloads in a way that avoids substantial complexity that would be needed with existing solutions. See {{design-rationale-envelope}} for a description of the reasoning for this.
 
 See {{envelope}} for more detail.
 
@@ -352,7 +343,7 @@ See {{manifest-commands}} for more detail.
 
 ### Integrity Check Values {#ovr-integrity}
 
-To enable {{ovr-severable}}, there needs to be a mechanism to verify integrity of any metadata outside the manifest. Integrity Check Values are used to verify the integrity of metadata that is not contained in the manifest. This MAY include Severable Command Sequences, or Text data. Integrated Payloads are integrity-checked using Command Sequences, so they do not have Integrity Check Values present in the Manifest.
+To enable severable elements {{ovr-severable}}, there needs to be a mechanism to verify the integrity of the severed data. While the severed data stays outside outside the manifest, for efficiency reasons, Integrity Check Values are used to include the digest of the data in the manifest. Note that Integrated Payloads, see {#ovr-integrated}, are integrity-checked using Command Sequences.
 
 See {{integrity-checks}} for more detail.
 
@@ -408,7 +399,7 @@ Here, valid means that a manifest has a supported encoding version and it has no
 
 These failure reasons MAY be combined with retry mechanisms prior to marking a manifest as invalid.
 
-Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in {{RFC9019, Section 3.5}}. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See {{RFC9124, Section 4.2.1}} for more discussion on the security considerations that apply to rollback.
+Selecting an older manifest in the event of failure of the latest valid manifest is one possible strategy to provide robustness of the firmware update process. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See {{RFC9124, Section 4.2.1}} for more discussion on the security considerations that apply to rollback.
 
 Following these initial tests, the manifest processor clears all parameter storage. This ensures that the manifest processor begins without any leaked data.
 
@@ -418,7 +409,8 @@ The RECOMMENDED process is to verify the signature of the manifest prior to pars
 
 When validating authenticity of manifests, the manifest processor MAY use an ACL (see {{access-control-lists}}) to determine the extent of the rights conferred by that authenticity.
 
-Once a valid, authentic manifest has been selected, the manifest processor MUST examine the component list and verify that its maximum number of components is not exceeded and that each listed component is supported.
+Once a valid, authentic manifest has been selected, the manifest processor MUST examine the component list and
+check that the number of components listed in the manifest is not larger than the number in the target system.
 
 For each listed component, the manifest processor MUST provide storage for the supported parameters. If the manifest processor does not have sufficient temporary storage to process the parameters for all components, it MAY process components serially for each command sequence. See {{serial-processing}} for more details.
 
@@ -426,7 +418,7 @@ The manifest processor SHOULD check that the shared sequence contains at least C
 
 Because the shared sequence contains Check Vendor Identifier and Check Class Identifier command(s), no custom commands are permitted in the shared sequence. This ensures that any custom commands are only executed by devices that understand them.
 
-If the manifest contains more than one component, each command sequence MUST begin with a Set Component Index.
+If the manifest contains more than one component, each command sequence MUST begin with a Set Component Index {{suit-directive-set-component-index}}.
 
 If a Recipient supports groups of interdependent components (a Component Set), then it SHOULD verify that all Components in the Component Set are specified by one update, that is the manifest:
 
