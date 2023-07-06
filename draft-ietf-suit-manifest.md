@@ -80,6 +80,11 @@ informative:
     author:
     date: 2020
     target: https://yaml.org/
+  COSE_Alg:
+    title: "COSE Algorithms"
+    author: IANA
+    date: 2023
+    target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
 
 --- abstract
 This specification describes the format of a manifest.  A manifest is
