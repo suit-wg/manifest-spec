@@ -523,10 +523,16 @@ Integers MUST always be supported by Set Component Index. Arrays of integers MUS
 
 Integer indices are the default case as described in the previous section. An array of integers represents a list of the components (Set Component Index) to which each subsequent command applies. The value True replaces the list of component indices with the full list of components, as defined in the manifest.
 
-When a command is executed, it either 1. operates on the component identified by the component index if that index is an integer, or 2. it operates on each component identified by an array of indicies, or 3. it operates on every component if the index is the boolean True. This is described by the following pseudocode:
+When a command is executed, it 
+
+1. operates on the component identified by the component index if that index is an integer, or
+2. it operates on each component identified by an array of indicies, or
+3. it operates on every component if the index is the boolean True.
+
+This is described by the following pseudocode:
 
 ~~~
-if component-index is true:
+if component-index is True:
     current-list = components
 else if component-index is array:
     current-list = [ components[idx] for idx in component-index ]
@@ -536,7 +542,7 @@ for current in current-list:
     cmd(current)
 ~~~
 
-Try Each and Run Sequence are affected in the same way as other commands: they are invoked once for each possible Component. This means that the sequences that are arguments to Try Each and Run Sequence are NOT invoked with Component Index = True, nor are they invoked with array indices. They are only invoked with integer indices. The interpreter loops over the whole sequence, setting the Component Index to each index in turn.
+Try Each and Run Sequence are affected in the same way as other commands: they are invoked once for each possible Component. This means that the sequences that are arguments to Try Each and Run Sequence are not invoked with Component Index = True, nor are they invoked with array indices. They are only invoked with integer indices. The interpreter loops over the whole sequence, setting the Component Index to each index in turn.
 
 ## Serialized Processing Interpreter {#serial-processing}
 
