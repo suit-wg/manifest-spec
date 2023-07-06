@@ -63,13 +63,13 @@ normative:
   RFC8949:
   RFC9019:
   RFC9124:
+  I-D.ietf-suit-mti:
+  RFC9090: oid
+  RFC9054: hash-algs
 
 
 informative:
-  I-D.moran-suit-mti:
-  RFC9054: hash-algs
   I-D.ietf-teep-architecture:
-  RFC9090: oid
   I-D.ietf-suit-firmware-encryption:
   I-D.ietf-suit-update-management:
   I-D.ietf-suit-trust-domains:
@@ -187,7 +187,7 @@ The IANA consideration section, see {{iana}}, provides instructions to IANA to c
 
 The complete CDDL description is provided in {{full-cddl}}, examples are given in {{examples}} and a design rational is offered in {{design-rationale}}. Finally, {{implementation-matrix}} gives a summarize of the mandatory-to-implement features of this specification.
 
-This specification covers the core features of SUIT. Additional specifications describe functionality of advanced use cases, such as:
+Additional specifications describe functionality of advanced use cases, such as:
 
 * Firmware Encryption is covered in {{I-D.ietf-suit-firmware-encryption}}
 * Update Management is covered in {{I-D.ietf-suit-update-management}}
@@ -466,7 +466,7 @@ AND
 
 ## Abstract Machine Description {#command-behavior}
 
-The heart of the manifest is the list of commands, which are processed by a Manifest Processor--a form of interpreter. This Manifest Processor can be modeled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands.
+The heart of the manifest is the list of commands, which are processed by a Manifest Processor -- a form of interpreter. This Manifest Processor can be modeled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands.
 
 There are two types of commands, namely those that modify state (directives) and those that perform tests (conditions). Parameters are used as the inputs to commands. Some directives offer control flow operations. Directives target a specific component. A component is a unit of code or data that can be targeted by an update. Components are identified by Component Identifiers, but referenced in commands by Component Index; Component Identifiers are arrays of binary strings and a Component Index is an index into the array of Component Identifiers.
 
@@ -706,7 +706,7 @@ NOTE: Any test can be used to select between images, Check Slot Condition is use
 
 # Metadata Structure {#metadata-structure}
 
-The metadata for SUIT updates is composed of several primary constituent parts: the Envelope, Authentication Information, Manifest, and Severable Elements.
+The metadata for SUIT updates is composed of several primary constituent parts: Authentication Information, Manifest, Severable Elements and Integrated Payloads.
 
 For a diagram of the metadata structure, see {{metadata-structure-overview}}.
 
@@ -731,6 +731,7 @@ The Envelope is encoded as a CBOR Map. Each element of the Envelope is enclosed 
 The suit-authentication-wrapper contains a SUIT Digest Container (see {{SUIT_Digest}}) and one or more SUIT Authentication Blocks. The SUIT_Digest carries the result of computing the indicated hash algorithm over the suit-manifest element. A signing application MUST verify the suit-manifest element against the SUIT_Digest prior to signing. A SUIT Authentication Block is implemented as COSE_Mac_Tagged, COSE_Mac0_Tagged, COSE_Sign_Tagged or COSE_Sign1_Tagged structures with detached payloads, as described in RFC 9052 {{-cose}}.
 
 For COSE_Sign and COSE_Sign1 a special signature structure (called Sig_structure) has to be created onto which the selected digital signature algorithm is applied to, see {{Section 4.4 of -cose}} for details. This specification requires Sig_structure to be populated as follows:
+
 * The external_aad field MUST be set to a zero-length binary string (i.e. there is no external additional authenticated data).
 * The payload field contains the SUIT_Digest wrapped in a bstr, as per the requirements in {{Section 4.4 of -cose}}.
 All other fields in the Sig_structure are populated as described in {{Section 4.4 of -cose}}.
@@ -937,7 +938,7 @@ D8 6F                # tag(111)
       2B 06 01 04 01 # X.690 Clause 8.19
 ~~~
 
-Computing a type 5 UUID from these produces:
+Computing a version 5 UUID from these produces:
 
 ~~~
 NAMESPACE_CBOR_PEN = UUID5(NAMESPACE_OID, h'D86F452B06010401')
@@ -972,7 +973,7 @@ This allows the OS, WiFi module, and application to be updated independently. To
 
 This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.
 
-UUIDs MUST be created according to RFC 4122 {{RFC4122}}. UUIDs SHOULD use versions 3, 4, or 5, as described in RFC4122. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
+UUIDs MUST be created according to versions 3, 4, or 5 of RFC 4122 {{RFC4122}}. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
 
 The RECOMMENDED method to create a vendor ID is:
 
@@ -1111,21 +1112,23 @@ Verify that the current component matches the suit-parameter-image-digest ({{sui
 
 #### suit-condition-check-content {#suit-condition-check-content}
 
-This directive compares the specified component identifier to the data indicated by suit-parameter-content. This functions similarly to suit-condition-image-match, however it does a direct, byte-by-byte comparison rather than a digest-based comparison. Because it is possible that an early stop to check-content could reveal information through timing, suit-condition-check-content MUST be constant time: no early exits. This MAY be implemented as follows:
+This directive compares the specified component identifier to the data indicated by suit-parameter-content. This functions similarly to suit-condition-image-match, however it does a direct, byte-by-byte comparison rather than a digest-based comparison. Because it is possible that an early stop to check-content could reveal information through timing, suit-condition-check-content MUST be constant time: no early exits. 
 
-```
+The following pseudo-code described an example content checking algorithm:
+
+~~~
 // content & component must be same length
 // returns 0 for match
-bool check_content(content, component, length) {
-    int residual = 0
+int check_content(content, component, length) {
+    int residual = 0;
     for (i = 0; i < length; i++) {
         residual |= content[i] ^ component[i];
     }
     return residual;
 }
-```
+~~~
 
-#### suit-condition-component-slot
+#### suit-condition-component-slot {#suit-condition-component-slot}
 
 Verify that the slot index of the current component matches the slot index set in suit-parameter-component-slot ({{suit-parameter-component-slot}}). This condition allows a manifest to select between several images to match a target slot.
 
@@ -1158,14 +1161,9 @@ When a Recipient executes a Directive, it MUST report a result code. If the Dire
 
 #### suit-directive-set-component-index {#suit-directive-set-component-index}
 
-Set Component Index defines the component to which successive directives and conditions will apply. The supplied argument MUST be one of three types:
-
-1. An unsigned integer (REQUIRED to implement in parser)
-2. A boolean (REQUIRED to implement in parser ONLY IF 2 or more components supported)
-3. An array of unsigned integers (REQUIRED to implement in parser ONLY IF 3 or more components supported)
+Set Component Index defines the component to which successive directives and conditions will apply. The Set Component Index arguments are described in {{index-true}}.
 
 If the following commands apply to ONE component, an unsigned integer index into the component list is used. If the following commands apply to ALL components, then the boolean value "True" is used instead of an index. If the following commands apply to more than one, but not all components, then an array of unsigned integer indices into the component list is used.
-See {{index-true}} for more details.
 
 If component index is set to True when a command is invoked, then the command applies to all components, in the order they appear in suit-common-components. When the Manifest Processor invokes a command while the component index is set to True, it must execute the command once for each possible component index, ensuring that the command receives the parameters corresponding to that component index.
 
@@ -1230,8 +1228,6 @@ suit-parameter-soft-failure ({{suit-parameter-soft-failure}}) defaults to False 
 
 suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. As with suit-directive-copy, if the source component is missing, this command fails.
 
-If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they MUST be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.
-
 ### Integrity Check Values {#integrity-checks}
 
 When the Text section or any Command Sequence of the Update Procedure is made severable, it is moved to the Envelope and replaced with a SUIT_Digest. The SUIT_Digest is computed over the entire bstr enclosing the Manifest element that has been moved to the Envelope. Each element that is made severable from the Manifest is placed in the Envelope. The keys for the envelope elements have the same values as the keys for the manifest elements.
@@ -1260,18 +1256,11 @@ A third model allows a Recipient to provide even more fine-grained controls: The
 
 #  SUIT Digest Container {#SUIT_Digest}
 
-The SUIT digest is a CBOR List containing two elements: an algorithm identifier and a bstr containing the bytes of the digest. Some forms of digest may require additional parameters. These can be added following the digest.
+The SUIT digest is a CBOR array containing two elements: an algorithm identifier and a bstr containing the bytes of the digest. Some forms of digest may require additional parameters. These can be added following the digest.
 
-The values of the algorithm identifier are defined by {{-hash-algs}}. The following algorithms MUST be implemented by all Manifest Processors:
+The values of the algorithm identifier are found in the IANA "COSE Algorithms" registry {{COSE_Alg}}, which was created by {{-hash-algs}}. SHA-256 (-16) MUST be implemented by all Manifest Processors.
 
-* SHA-256 (-16)
-
-The following algorithms MAY be implemented in a Manifest Processor:
-
-* SHAKE128 (-18)
-* SHA-384 (-43)
-* SHA-512 (-44)
-* SHAKE256 (-45)
+Any other algorithm defined in the IANA "COSE Algorithms" registry, such as SHA-512 (-44), MAY be implemented in a Manifest Processor.
 
 #  IANA Considerations {#iana}
 
@@ -1297,11 +1286,11 @@ IANA is requested to create a new registry for SUIT envelope elements.
 
 Label | Name | Reference
 ---|---|---
-2 | Authentication Wrapper | {{authentication-info}}
-3 | Manifest | {{manifest-structure}}
-16 | Payload Fetch | {{manifest-commands}}
-17 | Payload Installation | {{manifest-commands}}
-23 | Text Description | {{manifest-digest-text}}
+2 | Authentication Wrapper | {{authentication-info}} of [TBD: this document]
+3 | Manifest | {{manifest-structure}} of [TBD: this document]
+16 | Payload Fetch | {{manifest-commands}} of [TBD: this document]
+17 | Payload Installation | {{manifest-commands}} of [TBD: this document]
+23 | Text Description | {{manifest-digest-text}} of [TBD: this document]
 
 
 ## SUIT Manifest Elements
@@ -1310,16 +1299,16 @@ IANA is requested to create a new registry for SUIT manifest elements.
 
 Label | Name | Reference
 ---|---|---
-1 | Encoding Version | {{manifest-version}}
-2 | Sequence Number | {{manifest-seqnr}}
-3 | Common Data | {{manifest-common}}
-4 | Reference URI | {{manifest-reference-uri}}
-7 | Image Validation | {{manifest-commands}}
-8 | Image Loading | {{manifest-commands}}
-9 | Image Invocation | {{manifest-commands}}
-16 | Payload Fetch | {{manifest-commands}}
-17 | Payload Installation | {{manifest-commands}}
-23 | Text Description | {{manifest-digest-text}}
+1 | Encoding Version | {{manifest-version}} of [TBD: this document]
+2 | Sequence Number | {{manifest-seqnr}} of [TBD: this document]
+3 | Common Data | {{manifest-common}} of [TBD: this document]
+4 | Reference URI | {{manifest-reference-uri}} of [TBD: this document]
+7 | Image Validation | {{manifest-commands}} of [TBD: this document]
+8 | Image Loading | {{manifest-commands}} of [TBD: this document]
+9 | Image Invocation | {{manifest-commands}} of [TBD: this document]
+16 | Payload Fetch | {{manifest-commands}} of [TBD: this document]
+17 | Payload Installation | {{manifest-commands}} of [TBD: this document]
+23 | Text Description | {{manifest-digest-text}} of [TBD: this document]
 
 ## SUIT Common Elements
 
@@ -1327,8 +1316,8 @@ IANA is requested to create a new registry for SUIT common elements.
 
 Label | Name | Reference
 ---|---|---
-2 | Component Identifiers | {{manifest-common}}
-4 | Common Command Sequence | {{manifest-common}}
+2 | Component Identifiers | {{manifest-common}} of [TBD: this document]
+4 | Common Command Sequence | {{manifest-common}} of [TBD: this document]
 
 ## SUIT Commands
 
@@ -1336,35 +1325,35 @@ IANA is requested to create a new registry for SUIT commands.
 
 Label | Name | Reference
 ---|---|---
-1 | Vendor Identifier | {{identifier-conditions}}
-2 | Class Identifier | {{identifier-conditions}}
-3 | Image Match | {{suit-condition-image-match}}
+1 | Vendor Identifier | {{identifier-conditions}} of [TBD: this document]
+2 | Class Identifier | {{identifier-conditions}} of [TBD: this document]
+3 | Image Match | {{suit-condition-image-match}} of [TBD: this document]
 4 | Reserved
-5 | Component Slot | {{suit-condition-component-slot}}
-6 | Check Content | {{suit-condition-check-content}}
-12 | Set Component Index | {{suit-directive-set-component-index}}
+5 | Component Slot | {{suit-condition-component-slot}} of [TBD: this document]
+6 | Check Content | {{suit-condition-check-content}} of [TBD: this document]
+12 | Set Component Index | {{suit-directive-set-component-index}} of [TBD: this document]
 13 | Reserved
 14 | Abort
-15 | Try Each | {{suit-directive-try-each}}
+15 | Try Each | {{suit-directive-try-each}} of [TBD: this document]
 16 | Reserved
 17 | Reserved
-18 | Write Content | {{suit-directive-write}}
+18 | Write Content | {{suit-directive-write}} of [TBD: this document]
 19 | Reserved
-20 | Override Parameters | {{suit-directive-override-parameters}}
-21 | Fetch | {{suit-directive-fetch}}
-22 | Copy | {{suit-directive-copy}}
-23 | Invoke | {{suit-directive-invoke}}
-24 | Device Identifier | {{identifier-conditions}}
+20 | Override Parameters | {{suit-directive-override-parameters}} of [TBD: this document]
+21 | Fetch | {{suit-directive-fetch}} of [TBD: this document]
+22 | Copy | {{suit-directive-copy}} of [TBD: this document]
+23 | Invoke | {{suit-directive-invoke}} of [TBD: this document]
+24 | Device Identifier | {{identifier-conditions}} of [TBD: this document]
 25 | Reserved
 26 | Reserved
 27 | Reserved
 28 | Reserved
 29 | Reserved
 30 | Reserved
-31 | Swap | {{suit-directive-swap}}
-32 | Run Sequence | {{suit-directive-run-sequence}}
+31 | Swap | {{suit-directive-swap}} of [TBD: this document]
+32 | Run Sequence | {{suit-directive-run-sequence}} of [TBD: this document]
 33 | Reserved
-nint | Custom Condition | {{SUIT_Condition_Custom}}
+nint | Custom Condition | {{SUIT_Condition_Custom}} of [TBD: this document]
 
 ## SUIT Parameters
 
@@ -1372,27 +1361,27 @@ IANA is requested to create a new registry for SUIT parameters.
 
 Label | Name | Reference
 ---|---|---
-1 | Vendor ID | {{suit-parameter-vendor-identifier}}
-2 | Class ID | {{suit-parameter-class-identifier}}
-3 | Image Digest | {{suit-parameter-image-digest}}
+1 | Vendor ID | {{suit-parameter-vendor-identifier}} of [TBD: this document]
+2 | Class ID | {{suit-parameter-class-identifier}} of [TBD: this document]
+3 | Image Digest | {{suit-parameter-image-digest}} of [TBD: this document]
 4 | Reserved
-5 | Component Slot | {{suit-parameter-component-slot}}
-12 | Strict Order | {{suit-parameter-strict-order}}
-13 | Soft Failure | {{suit-parameter-soft-failure}}
-14 | Image Size | {{suit-parameter-image-size}}
-18 | Content | {{suit-parameter-content}}
+5 | Component Slot | {{suit-parameter-component-slot}} of [TBD: this document]
+12 | Strict Order | {{suit-parameter-strict-order}} of [TBD: this document]
+13 | Soft Failure | {{suit-parameter-soft-failure}} of [TBD: this document]
+14 | Image Size | {{suit-parameter-image-size}} of [TBD: this document]
+18 | Content | {{suit-parameter-content}} of [TBD: this document]
 19 | Reserved
 20 | Reserved
-21 | URI | {{suit-parameter-uri}}
-22 | Source Component | {{suit-parameter-source-component}}
-23 | Invoke Args | {{suit-parameter-invoke-args}}
-24 | Device ID | {{suit-parameter-device-identifier}}
+21 | URI | {{suit-parameter-uri}} of [TBD: this document]
+22 | Source Component | {{suit-parameter-source-component}} of [TBD: this document]
+23 | Invoke Args | {{suit-parameter-invoke-args}} of [TBD: this document]
+24 | Device ID | {{suit-parameter-device-identifier}} of [TBD: this document]
 26 | Reserved
 27 | Reserved
 28 | Reserved
 29 | Reserved
 30 | Reserved
-nint | Custom | {{suit-parameter-custom}}
+nint | Custom | {{suit-parameter-custom}} of [TBD: this document]
 
 ## SUIT Text Values
 
@@ -1400,11 +1389,11 @@ IANA is requested to create a new registry for SUIT text values.
 
 Label | Name | Reference
 ---|---|---
-1 | Manifest Description | {{manifest-digest-text}}
-2 | Update Description | {{manifest-digest-text}}
-3 | Manifest JSON Source | {{manifest-digest-text}}
-4 | Manifest YAML Source | {{manifest-digest-text}}
-nint | Custom | {{manifest-digest-text}}
+1 | Manifest Description | {{manifest-digest-text}} of [TBD: this document]
+2 | Update Description | {{manifest-digest-text}} of [TBD: this document]
+3 | Manifest JSON Source | {{manifest-digest-text}} of [TBD: this document]
+4 | Manifest YAML Source | {{manifest-digest-text}} of [TBD: this document]
+nint | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## SUIT Component Text Values
 
@@ -1412,14 +1401,14 @@ IANA is requested to create a new registry for SUIT component text values.
 
 Label | Name | Reference
 ---|---|---
-1 | Vendor Name | {{manifest-digest-text}}
-2 | Model Name | {{manifest-digest-text}}
-3 | Vendor Domain | {{manifest-digest-text}}
-4 | Model Info | {{manifest-digest-text}}
-5 | Component Description | {{manifest-digest-text}}
-6 | Component Version | {{manifest-digest-text}}
-7 | Component Version Required | {{manifest-digest-text}}
-nint | Custom | {{manifest-digest-text}}
+1 | Vendor Name | {{manifest-digest-text}} of [TBD: this document]
+2 | Model Name | {{manifest-digest-text}} of [TBD: this document]
+3 | Vendor Domain | {{manifest-digest-text}} of [TBD: this document]
+4 | Model Info | {{manifest-digest-text}} of [TBD: this document]
+5 | Component Description | {{manifest-digest-text}} of [TBD: this document]
+6 | Component Version | {{manifest-digest-text}} of [TBD: this document]
+7 | Component Version Required | {{manifest-digest-text}} of [TBD: this document]
+nint | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## Expert Review Instructions
 
@@ -1545,6 +1534,10 @@ We would like to thank the following persons for their support in designing this
 : {{{David Brown}}}
 *  
 : {{{Emmanuel Baccelli}}}
+
+We would like to thank our responsible area director, Roman Danyliw, for his detailed review.
+Finally, we would like to thank our SUIT working group chairs (Dave Thaler, David Waltermire, Russ Housley)
+for their feedback and support. 
 
 --- back
 
