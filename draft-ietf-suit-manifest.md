@@ -348,7 +348,7 @@ See {{manifest-commands}} for more detail.
 
 ### Integrity Check Values {#ovr-integrity}
 
-To enable severable elements {{ovr-severable}}, there needs to be a mechanism to verify the integrity of the severed data. While the severed data stays outside outside the manifest, for efficiency reasons, Integrity Check Values are used to include the digest of the data in the manifest. Note that Integrated Payloads, see {#ovr-integrated}, are integrity-checked using Command Sequences.
+To enable severable elements {{ovr-severable}}, there needs to be a mechanism to verify the integrity of the severed data. While the severed data stays outside the manifest, for efficiency reasons, Integrity Check Values are used to include the digest of the data in the manifest. Note that Integrated Payloads, see {#ovr-integrated}, are integrity-checked using Command Sequences.
 
 See {{integrity-checks}} for more detail.
 
