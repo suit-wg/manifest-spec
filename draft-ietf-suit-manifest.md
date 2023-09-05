@@ -3,7 +3,7 @@ v: 3
 
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-22
+docname: draft-ietf-suit-manifest-23
 ipr: trust200902
 category: std
 stream: IETF
@@ -35,7 +35,6 @@ author:
  -
       ins: H. Tschofenig
       name: Hannes Tschofenig
-      organization: Arm Limited
       email: hannes.tschofenig@gmx.net
 
  -
@@ -64,13 +63,13 @@ normative:
   RFC8949:
   RFC9019:
   RFC9124:
+  I-D.ietf-suit-mti:
+  RFC9090: oid
+  RFC9054: hash-algs
 
 
 informative:
-  I-D.moran-suit-mti:
-  RFC9054: hash-algs
   I-D.ietf-teep-architecture:
-  RFC9090: oid
   I-D.ietf-suit-firmware-encryption:
   I-D.ietf-suit-update-management:
   I-D.ietf-suit-trust-domains:
@@ -81,11 +80,16 @@ informative:
     author:
     date: 2020
     target: https://yaml.org/
+  COSE_Alg:
+    title: "COSE Algorithms"
+    author: IANA
+    date: 2023
+    target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
 
 --- abstract
 This specification describes the format of a manifest.  A manifest is
 a bundle of metadata about code/data obtained by a recipient (chiefly
-the firmware for an IoT device), where to find the that code/data, the
+the firmware for an IoT device), where to find the code/data, the
 devices to which it applies, and cryptographic information protecting
 the manifest. Software updates and Trusted Invocation both tend to use
 sequences of common operations, so the manifest encodes those sequences
@@ -95,34 +99,25 @@ of operations, rather than declaring the metadata.
 
 #  Introduction
 
-A firmware update mechanism is an essential security feature for IoT devices to deal with vulnerabilities. While the transport of firmware images to the devices themselves is important there are already various techniques available. Equally important is the inclusion of metadata about the conveyed firmware image (in the form of a manifest) and the use of a security wrapper to provide end-to-end security protection to detect modifications and (optionally) to make reverse engineering more difficult. End-to-end security allows the author, who builds the firmware image, to be sure that no other party (including potential adversaries) can install firmware updates on IoT devices without adequate privileges. For confidentiality protected firmware images it is additionally required to encrypt the firmware image. Starting security protection at the author is a risk mitigation technique so firmware images and manifests can be stored on untrusted repositories; it also reduces the scope of a compromise of any repository or intermediate system to be no worse than a denial of service.
+A firmware update mechanism is an essential security feature for IoT devices to deal with vulnerabilities. The transport of firmware images to the devices themselves is important security aspect. Luckily, there are already various device management solutions available offering the distribution of firmware images to IoT devices. Equally important is the inclusion of metadata about the conveyed firmware image (in the form of a manifest) and the use of a security wrapper to provide end-to-end security protection to detect modifications and (optionally) to make reverse engineering more difficult. Firmware signing allows the author, who builds the firmware image, to be sure that no other party (including potential adversaries) can install firmware updates on IoT devices without adequate privileges. For confidentiality protected firmware images it is additionally required to encrypt the firmware image and to distribute the content encryption key securely. The support for firmware and payload encryption via the SUIT manifest format is described in a companion document {{I-D.ietf-suit-firmware-encryption}}. Starting security protection at the author is a risk mitigation technique so firmware images and manifests can be stored on untrusted repositories; it also reduces the scope of a compromise of any repository or intermediate system to be no worse than a denial of service.
 
-A manifest is a bundle of metadata describing one or more code or data payloads and how to:
-
-* Obtain any dependencies
-* Obtain the payload(s)
-* Install them
-* Verify them
-* Load them into memory
-* Invoke them
+A manifest is a bundle of metadata about the firmware for an IoT device, where to
+find the firmware, and the devices to which it applies.
 
 This specification defines the SUIT manifest format and it is intended to meet several goals:
 
 * Meet the requirements defined in {{RFC9124}}.
-* Simple to parse on a constrained node
-* Simple to process on a constrained node
-* Compact encoding
-* Comprehensible by an intermediate system
-* Expressive enough to enable advanced use cases on advanced nodes
-* Extensible
+* Simple to parse on a constrained node.
+* Simple to process on a constrained node.
+* Compact encoding.
+* Comprehensible by an intermediate system.
+* Expressive enough to enable advanced use cases on advanced nodes.
+* Extensible.
 
 The SUIT manifest can be used for a variety of purposes throughout its lifecycle, such as:
 
-* a Firmware Author to reason about releasing a firmware.
-* a Network Operator to reason about compatibility of a firmware.
+* a Network Operator to reason about compatibility of a firmware, such as timing and acceptance of firmware updates.
 * a Device Operator to reason about the impact of a firmware.
-* the Device Operator to manage distribution of firmware to devices.
-* a Plant Manager to reason about timing and acceptance of firmware updates.
 * a device to reason about the authority & authenticity of a firmware prior to installation.
 * a device to reason about the applicability of a firmware.
 * a device to reason about the installation of a firmware.
@@ -157,7 +152,7 @@ Additionally, the following terminology is used throughout this document:
 * Resource: A piece of information that is used to construct a payload.
 * Manifest: A manifest is a bundle of metadata about the firmware for an IoT device, where to
 find the firmware, and the devices to which it applies.
-* Envelope: A container with the manifest, an authentication wrapper with cryptographic information protecting the manifest, authorization information, and severable elements.
+* Envelope: A container with the manifest, an authentication wrapper with cryptographic information protecting the manifest, authorization information, and severable elements. Severable elements can be removed from the manifest without impacting its security, see {{severable-fields}}.
 * Update: One or more manifests that describe one or more payloads.
 * Update Authority: The owner of a cryptographic key used to sign updates, trusted by Recipients.
 * Recipient: The system, typically an IoT device, that receives and processes a manifest.
@@ -197,13 +192,14 @@ The IANA consideration section, see {{iana}}, provides instructions to IANA to c
 
 The complete CDDL description is provided in {{full-cddl}}, examples are given in {{examples}} and a design rational is offered in {{design-rationale}}. Finally, {{implementation-matrix}} gives a summarize of the mandatory-to-implement features of this specification.
 
-This specification covers the core features of SUIT. Additional specifications describe functionality of advanced use cases, such as:
+Additional specifications describe functionality of advanced use cases, such as:
 
 * Firmware Encryption is covered in {{I-D.ietf-suit-firmware-encryption}}
 * Update Management is covered in {{I-D.ietf-suit-update-management}}
 * Features, such as dependencies, key delegation, multiple processors, required by the use of multiple trust domains are covered in {{I-D.ietf-suit-trust-domains}}
 * Secure reporting of the update status is covered in {{I-D.ietf-suit-report}}
-* Compression of firmware images
+
+A technique to efficiently compress firmware images may be standardized in the future.
 
 # Background {#background}
 
@@ -259,7 +255,7 @@ This section provides a high level overview of the manifest structure. The full 
 The manifest is structured from several key components:
 
 1. The Envelope (see {{ovr-envelope}}) contains the Authentication Block, the Manifest, any Severable Elements, and any Integrated Payloads.
-2. The Authentication Block (see {{ovr-auth}}) contains a list of signatures or MACs of the manifest..
+2. The Authentication Block (see {{ovr-auth}}) contains a list of signatures or MACs of the manifest.
 3. The Manifest (see {{ovr-manifest}}) contains all critical, non-severable metadata that the Recipient requires. It is further broken down into:
 
     1. Critical metadata, such as sequence number.
@@ -279,9 +275,9 @@ The diagram below illustrates the hierarchy of the Envelope.
 | Authentication Block    |
 | Manifest           --------------> +------------------------------+
 | Severable Elements      |          | Manifest                     |
-| Human-Readable Text     |          +------------------------------+
-| Integrated Payloads     |          | Structure Version            |
-+-------------------------+          | Sequence Number              |
+| Integrated Payloads     |          +------------------------------+
++-------------------------+          | Structure Version            |
+                                     | Sequence Number              |
                                      | Reference to Full Manifest   |
                                +------ Common Structure             |
                                | +---- Command Sequences            |
@@ -301,7 +297,7 @@ The diagram below illustrates the hierarchy of the Envelope.
 
 ## Envelope {#ovr-envelope}
 
-The SUIT Envelope is a container that encloses the Authentication Block, the Manifest, any Severable Elements, and any integrated payloads. The Envelope is used instead of conventional cryptographic envelopes, such as COSE_Envelope because it allows modular processing, severing of elements, and integrated payloads in a way that would add substantial complexity with existing solutions. See {{design-rationale-envelope}} for a description of the reasoning for this.
+The SUIT Envelope is a container that encloses the Authentication Block, the Manifest, any Severable Elements, and any integrated payloads. The Envelope is used instead of conventional cryptographic envelopes, such as COSE_Envelope because it allows modular processing, severing of elements, and integrated payloads in a way that avoids substantial complexity that would be needed with existing solutions. See {{design-rationale-envelope}} for a description of the reasoning for this.
 
 See {{envelope}} for more detail.
 
@@ -352,7 +348,7 @@ See {{manifest-commands}} for more detail.
 
 ### Integrity Check Values {#ovr-integrity}
 
-To enable {{ovr-severable}}, there needs to be a mechanism to verify integrity of any metadata outside the manifest. Integrity Check Values are used to verify the integrity of metadata that is not contained in the manifest. This MAY include Severable Command Sequences, or Text data. Integrated Payloads are integrity-checked using Command Sequences, so they do not have Integrity Check Values present in the Manifest.
+To enable severable elements {{ovr-severable}}, there needs to be a mechanism to verify the integrity of the severed data. While the severed data stays outside the manifest, for efficiency reasons, Integrity Check Values are used to include the digest of the data in the manifest. Note that Integrated Payloads, see {#ovr-integrated}, are integrity-checked using Command Sequences.
 
 See {{integrity-checks}} for more detail.
 
@@ -408,7 +404,7 @@ Here, valid means that a manifest has a supported encoding version and it has no
 
 These failure reasons MAY be combined with retry mechanisms prior to marking a manifest as invalid.
 
-Selecting an older manifest in the event of failure of the latest valid manifest is a robustness mechanism that is necessary for supporting the requirements in {{RFC9019, Section 3.5}}. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See {{RFC9124, Section 4.2.1}} for more discussion on the security considerations that apply to rollback.
+Selecting an older manifest in the event of failure of the latest valid manifest is one possible strategy to provide robustness of the firmware update process. It may not be appropriate for all applications. In particular Trusted Execution Environments MAY require a failure to invoke a new installation, rather than a rollback approach. See {{RFC9124, Section 4.2.1}} for more discussion on the security considerations that apply to rollback.
 
 Following these initial tests, the manifest processor clears all parameter storage. This ensures that the manifest processor begins without any leaked data.
 
@@ -418,7 +414,8 @@ The RECOMMENDED process is to verify the signature of the manifest prior to pars
 
 When validating authenticity of manifests, the manifest processor MAY use an ACL (see {{access-control-lists}}) to determine the extent of the rights conferred by that authenticity.
 
-Once a valid, authentic manifest has been selected, the manifest processor MUST examine the component list and verify that its maximum number of components is not exceeded and that each listed component is supported.
+Once a valid, authentic manifest has been selected, the manifest processor MUST examine the component list and
+check that the number of components listed in the manifest is not larger than the number in the target system.
 
 For each listed component, the manifest processor MUST provide storage for the supported parameters. If the manifest processor does not have sufficient temporary storage to process the parameters for all components, it MAY process components serially for each command sequence. See {{serial-processing}} for more details.
 
@@ -426,7 +423,7 @@ The manifest processor SHOULD check that the shared sequence contains at least C
 
 Because the shared sequence contains Check Vendor Identifier and Check Class Identifier command(s), no custom commands are permitted in the shared sequence. This ensures that any custom commands are only executed by devices that understand them.
 
-If the manifest contains more than one component, each command sequence MUST begin with a Set Component Index.
+If the manifest contains more than one component, each command sequence MUST begin with a Set Component Index {{suit-directive-set-component-index}}.
 
 If a Recipient supports groups of interdependent components (a Component Set), then it SHOULD verify that all Components in the Component Set are specified by one update, that is the manifest:
 
@@ -474,7 +471,7 @@ AND
 
 ## Abstract Machine Description {#command-behavior}
 
-The heart of the manifest is the list of commands, which are processed by a Manifest Processor--a form of interpreter. This Manifest Processor can be modeled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands.
+The heart of the manifest is the list of commands, which are processed by a Manifest Processor -- a form of interpreter. This Manifest Processor can be modeled as a simple abstract machine. This machine consists of several data storage locations that are modified by commands.
 
 There are two types of commands, namely those that modify state (directives) and those that perform tests (conditions). Parameters are used as the inputs to commands. Some directives offer control flow operations. Directives target a specific component. A component is a unit of code or data that can be targeted by an update. Components are identified by Component Identifiers, but referenced in commands by Component Index; Component Identifiers are arrays of binary strings and a Component Index is an index into the array of Component Identifiers.
 
@@ -526,10 +523,16 @@ Integers MUST always be supported by Set Component Index. Arrays of integers MUS
 
 Integer indices are the default case as described in the previous section. An array of integers represents a list of the components (Set Component Index) to which each subsequent command applies. The value True replaces the list of component indices with the full list of components, as defined in the manifest.
 
-When a command is executed, it either 1. operates on the component identified by the component index if that index is an integer, or 2. it operates on each component identified by an array of indicies, or 3. it operates on every component if the index is the boolean True. This is described by the following pseudocode:
+When a command is executed, it 
+
+1. operates on the component identified by the component index if that index is an integer, or
+2. it operates on each component identified by an array of indicies, or
+3. it operates on every component if the index is the boolean True.
+
+This is described by the following pseudocode:
 
 ~~~
-if component-index is true:
+if component-index is True:
     current-list = components
 else if component-index is array:
     current-list = [ components[idx] for idx in component-index ]
@@ -539,7 +542,7 @@ for current in current-list:
     cmd(current)
 ~~~
 
-Try Each and Run Sequence are affected in the same way as other commands: they are invoked once for each possible Component. This means that the sequences that are arguments to Try Each and Run Sequence are NOT invoked with Component Index = True, nor are they invoked with array indices. They are only invoked with integer indices. The interpreter loops over the whole sequence, setting the Component Index to each index in turn.
+Try Each and Run Sequence are affected in the same way as other commands: they are invoked once for each possible Component. This means that the sequences that are arguments to Try Each and Run Sequence are not invoked with Component Index = True, nor are they invoked with array indices. They are only invoked with integer indices. The interpreter loops over the whole sequence, setting the Component Index to each index in turn.
 
 ## Serialized Processing Interpreter {#serial-processing}
 
@@ -714,7 +717,7 @@ NOTE: Any test can be used to select between images, Check Slot Condition is use
 
 # Metadata Structure {#metadata-structure}
 
-The metadata for SUIT updates is composed of several primary constituent parts: the Envelope, Authentication Information, Manifest, and Severable Elements.
+The metadata for SUIT updates is composed of several primary constituent parts: Authentication Information, Manifest, Severable Elements and Integrated Payloads.
 
 For a diagram of the metadata structure, see {{metadata-structure-overview}}.
 
@@ -739,6 +742,7 @@ The Envelope is encoded as a CBOR Map. Each element of the Envelope is enclosed 
 The suit-authentication-wrapper contains a SUIT Digest Container (see {{SUIT_Digest}}) and one or more SUIT Authentication Blocks. The SUIT_Digest carries the result of computing the indicated hash algorithm over the suit-manifest element. A signing application MUST verify the suit-manifest element against the SUIT_Digest prior to signing. A SUIT Authentication Block is implemented as COSE_Mac_Tagged, COSE_Mac0_Tagged, COSE_Sign_Tagged or COSE_Sign1_Tagged structures with detached payloads, as described in RFC 9052 {{-cose}}.
 
 For COSE_Sign and COSE_Sign1 a special signature structure (called Sig_structure) has to be created onto which the selected digital signature algorithm is applied to, see {{Section 4.4 of -cose}} for details. This specification requires Sig_structure to be populated as follows:
+
 * The external_aad field MUST be set to a zero-length binary string (i.e. there is no external additional authenticated data).
 * The payload field contains the SUIT_Digest wrapped in a bstr, as per the requirements in {{Section 4.4 of -cose}}.
 All other fields in the Sig_structure are populated as described in {{Section 4.4 of -cose}}.
@@ -945,7 +949,7 @@ D8 6F                # tag(111)
       2B 06 01 04 01 # X.690 Clause 8.19
 ~~~
 
-Computing a type 5 UUID from these produces:
+Computing a version 5 UUID from these produces:
 
 ~~~
 NAMESPACE_CBOR_PEN = UUID5(NAMESPACE_OID, h'D86F452B06010401')
@@ -980,7 +984,7 @@ This allows the OS, WiFi module, and application to be updated independently. To
 
 This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.
 
-UUIDs MUST be created according to RFC 4122 {{RFC4122}}. UUIDs SHOULD use versions 3, 4, or 5, as described in RFC4122. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
+UUIDs MUST be created according to versions 3, 4, or 5 of RFC 4122 {{RFC4122}}. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
 
 The RECOMMENDED method to create a vendor ID is:
 
@@ -1119,21 +1123,23 @@ Verify that the current component matches the suit-parameter-image-digest ({{sui
 
 #### suit-condition-check-content {#suit-condition-check-content}
 
-This directive compares the specified component identifier to the data indicated by suit-parameter-content. This functions similarly to suit-condition-image-match, however it does a direct, byte-by-byte comparison rather than a digest-based comparison. Because it is possible that an early stop to check-content could reveal information through timing, suit-condition-check-content MUST be constant time: no early exits. This MAY be implemented as follows:
+This directive compares the specified component identifier to the data indicated by suit-parameter-content. This functions similarly to suit-condition-image-match, however it does a direct, byte-by-byte comparison rather than a digest-based comparison. Because it is possible that an early stop to check-content could reveal information through timing, suit-condition-check-content MUST be constant time: no early exits. 
 
-```
+The following pseudo-code described an example content checking algorithm:
+
+~~~
 // content & component must be same length
 // returns 0 for match
-bool check_content(content, component, length) {
-    int residual = 0
+int check_content(content, component, length) {
+    int residual = 0;
     for (i = 0; i < length; i++) {
         residual |= content[i] ^ component[i];
     }
     return residual;
 }
-```
+~~~
 
-#### suit-condition-component-slot
+#### suit-condition-component-slot {#suit-condition-component-slot}
 
 Verify that the slot index of the current component matches the slot index set in suit-parameter-component-slot ({{suit-parameter-component-slot}}). This condition allows a manifest to select between several images to match a target slot.
 
@@ -1166,14 +1172,9 @@ When a Recipient executes a Directive, it MUST report a result code. If the Dire
 
 #### suit-directive-set-component-index {#suit-directive-set-component-index}
 
-Set Component Index defines the component to which successive directives and conditions will apply. The supplied argument MUST be one of three types:
-
-1. An unsigned integer (REQUIRED to implement in parser)
-2. A boolean (REQUIRED to implement in parser ONLY IF 2 or more components supported)
-3. An array of unsigned integers (REQUIRED to implement in parser ONLY IF 3 or more components supported)
+Set Component Index defines the component to which successive directives and conditions will apply. The Set Component Index arguments are described in {{index-true}}.
 
 If the following commands apply to ONE component, an unsigned integer index into the component list is used. If the following commands apply to ALL components, then the boolean value "True" is used instead of an index. If the following commands apply to more than one, but not all components, then an array of unsigned integer indices into the component list is used.
-See {{index-true}} for more details.
 
 If component index is set to True when a command is invoked, then the command applies to all components, in the order they appear in suit-common-components. When the Manifest Processor invokes a command while the component index is set to True, it must execute the command once for each possible component index, ensuring that the command receives the parameters corresponding to that component index.
 
@@ -1238,8 +1239,6 @@ suit-parameter-soft-failure ({{suit-parameter-soft-failure}}) defaults to False 
 
 suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. As with suit-directive-copy, if the source component is missing, this command fails.
 
-If SUIT_Parameter_Compression_Info or SUIT_Parameter_Encryption_Info are present, they MUST be handled in a symmetric way, so that the source is decompressed into the destination and the destination is compressed into the source. The source is decrypted into the destination and the destination is encrypted into the source. suit-directive-swap is OPTIONAL to implement.
-
 ### Integrity Check Values {#integrity-checks}
 
 When the Text section or any Command Sequence of the Update Procedure is made severable, it is moved to the Envelope and replaced with a SUIT_Digest. The SUIT_Digest is computed over the entire bstr enclosing the Manifest element that has been moved to the Envelope. Each element that is made severable from the Manifest is placed in the Envelope. The keys for the envelope elements have the same values as the keys for the manifest elements.
@@ -1268,18 +1267,11 @@ A third model allows a Recipient to provide even more fine-grained controls: The
 
 #  SUIT Digest Container {#SUIT_Digest}
 
-The SUIT digest is a CBOR List containing two elements: an algorithm identifier and a bstr containing the bytes of the digest. Some forms of digest may require additional parameters. These can be added following the digest.
+The SUIT digest is a CBOR array containing two elements: an algorithm identifier and a bstr containing the bytes of the digest. Some forms of digest may require additional parameters. These can be added following the digest.
 
-The values of the algorithm identifier are defined by {{-hash-algs}}. The following algorithms MUST be implemented by all Manifest Processors:
+The values of the algorithm identifier are found in the IANA "COSE Algorithms" registry {{COSE_Alg}}, which was created by {{-hash-algs}}. SHA-256 (-16) MUST be implemented by all Manifest Processors.
 
-* SHA-256 (-16)
-
-The following algorithms MAY be implemented in a Manifest Processor:
-
-* SHAKE128 (-18)
-* SHA-384 (-43)
-* SHA-512 (-44)
-* SHAKE256 (-45)
+Any other algorithm defined in the IANA "COSE Algorithms" registry, such as SHA-512 (-44), MAY be implemented in a Manifest Processor.
 
 #  IANA Considerations {#iana}
 
@@ -1305,11 +1297,11 @@ IANA is requested to create a new registry for SUIT envelope elements.
 
 Label | Name | Reference
 ---|---|---
-2 | Authentication Wrapper | {{authentication-info}}
-3 | Manifest | {{manifest-structure}}
-16 | Payload Fetch | {{manifest-commands}}
-17 | Payload Installation | {{manifest-commands}}
-23 | Text Description | {{manifest-digest-text}}
+2 | Authentication Wrapper | {{authentication-info}} of [TBD: this document]
+3 | Manifest | {{manifest-structure}} of [TBD: this document]
+16 | Payload Fetch | {{manifest-commands}} of [TBD: this document]
+17 | Payload Installation | {{manifest-commands}} of [TBD: this document]
+23 | Text Description | {{manifest-digest-text}} of [TBD: this document]
 
 
 ## SUIT Manifest Elements
@@ -1318,16 +1310,16 @@ IANA is requested to create a new registry for SUIT manifest elements.
 
 Label | Name | Reference
 ---|---|---
-1 | Encoding Version | {{manifest-version}}
-2 | Sequence Number | {{manifest-seqnr}}
-3 | Common Data | {{manifest-common}}
-4 | Reference URI | {{manifest-reference-uri}}
-7 | Image Validation | {{manifest-commands}}
-8 | Image Loading | {{manifest-commands}}
-9 | Image Invocation | {{manifest-commands}}
-16 | Payload Fetch | {{manifest-commands}}
-17 | Payload Installation | {{manifest-commands}}
-23 | Text Description | {{manifest-digest-text}}
+1 | Encoding Version | {{manifest-version}} of [TBD: this document]
+2 | Sequence Number | {{manifest-seqnr}} of [TBD: this document]
+3 | Common Data | {{manifest-common}} of [TBD: this document]
+4 | Reference URI | {{manifest-reference-uri}} of [TBD: this document]
+7 | Image Validation | {{manifest-commands}} of [TBD: this document]
+8 | Image Loading | {{manifest-commands}} of [TBD: this document]
+9 | Image Invocation | {{manifest-commands}} of [TBD: this document]
+16 | Payload Fetch | {{manifest-commands}} of [TBD: this document]
+17 | Payload Installation | {{manifest-commands}} of [TBD: this document]
+23 | Text Description | {{manifest-digest-text}} of [TBD: this document]
 
 ## SUIT Common Elements
 
@@ -1335,8 +1327,8 @@ IANA is requested to create a new registry for SUIT common elements.
 
 Label | Name | Reference
 ---|---|---
-2 | Component Identifiers | {{manifest-common}}
-4 | Common Command Sequence | {{manifest-common}}
+2 | Component Identifiers | {{manifest-common}} of [TBD: this document]
+4 | Common Command Sequence | {{manifest-common}} of [TBD: this document]
 
 ## SUIT Commands
 
@@ -1344,35 +1336,35 @@ IANA is requested to create a new registry for SUIT commands.
 
 Label | Name | Reference
 ---|---|---
-1 | Vendor Identifier | {{identifier-conditions}}
-2 | Class Identifier | {{identifier-conditions}}
-3 | Image Match | {{suit-condition-image-match}}
+1 | Vendor Identifier | {{identifier-conditions}} of [TBD: this document]
+2 | Class Identifier | {{identifier-conditions}} of [TBD: this document]
+3 | Image Match | {{suit-condition-image-match}} of [TBD: this document]
 4 | Reserved
-5 | Component Slot | {{suit-condition-component-slot}}
-6 | Check Content | {{suit-condition-check-content}}
-12 | Set Component Index | {{suit-directive-set-component-index}}
+5 | Component Slot | {{suit-condition-component-slot}} of [TBD: this document]
+6 | Check Content | {{suit-condition-check-content}} of [TBD: this document]
+12 | Set Component Index | {{suit-directive-set-component-index}} of [TBD: this document]
 13 | Reserved
 14 | Abort
-15 | Try Each | {{suit-directive-try-each}}
+15 | Try Each | {{suit-directive-try-each}} of [TBD: this document]
 16 | Reserved
 17 | Reserved
-18 | Write Content | {{suit-directive-write}}
+18 | Write Content | {{suit-directive-write}} of [TBD: this document]
 19 | Reserved
-20 | Override Parameters | {{suit-directive-override-parameters}}
-21 | Fetch | {{suit-directive-fetch}}
-22 | Copy | {{suit-directive-copy}}
-23 | Invoke | {{suit-directive-invoke}}
-24 | Device Identifier | {{identifier-conditions}}
+20 | Override Parameters | {{suit-directive-override-parameters}} of [TBD: this document]
+21 | Fetch | {{suit-directive-fetch}} of [TBD: this document]
+22 | Copy | {{suit-directive-copy}} of [TBD: this document]
+23 | Invoke | {{suit-directive-invoke}} of [TBD: this document]
+24 | Device Identifier | {{identifier-conditions}} of [TBD: this document]
 25 | Reserved
 26 | Reserved
 27 | Reserved
 28 | Reserved
 29 | Reserved
 30 | Reserved
-31 | Swap | {{suit-directive-swap}}
-32 | Run Sequence | {{suit-directive-run-sequence}}
+31 | Swap | {{suit-directive-swap}} of [TBD: this document]
+32 | Run Sequence | {{suit-directive-run-sequence}} of [TBD: this document]
 33 | Reserved
-nint | Custom Condition | {{SUIT_Condition_Custom}}
+nint | Custom Condition | {{SUIT_Condition_Custom}} of [TBD: this document]
 
 ## SUIT Parameters
 
@@ -1380,27 +1372,27 @@ IANA is requested to create a new registry for SUIT parameters.
 
 Label | Name | Reference
 ---|---|---
-1 | Vendor ID | {{suit-parameter-vendor-identifier}}
-2 | Class ID | {{suit-parameter-class-identifier}}
-3 | Image Digest | {{suit-parameter-image-digest}}
+1 | Vendor ID | {{suit-parameter-vendor-identifier}} of [TBD: this document]
+2 | Class ID | {{suit-parameter-class-identifier}} of [TBD: this document]
+3 | Image Digest | {{suit-parameter-image-digest}} of [TBD: this document]
 4 | Reserved
-5 | Component Slot | {{suit-parameter-component-slot}}
-12 | Strict Order | {{suit-parameter-strict-order}}
-13 | Soft Failure | {{suit-parameter-soft-failure}}
-14 | Image Size | {{suit-parameter-image-size}}
-18 | Content | {{suit-parameter-content}}
+5 | Component Slot | {{suit-parameter-component-slot}} of [TBD: this document]
+12 | Strict Order | {{suit-parameter-strict-order}} of [TBD: this document]
+13 | Soft Failure | {{suit-parameter-soft-failure}} of [TBD: this document]
+14 | Image Size | {{suit-parameter-image-size}} of [TBD: this document]
+18 | Content | {{suit-parameter-content}} of [TBD: this document]
 19 | Reserved
 20 | Reserved
-21 | URI | {{suit-parameter-uri}}
-22 | Source Component | {{suit-parameter-source-component}}
-23 | Invoke Args | {{suit-parameter-invoke-args}}
-24 | Device ID | {{suit-parameter-device-identifier}}
+21 | URI | {{suit-parameter-uri}} of [TBD: this document]
+22 | Source Component | {{suit-parameter-source-component}} of [TBD: this document]
+23 | Invoke Args | {{suit-parameter-invoke-args}} of [TBD: this document]
+24 | Device ID | {{suit-parameter-device-identifier}} of [TBD: this document]
 26 | Reserved
 27 | Reserved
 28 | Reserved
 29 | Reserved
 30 | Reserved
-nint | Custom | {{suit-parameter-custom}}
+nint | Custom | {{suit-parameter-custom}} of [TBD: this document]
 
 ## SUIT Text Values
 
@@ -1408,11 +1400,11 @@ IANA is requested to create a new registry for SUIT text values.
 
 Label | Name | Reference
 ---|---|---
-1 | Manifest Description | {{manifest-digest-text}}
-2 | Update Description | {{manifest-digest-text}}
-3 | Manifest JSON Source | {{manifest-digest-text}}
-4 | Manifest YAML Source | {{manifest-digest-text}}
-nint | Custom | {{manifest-digest-text}}
+1 | Manifest Description | {{manifest-digest-text}} of [TBD: this document]
+2 | Update Description | {{manifest-digest-text}} of [TBD: this document]
+3 | Manifest JSON Source | {{manifest-digest-text}} of [TBD: this document]
+4 | Manifest YAML Source | {{manifest-digest-text}} of [TBD: this document]
+nint | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## SUIT Component Text Values
 
@@ -1420,14 +1412,14 @@ IANA is requested to create a new registry for SUIT component text values.
 
 Label | Name | Reference
 ---|---|---
-1 | Vendor Name | {{manifest-digest-text}}
-2 | Model Name | {{manifest-digest-text}}
-3 | Vendor Domain | {{manifest-digest-text}}
-4 | Model Info | {{manifest-digest-text}}
-5 | Component Description | {{manifest-digest-text}}
-6 | Component Version | {{manifest-digest-text}}
-7 | Component Version Required | {{manifest-digest-text}}
-nint | Custom | {{manifest-digest-text}}
+1 | Vendor Name | {{manifest-digest-text}} of [TBD: this document]
+2 | Model Name | {{manifest-digest-text}} of [TBD: this document]
+3 | Vendor Domain | {{manifest-digest-text}} of [TBD: this document]
+4 | Model Info | {{manifest-digest-text}} of [TBD: this document]
+5 | Component Description | {{manifest-digest-text}} of [TBD: this document]
+6 | Component Version | {{manifest-digest-text}} of [TBD: this document]
+7 | Component Version Required | {{manifest-digest-text}} of [TBD: this document]
+nint | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## Expert Review Instructions
 
@@ -1553,6 +1545,10 @@ We would like to thank the following persons for their support in designing this
 : {{{David Brown}}}
 *  
 : {{{Emmanuel Baccelli}}}
+
+We would like to thank our responsible area director, Roman Danyliw, for his detailed review.
+Finally, we would like to thank our SUIT working group chairs (Dave Thaler, David Waltermire, Russ Housley)
+for their feedback and support. 
 
 --- back
 
