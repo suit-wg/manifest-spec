@@ -1462,7 +1462,7 @@ This section registers the 'application/suit-envelope' media type in the
 "Media Types" registry.  This media type are used to indicate that
 the content is a SUIT envelope.
 
-```
+~~~
       Type name: application
 
       Subtype name: suit-envelope
@@ -1509,7 +1509,7 @@ the content is a SUIT envelope.
       Change Controller: IESG
 
       Provisional registration?  No
-```
+~~~
 
 #  Security Considerations
 
@@ -1531,8 +1531,6 @@ We would like to thank the following persons for their support in designing this
 : {{{Hugo Vincent}}}
 *  
 : {{{Carsten Bormann}}}
-*  
-: {{{Øyvind Rønningstad}}}
 *  
 : {{{Frank Audun Kvamtrø}}}
 *  
