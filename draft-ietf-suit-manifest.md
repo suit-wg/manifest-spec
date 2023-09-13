@@ -482,7 +482,7 @@ Directives MAY have side-effects in the parameter table, the interpreter state, 
 To simplify the logic describing the command semantics, the object "current" is used. It represents the component identified by the Component Index:
 
 ~~~
-current := components\[component-index\]
+current := components[component-index]
 ~~~
 
 As a result, Set Component Index is described as current := components\[arg\].
