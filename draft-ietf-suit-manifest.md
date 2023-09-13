@@ -460,7 +460,7 @@ As required in {{Section 3 of RFC9019}} and as an extension of design goal 1, de
 
 The manifest processor must be resilient to these faults. In order to enable this resilience, systems implementing the manifest processor MUST make the following guarantees:
 
-Either:
+One of:
 1. A fallback/recovery image is provided so that a disrupted system can apply the SUIT Manifest again.
 2. Manifests are constructed so that repeated partial invocations of any manifest sequence always results in a correct system configuration.
 3. A journal of manifest operations is stored in nonvolatile memory so that a repeated invocation does not alter nonvolatile memory up until the point of the previous failure. The journal enables the parser to recreate the processor state just prior to the disruption. This journal can be, for example, a SUIT Report. This report can be used to resume processing of the manifest from the point of failure.
