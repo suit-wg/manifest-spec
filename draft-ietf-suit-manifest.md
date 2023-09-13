@@ -783,10 +783,26 @@ suit-reference-uri is a text string that encodes a URI where a full version of t
 
 ### suit-text {#manifest-digest-text}
 
-suit-text SHOULD be a severable element. suit-text is a map containing two different types of pair:
+suit-text SHOULD be a severable element. suit-text is a map of language identifiers (identical to Tag38 of RFC9290, Appendix A) to language-specific text maps. Each language-specific text map is a map containing two different types of pair:
 
 * integer => text
 * SUIT_Component_Identifier => map
+
+The SUIT_Text_Map is defined in the following CDDL.
+
+~~~
+tag38-ltag = text .regexp "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+
+SUIT_Text_Map = {
+    + tag38-ltag => SUIT_Text_LMap
+}
+SUIT_Text_LMap = {
+    SUIT_Text_Keys,
+    * SUIT_Component_Identifier => {
+        SUIT_Text_Component_Keys
+    }
+}
+~~~
 
 Each SUIT_Component_Identifier => map entry contains a map of integer => text values. All SUIT_Component_Identifiers present in suit-text MUST also be present in suit-common ({{manifest-common}}).
 
