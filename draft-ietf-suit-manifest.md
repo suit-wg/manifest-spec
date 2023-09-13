@@ -438,7 +438,7 @@ Signature verification can be energy and time expensive on a constrained device.
 - The Recipient receives manifests over an unauthenticated channel, exposing it to more inauthentic or incompatible manifests, and
 - The Recipient has a power budget that makes signature verification undesirable
 
-When executing Common prior to authenticity validation, the Manifest Processor MUST first evaluate the integrity of the manifest using the SUIT_Digest present in the authentication block.
+When executing Common prior to authenticity validation, the Manifest Processor MUST first evaluate the integrity of the manifest using the SUIT_Digest present in the authentication block to identify corruption.
 
 The guidelines in Creating Manifests ({{creating-manifests}}) require that the common section contains the applicability checks, so this section is sufficient for applicability verification. The parser MUST restrict acceptable commands to conditions and the following directives: Override Parameters, Set Parameters, Try Each, and Run Sequence ONLY. The manifest parser MUST NOT execute any command with side-effects outside the parser (for example, Run, Copy, Swap, or Fetch commands) prior to authentication and any such command MUST Abort. The Shared sequence MUST be executed again, in its entirety, after authenticity validation.
 
