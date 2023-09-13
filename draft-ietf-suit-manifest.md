@@ -462,7 +462,7 @@ The manifest processor must be resilient to these faults. In order to enable thi
 
 One of:
 1. A fallback/recovery image is provided so that a disrupted system can apply the SUIT Manifest again.
-2. Manifests are constructed so that repeated partial invocations of any manifest sequence always results in a correct system configuration.
+2. Manifest Authors MUST construct Manifests in such a way that repeated partial invocations of any Manifest always results in a correct system state.
 3. A journal of manifest operations is stored in nonvolatile memory so that a repeated invocation does not alter nonvolatile memory up until the point of the previous failure. The journal enables the parser to recreate the processor state just prior to the disruption. This journal can be, for example, a SUIT Report. This report can be used to resume processing of the manifest from the point of failure.
 
 AND
