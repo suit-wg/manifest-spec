@@ -427,7 +427,7 @@ If the manifest contains more than one component, each command sequence MUST beg
 
 If a Recipient supports groups of interdependent components (a Component Set), then it SHOULD verify that all Components in the Component Set are specified by one update, that is the manifest:
 
-1. has sufficient permissions imparted by its signatures
+1. has sufficient permissions imparted by its signatures or MACs (see {{access-control-lists}}).
 2. specifies a digest and a payload for every Component in the Component Set.
 
 ### Minimizing Signature Verifications {#minimal-sigs}
