@@ -166,10 +166,13 @@ $$SUIT_Parameters //= (suit-parameter-soft-failure => bool)
 
 RFC4122_UUID = bstr .size 16
 
+tag38-ltag = text .regexp "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
 SUIT_Text_Map = {
-    SUIT_Text_Keys,
-    * SUIT_Component_Identifier => {
-        SUIT_Text_Component_Keys
+    tag38-ltag => {
+        SUIT_Text_Keys,
+        * SUIT_Component_Identifier => {
+            SUIT_Text_Component_Keys
+        }
     }
 }
 
