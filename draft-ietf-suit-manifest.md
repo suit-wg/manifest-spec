@@ -448,7 +448,7 @@ A Recipient MAY rely on network infrastructure to filter inapplicable manifests.
 
 The interpreter has a small set of design goals:
 
-1. Executing an update MUST either result in an error, or a verifiably correct system state.
+1. Executing an update MUST either result in an error, or a correct system state that can be checked against known digests.
 2. Executing a Trusted Invocation MUST either result in an error, or an invoked image.
 3. Executing the same manifest on multiple Recipients MUST result in the same system state.
 
