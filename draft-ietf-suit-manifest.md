@@ -739,21 +739,24 @@ The Envelope is encoded as a CBOR Map. Each element of the Envelope is enclosed 
 
 ## Authenticated Manifests {#authentication-info}
 
-The suit-authentication-wrapper contains a SUIT Digest Container (see {{SUIT_Digest}}) and one or more SUIT Authentication Blocks. The SUIT_Digest carries the result of computing the indicated hash algorithm over the suit-manifest element. A signing application MUST verify the suit-manifest element against the SUIT_Digest prior to signing. A SUIT Authentication Block is implemented as COSE_Mac_Tagged, COSE_Mac0_Tagged, COSE_Sign_Tagged or COSE_Sign1_Tagged structures with detached payloads, as described in RFC 9052 {{-cose}}.
+SUIT_Authentication contains a list of elements, which consist of a SUIT_Digest calculated over the manifest, and zero or more SUIT_Authentication_Block's calculated over the SUIT_Digest.
 
-For COSE_Sign and COSE_Sign1 a special signature structure (called Sig_structure) has to be created onto which the selected digital signature algorithm is applied to, see {{Section 4.4 of -cose}} for details. This specification requires Sig_structure to be populated as follows:
+~~~
+SUIT_Authentication = [
+    bstr .cbor SUIT_Digest,
+    * bstr .cbor SUIT_Authentication_Block
+]
+SUIT_Authentication_Block /= COSE_Mac_Tagged
+SUIT_Authentication_Block /= COSE_Sign_Tagged
+SUIT_Authentication_Block /= COSE_Mac0_Tagged
+SUIT_Authentication_Block /= COSE_Sign1_Tagged
+~~~
 
-* The external_aad field MUST be set to a zero-length binary string (i.e. there is no external additional authenticated data).
-* The payload field contains the SUIT_Digest wrapped in a bstr, as per the requirements in {{Section 4.4 of -cose}}.
-All other fields in the Sig_structure are populated as described in {{Section 4.4 of -cose}}.
+The SUIT_Digest is computed over the bstr-wrapped SUIT_Manifest that is present in the SUIT_Envelope at the suit-manifest key. The SUIT_Digest MUST always be present. The Manifest Processor requires a SUIT_Authentication_Block to be present. The manifest MUST be protected from tampering between creation and signing/MAC because it is not yet tamper-evident.
 
-Likewise, {{Section 6.3 of -cose}} describes the details for computing a MAC and the fields of the MAC_structure need to be populated. The rules for external_aad and the payload fields described in the paragraph above also apply to this structure.
+The SUIT_Authentication_Block is computed using detached payloads, as described in RFC 9052 {{-cose}}. The detached payload in each case is the bstr-wrapped SUIT_Digest at the beginning of the list. Signers (or MAC calculators) MUST verify the SUIT_Digest prior to signing. Each SUIT_Authentication_Block MAY be computed over the same SUIT_Digest using a different algorithm or signing/MAC authority, for example to allow PQC algorithms.
 
-The suit-authentication-wrapper MUST come before the suit-manifest element, regardless of canonical encoding of CBOR.
-
-A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.
-
-The algorithms used in SUIT_Authentication are defined by the profiles declared in {{I-D.moran-suit-mti}}.
+The SUIT_Authentication structure MUST come before the suit-manifest element, regardless of canonical encoding of CBOR. The algorithms used in SUIT_Authentication are defined by the profiles declared in {{I-D.moran-suit-mti}}.
 
 ## Manifest {#manifest-structure}
 
