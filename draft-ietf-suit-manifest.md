@@ -435,7 +435,7 @@ If a Recipient supports groups of interdependent components (a Component Set), t
 Signature verification can be energy and time expensive on a constrained device. MAC verification is typically unaffected by these concerns. A Recipient MAY choose to parse and execute only the SUIT_Common section of the manifest prior to signature verification, if all of the below apply:
 
 - The Authentication Block contains a COSE_Sign_Tagged or COSE_Sign1_Tagged
-- The Recipient receives manifests over an unauthenticated channel, exposing it to more inauthentic or incompatible manifests, and
+- The Recipient regularly receives inauthentic or incompatible manifests (for example, in a broadcast environment), and
 - The Recipient has a power budget that makes signature verification undesirable
 
 When executing Common prior to authenticity validation, the Manifest Processor MUST first evaluate the integrity of the manifest using the SUIT_Digest present in the authentication block.
