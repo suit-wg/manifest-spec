@@ -836,7 +836,7 @@ This hierarchical construction allows a component identifier to identify any par
 
 A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take to accomplish a particular goal. These goals are defined in the manifest and include:
 
-1. Payload Fetch: suit-payload-fetch is a SUIT_Command_Sequence to execute in order to obtain a payload. Some manifests may include these actions in the suit-install section instead if they operate in a streaming installation mode. This is particularly relevant for constrained devices without any temporary storage for staging the update. suit-payload-fetch is OPTIONAL to implement.
+1. Payload Fetch: suit-payload-fetch is a SUIT_Command_Sequence to execute in order to obtain a payload. Some manifests may include these actions in the suit-install section instead if they operate in a streaming installation mode. This is particularly relevant for constrained devices without any temporary storage for staging the update. suit-payload-fetch is OPTIONAL to implement because it is not relevant in all bootloaders.
 
 2. Payload Installation: suit-install is a SUIT_Command_Sequence to execute in order to install a payload. Typical actions include verifying a payload stored in temporary storage, copying a staged payload from temporary storage, and unpacking a payload. suit-install is OPTIONAL to implement.
 
@@ -844,7 +844,7 @@ A SUIT_Command_Sequence defines a series of actions that the Recipient MUST take
 
 4. Image Loading: suit-load is a SUIT_Command_Sequence to execute in order to prepare a payload for execution. Typical actions include copying an image from permanent storage into RAM, optionally including actions such as decryption or decompression. suit-load is OPTIONAL to implement.
 
-5. Invoke or Boot: suit-invoke is a SUIT_Command_Sequence to execute in order to invoke an image. suit-invoke typically contains a single instruction: the "invoke" directive, but may also contain an image condition. suit-invoke is OPTIONAL to implement.
+5. Invoke or Boot: suit-invoke is a SUIT_Command_Sequence to execute in order to invoke an image. suit-invoke typically contains a single instruction: the "invoke" directive, but may also contain an image condition. suit-invoke is OPTIONAL to implement because it not needed for restart-based invocation.
 
 Goals 1,2,3 form the Update Procedure. Goals 3,4,5 form the Invocation Procedure.
 
