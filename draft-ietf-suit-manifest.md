@@ -900,13 +900,13 @@ The information elements provided to the Reporting Engine are:
 - The values of parameters consumed by the command
 - The system information consumed by the command
 
-Together, these elements are called a Record. A group of Records is a Report.
+The Reporting Engine consumes these information elements and decides whether to generate an entry in its report output and which information elements to include based on its internal policy decisions. The Reporting Engine uses the reporting policy provided to it by the SUIT Manifest Processor as a set of hints but MAY choose to ignore these hints and apply its own policy instead.
 
-If the component index is set to True or an array when a command is executed with a non-zero reporting policy, then the Reporting Engine MUST receive one Record for each Component, in the order expressed in the Components list or the component index array.
+If the component index is set to True or an array when a command is executed with a non-zero reporting policy, then the Reporting Engine MUST receive one set of information elements for each Component, in the order expressed in the Components list or the Component Index array.
 
-This specification does not define a particular format of Records or Reports. This specification only defines hints to the Reporting Engine for which Records it should aggregate into the Report. The Reporting Engine MAY choose to ignore these hints and apply its own policy instead.
+This specification does not define a particular format of Records or Reports. This specification only defines hints to the Reporting Engine for which information elements it should aggregate into the Report.
 
-When used in a Invocation Procedure, the report MAY form the basis of an attestation report. When used in an Update Process, the report MAY form the basis for one or more log entries.
+When used in a Invocation Procedure, the output of the Reporting Engine MAY form the basis of an attestation report. When used in an Update Process, the report MAY form the basis for one or more log entries.
 
 ### SUIT_Parameters {#secparameters}
 
