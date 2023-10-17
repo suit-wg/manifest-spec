@@ -1076,9 +1076,9 @@ See {{parallel-processing}} for behavioral description of Strict Order.
 
 When executing a command sequence inside suit-directive-try-each ({{suit-directive-try-each}}) or suit-directive-run-sequence ({{suit-directive-run-sequence}}) and a condition failure occurs, the manifest processor aborts the sequence. For suit-directive-try-each, if Soft Failure is True, the next sequence in Try Each is invoked, otherwise suit-directive-try-each fails with the condition failure code. In suit-directive-run-sequence, if Soft Failure is True the suit-directive-run-sequence simply halts with no side-effects and the Manifest Processor continues with the following command, otherwise, the suit-directive-run-sequence fails with the condition failure code.
 
-suit-parameter-soft-failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when SUIT_Command_Sequence terminates. It MUST NOT be set outside of suit-directive-try-each or suit-directive-run-sequence.
+suit-parameter-soft-failure is scoped to the enclosing SUIT_Command_Sequence. Its value is discarded when the enclosing SUIT_Command_Sequence terminates and suit-parameter-soft-failure reverts to the value it had prior to the invocation of the SUIT_Command_Sequence. Nested SUIT_Command_Sequences do not inherit the enclosing sequence's suit-parameter-soft-failure. It MUST NOT be set outside of suit-directive-try-each or suit-directive-run-sequence, modifying suit-parameter-soft-failure outside of these circumstances causes an Abort.
 
-When suit-directive-try-each is invoked, Soft Failure defaults to True. An Update Author may choose to set Soft Failure to False if they require a failed condition in a sequence to force an Abort.
+When suit-directive-try-each is invoked, Soft Failure defaults to True in every SUIT_Command_Sequence in the suit-directive-try-each argument. An Update Author may choose to set Soft Failure to False if they require a failed condition in a sequence to force an Abort. When the enclosing SUIT_Command_Sequence terminates, suit-parameter-soft-failure reverts to the value it held before the SUIT_Command_Sequence was invoked.
 
 When suit-directive-run-sequence is invoked, Soft Failure defaults to False. An Update Author may choose to make failures soft within a suit-directive-run-sequence.
 
