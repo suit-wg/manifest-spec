@@ -425,16 +425,16 @@ Because the shared sequence contains Check Vendor Identifier and Check Class Ide
 
 If the manifest contains more than one component, each command sequence MUST begin with a Set Component Index {{suit-directive-set-component-index}}.
 
-If a Recipient supports groups of interdependent components (a Component Set), then it SHOULD verify that all Components in the Component Set are specified by one update, that is the manifest:
+If a Recipient supports groups of interdependent components (a Component Set), then it SHOULD verify that all Components in the Component Set are specified by one update, that is:
 
-1. has sufficient permissions imparted by its signatures
-2. specifies a digest and a payload for every Component in the Component Set.
+1. the manifest Author has sufficient permissions for the requested operations (see {{access-control-lists}}) and
+2. the manifest specifies a digest and a payload for every Component in the Component Set.
 
 ## Interpreter Fundamental Properties
 
 The interpreter has a small set of design goals:
 
-1. Executing an update MUST either result in an error, or a verifiably correct system state.
+1. Executing an update MUST either result in an error, or a correct system state that can be checked against known digests.
 2. Executing a Trusted Invocation MUST either result in an error, or an invoked image.
 3. Executing the same manifest on multiple Recipients MUST result in the same system state.
 
@@ -468,10 +468,21 @@ Directives MAY have side-effects in the parameter table, the interpreter state, 
 To simplify the logic describing the command semantics, the object "current" is used. It represents the component identified by the Component Index:
 
 ~~~
-current := components\[component-index\]
+current := components[component-index]
 ~~~
 
 As a result, Set Component Index is described as current := components\[arg\].
+
+The following table describes the semantics of each operation. The pseudo-code semantics are inspired by the Python programming language. 
+
+| pseudo-code operation | Semantics |
+|---|---
+| assert(test) | When test is false, causes an error return |
+| store(dest, source) | Writes source into dest |
+| statement0 for-each e in l else statement1 | Performs statement0 once for each element in iterable l; performs statement1 if no break is encountered | 
+| break | halt a for-each loop | 
+| now() | return the current UTC time |
+| statement if test | performs statement if test is true |
 
 The following table describes the behavior of each command. "params" represents the parameters for the current component. Most commands operate on a component.
 
@@ -483,7 +494,6 @@ The following table describes the behavior of each command. "params" represents 
 | Check Content | assert(binary-match(current, current.params\[content\]))
 | Set Component Index | current := components\[arg\]
 | Override Parameters | current.params\[k\] := v for-each k,v in arg
-| Set Parameters | current.params\[k\] := v if not k in params for-each k,v in arg
 | Invoke  | invoke(current)
 | Fetch | store(current, fetch(current.params\[uri\]))
 | Write | store(current, current.params\[content\])
@@ -491,7 +501,7 @@ The following table describes the behavior of each command. "params" represents 
 | Check Component Slot  | assert(current.slot-index == arg)
 | Check Device Identifier | assert(binary-match(current, current.params\[device-id\]))
 | Abort | assert(0)
-| Try Each  | try-each-done if exec(seq) is not error for-each seq in arg
+| Try Each  | (break if (exec(seq) is not error)) for-each seq in arg else assert(0)
 | Copy | store(current, current.params\[src-component\])
 | Swap | swap(current, current.params\[src-component\])
 | Run Sequence | exec(arg)
@@ -725,21 +735,24 @@ The Envelope is encoded as a CBOR Map. Each element of the Envelope is enclosed 
 
 ## Authenticated Manifests {#authentication-info}
 
-The suit-authentication-wrapper contains a SUIT Digest Container (see {{SUIT_Digest}}) and one or more SUIT Authentication Blocks. The SUIT_Digest carries the result of computing the indicated hash algorithm over the suit-manifest element. A signing application MUST verify the suit-manifest element against the SUIT_Digest prior to signing. A SUIT Authentication Block is implemented as COSE_Mac_Tagged, COSE_Mac0_Tagged, COSE_Sign_Tagged or COSE_Sign1_Tagged structures with detached payloads, as described in RFC 9052 {{-cose}}.
+SUIT_Authentication contains a list of elements, which consist of a SUIT_Digest calculated over the manifest, and zero or more SUIT_Authentication_Block's calculated over the SUIT_Digest.
 
-For COSE_Sign and COSE_Sign1 a special signature structure (called Sig_structure) has to be created onto which the selected digital signature algorithm is applied to, see {{Section 4.4 of -cose}} for details. This specification requires Sig_structure to be populated as follows:
+~~~
+SUIT_Authentication = [
+    bstr .cbor SUIT_Digest,
+    * bstr .cbor SUIT_Authentication_Block
+]
+SUIT_Authentication_Block /= COSE_Mac_Tagged
+SUIT_Authentication_Block /= COSE_Sign_Tagged
+SUIT_Authentication_Block /= COSE_Mac0_Tagged
+SUIT_Authentication_Block /= COSE_Sign1_Tagged
+~~~
 
-* The external_aad field MUST be set to a zero-length binary string (i.e. there is no external additional authenticated data).
-* The payload field contains the SUIT_Digest wrapped in a bstr, as per the requirements in {{Section 4.4 of -cose}}.
-All other fields in the Sig_structure are populated as described in {{Section 4.4 of -cose}}.
+The SUIT_Digest is computed over the bstr-wrapped SUIT_Manifest that is present in the SUIT_Envelope at the suit-manifest key. The SUIT_Digest MUST always be present. The Manifest Processor requires a SUIT_Authentication_Block to be present. The manifest MUST be protected from tampering between the time of creation and the time of signing/MACing.
 
-Likewise, {{Section 6.3 of -cose}} describes the details for computing a MAC and the fields of the MAC_structure need to be populated. The rules for external_aad and the payload fields described in the paragraph above also apply to this structure.
+The SUIT_Authentication_Block is computed using detached payloads, as described in RFC 9052 {{-cose}}. The detached payload in each case is the bstr-wrapped SUIT_Digest at the beginning of the list. Signers (or MAC calculators) MUST verify the SUIT_Digest prior to performing the cryptographic computation to avoid "Time-of-check to time-of-use" type of attack. When multiple SUIT_Authentication_Blocks are present, then each  SUIT_Authentication_Block MUST be computed over the same SUIT_Digest but using a different algorithm or signing/MAC authority. This feature also allows to transition to new algorithms, such as post-quantum cryptography (PQC) algorithms.
 
-The suit-authentication-wrapper MUST come before the suit-manifest element, regardless of canonical encoding of CBOR.
-
-A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.
-
-The algorithms used in SUIT_Authentication are defined by the profiles declared in {{I-D.moran-suit-mti}}.
+The SUIT_Authentication structure MUST come before the suit-manifest element, regardless of canonical encoding of CBOR. The algorithms used in SUIT_Authentication are defined by the profiles declared in {{I-D.moran-suit-mti}}.
 
 ## Manifest {#manifest-structure}
 
@@ -769,10 +782,26 @@ suit-reference-uri is a text string that encodes a URI where a full version of t
 
 ### suit-text {#manifest-digest-text}
 
-suit-text SHOULD be a severable element. suit-text is a map containing two different types of pair:
+suit-text SHOULD be a severable element. suit-text is a map of language identifiers (identical to Tag38 of RFC9290, Appendix A) to language-specific text maps. Each language-specific text map is a map containing two different types of pair:
 
 * integer => text
 * SUIT_Component_Identifier => map
+
+The SUIT_Text_Map is defined in the following CDDL.
+
+~~~
+tag38-ltag = text .regexp "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
+
+SUIT_Text_Map = {
+    + tag38-ltag => SUIT_Text_LMap
+}
+SUIT_Text_LMap = {
+    SUIT_Text_Keys,
+    * SUIT_Component_Identifier => {
+        SUIT_Text_Component_Keys
+    }
+}
+~~~
 
 Each SUIT_Component_Identifier => map entry contains a map of integer => text values. All SUIT_Component_Identifiers present in suit-text MUST also be present in suit-common ({{manifest-common}}).
 
@@ -795,8 +824,8 @@ CDDL Structure | Description
 ---|---
 suit-text-vendor-name | Free text vendor name
 suit-text-model-name | Free text model name
-suit-text-vendor-domain | The domain used to create the vendor-id condition
-suit-text-model-info | The information used to create the class-id condition
+suit-text-vendor-domain | The domain used to create the vendor-id condition (see {{uuid-identifiers}})
+suit-text-model-info | The information used to create the class-id condition (see {{uuid-identifiers)
 suit-text-component-description | Free text description of each component in the manifest
 suit-text-component-version | A free text representation of the component version
 
@@ -886,13 +915,13 @@ The information elements provided to the Reporting Engine are:
 - The values of parameters consumed by the command
 - The system information consumed by the command
 
-Together, these elements are called a Record. A group of Records is a Report.
+The Reporting Engine consumes these information elements and decides whether to generate an entry in its report output and which information elements to include based on its internal policy decisions. The Reporting Engine uses the reporting policy provided to it by the SUIT Manifest Processor as a set of hints but MAY choose to ignore these hints and apply its own policy instead.
 
-If the component index is set to True or an array when a command is executed with a non-zero reporting policy, then the Reporting Engine MUST receive one Record for each Component, in the order expressed in the Components list or the component index array.
+If the component index is set to True or an array when a command is executed with a non-zero reporting policy, then the Reporting Engine MUST receive one set of information elements for each Component, in the order expressed in the Components list or the Component Index array.
 
-This specification does not define a particular format of Records or Reports. This specification only defines hints to the Reporting Engine for which Records it should aggregate into the Report. The Reporting Engine MAY choose to ignore these hints and apply its own policy instead.
+This specification does not define a particular format of Records or Reports. This specification only defines hints to the Reporting Engine for which information elements it should aggregate into the Report.
 
-When used in a Invocation Procedure, the report MAY form the basis of an attestation report. When used in an Update Process, the report MAY form the basis for one or more log entries.
+When used in a Invocation Procedure, the output of the Reporting Engine MAY form the basis of an attestation report. When used in an Update Process, the report MAY form the basis for one or more log entries.
 
 ### SUIT_Parameters {#secparameters}
 
@@ -1032,7 +1061,9 @@ This parameter sets the slot index of a component. Some components support multi
 
 A block of raw data for use with {{suit-directive-write}}. It contains a byte string of data to be written to a specified component ID in the same way as a fetch or a copy.
 
-If data is encoded this way, it should be small. Large payloads written via this method will prevent the manifest from being held in memory during validation. Typical applications include small configuration parameters.
+If data is encoded this way, it should be small, e.g. 10's of bytes. Large payloads, e.g. 1000's of bytes, written via this method might prevent the manifest from being held in memory during validation. Typical applications include small configuration parameters.
+
+The size of payload embedded in suit-parameter-content impacts the security requirement defined in {{RFC9124}}, Section 4.3.21 REQ.SEC.MFST.CONST: Manifest Kept Immutable between Check and Use. Actual limitations on payload size for suit-parameter-content depend on the application, in particular the available memory that satisfies REQ.SEC.MFST.CONST. If the availability of tamper resistant memory is less than the manifest size, then REQ.SEC.MFST.CONST cannot be satisfied.
 
 If suit-parameter-content is instantiated in a severable command sequence, then this becomes functionally very similar to an integrated payload, which may be a better choice.
 
