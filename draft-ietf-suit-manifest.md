@@ -425,10 +425,10 @@ Because the shared sequence contains Check Vendor Identifier and Check Class Ide
 
 If the manifest contains more than one component, each command sequence MUST begin with a Set Component Index {{suit-directive-set-component-index}}.
 
-If a Recipient supports groups of interdependent components (a Component Set), then it SHOULD verify that all Components in the Component Set are specified by one update, that is the manifest:
+If a Recipient supports groups of interdependent components (a Component Set), then it SHOULD verify that all Components in the Component Set are specified by one update, that is:
 
-1. has sufficient permissions imparted by its signatures
-2. specifies a digest and a payload for every Component in the Component Set.
+1. the manifest Author has sufficient permissions for the requested operations (see {{access-control-lists}}) and
+2. the manifest specifies a digest and a payload for every Component in the Component Set.
 
 ### Minimizing Signature Verifications {#minimal-sigs}
 
