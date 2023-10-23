@@ -1271,7 +1271,7 @@ Because of this, all command sequences in the manifest are encoded in a bstr so 
 
 # Access Control Lists {#access-control-lists}
 
-To manage permissions in the manifest, there are three models that can be used.
+SUIT Manifest Processors are RECOMMENDED to use one of the following models for managing permissions in the manifest.
 
 First, the simplest model requires that all manifests are authenticated by a single trusted key. This mode has the advantage that only a root manifest needs to be authenticated, since all of its dependencies have digests included in the root manifest.
 
