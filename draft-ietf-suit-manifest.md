@@ -752,7 +752,7 @@ SUIT_Authentication_Block /= COSE_Mac0_Tagged
 SUIT_Authentication_Block /= COSE_Sign1_Tagged
 ~~~
 
-The SUIT_Digest is computed over the bstr-wrapped SUIT_Manifest that is present in the SUIT_Envelope at the suit-manifest key. The SUIT_Digest MUST always be present. The Manifest Processor requires a SUIT_Authentication_Block to be present. The manifest MUST be protected from tampering between creation and signing/MAC because it is not yet tamper-evident.
+The SUIT_Digest is computed over the bstr-wrapped SUIT_Manifest that is present in the SUIT_Envelope at the suit-manifest key. The SUIT_Digest MUST always be present. The Manifest Processor requires a SUIT_Authentication_Block to be present. The manifest MUST be protected from tampering between the time of creation and the time of signing/MACing.
 
 The SUIT_Authentication_Block is computed using detached payloads, as described in RFC 9052 {{-cose}}. The detached payload in each case is the bstr-wrapped SUIT_Digest at the beginning of the list. Signers (or MAC calculators) MUST verify the SUIT_Digest prior to signing. Each SUIT_Authentication_Block MAY be computed over the same SUIT_Digest using a different algorithm or signing/MAC authority, for example to allow PQC algorithms.
 
