@@ -1265,7 +1265,7 @@ Each Integrity Check Value covers the corresponding Envelope Element as describe
 
 Because the manifest can be used by different actors at different times, some parts of the manifest can be removed or "Severed" without affecting later stages of the lifecycle. Severing of information is achieved by separating that information from the signed container so that removing it does not affect the signature. This means that ensuring integrity of severable parts of the manifest is a requirement for the signed portion of the manifest. Severing some parts makes it possible to discard parts of the manifest that are no longer necessary. This is important because it allows the storage used by the manifest to be greatly reduced. For example, no text size limits are needed if text is removed from the manifest prior to delivery to a constrained device.
 
-Elements are made severable by removing them from the manifest, encoding them in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that they can still be authenticated. The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 SHOULD NOT be severable. Elements larger than (Digest Bits)/8 + 4 MAY be severable, while elements that are much larger than (Digest Bits)/8 + 4 SHOULD be severable.
+At time of manifest creation, the Author MAY chose to make a manifest element severable by removing it from the manifest, encoding it in a bstr, and placing a SUIT_Digest of the bstr in the manifest so that it can still be authenticated. Making an element severable changes the digest of the manifest, so the signature MUST be computed after manifest elements are made severable. Only Manifest Elements with corresponding elements in the SUIT_Envelope can be made severable (see {{iana-envelope}} for SUIT_Envelope elements). The SUIT_Digest typically consumes 4 bytes more than the size of the raw digest, therefore elements smaller than (Digest Bits)/8 + 4 SHOULD NOT be severable. Elements larger than (Digest Bits)/8 + 4 MAY be severable, while elements that are much larger than (Digest Bits)/8 + 4 SHOULD be severable.
 
 Because of this, all command sequences in the manifest are encoded in a bstr so that there is a single code path needed for all command sequences.
 
@@ -1307,7 +1307,7 @@ For each registry, values 0-255 are Standards Action and 256 or greater are Expe
 
 New entries to those registries need to provide a label, a name and a reference to a specification that describes the functionality. More guidance on the expert review can be found below.
 
-## SUIT Envelope Elements
+## SUIT Envelope Elements {#iana-envelope}
 
 IANA is requested to create a new registry for SUIT envelope elements.
 
