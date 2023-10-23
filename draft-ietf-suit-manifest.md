@@ -550,7 +550,9 @@ When a serialized Manifest Processor encounters a component index of True, it do
 
 ## Parallel Processing Interpreter {#parallel-processing}
 
-Advanced Recipients MAY make use of the Strict Order parameter and enable parallel processing of some Command Sequences, or it may reorder some Command Sequences. To perform parallel processing, once the Strict Order parameter is set to False, the Recipient may issue each or every command concurrently until the Strict Order parameter is returned to True or the Command Sequence ends. Then, it waits for all issued commands to complete before continuing processing of commands. To perform out-of-order processing, a similar approach is used, except the Recipient consumes all commands after the Strict Order parameter is set to False, then it sorts these commands into its preferred order, invokes them all, then continues processing.
+To enable parallel or out-of-order processing of Command Sequences, Recipients MAY make use of the Strict Order parameter. The Strict Order parameter indicates to the Manifest Processor that Commands MUST be executed strictly in order. When the Strict Order parameter is False, this indicates to the Manifest Processor that Commands MAY be executed in parallel or out of order. 
+To perform parallel processing, once the Strict Order parameter is set to False, the Recipient may issue each or every command concurrently until the Strict Order parameter is returned to True or the Command Sequence ends. Then, it waits for all issued commands to complete before continuing processing of commands. To perform out-of-order processing, a similar approach is used, except the Recipient consumes all commands after the Strict Order parameter is set to False, then it sorts these commands into its preferred order, invokes them all, then continues processing.
+
 
 When the manifest processor encounters any of these scenarios the parallel processing MUST halt until all issued commands have completed:
 
