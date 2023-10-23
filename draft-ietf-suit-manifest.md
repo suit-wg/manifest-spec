@@ -754,7 +754,7 @@ SUIT_Authentication_Block /= COSE_Sign1_Tagged
 
 The SUIT_Digest is computed over the bstr-wrapped SUIT_Manifest that is present in the SUIT_Envelope at the suit-manifest key. The SUIT_Digest MUST always be present. The Manifest Processor requires a SUIT_Authentication_Block to be present. The manifest MUST be protected from tampering between the time of creation and the time of signing/MACing.
 
-The SUIT_Authentication_Block is computed using detached payloads, as described in RFC 9052 {{-cose}}. The detached payload in each case is the bstr-wrapped SUIT_Digest at the beginning of the list. Signers (or MAC calculators) MUST verify the SUIT_Digest prior to signing. Each SUIT_Authentication_Block MAY be computed over the same SUIT_Digest using a different algorithm or signing/MAC authority, for example to allow PQC algorithms.
+The SUIT_Authentication_Block is computed using detached payloads, as described in RFC 9052 {{-cose}}. The detached payload in each case is the bstr-wrapped SUIT_Digest at the beginning of the list. Signers (or MAC calculators) MUST verify the SUIT_Digest prior to performing the cryptographic computation to avoid "Time-of-check to time-of-use" type of attack. When multiple SUIT_Authentication_Blocks are present, then each  SUIT_Authentication_Block MUST be computed over the same SUIT_Digest but using a different algorithm or signing/MAC authority. This feature also allows to transition to new algorithms, such as post-quantum cryptography (PQC) algorithms.
 
 The SUIT_Authentication structure MUST come before the suit-manifest element, regardless of canonical encoding of CBOR. The algorithms used in SUIT_Authentication are defined by the profiles declared in {{I-D.moran-suit-mti}}.
 
