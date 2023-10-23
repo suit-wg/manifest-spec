@@ -554,12 +554,13 @@ To enable parallel or out-of-order processing of Command Sequences, Recipients M
 To perform parallel processing, once the Strict Order parameter is set to False, the Recipient may issue each or every command concurrently until the Strict Order parameter is returned to True or the Command Sequence ends. Then, it waits for all issued commands to complete before continuing processing of commands. To perform out-of-order processing, a similar approach is used, except the Recipient consumes all commands after the Strict Order parameter is set to False, then it sorts these commands into its preferred order, invokes them all, then continues processing.
 
 
-When the manifest processor encounters any of these scenarios the parallel processing MUST halt until all issued commands have completed:
+When the manifest processor encounters any of the following scenarios the parallel processing MUST pause until all issued commands have completed, after which it may resume parallel processing if Strict Order is still False.
 
-* Set Parameters.
 * Override Parameters.
 * Set Strict Order = True.
 * Set Component Index.
+
+Extensions MAY alter this list. A Component MUST NOT be both a target of an operation and a source of data (for example, in Copy or Swap) in a Command Sequence where Strict Order is False. 
 
 To perform more useful parallel operations, a manifest author may collect sequences of commands in a Run Sequence command. Then, each of these sequences MAY be run in parallel. There are several invocation options for Run Sequence:
 
