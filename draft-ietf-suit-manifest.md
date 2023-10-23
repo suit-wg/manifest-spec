@@ -69,7 +69,7 @@ normative:
 
 
 informative:
-  I-D.ietf-teep-architecture:
+  RFC9397:
   I-D.ietf-suit-firmware-encryption:
   I-D.ietf-suit-update-management:
   I-D.ietf-suit-trust-domains:
@@ -139,7 +139,7 @@ In this document, these operations are called commands. Commands are classed as 
 
 The available commands support simple steps, such as copying a firmware image from one place to another, checking that a firmware image is correct, verifying that the specified firmware is the correct firmware for the device, or unpacking a firmware. By using these steps in different orders and changing the parameters they use, a broad range of use cases can be supported. The SUIT manifest uses this observation to optimize metadata for consumption by constrained devices.
 
-While the SUIT manifest is informed by and optimized for firmware update and Trusted Invocation use cases, there is nothing in the SUIT Information Model {{RFC9124}} that restricts its use to only those use cases. Other use cases include the management of trusted applications (TAs) in a Trusted Execution Environment (TEE), as discussed in {{I-D.ietf-teep-architecture}}.
+While the SUIT manifest is informed by and optimized for firmware update and Trusted Invocation use cases, there is nothing in the SUIT Information Model {{RFC9124}} that restricts its use to only those use cases. Other use cases include the management of trusted applications (TAs) in a Trusted Execution Environment (TEE), as discussed in {{RFC9397}}.
 
 #  Conventions and Terminology
 
@@ -753,7 +753,7 @@ The suit-authentication-wrapper MUST come before the suit-manifest element, rega
 
 A SUIT_Envelope that has not had authentication information added MUST still contain the suit-authentication-wrapper element, but the content MUST be a list containing only the SUIT_Digest.
 
-The algorithms used in SUIT_Authentication are defined by the profiles declared in {{I-D.moran-suit-mti}}.
+The algorithms used in SUIT_Authentication are defined by the profiles declared in {{I-D.ietf-suit-mti}}.
 
 ## Manifest {#manifest-structure}
 
