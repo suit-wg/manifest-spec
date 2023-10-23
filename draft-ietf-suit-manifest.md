@@ -494,7 +494,7 @@ The following table describes the semantics of each operation. The pseudo-code s
 | assert(test) | When test is false, causes an error return |
 | store(dest, source) | Writes source into dest |
 | statement0 for-each e in l else statement1 | Performs statement0 once for each element in iterable l; performs statement1 if no break is encountered | 
-| break | halt a for each loop | 
+| break | halt a for-each loop | 
 | now() | return the current UTC time |
 | statement if test | performs statement if test is true |
 
