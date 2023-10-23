@@ -1241,7 +1241,7 @@ Encoding Considerations: Careful consideration must be taken to determine whethe
 
 suit-directive-invoke directs the manifest processor to transfer execution to the current Component Index. When this is invoked, the manifest processor MAY be unloaded and execution continues in the Component Index. Arguments are provided to suit-directive-invoke through suit-parameter-invoke-arguments ({{suit-parameter-invoke-args}}) and are forwarded to the executable code located in Component Index in an application-specific way. For example, this could form the Linux Kernel Command Line if booting a Linux device.
 
-If the executable code at Component Index is constructed in such a way that it does not unload the manifest processor, then the manifest processor may resume execution after the executable completes. This allows the manifest processor to invoke suitable helpers and to verify them with image conditions.
+If the executable code at Component Index is constructed in such a way that it does not unload the manifest processor, then the manifest processor MAY resume execution after the executable completes. This allows the manifest processor to invoke suitable helpers and to verify them with image conditions.
 
 #### suit-directive-run-sequence {#suit-directive-run-sequence}
 
