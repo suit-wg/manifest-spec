@@ -809,8 +809,8 @@ CDDL Structure | Description
 ---|---
 suit-text-vendor-name | Free text vendor name
 suit-text-model-name | Free text model name
-suit-text-vendor-domain | The domain used to create the vendor-id condition
-suit-text-model-info | The information used to create the class-id condition
+suit-text-vendor-domain | The domain used to create the vendor-id condition (see {{uuid-identifiers}})
+suit-text-model-info | The information used to create the class-id condition (see {{uuid-identifiers)
 suit-text-component-description | Free text description of each component in the manifest
 suit-text-component-version | A free text representation of the component version
 
