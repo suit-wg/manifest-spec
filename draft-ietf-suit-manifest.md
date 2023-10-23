@@ -1046,7 +1046,7 @@ This parameter sets the slot index of a component. Some components support multi
 
 A block of raw data for use with {{suit-directive-write}}. It contains a byte string of data to be written to a specified component ID in the same way as a fetch or a copy.
 
-If data is encoded this way, it should be small, e.g. 10's of bytes. Large payloads, e.g. 1000's of bytes, written via this method will prevent the manifest from being held in memory during validation. Typical applications include small configuration parameters.
+If data is encoded this way, it should be small, e.g. 10's of bytes. Large payloads, e.g. 1000's of bytes, written via this method might prevent the manifest from being held in memory during validation. Typical applications include small configuration parameters.
 
 The size of payload embedded in suit-parameter-content impacts the security requirement defined in {{RFC9124}}, Section 4.3.21 REQ.SEC.MFST.CONST: Manifest Kept Immutable between Check and Use. Actual limitations on payload size for suit-parameter-content depend on the application, in particular the available memory that satisfies REQ.SEC.MFST.CONST. If the availability of tamper resistant memory is less than the manifest size, then REQ.SEC.MFST.CONST cannot be satisfied.
 
