@@ -651,11 +651,11 @@ Then, the install sequence contains the following commands:
 
 The goal of the Integrated Payload template is to install a payload that is included in the manifest envelope. It is identical to the Component Download template ({{firmware-download-template}}).
 
-An implementer MAY choose to place a payload in the envelope of a manifest. The payload envelope key MUST be a string. The payload MUST be serialized in a bstr element.
+An Author MAY choose to place a payload in the envelope of a manifest. The payload envelope key MUST be a string. The payload MUST be serialized in a bstr element.
 
-The URI for a payload enclosed in this way MAY be expressed as a fragment-only reference, as defined in {{RFC3986, Section 4.4}}.
+The URI for a payload enclosed in this way MAY be expressed as a fragment-only reference, as defined in {{RFC3986, Section 4.4}}, for example: "#device-model-v1.2.3.bin".
 
-A distributor MAY choose to pre-fetch a payload and add it to the manifest envelope, using the URI as the key.
+An intermediary, such as a Network Operator, MAY choose to pre-fetch a payload and add it to the manifest envelope, using the URI as the key.
 
 ## Load from Nonvolatile Storage Template {#template-load-ext}
 
