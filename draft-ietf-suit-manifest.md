@@ -430,20 +430,6 @@ If a Recipient supports groups of interdependent components (a Component Set), t
 1. the manifest Author has sufficient permissions for the requested operations (see {{access-control-lists}}) and
 2. the manifest specifies a digest and a payload for every Component in the Component Set.
 
-### Minimizing Signature Verifications {#minimal-sigs}
-
-Signature verification can be energy and time expensive on a constrained device. MAC verification is typically unaffected by these concerns. A Recipient MAY choose to parse and execute only the SUIT_Common section of the manifest prior to signature verification, if all of the below apply:
-
-- The Authentication Block contains a COSE_Sign_Tagged or COSE_Sign1_Tagged
-- The Recipient receives manifests over an unauthenticated channel, exposing it to more inauthentic or incompatible manifests, and
-- The Recipient has a power budget that makes signature verification undesirable
-
-When executing Common prior to authenticity validation, the Manifest Processor MUST first evaluate the integrity of the manifest using the SUIT_Digest present in the authentication block to identify corruption.
-
-The guidelines in {{creating-manifests}} require that the common section contains the applicability checks, so this section is sufficient for applicability verification. The parser MUST restrict acceptable commands to conditions and the following directives: Override Parameters, Set Parameters, Try Each, and Run Sequence ONLY. The manifest parser MUST NOT execute any command with side-effects outside the parser (for example, Run, Copy, Swap, or Fetch commands) prior to authentication and any such command MUST Abort. The Shared sequence MUST be executed again, in its entirety, after authenticity validation.
-
-A Recipient MAY rely on network infrastructure to filter inapplicable manifests.
-
 ## Interpreter Fundamental Properties
 
 The interpreter has a small set of design goals:
