@@ -1106,6 +1106,10 @@ When suit-directive-run-sequence is invoked, Soft Failure defaults to False. An 
 
 This parameter is an extension point for any proprietary, application specific conditions and directives. It MUST NOT be used in the shared sequence. This effectively scopes each custom command to a particular Vendor Identifier/Class Identifier pair.
 
+suit-parameter-custom MAY be consumed by any command, in an application-specific way, however if a suit-parameter-custom is absent, then all standardised suit-commands MUST execute correctly. In this respect, suit-parameter-custom MUST be treated as a hint by any standardised suit-command that consumes it.
+
+{{suit-command-custom}} MAY consume a suit-parameter-custom and MAY require that a specific suit-parameter-custom is present.
+
 ### SUIT_Condition
 
 Conditions are used to define mandatory properties of a system in order for an update to be applied. They can be pre-conditions or post-conditions of any directive or series of directives, depending on where they are placed in the list. All Conditions specify a Reporting Policy as described {{reporting-policy}}. Conditions include:
