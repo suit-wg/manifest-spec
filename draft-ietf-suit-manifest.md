@@ -487,6 +487,17 @@ current := components[component-index]
 
 As a result, Set Component Index is described as current := components\[arg\].
 
+The following table describes the semantics of each operation. The pseudo-code semantics are inspired by the Python programming language. 
+
+| pseudo-code operation | Semantics |
+|---|---
+| assert(test) | When test is false, causes an error return |
+| store(dest, source) | Writes source into dest |
+| statement0 for-each e in l else statement1 | Performs statement0 once for each element in iterable l; performs statement1 if no break is encountered | 
+| break | halt a for-each loop | 
+| now() | return the current UTC time |
+| statement if test | performs statement if test is true |
+
 The following table describes the behavior of each command. "params" represents the parameters for the current component. Most commands operate on a component.
 
 | Command Name | Semantic of the Operation
@@ -497,7 +508,6 @@ The following table describes the behavior of each command. "params" represents 
 | Check Content | assert(binary-match(current, current.params\[content\]))
 | Set Component Index | current := components\[arg\]
 | Override Parameters | current.params\[k\] := v for-each k,v in arg
-| Set Parameters | current.params\[k\] := v if not k in params for-each k,v in arg
 | Invoke  | invoke(current)
 | Fetch | store(current, fetch(current.params\[uri\]))
 | Write | store(current, current.params\[content\])
@@ -505,7 +515,7 @@ The following table describes the behavior of each command. "params" represents 
 | Check Component Slot  | assert(current.slot-index == arg)
 | Check Device Identifier | assert(binary-match(current, current.params\[device-id\]))
 | Abort | assert(0)
-| Try Each  | try-each-done if exec(seq) is not error for-each seq in arg
+| Try Each  | (break if (exec(seq) is not error)) for-each seq in arg else assert(0)
 | Copy | store(current, current.params\[src-component\])
 | Swap | swap(current, current.params\[src-component\])
 | Run Sequence | exec(arg)
