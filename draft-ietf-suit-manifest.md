@@ -3,7 +3,7 @@ v: 3
 
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-23
+docname: draft-ietf-suit-manifest-24
 ipr: trust200902
 category: std
 stream: IETF
@@ -82,7 +82,7 @@ informative:
     target: https://yaml.org/
   COSE_Alg:
     title: "COSE Algorithms"
-    author: IANA
+    author:
     date: 2023
     target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
 
@@ -840,7 +840,7 @@ suit-common encodes all the information that is shared between each of the comma
 
 suit-components is a list of [SUIT_Component_Identifier](#suit-component-identifier) blocks that specify the component identifiers that will be affected by the content of the current manifest. suit-components is REQUIRED to implement.
 
-suit-shared-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-shared-sequence include setting expected Recipient identity and image digests when they are conditional (see {{suit-directive-try-each}} and {{a-b-template}} for more information on conditional sequences). suit-shared-sequence is RECOMMENDED to implement. It is REQUIRED if the optimizations described in {{minimal-sigs}} will be used. Whenever a parameter or Try Each command is required by more than one Command Sequence, placing that parameter or command in suit-shared-sequence results in a smaller encoding.
+suit-shared-sequence is a SUIT_Command_Sequence to execute prior to executing any other command sequence. Typical actions in suit-shared-sequence include setting expected Recipient identity and image digests when they are conditional (see {{suit-directive-try-each}} and {{a-b-template}} for more information on conditional sequences). suit-shared-sequence is RECOMMENDED to implement. Whenever a parameter or Try Each command is required by more than one Command Sequence, placing that parameter or command in suit-shared-sequence results in a smaller encoding.
 
 #### SUIT_Component_Identifier {#suit-component-identifier}
 
@@ -1107,8 +1107,6 @@ When suit-directive-run-sequence is invoked, Soft Failure defaults to False. An 
 This parameter is an extension point for any proprietary, application specific conditions and directives. It MUST NOT be used in the shared sequence. This effectively scopes each custom command to a particular Vendor Identifier/Class Identifier pair.
 
 suit-parameter-custom MAY be consumed by any command, in an application-specific way, however if a suit-parameter-custom is absent, then all standardised suit-commands MUST execute correctly. In this respect, suit-parameter-custom MUST be treated as a hint by any standardised suit-command that consumes it.
-
-{{suit-command-custom}} MAY consume a suit-parameter-custom and MAY require that a specific suit-parameter-custom is present.
 
 ### SUIT_Condition
 
