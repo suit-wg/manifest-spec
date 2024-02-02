@@ -1537,6 +1537,49 @@ the content is a SUIT envelope.
 
 This document is about a manifest format protecting and describing how to retrieve, install, and invoke firmware images and as such it is part of a larger solution for delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture {{RFC9019}} and in the information model {{RFC9124}} documents.
 
+The security requirements outlined in {{RFC9124}} are addressed by this draft and its extensions.
+The specific mapping of requirements and information elements in {{RFC9124}} to manifest data structures is
+outlined in the table below:
+
+| Security Requirement | Information Element | Implementation |
+---
+| REQ.SEC.SEQUENCE | Monotonic Sequence Number | {{manifest-seqnr}} |
+| REQ.SEC.COMPATIBLE | Vendor ID Condition, Class ID Condition | {{identifier-conditions}} |
+| REQ.SEC.EXP | Expiration Time | {{I-D.ietf-suit-update-management}} |
+| REQ.SEC.AUTHENTIC | Signature, Payload Digests | {{authentication-info}}, {{suit-condition-image-match}} |
+| REQ.SEC.AUTH.IMG_TYPE | Payload Format | TBD |
+| REQ.SEC.AUTH.IMG_LOC | Storage Location | {{suit-component-identifier}}
+| REQ.SEC.AUTH.REMOTE_LOC | Payload Indicator | {{suit-parameter-uri}} |
+| REQ.SEC.AUTH.EXEC | Payload Digests, Size | {{suit-parameter-image-digest}}, {{suit-parameter-image-size}} |
+| REQ.SEC.AUTH.PRECURSOR | Precursor Image Digest | {{suit-parameter-image-digest}} |
+| REQ.SEC.AUTH.COMPATIBILITY | Authenticated Vendor and Class IDs | {{suit-parameter-vendor-identifier}}, {{suit-parameter-class-identifier}} |
+| REQ.SEC.RIGHTS | Signature | {{authentication-info}}, {{access-control-lists}} |
+| REQ.SEC.IMG.CONFIDENTIALITY | Encryption Wrapper | {{I-D.ietf-suit-firmware-encryption}} |
+| REQ.SEC.ACCESS_CONTROL: Access Control | None | {{access-control-lists}} |
+| REQ.SEC.MFST.CONFIDENTIALITY | Manifest Encryption Wrapper / Transport Security | {{I-D.ietf-suit-firmware-encryption}} |
+| REQ.SEC.IMG.COMPLETE_DIGEST | Payload Digests | TBD |
+| REQ.SEC.REPORTING | None | {{I-D.ietf-suit-report}}, {{RFC9334}}
+| REQ.SEC.KEY.PROTECTION | None | Implementation Consideration |
+| REQ.SEC.KEY.ROTATION | None | {{draft-tschofenig-cose-cwt-chain}}, Implementation Consideration |
+| REQ.SEC.MFST.CHECK | None | Deployment Consideration |
+| REQ.SEC.MFST.TRUSTED | None | Deployment Consideration |
+| REQ.SEC.MFST.CONST | None | Implementation Consideration |
+| REQ.USE.MFST.PRE_CHECK | Additional Installation Instructions | {{I-D.ietf-suit-update-management}}
+| REQ.USE.MFST.TEXT | Manifest Text Information | {{manifest-digest-text}}
+| REQ.USE.MFST.OVERRIDE_REMOTE | Aliases | {{RFC3986}} Rleative URIs, {{I-D.ietf-suit-trust-domains}} |
+| REQ.USE.MFST.COMPONENT | Dependencies, StorageIdentifier, ComponentIdentifier | [SUIT_Component_Identifier](#suit-component-identifier), {{I-D.ietf-suit-trust-domains}} |
+| REQ.USE.MFST.MULTI_AUTH | Signature | {{authentication-info}} |
+| REQ.USE.IMG.FORMAT | Payload Format | TBD |
+| REQ.USE.IMG.NESTED | Processing Steps | TBD |
+| REQ.USE.IMG.VERSIONS | Required Image Version List | {{I-D.ietf-suit-update-management}} |
+| REQ.USE.IMG.SELECT | XIP Address | {{suit-condition-component-slot}} |
+| REQ.USE.EXEC | Runtime Metadata | {{manifest-commands}} (suit-invoke) |
+| REQ.USE.LOAD | Load-Time Metadata | {{manifest-commands}} (suit-load) |
+| REQ.USE.PAYLOAD | Payload | {{template-integrated-payload}} |
+| REQ.USE.PARSE | Simple Parsing | {{command-behavior}} |
+| REQ.USE.DELEGATION | Delegation Chain | {{draft-tschofenig-cose-cwt-chain}} |
+
+
 # Acknowledgements
 
 We would like to thank the following persons for their support in designing this mechanism:
