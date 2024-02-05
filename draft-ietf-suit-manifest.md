@@ -1566,7 +1566,7 @@ outlined in the table below:
 | REQ.SEC.MFST.CONST | None | Implementation Consideration |
 | REQ.USE.MFST.PRE_CHECK | Additional Installation Instructions | {{I-D.ietf-suit-update-management}}
 | REQ.USE.MFST.TEXT | Manifest Text Information | {{manifest-digest-text}}
-| REQ.USE.MFST.OVERRIDE_REMOTE | Aliases | {{RFC3986}} Rleative URIs, {{I-D.ietf-suit-trust-domains}} |
+| REQ.USE.MFST.OVERRIDE_REMOTE | Aliases | {{RFC3986}} Relative URIs, {{I-D.ietf-suit-trust-domains}} |
 | REQ.USE.MFST.COMPONENT | Dependencies, StorageIdentifier, ComponentIdentifier | [SUIT_Component_Identifier](#suit-component-identifier), {{I-D.ietf-suit-trust-domains}} |
 | REQ.USE.MFST.MULTI_AUTH | Signature | {{authentication-info}} |
 | REQ.USE.IMG.FORMAT | Payload Format | {{I-D.ietf-suit-update-management}} |
