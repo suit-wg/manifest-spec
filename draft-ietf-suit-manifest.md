@@ -1547,7 +1547,7 @@ outlined in the table below:
 | REQ.SEC.COMPATIBLE | Vendor ID Condition, Class ID Condition | {{identifier-conditions}} |
 | REQ.SEC.EXP | Expiration Time | {{I-D.ietf-suit-update-management}} |
 | REQ.SEC.AUTHENTIC | Signature, Payload Digests | {{authentication-info}}, {{suit-condition-image-match}} |
-| REQ.SEC.AUTH.IMG_TYPE | Payload Format | TBD |
+| REQ.SEC.AUTH.IMG_TYPE | Payload Format | {{I-D.ietf-suit-update-management}} |
 | REQ.SEC.AUTH.IMG_LOC | Storage Location | {{suit-component-identifier}}
 | REQ.SEC.AUTH.REMOTE_LOC | Payload Indicator | {{suit-parameter-uri}} |
 | REQ.SEC.AUTH.EXEC | Payload Digests, Size | {{suit-parameter-image-digest}}, {{suit-parameter-image-size}} |
@@ -1557,7 +1557,7 @@ outlined in the table below:
 | REQ.SEC.IMG.CONFIDENTIALITY | Encryption Wrapper | {{I-D.ietf-suit-firmware-encryption}} |
 | REQ.SEC.ACCESS_CONTROL: Access Control | None | {{access-control-lists}} |
 | REQ.SEC.MFST.CONFIDENTIALITY | Manifest Encryption Wrapper / Transport Security | {{I-D.ietf-suit-firmware-encryption}} |
-| REQ.SEC.IMG.COMPLETE_DIGEST | Payload Digests | TBD |
+| REQ.SEC.IMG.COMPLETE_DIGEST | Payload Digests | Implementation Consideration |
 | REQ.SEC.REPORTING | None | {{I-D.ietf-suit-report}}, {{RFC9334}}
 | REQ.SEC.KEY.PROTECTION | None | Implementation Consideration |
 | REQ.SEC.KEY.ROTATION | None | {{draft-tschofenig-cose-cwt-chain}}, Implementation Consideration |
@@ -1569,8 +1569,8 @@ outlined in the table below:
 | REQ.USE.MFST.OVERRIDE_REMOTE | Aliases | {{RFC3986}} Rleative URIs, {{I-D.ietf-suit-trust-domains}} |
 | REQ.USE.MFST.COMPONENT | Dependencies, StorageIdentifier, ComponentIdentifier | [SUIT_Component_Identifier](#suit-component-identifier), {{I-D.ietf-suit-trust-domains}} |
 | REQ.USE.MFST.MULTI_AUTH | Signature | {{authentication-info}} |
-| REQ.USE.IMG.FORMAT | Payload Format | TBD |
-| REQ.USE.IMG.NESTED | Processing Steps | TBD |
+| REQ.USE.IMG.FORMAT | Payload Format | {{I-D.ietf-suit-update-management}} |
+| REQ.USE.IMG.NESTED | Processing Steps | {{I-D.ietf-suit-firmware-encryption}} (Encryption Wrapper), {{I-D.ietf-suit-update-management}} (Payload Format) |
 | REQ.USE.IMG.VERSIONS | Required Image Version List | {{I-D.ietf-suit-update-management}} |
 | REQ.USE.IMG.SELECT | XIP Address | {{suit-condition-component-slot}} |
 | REQ.USE.EXEC | Runtime Metadata | {{manifest-commands}} (suit-invoke) |
@@ -1748,7 +1748,7 @@ By structuring the data in this way, the manifest processor becomes a very simpl
 
 The results of this allow a Recipient to implement a very small parser for constrained applications. If needed, such a parser also allows the Recipient to perform complex updates with reduced overhead. Conditional execution of commands allows a simple device to perform important decisions at validation-time.
 
-Dependency handling is vastly simplified as well. Dependencies function like subroutines of the language. When a manifest has a dependency, it can invoke that dependency's commands and modify their behavior by setting parameters. Because some parameters come with security implications, the dependencies also have a mechanism to reject modifications to parameters on a fine-grained level.
+Dependency handling is vastly simplified as well. Dependencies function like subroutines of the language. When a manifest has a dependency, it can invoke that dependency's commands and modify their behavior by setting parameters. Because some parameters come with security implications, the dependencies also have a mechanism to reject modifications to parameters on a fine-grained level. Dependency handling is covered in {{I-D.suit-trust-domains}}
 
 Developing a robust permissions system works in this model too. The Recipient can use a simple ACL that is a table of Identities and Component Identifier permissions to ensure that operations on components fail unless they are permitted by the ACL. This table can be further refined with individual parameters and commands.
 
