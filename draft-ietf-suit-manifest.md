@@ -1260,7 +1260,7 @@ suit-directive-swap instructs the manifest processor to move the source to the d
 
 ### suit-command-custom {#SUIT_Command_Custom}
 
-suit-command-custom describes any proprietary, application specific condition or directive. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided to the command, it should be encoded in a custom parameter (a nint) as described in {{secparameters}}. SUIT_Command_Custom is OPTIONAL to implement.
+suit-command-custom describes any proprietary, application specific condition or directive. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided, it should be encoded in a custom parameter (a nint) (as described in {{secparameters}}). SUIT_Command_Custom is OPTIONAL to implement.
 
 
 ### Integrity Check Values {#integrity-checks}
