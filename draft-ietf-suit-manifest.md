@@ -1121,7 +1121,7 @@ Image Match | suit-condition-image-match | {{suit-condition-image-match}}
 Check Content | suit-condition-check-content | {{suit-condition-check-content}}
 Component Slot | suit-condition-component-slot | {{suit-condition-component-slot}}
 Abort | suit-condition-abort | {{suit-condition-abort}}
-Custom Condition | suit-condition-custom | {{SUIT_Condition_Custom}}
+Custom Condition | suit-command-custom | {{SUIT_Command_Custom}}
 
 The abstract description of these conditions is defined in {{command-behavior}}.
 
@@ -1169,10 +1169,6 @@ Verify that the slot index of the current component matches the slot index set i
 
 Unconditionally fail. This operation is typically used in conjunction with suit-directive-try-each ({{suit-directive-try-each}}).
 
-#### suit-condition-custom {#SUIT_Condition_Custom}
-
-suit-condition-custom describes any proprietary, application specific condition. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided to the condition, it should be encoded in a custom parameter (a nint) as described in {{secparameters}}. SUIT_Condition_Custom is OPTIONAL to implement.
-
 ### SUIT_Directive
 Directives are used to define the behavior of the recipient. Directives include:
 
@@ -1187,6 +1183,7 @@ Write | suit-directive-write | {{suit-directive-write}}
 Invoke | suit-directive-invoke | {{suit-directive-invoke}}
 Run Sequence | suit-directive-run-sequence | {{suit-directive-run-sequence}}
 Swap | suit-directive-swap | {{suit-directive-swap}}
+Custom Directive | suit-command-custom | {{SUIT_Command_Custom}}
 
 The abstract description of these commands is defined in {{command-behavior}}.
 
@@ -1260,6 +1257,11 @@ suit-parameter-soft-failure ({{suit-parameter-soft-failure}}) defaults to False 
 #### suit-directive-swap {#suit-directive-swap}
 
 suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. As with suit-directive-copy, if the source component is missing, this command fails.
+
+### suit-command-custom {#SUIT_Command_Custom}
+
+suit-command-custom describes any proprietary, application specific condition or directive. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided to the command, it should be encoded in a custom parameter (a nint) as described in {{secparameters}}. SUIT_Command_Custom is OPTIONAL to implement.
+
 
 ### Integrity Check Values {#integrity-checks}
 
@@ -1386,7 +1388,7 @@ Label | Name | Reference
 31 | Swap | {{suit-directive-swap}} of [TBD: this document]
 32 | Run Sequence | {{suit-directive-run-sequence}} of [TBD: this document]
 33 | Reserved
-nint | Custom Condition | {{SUIT_Condition_Custom}} of [TBD: this document]
+nint | Custom Command | {{SUIT_Command_Custom}} of [TBD: this document]
 
 ## SUIT Parameters
 
