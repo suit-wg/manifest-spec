@@ -21,7 +21,7 @@ of operations, rather than declaring the metadata.
     " name="description">
 <meta content="xml2rfc 3.17.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
-<meta content="draft-ietf-suit-manifest-24" name="ietf.draft">
+<meta content="draft-ietf-suit-manifest-25" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.17.1
     Python 3.11.5
@@ -1212,11 +1212,11 @@ li > p:last-of-type:only-child {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CBOR-based SUIT Manifest</td>
-<td class="right">October 2023</td>
+<td class="right">February 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Moran, et al.</td>
-<td class="center">Expires 3 May 2024</td>
+<td class="center">Expires 8 August 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1226,15 +1226,15 @@ li > p:last-of-type:only-child {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">SUIT</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-suit-manifest-24</dd>
+<dd class="internet-draft">draft-ietf-suit-manifest-25</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-31" class="published">31 October 2023</time>
+<time datetime="2024-02-05" class="published">5 February 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-05-03">3 May 2024</time></dd>
+<dd class="expires"><time datetime="2024-08-08">8 August 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1289,7 +1289,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 3 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1298,7 +1298,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2023 IETF Trust and the persons identified as the
+            Copyright (c) 2024 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1478,7 +1478,10 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
                     <p id="section-toc.1-1.8.2.4.2.10.1"><a href="#section-8.4.10" class="auto internal xref">8.4.10</a>. <a href="#name-suit_directive" class="internal xref">SUIT_Directive</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.11">
-                    <p id="section-toc.1-1.8.2.4.2.11.1"><a href="#section-8.4.11" class="auto internal xref">8.4.11</a>. <a href="#name-integrity-check-values-2" class="internal xref">Integrity Check Values</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.11.1"><a href="#section-8.4.11" class="auto internal xref">8.4.11</a>. <a href="#name-suit-command-custom" class="internal xref">suit-command-custom</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.12">
+                    <p id="section-toc.1-1.8.2.4.2.12.1"><a href="#section-8.4.12" class="auto internal xref">8.4.12</a>. <a href="#name-integrity-check-values-2" class="internal xref">Integrity Check Values</a></p>
 </li>
                 </ul>
 </li>
@@ -1968,7 +1971,7 @@ To implement a tool that generates updates, see <a href="#creating-manifests" cl
 <a href="#section-5.3.4" class="section-number selfRef">5.3.4. </a><a href="#name-integrity-check-values" class="section-name selfRef">Integrity Check Values</a>
           </h4>
 <p id="section-5.3.4-1">To enable severable elements <a href="#ovr-severable" class="auto internal xref">Section 5.4</a>, there needs to be a mechanism to verify the integrity of the severed data. While the severed data stays outside the manifest, for efficiency reasons, Integrity Check Values are used to include the digest of the data in the manifest. Note that Integrated Payloads, see {#ovr-integrated}, are integrity-checked using Command Sequences.<a href="#section-5.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.3.4-2">See <a href="#integrity-checks" class="auto internal xref">Section 8.4.11</a> for more detail.<a href="#section-5.3.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.3.4-2">See <a href="#integrity-checks" class="auto internal xref">Section 8.4.12</a> for more detail.<a href="#section-5.3.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ovr-text">
@@ -2654,7 +2657,7 @@ SUIT_Authentication_Block /= COSE_Sign1_Tagged
           <li class="normal" id="section-8.4-2.7">human-readable text describing the manifest found in the SUIT_Envelope (see <a href="#manifest-digest-text" class="auto internal xref">Section 8.4.4</a>)<a href="#section-8.4-2.7" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-8.4-3">The Text section, or any Command Sequence of the Update Procedure (Image Fetch, Image Installation and, System Validation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable element. Severable elements are <span class="bcp14">RECOMMENDED</span> to implement. In particular, the human-readable text <span class="bcp14">SHOULD</span> be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See <a href="#integrity-checks" class="auto internal xref">Section 8.4.11</a> for more detail.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
+<p id="section-8.4-3">The Text section, or any Command Sequence of the Update Procedure (Image Fetch, Image Installation and, System Validation) can be either a CBOR structure or a SUIT_Digest. In each of these cases, the SUIT_Digest provides for a severable element. Severable elements are <span class="bcp14">RECOMMENDED</span> to implement. In particular, the human-readable text <span class="bcp14">SHOULD</span> be severable, since most useful text elements occupy more space than a SUIT_Digest, but are not needed by the Recipient. Because SUIT_Digest is a CBOR Array and each severable element is a CBOR bstr, it is straight-forward for a Recipient to determine whether an element has been severed. The key used for a severable element is the same in the SUIT_Manifest and in the SUIT_Envelope so that a Recipient can easily identify the correct data in the envelope. See <a href="#integrity-checks" class="auto internal xref">Section 8.4.12</a> for more detail.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
 <div id="manifest-version">
 <section id="section-8.4.1">
           <h4 id="name-suit-manifest-version">
@@ -3306,9 +3309,9 @@ Class ID = UUID5(
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">Custom Condition</td>
-                <td class="text-left" rowspan="1" colspan="1">suit-condition-custom</td>
+                <td class="text-left" rowspan="1" colspan="1">suit-command-custom</td>
                 <td class="text-left" rowspan="1" colspan="1">
-                  <a href="#SUIT_Condition_Custom" class="auto internal xref">Section 8.4.9.6</a>
+                  <a href="#SUIT_Command_Custom" class="auto internal xref">Section 8.4.11</a>
 </td>
               </tr>
             </tbody>
@@ -3371,14 +3374,6 @@ int check_content(content, component, length) {
 <a href="#section-8.4.9.5" class="section-number selfRef">8.4.9.5. </a><a href="#name-suit-condition-abort" class="section-name selfRef">suit-condition-abort</a>
             </h5>
 <p id="section-8.4.9.5-1">Unconditionally fail. This operation is typically used in conjunction with suit-directive-try-each (<a href="#suit-directive-try-each" class="auto internal xref">Section 8.4.10.2</a>).<a href="#section-8.4.9.5-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="SUIT_Condition_Custom">
-<section id="section-8.4.9.6">
-            <h5 id="name-suit-condition-custom">
-<a href="#section-8.4.9.6" class="section-number selfRef">8.4.9.6. </a><a href="#name-suit-condition-custom" class="section-name selfRef">suit-condition-custom</a>
-            </h5>
-<p id="section-8.4.9.6-1">suit-condition-custom describes any proprietary, application specific condition. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided to the condition, it should be encoded in a custom parameter (a nint) as described in <a href="#secparameters" class="auto internal xref">Section 8.4.8</a>. SUIT_Condition_Custom is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.9.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3460,6 +3455,13 @@ int check_content(content, component, length) {
                 <td class="text-left" rowspan="1" colspan="1">suit-directive-swap</td>
                 <td class="text-left" rowspan="1" colspan="1">
                   <a href="#suit-directive-swap" class="auto internal xref">Section 8.4.10.9</a>
+</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Custom Directive</td>
+                <td class="text-left" rowspan="1" colspan="1">suit-command-custom</td>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <a href="#SUIT_Command_Custom" class="auto internal xref">Section 8.4.11</a>
 </td>
               </tr>
             </tbody>
@@ -3556,13 +3558,21 @@ int check_content(content, component, length) {
 </div>
 </section>
 </div>
-<div id="integrity-checks">
+<div id="SUIT_Command_Custom">
 <section id="section-8.4.11">
-          <h4 id="name-integrity-check-values-2">
-<a href="#section-8.4.11" class="section-number selfRef">8.4.11. </a><a href="#name-integrity-check-values-2" class="section-name selfRef">Integrity Check Values</a>
+          <h4 id="name-suit-command-custom">
+<a href="#section-8.4.11" class="section-number selfRef">8.4.11. </a><a href="#name-suit-command-custom" class="section-name selfRef">suit-command-custom</a>
           </h4>
-<p id="section-8.4.11-1">When the Text section or any Command Sequence of the Update Procedure is made severable, it is moved to the Envelope and replaced with a SUIT_Digest. The SUIT_Digest is computed over the entire bstr enclosing the Manifest element that has been moved to the Envelope. Each element that is made severable from the Manifest is placed in the Envelope. The keys for the envelope elements have the same values as the keys for the manifest elements.<a href="#section-8.4.11-1" class="pilcrow">¶</a></p>
-<p id="section-8.4.11-2">Each Integrity Check Value covers the corresponding Envelope Element as described in <a href="#severable-fields" class="auto internal xref">Section 8.5</a>.<a href="#section-8.4.11-2" class="pilcrow">¶</a></p>
+<p id="section-8.4.11-1">suit-command-custom describes any proprietary, application specific condition or directive. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided, it should be encoded in a custom parameter (a nint) (as described in <a href="#secparameters" class="auto internal xref">Section 8.4.8</a>). SUIT_Command_Custom is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.11-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="integrity-checks">
+<section id="section-8.4.12">
+          <h4 id="name-integrity-check-values-2">
+<a href="#section-8.4.12" class="section-number selfRef">8.4.12. </a><a href="#name-integrity-check-values-2" class="section-name selfRef">Integrity Check Values</a>
+          </h4>
+<p id="section-8.4.12-1">When the Text section or any Command Sequence of the Update Procedure is made severable, it is moved to the Envelope and replaced with a SUIT_Digest. The SUIT_Digest is computed over the entire bstr enclosing the Manifest element that has been moved to the Envelope. Each element that is made severable from the Manifest is placed in the Envelope. The keys for the envelope elements have the same values as the keys for the manifest elements.<a href="#section-8.4.12-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.12-2">Each Integrity Check Value covers the corresponding Envelope Element as described in <a href="#severable-fields" class="auto internal xref">Section 8.5</a>.<a href="#section-8.4.12-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3957,9 +3967,9 @@ and a page within this category for SUIT manifests.<a href="#section-11-3" class
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">nint</td>
-              <td class="text-left" rowspan="1" colspan="1">Custom Condition</td>
+              <td class="text-left" rowspan="1" colspan="1">Custom Command</td>
               <td class="text-left" rowspan="1" colspan="1">
-                <a href="#SUIT_Condition_Custom" class="auto internal xref">Section 8.4.9.6</a> of [TBD: this document]</td>
+                <a href="#SUIT_Command_Custom" class="auto internal xref">Section 8.4.11</a> of [TBD: this document]</td>
             </tr>
           </tbody>
         </table>
@@ -4329,6 +4339,252 @@ the content is a SUIT envelope.<a href="#section-11.9-1" class="pilcrow">¶</a><
 <a href="#section-12" class="section-number selfRef">12. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
 <p id="section-12-1">This document is about a manifest format protecting and describing how to retrieve, install, and invoke firmware images and as such it is part of a larger solution for delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture <span>[<a href="#RFC9019" class="cite xref">RFC9019</a>]</span> and in the information model <span>[<a href="#RFC9124" class="cite xref">RFC9124</a>]</span> documents.<a href="#section-12-1" class="pilcrow">¶</a></p>
+<p id="section-12-2">The security requirements outlined in <span>[<a href="#RFC9124" class="cite xref">RFC9124</a>]</span> are addressed by this draft and its extensions.
+The specific mapping of requirements and information elements in <span>[<a href="#RFC9124" class="cite xref">RFC9124</a>]</span> to manifest data structures is
+outlined in the table below:<a href="#section-12-2" class="pilcrow">¶</a></p>
+<table class="center" id="table-16">
+        <caption><a href="#table-16" class="selfRef">Table 16</a></caption>
+<thead>
+          <tr>
+            <th class="text-left" rowspan="1" colspan="1">Security Requirement</th>
+            <th class="text-left" rowspan="1" colspan="1">Information Element</th>
+            <th class="text-left" rowspan="1" colspan="1">Implementation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.SEQUENCE</td>
+            <td class="text-left" rowspan="1" colspan="1">Monotonic Sequence Number</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#manifest-seqnr" class="auto internal xref">Section 8.4.2</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.COMPATIBLE</td>
+            <td class="text-left" rowspan="1" colspan="1">Vendor ID Condition, Class ID Condition</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#identifier-conditions" class="auto internal xref">Section 8.4.9.1</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.EXP</td>
+            <td class="text-left" rowspan="1" colspan="1">Expiration Time</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#I-D.ietf-suit-update-management" class="cite xref">I-D.ietf-suit-update-management</a>]</span>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.AUTHENTIC</td>
+            <td class="text-left" rowspan="1" colspan="1">Signature, Payload Digests</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#authentication-info" class="auto internal xref">Section 8.3</a>, <a href="#suit-condition-image-match" class="auto internal xref">Section 8.4.9.2</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.AUTH.IMG_TYPE</td>
+            <td class="text-left" rowspan="1" colspan="1">Payload Format</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#I-D.ietf-suit-update-management" class="cite xref">I-D.ietf-suit-update-management</a>]</span>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.AUTH.IMG_LOC</td>
+            <td class="text-left" rowspan="1" colspan="1">Storage Location</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#suit-component-identifier" class="auto internal xref">Section 8.4.5.1</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.AUTH.REMOTE_LOC</td>
+            <td class="text-left" rowspan="1" colspan="1">Payload Indicator</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#suit-parameter-uri" class="auto internal xref">Section 8.4.8.10</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.AUTH.EXEC</td>
+            <td class="text-left" rowspan="1" colspan="1">Payload Digests, Size</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#suit-parameter-image-digest" class="auto internal xref">Section 8.4.8.6</a>, <a href="#suit-parameter-image-size" class="auto internal xref">Section 8.4.8.7</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.AUTH.PRECURSOR</td>
+            <td class="text-left" rowspan="1" colspan="1">Precursor Image Digest</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#suit-parameter-image-digest" class="auto internal xref">Section 8.4.8.6</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.AUTH.COMPATIBILITY</td>
+            <td class="text-left" rowspan="1" colspan="1">Authenticated Vendor and Class IDs</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#suit-parameter-vendor-identifier" class="auto internal xref">Section 8.4.8.3</a>, <a href="#suit-parameter-class-identifier" class="auto internal xref">Section 8.4.8.4</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.RIGHTS</td>
+            <td class="text-left" rowspan="1" colspan="1">Signature</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#authentication-info" class="auto internal xref">Section 8.3</a>, <a href="#access-control-lists" class="auto internal xref">Section 9</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.IMG.CONFIDENTIALITY</td>
+            <td class="text-left" rowspan="1" colspan="1">Encryption Wrapper</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#I-D.ietf-suit-firmware-encryption" class="cite xref">I-D.ietf-suit-firmware-encryption</a>]</span>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.ACCESS_CONTROL: Access Control</td>
+            <td class="text-left" rowspan="1" colspan="1">None</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#access-control-lists" class="auto internal xref">Section 9</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.MFST.CONFIDENTIALITY</td>
+            <td class="text-left" rowspan="1" colspan="1">Manifest Encryption Wrapper / Transport Security</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#I-D.ietf-suit-firmware-encryption" class="cite xref">I-D.ietf-suit-firmware-encryption</a>]</span>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.IMG.COMPLETE_DIGEST</td>
+            <td class="text-left" rowspan="1" colspan="1">Payload Digests</td>
+            <td class="text-left" rowspan="1" colspan="1">Implementation Consideration</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.REPORTING</td>
+            <td class="text-left" rowspan="1" colspan="1">None</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#I-D.ietf-suit-report" class="cite xref">I-D.ietf-suit-report</a>]</span>, <span>[<a href="#RFC9334" class="cite xref">RFC9334</a>]</span>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.KEY.PROTECTION</td>
+            <td class="text-left" rowspan="1" colspan="1">None</td>
+            <td class="text-left" rowspan="1" colspan="1">Implementation Consideration</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.KEY.ROTATION</td>
+            <td class="text-left" rowspan="1" colspan="1">None</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#I-D.tschofenig-cose-cwt-chain" class="cite xref">I-D.tschofenig-cose-cwt-chain</a>]</span>, Implementation Consideration</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.MFST.CHECK</td>
+            <td class="text-left" rowspan="1" colspan="1">None</td>
+            <td class="text-left" rowspan="1" colspan="1">Deployment Consideration</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.MFST.TRUSTED</td>
+            <td class="text-left" rowspan="1" colspan="1">None</td>
+            <td class="text-left" rowspan="1" colspan="1">Deployment Consideration</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.SEC.MFST.CONST</td>
+            <td class="text-left" rowspan="1" colspan="1">None</td>
+            <td class="text-left" rowspan="1" colspan="1">Implementation Consideration</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.MFST.PRE_CHECK</td>
+            <td class="text-left" rowspan="1" colspan="1">Additional Installation Instructions</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#I-D.ietf-suit-update-management" class="cite xref">I-D.ietf-suit-update-management</a>]</span>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.MFST.TEXT</td>
+            <td class="text-left" rowspan="1" colspan="1">Manifest Text Information</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#manifest-digest-text" class="auto internal xref">Section 8.4.4</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.MFST.OVERRIDE_REMOTE</td>
+            <td class="text-left" rowspan="1" colspan="1">Aliases</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> Relative URIs, <span>[<a href="#I-D.ietf-suit-trust-domains" class="cite xref">I-D.ietf-suit-trust-domains</a>]</span>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.MFST.COMPONENT</td>
+            <td class="text-left" rowspan="1" colspan="1">Dependencies, StorageIdentifier, ComponentIdentifier</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span><a href="#suit-component-identifier" class="internal xref">SUIT_Component_Identifier</a> (<a href="#suit-component-identifier" class="auto internal xref">Section 8.4.5.1</a>)</span>, <span>[<a href="#I-D.ietf-suit-trust-domains" class="cite xref">I-D.ietf-suit-trust-domains</a>]</span>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.MFST.MULTI_AUTH</td>
+            <td class="text-left" rowspan="1" colspan="1">Signature</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#authentication-info" class="auto internal xref">Section 8.3</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.IMG.FORMAT</td>
+            <td class="text-left" rowspan="1" colspan="1">Payload Format</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#I-D.ietf-suit-update-management" class="cite xref">I-D.ietf-suit-update-management</a>]</span>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.IMG.NESTED</td>
+            <td class="text-left" rowspan="1" colspan="1">Processing Steps</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#I-D.ietf-suit-firmware-encryption" class="cite xref">I-D.ietf-suit-firmware-encryption</a>]</span> (Encryption Wrapper), <span>[<a href="#I-D.ietf-suit-update-management" class="cite xref">I-D.ietf-suit-update-management</a>]</span> (Payload Format)</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.IMG.VERSIONS</td>
+            <td class="text-left" rowspan="1" colspan="1">Required Image Version List</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#I-D.ietf-suit-update-management" class="cite xref">I-D.ietf-suit-update-management</a>]</span>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.IMG.SELECT</td>
+            <td class="text-left" rowspan="1" colspan="1">XIP Address</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#suit-condition-component-slot" class="auto internal xref">Section 8.4.9.4</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.EXEC</td>
+            <td class="text-left" rowspan="1" colspan="1">Runtime Metadata</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#manifest-commands" class="auto internal xref">Section 8.4.6</a> (suit-invoke)</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.LOAD</td>
+            <td class="text-left" rowspan="1" colspan="1">Load-Time Metadata</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#manifest-commands" class="auto internal xref">Section 8.4.6</a> (suit-load)</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.PAYLOAD</td>
+            <td class="text-left" rowspan="1" colspan="1">Payload</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#template-integrated-payload" class="auto internal xref">Section 7.5</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.PARSE</td>
+            <td class="text-left" rowspan="1" colspan="1">Simple Parsing</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#command-behavior" class="auto internal xref">Section 6.4</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">REQ.USE.DELEGATION</td>
+            <td class="text-left" rowspan="1" colspan="1">Delegation Chain</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <span>[<a href="#I-D.tschofenig-cose-cwt-chain" class="cite xref">I-D.tschofenig-cose-cwt-chain</a>]</span>
+</td>
+          </tr>
+        </tbody>
+      </table>
 </section>
 </div>
 <div id="acknowledgements">
@@ -4463,7 +4719,7 @@ for their feedback and support.<a href="#section-13-3" class="pilcrow">¶</a></p
 <dl class="references">
 <dt id="I-D.ietf-suit-mti">[I-D.ietf-suit-mti]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Rønningstad, O.</span>, and <span class="refAuthor">A. Tsukamoto</span>, <span class="refTitle">"Mandatory-to-Implement Algorithms for Authors and Recipients of Software Update for the Internet of Things manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-mti-03</span>, <time datetime="2023-10-23" class="refDate">23 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-suit-mti-03">https://datatracker.ietf.org/doc/html/draft-ietf-suit-mti-03</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Rønningstad, O.</span>, and <span class="refAuthor">A. Tsukamoto</span>, <span class="refTitle">"Mandatory-to-Implement Algorithms for Authors and Recipients of Software Update for the Internet of Things manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-mti-04</span>, <time datetime="2024-01-23" class="refDate">23 January 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-suit-mti-04">https://datatracker.ietf.org/doc/html/draft-ietf-suit-mti-04</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -4530,11 +4786,19 @@ for their feedback and support.<a href="#section-13-3" class="pilcrow">¶</a></p
 <dd class="break"></dd>
 <dt id="I-D.ietf-suit-update-management">[I-D.ietf-suit-update-management]</dt>
         <dd>
-<span class="refAuthor">Moran, B.</span> and <span class="refAuthor">K. Takayama</span>, <span class="refTitle">"Update Management Extensions for Software Updates for Internet of Things (SUIT) Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-update-management-04</span>, <time datetime="2023-10-23" class="refDate">23 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-suit-update-management-04">https://datatracker.ietf.org/doc/html/draft-ietf-suit-update-management-04</a>&gt;</span>. </dd>
+<span class="refAuthor">Moran, B.</span> and <span class="refAuthor">K. Takayama</span>, <span class="refTitle">"Update Management Extensions for Software Updates for Internet of Things (SUIT) Manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-update-management-05</span>, <time datetime="2023-11-08" class="refDate">8 November 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-suit-update-management-05">https://datatracker.ietf.org/doc/html/draft-ietf-suit-update-management-05</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.tschofenig-cose-cwt-chain">[I-D.tschofenig-cose-cwt-chain]</dt>
+        <dd>
+<span class="refAuthor">Tschofenig, H.</span> and <span class="refAuthor">B. Moran</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Header Parameters for Carrying and Referencing Chains of CBOR Web Tokens (CWTs)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-tschofenig-cose-cwt-chain-00</span>, <time datetime="2024-01-04" class="refDate">4 January 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-tschofenig-cose-cwt-chain-00">https://datatracker.ietf.org/doc/html/draft-tschofenig-cose-cwt-chain-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7228">[RFC7228]</dt>
         <dd>
 <span class="refAuthor">Bormann, C.</span>, <span class="refAuthor">Ersue, M.</span>, and <span class="refAuthor">A. Keranen</span>, <span class="refTitle">"Terminology for Constrained-Node Networks"</span>, <span class="seriesInfo">RFC 7228</span>, <span class="seriesInfo">DOI 10.17487/RFC7228</span>, <time datetime="2014-05" class="refDate">May 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7228">https://www.rfc-editor.org/rfc/rfc7228</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9334">[RFC9334]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Thaler, D.</span>, <span class="refAuthor">Richardson, M.</span>, <span class="refAuthor">Smith, N.</span>, and <span class="refAuthor">W. Pan</span>, <span class="refTitle">"Remote ATtestation procedureS (RATS) Architecture"</span>, <span class="seriesInfo">RFC 9334</span>, <span class="seriesInfo">DOI 10.17487/RFC9334</span>, <time datetime="2023-01" class="refDate">January 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9334">https://www.rfc-editor.org/rfc/rfc9334</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9397">[RFC9397]</dt>
         <dd>
@@ -4864,8 +5128,8 @@ bz/m4rVlnIXbwK07HypLbAmBMcCjbazR14vTgdzfsJwFLbM5kdtzOLSolg==
 </div>
 <p id="appendix-B-6">Each example uses SHA256 as the digest function.<a href="#appendix-B-6" class="pilcrow">¶</a></p>
 <p id="appendix-B-7">Note that reporting policies are declared for each non-flow-control command in these examples. The reporting policies used in the examples are described in the following tables.<a href="#appendix-B-7" class="pilcrow">¶</a></p>
-<table class="center" id="table-16">
-        <caption><a href="#table-16" class="selfRef">Table 16</a></caption>
+<table class="center" id="table-17">
+        <caption><a href="#table-17" class="selfRef">Table 17</a></caption>
 <thead>
           <tr>
             <th class="text-left" rowspan="1" colspan="1">Policy</th>
@@ -4891,8 +5155,8 @@ bz/m4rVlnIXbwK07HypLbAmBMcCjbazR14vTgdzfsJwFLbM5kdtzOLSolg==
           </tr>
         </tbody>
       </table>
-<table class="center" id="table-17">
-        <caption><a href="#table-17" class="selfRef">Table 17</a></caption>
+<table class="center" id="table-18">
+        <caption><a href="#table-18" class="selfRef">Table 18</a></caption>
 <thead>
           <tr>
             <th class="text-left" rowspan="1" colspan="1">Command</th>
@@ -5779,7 +6043,7 @@ aabbccddeeff0e1a00012c220749880c00030f0c01030f0945840c001702
 <p id="appendix-C-2">The specialized byte code approach gives benefits equivalent to those provided by a scripting language or conventional byte code, with two substantial differences. First, the language is extremely high level, consisting of only the operations that a device may perform during update and trusted invocation of a firmware image. Second, the language specifies linear behavior, without reverse branches. Conditional processing is supported, and parallel and out-of-order processing may be performed by sufficiently capable devices.<a href="#appendix-C-2" class="pilcrow">¶</a></p>
 <p id="appendix-C-3">By structuring the data in this way, the manifest processor becomes a very simple engine that uses a pull parser to interpret the manifest. This pull parser invokes a series of command handlers that evaluate a Condition or execute a Directive. Most data is structured in a highly regular pattern, which simplifies the parser.<a href="#appendix-C-3" class="pilcrow">¶</a></p>
 <p id="appendix-C-4">The results of this allow a Recipient to implement a very small parser for constrained applications. If needed, such a parser also allows the Recipient to perform complex updates with reduced overhead. Conditional execution of commands allows a simple device to perform important decisions at validation-time.<a href="#appendix-C-4" class="pilcrow">¶</a></p>
-<p id="appendix-C-5">Dependency handling is vastly simplified as well. Dependencies function like subroutines of the language. When a manifest has a dependency, it can invoke that dependency's commands and modify their behavior by setting parameters. Because some parameters come with security implications, the dependencies also have a mechanism to reject modifications to parameters on a fine-grained level.<a href="#appendix-C-5" class="pilcrow">¶</a></p>
+<p id="appendix-C-5">Dependency handling is vastly simplified as well. Dependencies function like subroutines of the language. When a manifest has a dependency, it can invoke that dependency's commands and modify their behavior by setting parameters. Because some parameters come with security implications, the dependencies also have a mechanism to reject modifications to parameters on a fine-grained level. Dependency handling is covered in <span>[<a href="#I-D.ietf-suit-trust-domains" class="cite xref">I-D.ietf-suit-trust-domains</a>]</span>.<a href="#appendix-C-5" class="pilcrow">¶</a></p>
 <p id="appendix-C-6">Developing a robust permissions system works in this model too. The Recipient can use a simple ACL that is a table of Identities and Component Identifier permissions to ensure that operations on components fail unless they are permitted by the ACL. This table can be further refined with individual parameters and commands.<a href="#appendix-C-6" class="pilcrow">¶</a></p>
 <p id="appendix-C-7">Capability reporting is similarly simplified. A Recipient can report the Commands, Parameters, Algorithms, and Component Identifiers that it supports. This is sufficiently precise for a manifest author to create a manifest that the Recipient can accept.<a href="#appendix-C-7" class="pilcrow">¶</a></p>
 <p id="appendix-C-8">The simplicity of design in the Recipient due to all of these benefits allows even a highly constrained platform to use advanced update capabilities.<a href="#appendix-C-8" class="pilcrow">¶</a></p>
@@ -5838,8 +6102,8 @@ implementation needs
 to offer to claim conformance to this specification, in the absence of
 an application profile standard specifying otherwise.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
 <p id="appendix-D-2">The subsequent table shows the conditions.<a href="#appendix-D-2" class="pilcrow">¶</a></p>
-<table class="center" id="table-18">
-        <caption><a href="#table-18" class="selfRef">Table 18</a></caption>
+<table class="center" id="table-19">
+        <caption><a href="#table-19" class="selfRef">Table 19</a></caption>
 <thead>
           <tr>
             <th class="text-left" rowspan="1" colspan="1">Name</th>
@@ -5914,7 +6178,7 @@ an application profile standard specifying otherwise.<a href="#appendix-D-1" cla
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Custom Condition</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#SUIT_Condition_Custom" class="auto internal xref">Section 8.4.9.6</a>
+              <a href="#SUIT_Command_Custom" class="auto internal xref">Section 8.4.11</a>
 </td>
             <td class="text-left" rowspan="1" colspan="1">
               <span class="bcp14">OPTIONAL</span>
@@ -5923,8 +6187,8 @@ an application profile standard specifying otherwise.<a href="#appendix-D-1" cla
         </tbody>
       </table>
 <p id="appendix-D-4">The subsequent table shows the directives.<a href="#appendix-D-4" class="pilcrow">¶</a></p>
-<table class="center" id="table-19">
-        <caption><a href="#table-19" class="selfRef">Table 19</a></caption>
+<table class="center" id="table-20">
+        <caption><a href="#table-20" class="selfRef">Table 20</a></caption>
 <thead>
           <tr>
             <th class="text-left" rowspan="1" colspan="1">Name</th>
@@ -6014,8 +6278,8 @@ an application profile standard specifying otherwise.<a href="#appendix-D-1" cla
         </tbody>
       </table>
 <p id="appendix-D-6">The subsequent table shows the parameters.<a href="#appendix-D-6" class="pilcrow">¶</a></p>
-<table class="center" id="table-20">
-        <caption><a href="#table-20" class="selfRef">Table 20</a></caption>
+<table class="center" id="table-21">
+        <caption><a href="#table-21" class="selfRef">Table 21</a></caption>
 <thead>
           <tr>
             <th class="text-left" rowspan="1" colspan="1">Name</th>
