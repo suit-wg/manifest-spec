@@ -1121,7 +1121,7 @@ Image Match | suit-condition-image-match | {{suit-condition-image-match}}
 Check Content | suit-condition-check-content | {{suit-condition-check-content}}
 Component Slot | suit-condition-component-slot | {{suit-condition-component-slot}}
 Abort | suit-condition-abort | {{suit-condition-abort}}
-Custom Condition | suit-condition-custom | {{SUIT_Condition_Custom}}
+Custom Condition | suit-command-custom | {{SUIT_Command_Custom}}
 
 The abstract description of these conditions is defined in {{command-behavior}}.
 
@@ -1169,10 +1169,6 @@ Verify that the slot index of the current component matches the slot index set i
 
 Unconditionally fail. This operation is typically used in conjunction with suit-directive-try-each ({{suit-directive-try-each}}).
 
-#### suit-condition-custom {#SUIT_Condition_Custom}
-
-suit-condition-custom describes any proprietary, application specific condition. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided to the condition, it should be encoded in a custom parameter (a nint) as described in {{secparameters}}. SUIT_Condition_Custom is OPTIONAL to implement.
-
 ### SUIT_Directive
 Directives are used to define the behavior of the recipient. Directives include:
 
@@ -1187,6 +1183,7 @@ Write | suit-directive-write | {{suit-directive-write}}
 Invoke | suit-directive-invoke | {{suit-directive-invoke}}
 Run Sequence | suit-directive-run-sequence | {{suit-directive-run-sequence}}
 Swap | suit-directive-swap | {{suit-directive-swap}}
+Custom Directive | suit-command-custom | {{SUIT_Command_Custom}}
 
 The abstract description of these commands is defined in {{command-behavior}}.
 
@@ -1260,6 +1257,11 @@ suit-parameter-soft-failure ({{suit-parameter-soft-failure}}) defaults to False 
 #### suit-directive-swap {#suit-directive-swap}
 
 suit-directive-swap instructs the manifest processor to move the source to the destination and the destination to the source simultaneously. Swap has nearly identical semantics to suit-directive-copy except that suit-directive-swap replaces the source with the current contents of the destination in an application-defined way. As with suit-directive-copy, if the source component is missing, this command fails.
+
+### suit-command-custom {#SUIT_Command_Custom}
+
+suit-command-custom describes any proprietary, application specific condition or directive. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided, it should be encoded in a custom parameter (a nint) (as described in {{secparameters}}). SUIT_Command_Custom is OPTIONAL to implement.
+
 
 ### Integrity Check Values {#integrity-checks}
 
@@ -1386,7 +1388,7 @@ Label | Name | Reference
 31 | Swap | {{suit-directive-swap}} of [TBD: this document]
 32 | Run Sequence | {{suit-directive-run-sequence}} of [TBD: this document]
 33 | Reserved
-nint | Custom Condition | {{SUIT_Condition_Custom}} of [TBD: this document]
+nint | Custom Command | {{SUIT_Command_Custom}} of [TBD: this document]
 
 ## SUIT Parameters
 
@@ -1536,6 +1538,49 @@ the content is a SUIT envelope.
 #  Security Considerations
 
 This document is about a manifest format protecting and describing how to retrieve, install, and invoke firmware images and as such it is part of a larger solution for delivering firmware updates to IoT devices. A detailed security treatment can be found in the architecture {{RFC9019}} and in the information model {{RFC9124}} documents.
+
+The security requirements outlined in {{RFC9124}} are addressed by this draft and its extensions.
+The specific mapping of requirements and information elements in {{RFC9124}} to manifest data structures is
+outlined in the table below:
+
+| Security Requirement | Information Element | Implementation |
+---
+| REQ.SEC.SEQUENCE | Monotonic Sequence Number | {{manifest-seqnr}} |
+| REQ.SEC.COMPATIBLE | Vendor ID Condition, Class ID Condition | {{identifier-conditions}} |
+| REQ.SEC.EXP | Expiration Time | {{I-D.ietf-suit-update-management}} |
+| REQ.SEC.AUTHENTIC | Signature, Payload Digests | {{authentication-info}}, {{suit-condition-image-match}} |
+| REQ.SEC.AUTH.IMG_TYPE | Payload Format | {{I-D.ietf-suit-update-management}} |
+| REQ.SEC.AUTH.IMG_LOC | Storage Location | {{suit-component-identifier}}
+| REQ.SEC.AUTH.REMOTE_LOC | Payload Indicator | {{suit-parameter-uri}} |
+| REQ.SEC.AUTH.EXEC | Payload Digests, Size | {{suit-parameter-image-digest}}, {{suit-parameter-image-size}} |
+| REQ.SEC.AUTH.PRECURSOR | Precursor Image Digest | {{suit-parameter-image-digest}} |
+| REQ.SEC.AUTH.COMPATIBILITY | Authenticated Vendor and Class IDs | {{suit-parameter-vendor-identifier}}, {{suit-parameter-class-identifier}} |
+| REQ.SEC.RIGHTS | Signature | {{authentication-info}}, {{access-control-lists}} |
+| REQ.SEC.IMG.CONFIDENTIALITY | Encryption Wrapper | {{I-D.ietf-suit-firmware-encryption}} |
+| REQ.SEC.ACCESS_CONTROL: Access Control | None | {{access-control-lists}} |
+| REQ.SEC.MFST.CONFIDENTIALITY | Manifest Encryption Wrapper / Transport Security | {{I-D.ietf-suit-firmware-encryption}} |
+| REQ.SEC.IMG.COMPLETE_DIGEST | Payload Digests | Implementation Consideration |
+| REQ.SEC.REPORTING | None | {{I-D.ietf-suit-report}}, {{RFC9334}}
+| REQ.SEC.KEY.PROTECTION | None | Implementation Consideration |
+| REQ.SEC.KEY.ROTATION | None | {{draft-tschofenig-cose-cwt-chain}}, Implementation Consideration |
+| REQ.SEC.MFST.CHECK | None | Deployment Consideration |
+| REQ.SEC.MFST.TRUSTED | None | Deployment Consideration |
+| REQ.SEC.MFST.CONST | None | Implementation Consideration |
+| REQ.USE.MFST.PRE_CHECK | Additional Installation Instructions | {{I-D.ietf-suit-update-management}}
+| REQ.USE.MFST.TEXT | Manifest Text Information | {{manifest-digest-text}}
+| REQ.USE.MFST.OVERRIDE_REMOTE | Aliases | {{RFC3986}} Relative URIs, {{I-D.ietf-suit-trust-domains}} |
+| REQ.USE.MFST.COMPONENT | Dependencies, StorageIdentifier, ComponentIdentifier | [SUIT_Component_Identifier](#suit-component-identifier), {{I-D.ietf-suit-trust-domains}} |
+| REQ.USE.MFST.MULTI_AUTH | Signature | {{authentication-info}} |
+| REQ.USE.IMG.FORMAT | Payload Format | {{I-D.ietf-suit-update-management}} |
+| REQ.USE.IMG.NESTED | Processing Steps | {{I-D.ietf-suit-firmware-encryption}} (Encryption Wrapper), {{I-D.ietf-suit-update-management}} (Payload Format) |
+| REQ.USE.IMG.VERSIONS | Required Image Version List | {{I-D.ietf-suit-update-management}} |
+| REQ.USE.IMG.SELECT | XIP Address | {{suit-condition-component-slot}} |
+| REQ.USE.EXEC | Runtime Metadata | {{manifest-commands}} (suit-invoke) |
+| REQ.USE.LOAD | Load-Time Metadata | {{manifest-commands}} (suit-load) |
+| REQ.USE.PAYLOAD | Payload | {{template-integrated-payload}} |
+| REQ.USE.PARSE | Simple Parsing | {{command-behavior}} |
+| REQ.USE.DELEGATION | Delegation Chain | {{draft-tschofenig-cose-cwt-chain}} |
+
 
 # Acknowledgements
 
@@ -1705,7 +1750,7 @@ By structuring the data in this way, the manifest processor becomes a very simpl
 
 The results of this allow a Recipient to implement a very small parser for constrained applications. If needed, such a parser also allows the Recipient to perform complex updates with reduced overhead. Conditional execution of commands allows a simple device to perform important decisions at validation-time.
 
-Dependency handling is vastly simplified as well. Dependencies function like subroutines of the language. When a manifest has a dependency, it can invoke that dependency's commands and modify their behavior by setting parameters. Because some parameters come with security implications, the dependencies also have a mechanism to reject modifications to parameters on a fine-grained level.
+Dependency handling is vastly simplified as well. Dependencies function like subroutines of the language. When a manifest has a dependency, it can invoke that dependency's commands and modify their behavior by setting parameters. Because some parameters come with security implications, the dependencies also have a mechanism to reject modifications to parameters on a fine-grained level. Dependency handling is covered in {{I-D.suit-trust-domains}}.
 
 Developing a robust permissions system works in this model too. The Recipient can use a simple ACL that is a table of Identities and Component Identifier permissions to ensure that operations on components fail unless they are permitted by the ACL. This table can be further refined with individual parameters and commands.
 
