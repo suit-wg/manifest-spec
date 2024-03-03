@@ -3,7 +3,7 @@ v: 3
 
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-25
+docname: draft-ietf-suit-manifest-26
 ipr: trust200902
 category: std
 stream: IETF
@@ -56,7 +56,7 @@ author:
       email: oyvind.ronningstad@gmail.com
 
 normative:
-  RFC4122:
+  I-D.ietf-uuidrev-rfc4122bis:
   RFC9052: cose
 #  RFC9053: cose-algs
   RFC3986:
@@ -78,10 +78,10 @@ informative:
   I-D.tschofenig-cose-cwt-chain:
   RFC7228:
   YAML:
-    title: "YAML Ain't Markup Language"
+    title: "YAML Ain’t Markup Language (YAML™) version 1.2"
     author:
-    date: 2020
-    target: https://yaml.org/
+    date: 2021
+    target: https://yaml.org/spec/1.2.2/
   COSE_Alg:
     title: "COSE Algorithms"
     author:
@@ -194,12 +194,12 @@ The IANA consideration section, see {{iana}}, provides instructions to IANA to c
 
 The complete CDDL description is provided in {{full-cddl}}, examples are given in {{examples}} and a design rational is offered in {{design-rationale}}. Finally, {{implementation-matrix}} gives a summarize of the mandatory-to-implement features of this specification.
 
-Additional specifications describe functionality of advanced use cases, such as:
+Additional specifications describe functionality needed to implement all of the requirements of {{RFC9124}}, such as:
 
-* Firmware Encryption is covered in {{I-D.ietf-suit-firmware-encryption}}
-* Update Management is covered in {{I-D.ietf-suit-update-management}}
-* Features, such as dependencies, key delegation, multiple processors, required by the use of multiple trust domains are covered in {{I-D.ietf-suit-trust-domains}}
-* Secure reporting of the update status is covered in {{I-D.ietf-suit-report}}
+* Firmware encryption {{I-D.ietf-suit-firmware-encryption}}
+* Update management {{I-D.ietf-suit-update-management}}
+* Dependency manifests {{I-D.ietf-suit-trust-domains}}
+* Secure reporting of the update status {{I-D.ietf-suit-report}}
 
 A technique to efficiently compress firmware images may be standardized in the future.
 
@@ -350,7 +350,7 @@ See {{manifest-commands}} for more detail.
 
 ### Integrity Check Values {#ovr-integrity}
 
-To enable severable elements {{ovr-severable}}, there needs to be a mechanism to verify the integrity of the severed data. While the severed data stays outside the manifest, for efficiency reasons, Integrity Check Values are used to include the digest of the data in the manifest. Note that Integrated Payloads, see {#ovr-integrated}, are integrity-checked using Command Sequences.
+To enable severable elements {{ovr-severable}}, there needs to be a mechanism to verify the integrity of the severed data. While the severed data stays outside the manifest, for efficiency reasons, Integrity Check Values are used to include the digest of the data in the manifest. Note that Integrated Payloads, see {{ovr-integrated}}, are integrity-checked using Command Sequences.
 
 See {{integrity-checks}} for more detail.
 
@@ -821,7 +821,7 @@ CDDL Structure | Description
 suit-text-manifest-description | Free text description of the manifest
 suit-text-update-description | Free text description of the update
 suit-text-manifest-json-source | The JSON-formatted document that was used to create the manifest
-suit-text-manifest-yaml-source | The YAML {{YAML}}-formatted document that was used to create the manifest
+suit-text-manifest-yaml-source | The YAML-formatted document {{YAML}} that was used to create the manifest
 
 The following table describes the text fields available in each map identified by a SUIT_Component_Identifier.
 
@@ -830,7 +830,7 @@ CDDL Structure | Description
 suit-text-vendor-name | Free text vendor name
 suit-text-model-name | Free text model name
 suit-text-vendor-domain | The domain used to create the vendor-id condition (see {{uuid-identifiers}})
-suit-text-model-info | The information used to create the class-id condition (see {{uuid-identifiers)
+suit-text-model-info | The information used to create the class-id condition (see {{uuid-identifiers}})
 suit-text-component-description | Free text description of each component in the manifest
 suit-text-component-version | A free text representation of the component version
 
@@ -978,7 +978,7 @@ NAMESPACE_CBOR_PEN = 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e
 
 #### Constructing UUIDs {#uuid-identifiers}
 
-Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 {{RFC4122}} UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.
+Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 {{I-D.ietf-uuidrev-rfc4122bis}} UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.
 
 A Recipient MAY match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a Recipient that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This Recipient might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.
 
@@ -1004,7 +1004,7 @@ This allows the OS, WiFi module, and application to be updated independently. To
 
 This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.
 
-UUIDs MUST be created according to versions 3, 4, or 5 of RFC 4122 {{RFC4122}}. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
+UUIDs MUST be created according to versions 3, 4, or 5 of {{I-D.ietf-uuidrev-rfc4122bis}}. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
 
 The RECOMMENDED method to create a vendor ID is:
 
@@ -1038,7 +1038,7 @@ Class-specific-information is composed of a variety of data, for example:
 suit-parameter-vendor-identifier may be presented in one of two ways:
 
 - A Private Enterprise Number
-- A byte string containing a UUID {{RFC4122}}
+- A byte string containing a UUID {{I-D.ietf-uuidrev-rfc4122bis}}
 
 Private Enterprise Numbers are encoded as a relative OID, according to the definition in {{-oid}}. All PENs are relative to the IANA PEN: 1.3.6.1.4.1.
 
@@ -1135,7 +1135,7 @@ Condition labels in the positive number range are reserved for IANA registration
 
 #### suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier {#identifier-conditions}
 
-There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a RFC 4122 {{RFC4122}} UUID that MUST have already been set as a parameter. The installing Recipient MUST match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. Each component MAY match more than one identifier. Care is needed to ensure that manifests correctly identify their targets using these conditions. Using only a generic class ID for a device-specific firmware could result in matching devices that are not compatible.
+There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a UUID {{I-D.ietf-uuidrev-rfc4122bis}} that MUST have already been set as a parameter. The installing Recipient MUST match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. Each component MAY match more than one identifier. Care is needed to ensure that manifests correctly identify their targets using these conditions. Using only a generic class ID for a device-specific firmware could result in matching devices that are not compatible.
 
 The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.
 
