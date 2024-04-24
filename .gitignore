@@ -2,3 +2,7 @@
 .refcache/
 
 .DS_Store
+
+*.html
+*.xml
+*.txt
