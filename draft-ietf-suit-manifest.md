@@ -106,7 +106,8 @@ A firmware update mechanism is an essential security feature for IoT devices to 
 A manifest is a bundle of metadata about the firmware for an IoT device, where to
 find the firmware, and the devices to which it applies.
 
-This specification defines the SUIT manifest format and it is intended to meet several goals:
+This specification defines the SUIT manifest format.
+It is intended to meet several goals:
 
 * Meet the requirements defined in {{RFC9124}}.
 * Simple to parse on a constrained node.
@@ -192,7 +193,7 @@ To implement a tool that generates updates, see {{creating-manifests}} and {{met
 
 The IANA consideration section, see {{iana}}, provides instructions to IANA to create several registries. This section also provides the CBOR labels for the structures defined in this document.
 
-The complete CDDL description is provided in {{full-cddl}}, examples are given in {{examples}} and a design rational is offered in {{design-rationale}}. Finally, {{implementation-matrix}} gives a summarize of the mandatory-to-implement features of this specification.
+The complete CDDL description is provided in {{full-cddl}}, examples are given in {{examples}} and a design rationale is offered in {{design-rationale}}. Finally, {{implementation-matrix}} summarizes the mandatory-to-implement features of this specification.
 
 Additional specifications describe functionality needed to implement all of the requirements of {{RFC9124}}, such as:
 
@@ -1619,7 +1620,7 @@ for their feedback and support.
 
 --- back
 
-# A. Full CDDL {#full-cddl}
+# Full CDDL {#full-cddl}
 In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL data definition.
 
 To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in {{-cose, Section 1.4}}.
@@ -1628,7 +1629,7 @@ To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE
 {::include draft-ietf-suit-manifest.cddl}
 ~~~
 
-# B. Examples {#examples}
+# Examples {#examples}
 
 The following examples demonstrate a small subset of the functionality of the manifest. Even a simple manifest processor can execute most of these manifests.
 
@@ -1742,7 +1743,7 @@ Furthermore, it shows using these templates with two images.
 
 {::include examples/example5.txt}
 
-# C. Design Rational {#design-rationale}
+# Design Rationale {#design-rationale}
 
 In order to provide flexible behavior to constrained devices, while still allowing more powerful devices to use their full capabilities, the SUIT manifest encodes the required behavior of a Recipient device. Behavior is encoded as a specialized byte code, contained in a CBOR list. This promotes a flat encoding, which simplifies the parser. The information encoded by this byte code closely matches the operations that a device will perform, which promotes ease of processing. The core operations used by most update and trusted invocation operations are represented in the byte code. The byte code can be extended by registering new operations.
 
