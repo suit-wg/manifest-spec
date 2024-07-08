@@ -1237,6 +1237,13 @@ suit-directive-fetch typically takes no arguments unless one is needed to modify
 
 suit-directive-fetch reads the URI parameter to find the source of the fetch it performs.
 
+The size and digest of the payload to be fetched are typically set prior to the invokation of suit-directive-fetch. If both suit-parameter-image-digest and suit-parameter-image-size are set for the current component when suit-directive-fetch is invoked, the Manifest Processor MAY choose to optimize the fetch by:
+
+* Checking if the target component matches the digest supplied before fetching.
+* Checking if another component matches the digest supplied before fetching.
+
+The exact mechanisms of these optimizations are implementation defined.
+
 #### suit-directive-copy {#suit-directive-copy}
 
 suit-directive-copy instructs the manifest processor to obtain one or more payloads, as specified by the component index. As described in {{index-true}} component index may be a single integer, a list of integers, or True. suit-directive-copy retrieves each component specified by the current component-index, respectively.
@@ -1244,6 +1251,13 @@ suit-directive-copy instructs the manifest processor to obtain one or more paylo
 suit-directive-copy reads its source from suit-parameter-source-component ({{suit-parameter-source-component}}).
 
 If either the source component parameter or the source component itself is absent, this command fails.
+
+The size and digest of the payload to be fetched are typically set prior to the invokation of suit-directive-copy. If both suit-parameter-image-digest and suit-parameter-image-size are set for the current component when suit-directive-copy is invoked, the Manifest Processor MAY choose to optimize the copy by:
+
+* Checking if the target component matches the digest supplied before copying.
+* Checking if the source component matches the digest supplied before copying.
+
+The first optimization avoids a copy operation when the data is the same. The second optimization avoids a copy of a corrupted image. The exact mechanisms of these optimizations are implementation defined.
 
 #### suit-directive-write {#suit-directive-write}
 
