@@ -176,6 +176,8 @@ find the firmware, and the devices to which it applies.
 * Image: Information that a Recipient uses to perform its function, typically firmware/software, configuration, or resource data such as text or images. Also, a Payload, once installed is an Image.
 * Slot: One of several possible storage locations for a given Component, typically used in A/B image systems
 * Abort: An event in which the Manifest Processor immediately halts execution of the current Procedure. It creates a Record of an error condition.
+* Pull parser: A parser that traverses the data and extracts information on an as-needed basis.
+* Severable element: An element of the manifest that supports elision of hashed data. If a hash of the data is included in the manifest and the data is included in the envelope, then that data may be elided.
 
 # How to use this Document
 
@@ -201,7 +203,7 @@ Additional specifications describe functionality needed to implement all of the 
 * Dependency manifests {{I-D.ietf-suit-trust-domains}}
 * Secure reporting of the update status {{I-D.ietf-suit-report}}
 
-A technique to efficiently compress firmware images may be standardized in the future.
+A technique to compress firmware images may be standardized in the future.
 
 # Background {#background}
 
@@ -248,7 +250,7 @@ When installation is complete, similar information can be used for validating an
 7. Load image(s).
 8. Invoke image(s).
 
-If verification and invocation is implemented in a bootloader, then the bootloader MUST also verify the signature of the manifest and the applicability of the manifest in order to implement secure boot workflows. The bootloader may add its own authentication, e.g. a Message Authentication Code (MAC), to the manifest in order to prevent further verifications.
+If verification and invocation is implemented in a bootloader, then the bootloader MUST also verify the signature of the manifest and the applicability of the manifest in order to implement secure boot workflows. Because signature verifications can be costly in constrained applications, the bootloader may add its own authentication, e.g. a Message Authentication Code (MAC), to the manifest in order to prevent further signature verifications and save energy, provided that the bootloader can protect its authentication key.
 
 # Metadata Structure Overview {#metadata-structure-overview}
 
@@ -362,7 +364,7 @@ See {{manifest-digest-text}} for more detail.
 
 ## Severable Elements {#ovr-severable}
 
-Severable Elements are elements of the Envelope ({{ovr-envelope}}) that have Integrity Check Values ({{ovr-integrity}}) in the Manifest ({{ovr-manifest}}).
+Severable Elements are elements of the Envelope ({{ovr-envelope}}) that have Integrity Check Values ({{ovr-integrity}}) in the Manifest ({{ovr-manifest}}). This is a form of elision of hashed data. The elements in the envelope are verified by Integrity Check Values and therefore cannot be replaced with other elements even if they are authenticated elements.
 
 Because of this organisation, these elements can be discarded or "Severed" from the Envelope without changing the signature of the Manifest. This allows savings based on the size of the Envelope in several scenarios, for example:
 
@@ -453,7 +455,7 @@ One of:
 2. Manifest Authors MUST construct Manifests in such a way that repeated partial invocations of any Manifest always results in a correct system state. Typically this is done by using Try-Each and Conditions to bypass operations that have already been completed.
 3. A journal of manifest operations is stored in nonvolatile memory. The journal enables the parser to re-create the state just prior to the disruption. This journal can, for example, be a SUIT Report or a journaling file system.
 
-AND
+    AND
 
 4. Where a command is not repeatable because of the way in which it alters system state (e.g. swapping images or in-place delta) it MUST be resumable or revertible. This applies to commands that modify at least one source component as well as the destination component.
 
@@ -481,10 +483,10 @@ The following table describes the semantics of each operation. The pseudo-code s
 |---|---
 | assert(test) | When test is false, causes an error return |
 | store(dest, source) | Writes source into dest |
-| statement0 for-each e in l else statement1 | Performs statement0 once for each element in iterable l; performs statement1 if no break is encountered | 
+| expression0 for-each e in l else expression1 | Performs expression0 once for each element in iterable l; performs expression1 if no break is encountered | 
 | break | halt a for-each loop | 
 | now() | return the current UTC time |
-| statement if test | performs statement if test is true |
+| expression if test | performs expression if test is true |
 
 The following table describes the behavior of each command. "params" represents the parameters for the current component. Most commands operate on a component.
 
@@ -552,24 +554,26 @@ When a serialized Manifest Processor encounters a component index of True, it do
 
 ## Parallel Processing Interpreter {#parallel-processing}
 
-To enable parallel or out-of-order processing of Command Sequences, Recipients MAY make use of the Strict Order parameter. The Strict Order parameter indicates to the Manifest Processor that Commands MUST be executed strictly in order. When the Strict Order parameter is False, this indicates to the Manifest Processor that Commands MAY be executed in parallel or out of order. 
-To perform parallel processing, once the Strict Order parameter is set to False, the Recipient may issue each or every command concurrently until the Strict Order parameter is returned to True or the Command Sequence ends. Then, it waits for all issued commands to complete before continuing processing of commands. To perform out-of-order processing, a similar approach is used, except the Recipient consumes all commands after the Strict Order parameter is set to False, then it sorts these commands into its preferred order, invokes them all, then continues processing.
+To enable parallel or out-of-order processing of Command Sequences, Recipients MAY make use of the Strict Order parameter. The Strict Order parameter indicates to the Manifest Processor that Commands MUST be executed strictly in order. When the Strict Order parameter is False, this indicates to the Manifest Processor that Commands MAY be executed in parallel and/or out of order.
 
+To perform parallel processing, once the Strict Order parameter is set to False, the Recipient MAY add each command to an issue queue for parallel processing or an issue pool for out-of-order processing. The Manifest Processor then executes these pending commands in whatever order or parallelism it deems appropriate. Once there are no more commands to add to the issue queue/pool, the Manifest Processor drains the issue queue/pool by issuing all pending commands and waits for every issued command to complete. The Manifest Processor MAY issue commands before it has completed adding all remaining commands to the issue queue/pool.
 
-When the manifest processor encounters any of the following scenarios the parallel processing MUST pause until all issued commands have completed, after which it may resume parallel processing if Strict Order is still False.
+While adding commands to the issue queue or pool, if the Manifest Processor encounters any of the following commands, it MUST treat the command as a barrier, draining the issue queue/pool and waiting for all issued commands to complete.
 
 * Override Parameters.
 * Set Strict Order = True.
 * Set Component Index.
 
-Extensions MAY alter this list. A Component MUST NOT be both a target of an operation and a source of data (for example, in Copy or Swap) in a Command Sequence where Strict Order is False. 
+Extensions MAY alter this list. Once all issued commands have completed, the Manifest Processor issues the barrier command, after which it may resume parallel processing if Strict Order is still False.
+
+A Component MUST NOT be both a target of an operation and a source of data (for example, in Copy or Swap) in a Command Sequence where Strict Order is False. This would cause a race condition if the Component is written to, then later read from. The Manifest Processor MUST issue an Abort if it detects this exception.
 
 To perform more useful parallel operations, a manifest author may collect sequences of commands in a Run Sequence command. Then, each of these sequences MAY be run in parallel. There are several invocation options for Run Sequence:
 
 * Component Index is a positive integer, Strict Order is False: Strict Order is set to True before the sequence argument is run. The sequence argument MUST begin with set-component-index.
-* Component Index is true or an array of positive integers, Strict Order is False: The sequence argument is run once for each component (or each component in the array); the manifest processor presets the component index and Strict Order = True before each iteration of the sequence argument.
+* Component Index is true or an array of positive integers, Strict Order is False: The sequence argument is run once for each component (or each component in the array); the Manifest Processor presets the component index and Strict Order = True before each iteration of the sequence argument.
 * Component Index is a positive integer, Strict Order is True: No special considerations
-* Component Index is True or an array of positive integers, Strict Order is True: The sequence argument is run once for each component (or each component in the array); the manifest processor presets the component index before each iteration of the sequence argument.
+* Component Index is True or an array of positive integers, Strict Order is True: The sequence argument is run once for each component (or each component in the array); the Manifest Processor presets the component index before each iteration of the sequence argument.
 
 These rules isolate each sequence from each other sequence, ensuring that they operate as expected. When Strict Order = False, any further Set Component Index directives in the Run Sequence command sequence argument MUST cause an Abort. This allows the interpreter that issues Run Sequence commands to check that the first element is correct, then issue the sequence to a parallel execution context to handle the remainder of the sequence.
 
@@ -783,7 +787,9 @@ The suit-manifest-sequence-number is a monotonically increasing anti-rollback co
 
 ### suit-reference-uri {#manifest-reference-uri}
 
-suit-reference-uri is a text string that encodes a URI where a full version of this manifest can be found. This is convenient for allowing management systems to show the severed elements of a manifest when this URI is reported by a Recipient after installation.
+suit-reference-uri is a UTF-8 string that encodes a URI where a full version of this manifest can be found. This is convenient for allowing management systems to show the severed elements of a manifest when this URI is reported by a Recipient after installation.
+This document is only concerned with the transport of a UTF-8 encoded URI which is 
+intended for machine readable uses, not human readable uses. 
 
 ### suit-text {#manifest-digest-text}
 
@@ -1012,6 +1018,10 @@ The RECOMMENDED method to create a vendor ID is:
 Vendor ID = UUID5(DNS_PREFIX, vendor domain name)
 ~~~
 
+In this case, the vendor domain name is a UTF-8 encoded string. Since UUID version 5
+applies a digest, internationalization considerations are not applied. The native 
+UTF-8 domain name is used.
+
 If the Vendor ID is a UUID, the RECOMMENDED method to create a Class ID is:
 
 ~~~
@@ -1074,7 +1084,9 @@ If suit-parameter-content is instantiated in a severable command sequence, then 
 
 #### suit-parameter-uri {#suit-parameter-uri}
 
-A URI Reference {{RFC3986}} from which to fetch a resource, encoded as a text string. CBOR Tag 32 is not used because the meaning of the text string is unambiguous in this context.
+A UTF-8 encoded URI Reference {{RFC3986}} from which to fetch a resource. The encoding is the same as CBOR Tag 32, however the tag is omitted because it is implied by the context.
+This document is only concerned with the transport of a UTF-8 encoded URI which is 
+intended for machine readable uses, not human readable uses. 
 
 #### suit-parameter-source-component {#suit-parameter-source-component}
 
@@ -1262,8 +1274,7 @@ suit-directive-swap instructs the manifest processor to move the source to the d
 
 ### suit-command-custom {#SUIT_Command_Custom}
 
-suit-command-custom describes any proprietary, application specific condition or directive. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided, it should be encoded in a custom parameter (a nint) (as described in {{secparameters}}). SUIT_Command_Custom is OPTIONAL to implement.
-
+suit-command-custom describes any experimental, proprietary, or application specific condition or directive. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided, it should be encoded in a custom parameter (as described in {{secparameters}}). Any number of custom commands is permitted. SUIT_Command_Custom is OPTIONAL to implement.
 
 ### Integrity Check Values {#integrity-checks}
 
@@ -1313,7 +1324,7 @@ and a page within this category for SUIT manifests.
 
 IANA is also requested to create several registries defined in the subsections below.
 
-For each registry, values 0-255 are Standards Action and 256 or greater are Expert Review. Negative values -255 to 0 are Standards Action, and -256 and lower are Private Use.
+For each registry, values 0-255 are Standards Action and 256 or greater are Specification Required. Negative values -255 to 0 are Standards Action, and -256 and lower are Private Use.
 
 New entries to those registries need to provide a label, a name and a reference to a specification that describes the functionality. More guidance on the expert review can be found below.
 
@@ -1323,6 +1334,8 @@ IANA is requested to create a new registry for SUIT envelope elements.
 
 Label | Name | Reference
 ---|---|---
+0 | Reserved | Unset Detection
+1 | Reserved | Future Delegation
 2 | Authentication Wrapper | {{authentication-info}} of [TBD: this document]
 3 | Manifest | {{manifest-structure}} of [TBD: this document]
 16 | Payload Fetch | {{manifest-commands}} of [TBD: this document]
@@ -1336,6 +1349,7 @@ IANA is requested to create a new registry for SUIT manifest elements.
 
 Label | Name | Reference
 ---|---|---
+0 | Reserved | Unset Detection
 1 | Encoding Version | {{manifest-version}} of [TBD: this document]
 2 | Sequence Number | {{manifest-seqnr}} of [TBD: this document]
 3 | Common Data | {{manifest-common}} of [TBD: this document]
@@ -1353,6 +1367,7 @@ IANA is requested to create a new registry for SUIT common elements.
 
 Label | Name | Reference
 ---|---|---
+0 | Reserved | Unset Detection
 2 | Component Identifiers | {{manifest-common}} of [TBD: this document]
 4 | Common Command Sequence | {{manifest-common}} of [TBD: this document]
 
@@ -1362,35 +1377,24 @@ IANA is requested to create a new registry for SUIT commands.
 
 Label | Name | Reference
 ---|---|---
+0 | Reserved | Unset Detection
 1 | Vendor Identifier | {{identifier-conditions}} of [TBD: this document]
 2 | Class Identifier | {{identifier-conditions}} of [TBD: this document]
 3 | Image Match | {{suit-condition-image-match}} of [TBD: this document]
-4 | Reserved
 5 | Component Slot | {{suit-condition-component-slot}} of [TBD: this document]
 6 | Check Content | {{suit-condition-check-content}} of [TBD: this document]
 12 | Set Component Index | {{suit-directive-set-component-index}} of [TBD: this document]
-13 | Reserved
 14 | Abort
 15 | Try Each | {{suit-directive-try-each}} of [TBD: this document]
-16 | Reserved
-17 | Reserved
 18 | Write Content | {{suit-directive-write}} of [TBD: this document]
-19 | Reserved
 20 | Override Parameters | {{suit-directive-override-parameters}} of [TBD: this document]
 21 | Fetch | {{suit-directive-fetch}} of [TBD: this document]
 22 | Copy | {{suit-directive-copy}} of [TBD: this document]
 23 | Invoke | {{suit-directive-invoke}} of [TBD: this document]
 24 | Device Identifier | {{identifier-conditions}} of [TBD: this document]
-25 | Reserved
-26 | Reserved
-27 | Reserved
-28 | Reserved
-29 | Reserved
-30 | Reserved
 31 | Swap | {{suit-directive-swap}} of [TBD: this document]
 32 | Run Sequence | {{suit-directive-run-sequence}} of [TBD: this document]
-33 | Reserved
-nint | Custom Command | {{SUIT_Command_Custom}} of [TBD: this document]
+< -255 | Custom Command | {{SUIT_Command_Custom}} of [TBD: this document]
 
 ## SUIT Parameters
 
@@ -1398,27 +1402,20 @@ IANA is requested to create a new registry for SUIT parameters.
 
 Label | Name | Reference
 ---|---|---
+0 | Reserved | Unset Detection
 1 | Vendor ID | {{suit-parameter-vendor-identifier}} of [TBD: this document]
 2 | Class ID | {{suit-parameter-class-identifier}} of [TBD: this document]
 3 | Image Digest | {{suit-parameter-image-digest}} of [TBD: this document]
-4 | Reserved
 5 | Component Slot | {{suit-parameter-component-slot}} of [TBD: this document]
 12 | Strict Order | {{suit-parameter-strict-order}} of [TBD: this document]
 13 | Soft Failure | {{suit-parameter-soft-failure}} of [TBD: this document]
 14 | Image Size | {{suit-parameter-image-size}} of [TBD: this document]
 18 | Content | {{suit-parameter-content}} of [TBD: this document]
-19 | Reserved
-20 | Reserved
 21 | URI | {{suit-parameter-uri}} of [TBD: this document]
 22 | Source Component | {{suit-parameter-source-component}} of [TBD: this document]
 23 | Invoke Args | {{suit-parameter-invoke-args}} of [TBD: this document]
 24 | Device ID | {{suit-parameter-device-identifier}} of [TBD: this document]
-26 | Reserved
-27 | Reserved
-28 | Reserved
-29 | Reserved
-30 | Reserved
-nint | Custom | {{suit-parameter-custom}} of [TBD: this document]
+< -255 | Custom | {{suit-parameter-custom}} of [TBD: this document]
 
 ## SUIT Text Values
 
@@ -1426,11 +1423,12 @@ IANA is requested to create a new registry for SUIT text values.
 
 Label | Name | Reference
 ---|---|---
+0 | Reserved | Unset Detection
 1 | Manifest Description | {{manifest-digest-text}} of [TBD: this document]
 2 | Update Description | {{manifest-digest-text}} of [TBD: this document]
 3 | Manifest JSON Source | {{manifest-digest-text}} of [TBD: this document]
 4 | Manifest YAML Source | {{manifest-digest-text}} of [TBD: this document]
-nint | Custom | {{manifest-digest-text}} of [TBD: this document]
+< -255 | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## SUIT Component Text Values
 
@@ -1438,6 +1436,7 @@ IANA is requested to create a new registry for SUIT component text values.
 
 Label | Name | Reference
 ---|---|---
+0 | Reserved | Unset Detection
 1 | Vendor Name | {{manifest-digest-text}} of [TBD: this document]
 2 | Model Name | {{manifest-digest-text}} of [TBD: this document]
 3 | Vendor Domain | {{manifest-digest-text}} of [TBD: this document]
@@ -1445,7 +1444,7 @@ Label | Name | Reference
 5 | Component Description | {{manifest-digest-text}} of [TBD: this document]
 6 | Component Version | {{manifest-digest-text}} of [TBD: this document]
 7 | Component Version Required | {{manifest-digest-text}} of [TBD: this document]
-nint | Custom | {{manifest-digest-text}} of [TBD: this document]
+< -255 | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## Expert Review Instructions
 
@@ -1484,14 +1483,14 @@ Expert reviewers should take into consideration the following points:
 
 ## Media Type Registration
 
-This section registers the 'application/suit-envelope' media type in the
+This section registers the 'application/suit-envelope+cose' media type in the
 "Media Types" registry.  This media type are used to indicate that
 the content is a SUIT envelope.
 
 ~~~
       Type name: application
 
-      Subtype name: suit-envelope
+      Subtype name: suit-envelope+cose
 
       Required parameters: N/A
 
@@ -1519,7 +1518,7 @@ the content is a SUIT envelope.
 
       *  Magic number(s): N/A
 
-      *  File extension(s): cbor
+      *  File extension(s): cbor, suit
 
       *  Macintosh file type code(s): N/A
 
