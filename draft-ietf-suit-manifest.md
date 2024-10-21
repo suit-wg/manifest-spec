@@ -3,7 +3,7 @@ v: 3
 
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-26
+docname: draft-ietf-suit-manifest-28
 ipr: trust200902
 category: std
 stream: IETF
@@ -727,7 +727,7 @@ The metadata for SUIT updates is composed of several primary constituent parts: 
 
 For a diagram of the metadata structure, see {{metadata-structure-overview}}.
 
-## Encoding Considerations
+## Encoding Considerations {#encoding}
 
 The map indices in the envelope encoding are reset to 1 for each map within the structure. This is to keep the indices as small as possible. The goal is to keep the index objects to single bytes (CBOR positive integers 1-23).
 
@@ -788,9 +788,10 @@ The suit-manifest-sequence-number is a monotonically increasing anti-rollback co
 
 ### suit-reference-uri {#manifest-reference-uri}
 
-suit-reference-uri is a UTF-8 string that encodes a URI where a full version of this manifest can be found. This is convenient for allowing management systems to show the severed elements of a manifest when this URI is reported by a Recipient after installation.
-This document is only concerned with the transport of a UTF-8 encoded URI which is 
-intended for machine readable uses, not human readable uses. 
+suit-reference-uri is a URI where a full version of this manifest can be found. This is convenient for allowing management systems to show the severed elements of a manifest when this URI is reported by a Recipient after installation.
+This document is only concerned with the transport of a URI which is 
+intended for machine readable uses, not human readable uses. The encoding is the same as CBOR
+Tag 32, however the tag is omitted because it is implied by context. 
 
 ### suit-text {#manifest-digest-text}
 
@@ -1085,8 +1086,8 @@ If suit-parameter-content is instantiated in a severable command sequence, then 
 
 #### suit-parameter-uri {#suit-parameter-uri}
 
-A UTF-8 encoded URI Reference {{RFC3986}} from which to fetch a resource. The encoding is the same as CBOR Tag 32, however the tag is omitted because it is implied by the context.
-This document is only concerned with the transport of a UTF-8 encoded URI which is 
+A URI Reference {{RFC3986}} from which to fetch a resource. The encoding is the same as CBOR Tag 32, however the tag is omitted because it is implied by the context.
+This document is only concerned with the transport of a URI which is 
 intended for machine readable uses, not human readable uses. 
 
 #### suit-parameter-source-component {#suit-parameter-source-component}
@@ -1329,8 +1330,8 @@ Any other algorithm defined in the IANA "COSE Algorithms" registry, such as SHA-
 
 IANA is requested to:
 
-* allocate CBOR tag 107 (suggested) in the "CBOR Tags" registry for the SUIT Envelope.
-* allocate CBOR tag 1070 (suggested) in the "CBOR Tags" registry for the SUIT Manifest.
+* allocate CBOR tag 107 (suggested) in the "CBOR Tags" registry for the SUIT Envelope. The CBOR Tag's Data Item is a SUIT_Envelope as defined in {{full-cddl}}
+* allocate CBOR tag 1070 (suggested) in the "CBOR Tags" registry for the SUIT Manifest. The CBOR Tag's Data Item is a SUIT_Manifest as defined in {{full-cddl}}
 * allocate media type application/suit-envelope in the "Media Types" registry, see below.
 * setup several registries as described below.
 
@@ -1349,8 +1350,8 @@ IANA is requested to create a new registry for SUIT envelope elements.
 
 Label | Name | Reference
 ---|---|---
-0 | Reserved | Unset Detection
-1 | Reserved | Future Delegation
+0 | Reserved (Unset Detection) | {{encoding}} of [TBD: this document]
+1 | Reserved (Delegation) | 
 2 | Authentication Wrapper | {{authentication-info}} of [TBD: this document]
 3 | Manifest | {{manifest-structure}} of [TBD: this document]
 16 | Payload Fetch | {{manifest-commands}} of [TBD: this document]
@@ -1373,7 +1374,7 @@ Label | Name | Reference
 8 | Image Loading | {{manifest-commands}} of [TBD: this document]
 9 | Image Invocation | {{manifest-commands}} of [TBD: this document]
 16 | Payload Fetch | {{manifest-commands}} of [TBD: this document]
-17 | Payload Installation | {{manifest-commands}} of [TBD: this document]
+20 | Payload Installation | {{manifest-commands}} of [TBD: this document]
 23 | Text Description | {{manifest-digest-text}} of [TBD: this document]
 
 ## SUIT Common Elements
