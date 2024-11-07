@@ -1349,8 +1349,8 @@ IANA is requested to create a new registry for SUIT envelope elements.
 
 Label | Name | Reference
 ---|---|---
-0 | Reserved (Unset Detection) | {{encoding}} of [TBD: this document]
-1 | Reserved (Delegation) | 
+0 | Unset Detection | {{encoding}} of [TBD: this document]
+1 | Reserved (Delegation) | {{design-rationale-envelope}} of [TBD: this document]
 2 | Authentication Wrapper | {{authentication-info}} of [TBD: this document]
 3 | Manifest | {{manifest-structure}} of [TBD: this document]
 16 | Payload Fetch | {{manifest-commands}} of [TBD: this document]
@@ -1364,7 +1364,7 @@ IANA is requested to create a new registry for SUIT manifest elements.
 
 Label | Name | Reference
 ---|---|---
-0 | Reserved | Unset Detection
+0 | Unset Detection | {{encoding}} of [TBD: this document]
 1 | Encoding Version | {{manifest-version}} of [TBD: this document]
 2 | Sequence Number | {{manifest-seqnr}} of [TBD: this document]
 3 | Common Data | {{manifest-common}} of [TBD: this document]
@@ -1382,7 +1382,7 @@ IANA is requested to create a new registry for SUIT common elements.
 
 Label | Name | Reference
 ---|---|---
-0 | Reserved | Unset Detection
+0 | Unset Detection | {{encoding}} of [TBD: this document]
 2 | Component Identifiers | {{manifest-common}} of [TBD: this document]
 4 | Common Command Sequence | {{manifest-common}} of [TBD: this document]
 
@@ -1392,7 +1392,7 @@ IANA is requested to create a new registry for SUIT commands.
 
 Label | Name | Reference
 ---|---|---
-0 | Reserved | Unset Detection
+0 | Unset Detection | {{encoding}} of [TBD: this document]
 1 | Vendor Identifier | {{identifier-conditions}} of [TBD: this document]
 2 | Class Identifier | {{identifier-conditions}} of [TBD: this document]
 3 | Image Match | {{suit-condition-image-match}} of [TBD: this document]
@@ -1417,7 +1417,7 @@ IANA is requested to create a new registry for SUIT parameters.
 
 Label | Name | Reference
 ---|---|---
-0 | Reserved | Unset Detection
+0 | Unset Detection | {{encoding}} of [TBD: this document]
 1 | Vendor ID | {{suit-parameter-vendor-identifier}} of [TBD: this document]
 2 | Class ID | {{suit-parameter-class-identifier}} of [TBD: this document]
 3 | Image Digest | {{suit-parameter-image-digest}} of [TBD: this document]
@@ -1438,7 +1438,7 @@ IANA is requested to create a new registry for SUIT text values.
 
 Label | Name | Reference
 ---|---|---
-0 | Reserved | Unset Detection
+0 | Unset Detection | {{encoding}} of [TBD: this document]
 1 | Manifest Description | {{manifest-digest-text}} of [TBD: this document]
 2 | Update Description | {{manifest-digest-text}} of [TBD: this document]
 3 | Manifest JSON Source | {{manifest-digest-text}} of [TBD: this document]
@@ -1451,7 +1451,7 @@ IANA is requested to create a new registry for SUIT component text values.
 
 Label | Name | Reference
 ---|---|---
-0 | Reserved | Unset Detection
+0 | Unset Detection | {{encoding}} of [TBD: this document]
 1 | Vendor Name | {{manifest-digest-text}} of [TBD: this document]
 2 | Model Name | {{manifest-digest-text}} of [TBD: this document]
 3 | Vendor Domain | {{manifest-digest-text}} of [TBD: this document]
