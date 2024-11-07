@@ -840,7 +840,6 @@ suit-text-model-name | Free text model name
 suit-text-vendor-domain | The domain used to create the vendor-id condition (see {{uuid-identifiers}})
 suit-text-model-info | The information used to create the class-id condition (see {{uuid-identifiers}})
 suit-text-component-description | Free text description of each component in the manifest
-suit-text-component-version | A free text representation of the component version
 
 suit-text is OPTIONAL to implement.
 
@@ -1459,7 +1458,6 @@ Label | Name | Reference
 4 | Model Info | {{manifest-digest-text}} of [TBD: this document]
 5 | Component Description | {{manifest-digest-text}} of [TBD: this document]
 6 | Component Version | {{manifest-digest-text}} of [TBD: this document]
-7 | Component Version Required | {{manifest-digest-text}} of [TBD: this document]
 < -255 | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## Expert Review Instructions
