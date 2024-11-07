@@ -217,7 +217,7 @@ suit-load = 8
 suit-invoke = 9
 ;Severable, recipient-necessary
 suit-payload-fetch = 16
-suit-install = 17
+suit-install = 20
 ;Severable, recipient-unnecessary
 suit-text = 23
 
