@@ -1355,7 +1355,7 @@ Label | Name | Reference
 2 | Authentication Wrapper | {{authentication-info}} of [TBD: this document]
 3 | Manifest | {{manifest-structure}} of [TBD: this document]
 16 | Payload Fetch | {{manifest-commands}} of [TBD: this document]
-17 | Payload Installation | {{manifest-commands}} of [TBD: this document]
+20 | Payload Installation | {{manifest-commands}} of [TBD: this document]
 23 | Text Description | {{manifest-digest-text}} of [TBD: this document]
 
 
