@@ -56,7 +56,7 @@ author:
       email: oyvind.ronningstad@gmail.com
 
 normative:
-  I-D.ietf-uuidrev-rfc4122bis:
+  RFC4122bis:
   RFC9052: cose
 #  RFC9053: cose-algs
   RFC3986:
@@ -91,7 +91,7 @@ informative:
 --- abstract
 This specification describes the format of a manifest.  A manifest is
 a bundle of metadata about code/data obtained by a recipient (chiefly
-the firmware for an IoT device), where to find the code/data, the
+the firmware for an Internet of Things (IoT) device), where to find the code/data, the
 devices to which it applies, and cryptographic information protecting
 the manifest. Software updates and Trusted Invocation both tend to use
 sequences of common operations, so the manifest encodes those sequences
@@ -985,7 +985,7 @@ NAMESPACE_CBOR_PEN = 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e
 
 #### Constructing UUIDs {#uuid-identifiers}
 
-Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 {{I-D.ietf-uuidrev-rfc4122bis}} UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.
+Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122bis {{RFC4122bis}} UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.
 
 A Recipient MAY match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a Recipient that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This Recipient might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.
 
@@ -1011,7 +1011,7 @@ This allows the OS, WiFi module, and application to be updated independently. To
 
 This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.
 
-UUIDs MUST be created according to versions 3, 4, or 5 of {{I-D.ietf-uuidrev-rfc4122bis}}. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
+UUIDs MUST be created according to versions 3, 4, or 5 of {{RFC4122bis}}. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
 
 The RECOMMENDED method to create a vendor ID is:
 
@@ -1049,7 +1049,7 @@ Class-specific-information is composed of a variety of data, for example:
 suit-parameter-vendor-identifier may be presented in one of two ways:
 
 - A Private Enterprise Number
-- A byte string containing a UUID {{I-D.ietf-uuidrev-rfc4122bis}}
+- A byte string containing a UUID {{RFC4122bis}}
 
 Private Enterprise Numbers are encoded as a relative OID, according to the definition in {{-oid}}. All PENs are relative to the IANA PEN: 1.3.6.1.4.1.
 
@@ -1148,7 +1148,7 @@ Condition labels in the positive number range are reserved for IANA registration
 
 #### suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier {#identifier-conditions}
 
-There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a UUID {{I-D.ietf-uuidrev-rfc4122bis}} that MUST have already been set as a parameter. The installing Recipient MUST match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. Each component MAY match more than one identifier. Care is needed to ensure that manifests correctly identify their targets using these conditions. Using only a generic class ID for a device-specific firmware could result in matching devices that are not compatible.
+There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a UUID {{RFC4122bis}} that MUST have already been set as a parameter. The installing Recipient MUST match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. Each component MAY match more than one identifier. Care is needed to ensure that manifests correctly identify their targets using these conditions. Using only a generic class ID for a device-specific firmware could result in matching devices that are not compatible.
 
 The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.
 
