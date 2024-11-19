@@ -153,6 +153,7 @@ $$SUIT_Parameters //= (suit-parameter-image-size => uint)
 $$SUIT_Parameters //= (suit-parameter-component-slot => uint)
 
 $$SUIT_Parameters //= (suit-parameter-uri => tstr)
+$$SUIT_Parameters //= (suit-parameter-fetch-arguments => bstr)
 $$SUIT_Parameters //= (suit-parameter-source-component => uint)
 $$SUIT_Parameters //= (suit-parameter-invoke-args => bstr)
 
@@ -254,6 +255,7 @@ suit-parameter-component-slot    = 5
 suit-parameter-strict-order      = 12
 suit-parameter-soft-failure      = 13
 suit-parameter-image-size        = 14
+suit-parameter-fetch-arguments   = 16
 suit-parameter-content           = 18
 
 suit-parameter-uri               = 21
