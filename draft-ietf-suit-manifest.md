@@ -196,7 +196,7 @@ To implement a tool that generates updates, see {{creating-manifests}} and {{met
 
 The IANA consideration section, see {{iana}}, provides instructions to IANA to create several registries. This section also provides the CBOR labels for the structures defined in this document.
 
-The complete CDDL ({{-cddl}}) description is provided in {{full-cddl}}, examples are given in {{examples}} and a design rationale is offered in {{design-rationale}}. Finally, {{implementation-matrix}} summarizes the mandatory-to-implement features of this specification.
+The complete CDDL ({{-cddl}}) definition is provided in {{full-cddl}}, examples are given in {{examples}} and a design rationale is offered in {{design-rationale}}. Finally, {{implementation-matrix}} summarizes the mandatory-to-implement features of this specification.
 
 Additional specifications describe functionality needed to implement all of the requirements of {{RFC9124}}, such as:
 
