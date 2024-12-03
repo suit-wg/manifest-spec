@@ -39,3 +39,7 @@ ${COSE_CDDL}: ${COSE_XML} cose_cddl.py
 
 ${CDDL}: ${COSE_CDDL} ${SUIT_CDDL}
 	cat ${SUIT_CDDL} ${COSE_CDDL} > $@
+
+.PHONY: clean
+clean:
+	rm  -rf ${COSE_CDDL} ${SUIT_CDDL}
