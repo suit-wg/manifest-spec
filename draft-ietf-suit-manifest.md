@@ -1339,7 +1339,7 @@ and a page within this category for SUIT manifests.
 
 IANA is also requested to create several registries defined in the subsections below.
 
-For each registry, values 0-255 are Standards Action and 256 or greater are Specification Required with Expert Review. Negative values -255 to 0 are Standards Action, and -256 and lower are Private Use.
+For each registry, values 0-255 are Standards Action and 256 or greater are Specification Required. Negative values -255 to 0 are Standards Action, and -256 and lower are Private Use.
 
 New entries to those registries need to provide a label, a name and a reference to a specification that describes the functionality. More guidance on the expert review can be found below.
 
