@@ -255,7 +255,6 @@ suit-parameter-component-slot    = 5
 suit-parameter-strict-order      = 12
 suit-parameter-soft-failure      = 13
 suit-parameter-image-size        = 14
-suit-parameter-fetch-arguments   = 16
 suit-parameter-content           = 18
 
 suit-parameter-uri               = 21
@@ -263,6 +262,7 @@ suit-parameter-source-component  = 22
 suit-parameter-invoke-args       = 23
 
 suit-parameter-device-identifier = 24
+suit-parameter-fetch-arguments   = 25
 
 suit-parameter-custom = nint
 
