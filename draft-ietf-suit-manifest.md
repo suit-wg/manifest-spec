@@ -1493,9 +1493,7 @@ Expert reviewers should take into consideration the following points:
       length of the encoded value should be weighed against how many
       code points of that length are left, the size of device it will be
       used on, and the number of code points left that encode to that
-      size. For each registry, values 0-255 are Standards Action and 
-      256 or greater are Specification Required. Negative values -255 
-      to 0 are Standards Action, and -256 and lower are Private Use.
+      size.
 
 -  Key assignments in the SUIT Parameters table, particularly those
       that encode to 1 CBOR byte (-23 to 23) should be reserved for
