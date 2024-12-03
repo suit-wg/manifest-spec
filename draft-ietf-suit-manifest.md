@@ -1497,6 +1497,10 @@ Expert reviewers should take into consideration the following points:
       256 or greater are Specification Required. Negative values -255 
       to 0 are Standards Action, and -256 and lower are Private Use.
 
+-  Key assignments in the SUIT Parameters table, particularly those
+      that encode to 1 CBOR byte (-23 to 23) should be reserved for
+      SUIT Directives that match the same key value.
+
 ## Media Type Registration
 
 This section registers the 'application/suit-envelope+cose' media type in the
