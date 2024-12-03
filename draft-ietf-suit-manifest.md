@@ -1496,7 +1496,7 @@ Expert reviewers should take into consideration the following points:
       size.
 
 -  Key assignments in the SUIT Parameters table, particularly those
-      that encode to 1 CBOR byte (-23 to 23) should be reserved for
+      that encode to 1 CBOR byte (-24 to 23) should be reserved for
       SUIT Directives that match the same key value.
 
 ## Media Type Registration
