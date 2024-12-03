@@ -153,6 +153,7 @@ $$SUIT_Parameters //= (suit-parameter-image-size => uint)
 $$SUIT_Parameters //= (suit-parameter-component-slot => uint)
 
 $$SUIT_Parameters //= (suit-parameter-uri => tstr)
+$$SUIT_Parameters //= (suit-parameter-fetch-arguments => bstr)
 $$SUIT_Parameters //= (suit-parameter-source-component => uint)
 $$SUIT_Parameters //= (suit-parameter-invoke-args => bstr)
 
@@ -261,6 +262,7 @@ suit-parameter-source-component  = 22
 suit-parameter-invoke-args       = 23
 
 suit-parameter-device-identifier = 24
+suit-parameter-fetch-arguments   = 25
 
 suit-parameter-custom = nint
 
