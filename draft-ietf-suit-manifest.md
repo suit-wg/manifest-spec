@@ -3,7 +3,7 @@ v: 3
 
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-29
+docname: draft-ietf-suit-manifest-30
 ipr: trust200902
 category: std
 stream: IETF
@@ -66,6 +66,7 @@ normative:
   I-D.ietf-suit-mti:
   RFC9090: oid
   RFC9054: hash-algs
+  RFC8610: cddl
 
 
 informative:
@@ -195,7 +196,7 @@ To implement a tool that generates updates, see {{creating-manifests}} and {{met
 
 The IANA consideration section, see {{iana}}, provides instructions to IANA to create several registries. This section also provides the CBOR labels for the structures defined in this document.
 
-The complete CDDL description is provided in {{full-cddl}}, examples are given in {{examples}} and a design rationale is offered in {{design-rationale}}. Finally, {{implementation-matrix}} summarizes the mandatory-to-implement features of this specification.
+The complete CDDL ({{-cddl}}) definition is provided in {{full-cddl}}, examples are given in {{examples}} and a design rationale is offered in {{design-rationale}}. Finally, {{implementation-matrix}} summarizes the mandatory-to-implement features of this specification.
 
 Additional specifications describe functionality needed to implement all of the requirements of {{RFC9124}}, such as:
 
@@ -1638,7 +1639,7 @@ for their feedback and support.
 --- back
 
 # Full CDDL {#full-cddl}
-In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL data definition.
+In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message MUST adhere to the following CDDL ({{-cddl}}) data definition.
 
 To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in {{-cose, Section 1.4}}.
 

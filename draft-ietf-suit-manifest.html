@@ -13,7 +13,7 @@
 <meta content="
        This specification describes the format of a manifest.  A manifest is
 a bundle of metadata about code/data obtained by a recipient (chiefly
-the firmware for an IoT device), where to find the code/data, the
+the firmware for an Internet of Things (IoT) device), where to find the code/data, the
 devices to which it applies, and cryptographic information protecting
 the manifest. Software updates and Trusted Invocation both tend to use
 sequences of common operations, so the manifest encodes those sequences
@@ -1212,11 +1212,11 @@ li > p:last-of-type:only-child {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CBOR-based SUIT Manifest</td>
-<td class="right">November 2024</td>
+<td class="right">December 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Moran, et al.</td>
-<td class="center">Expires 11 May 2025</td>
+<td class="center">Expires 6 June 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1229,12 +1229,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-suit-manifest-29</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-11-07" class="published">7 November 2024</time>
+<time datetime="2024-12-03" class="published">3 December 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-05-11">11 May 2025</time></dd>
+<dd class="expires"><time datetime="2025-06-06">6 June 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1264,7 +1264,7 @@ li > p:last-of-type:only-child {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This specification describes the format of a manifest.  A manifest is
 a bundle of metadata about code/data obtained by a recipient (chiefly
-the firmware for an IoT device), where to find the code/data, the
+the firmware for an Internet of Things (IoT) device), where to find the code/data, the
 devices to which it applies, and cryptographic information protecting
 the manifest. Software updates and Trusted Invocation both tend to use
 sequences of common operations, so the manifest encodes those sequences
@@ -1289,7 +1289,7 @@ of operations, rather than declaring the metadata.<a href="#section-abstract-1" 
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 May 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 6 June 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1750,7 +1750,7 @@ find the firmware, and the devices to which it applies.<a href="#section-2-3.4" 
 <p id="section-3-3">To implement an updatable device, see <a href="#interpreter-behavior" class="auto internal xref">Section 6</a> and <a href="#metadata-structure" class="auto internal xref">Section 8</a>.
 To implement a tool that generates updates, see <a href="#creating-manifests" class="auto internal xref">Section 7</a> and <a href="#metadata-structure" class="auto internal xref">Section 8</a>.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">The IANA consideration section, see <a href="#iana" class="auto internal xref">Section 11</a>, provides instructions to IANA to create several registries. This section also provides the CBOR labels for the structures defined in this document.<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">The complete CDDL description is provided in <a href="#full-cddl" class="auto internal xref">Appendix A</a>, examples are given in <a href="#examples" class="auto internal xref">Appendix B</a> and a design rationale is offered in <a href="#design-rationale" class="auto internal xref">Appendix C</a>. Finally, <a href="#implementation-matrix" class="auto internal xref">Appendix D</a> summarizes the mandatory-to-implement features of this specification.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-5">The complete CDDL (<span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>) description is provided in <a href="#full-cddl" class="auto internal xref">Appendix A</a>, examples are given in <a href="#examples" class="auto internal xref">Appendix B</a> and a design rationale is offered in <a href="#design-rationale" class="auto internal xref">Appendix C</a>. Finally, <a href="#implementation-matrix" class="auto internal xref">Appendix D</a> summarizes the mandatory-to-implement features of this specification.<a href="#section-3-5" class="pilcrow">¶</a></p>
 <p id="section-3-6">Additional specifications describe functionality needed to implement all of the requirements of <span>[<a href="#RFC9124" class="cite xref">RFC9124</a>]</span>, such as:<a href="#section-3-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3-7.1">Firmware encryption <span>[<a href="#I-D.ietf-suit-firmware-encryption" class="cite xref">I-D.ietf-suit-firmware-encryption</a>]</span><a href="#section-3-7.1" class="pilcrow">¶</a>
@@ -2784,10 +2784,6 @@ SUIT_Text_LMap = {
                 <td class="text-left" rowspan="1" colspan="1">suit-text-component-description</td>
                 <td class="text-left" rowspan="1" colspan="1">Free text description of each component in the manifest</td>
               </tr>
-              <tr>
-                <td class="text-left" rowspan="1" colspan="1">suit-text-component-version</td>
-                <td class="text-left" rowspan="1" colspan="1">A free text representation of the component version</td>
-              </tr>
             </tbody>
           </table>
 <p id="section-8.4.4-12">suit-text is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.4-12" class="pilcrow">¶</a></p>
@@ -3071,7 +3067,7 @@ NAMESPACE_CBOR_PEN = 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e
             <h5 id="name-constructing-uuids">
 <a href="#section-8.4.8.2" class="section-number selfRef">8.4.8.2. </a><a href="#name-constructing-uuids" class="section-name selfRef">Constructing UUIDs</a>
             </h5>
-<p id="section-8.4.8.2-1">Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122 <span>[<a href="#I-D.ietf-uuidrev-rfc4122bis" class="cite xref">I-D.ietf-uuidrev-rfc4122bis</a>]</span> UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.<a href="#section-8.4.8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.2-1">Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122bis <span>[<a href="#RFC4122bis" class="cite xref">RFC4122bis</a>]</span> UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.<a href="#section-8.4.8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.2-2">A Recipient <span class="bcp14">MAY</span> match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a Recipient that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This Recipient might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.<a href="#section-8.4.8.2-2" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.2-3">Identifiers are used for compatibility checks. They <span class="bcp14">MUST NOT</span> be used as assertions of identity. They are evaluated by identifier conditions (<a href="#identifier-conditions" class="auto internal xref">Section 8.4.9.1</a>).<a href="#section-8.4.8.2-3" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.2-4">A more complete example: Imagine a device has the following physical components:
@@ -3094,7 +3090,7 @@ NAMESPACE_CBOR_PEN = 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e
             </ol>
 <p id="section-8.4.8.2-8">This allows the OS, WiFi module, and application to be updated independently. To combat possible incompatibilities, the OS class ID can be changed each time the OS has a change to its API.<a href="#section-8.4.8.2-8" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.2-9">This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.<a href="#section-8.4.8.2-9" class="pilcrow">¶</a></p>
-<p id="section-8.4.8.2-10">UUIDs <span class="bcp14">MUST</span> be created according to versions 3, 4, or 5 of <span>[<a href="#I-D.ietf-uuidrev-rfc4122bis" class="cite xref">I-D.ietf-uuidrev-rfc4122bis</a>]</span>. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.<a href="#section-8.4.8.2-10" class="pilcrow">¶</a></p>
+<p id="section-8.4.8.2-10">UUIDs <span class="bcp14">MUST</span> be created according to versions 3, 4, or 5 of <span>[<a href="#RFC4122bis" class="cite xref">RFC4122bis</a>]</span>. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.<a href="#section-8.4.8.2-10" class="pilcrow">¶</a></p>
 <p id="section-8.4.8.2-11">The <span class="bcp14">RECOMMENDED</span> method to create a vendor ID is:<a href="#section-8.4.8.2-11" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.4.8.2-12">
 <pre>
@@ -3138,7 +3134,7 @@ Class ID = UUID5(
 <ul class="normal">
 <li class="normal" id="section-8.4.8.3-2.1">A Private Enterprise Number<a href="#section-8.4.8.3-2.1" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-8.4.8.3-2.2">A byte string containing a UUID <span>[<a href="#I-D.ietf-uuidrev-rfc4122bis" class="cite xref">I-D.ietf-uuidrev-rfc4122bis</a>]</span><a href="#section-8.4.8.3-2.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-8.4.8.3-2.2">A byte string containing a UUID <span>[<a href="#RFC4122bis" class="cite xref">RFC4122bis</a>]</span><a href="#section-8.4.8.3-2.2" class="pilcrow">¶</a>
 </li>
             </ul>
 <p id="section-8.4.8.3-3">Private Enterprise Numbers are encoded as a relative OID, according to the definition in <span>[<a href="#RFC9090" class="cite xref">RFC9090</a>]</span>. All PENs are relative to the IANA PEN: 1.3.6.1.4.1.<a href="#section-8.4.8.3-3" class="pilcrow">¶</a></p>
@@ -3343,7 +3339,7 @@ intended for machine readable uses, not human readable uses.<a href="#section-8.
             <h5 id="name-suit-condition-vendor-ident">
 <a href="#section-8.4.9.1" class="section-number selfRef">8.4.9.1. </a><a href="#name-suit-condition-vendor-ident" class="section-name selfRef">suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier</a>
             </h5>
-<p id="section-8.4.9.1-1">There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a UUID <span>[<a href="#I-D.ietf-uuidrev-rfc4122bis" class="cite xref">I-D.ietf-uuidrev-rfc4122bis</a>]</span> that <span class="bcp14">MUST</span> have already been set as a parameter. The installing Recipient <span class="bcp14">MUST</span> match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. Each component <span class="bcp14">MAY</span> match more than one identifier. Care is needed to ensure that manifests correctly identify their targets using these conditions. Using only a generic class ID for a device-specific firmware could result in matching devices that are not compatible.<a href="#section-8.4.9.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.9.1-1">There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a UUID <span>[<a href="#RFC4122bis" class="cite xref">RFC4122bis</a>]</span> that <span class="bcp14">MUST</span> have already been set as a parameter. The installing Recipient <span class="bcp14">MUST</span> match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. Each component <span class="bcp14">MAY</span> match more than one identifier. Care is needed to ensure that manifests correctly identify their targets using these conditions. Using only a generic class ID for a device-specific firmware could result in matching devices that are not compatible.<a href="#section-8.4.9.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.9.1-2">The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are <span class="bcp14">REQUIRED</span> to implement. suit-condition-device-identifier is <span class="bcp14">OPTIONAL</span> to implement.<a href="#section-8.4.9.1-2" class="pilcrow">¶</a></p>
 <p id="section-8.4.9.1-3">Each identifier condition compares the corresponding identifier parameter to a parameter asserted to the Manifest Processor by the Recipient. Identifiers <span class="bcp14">MUST</span> be known to the Manifest Processor in order to evaluate compatibility.<a href="#section-8.4.9.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -3684,14 +3680,15 @@ and a page within this category for SUIT manifests.<a href="#section-11-3" class
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved (Unset Detection)</td>
+              <td class="text-left" rowspan="1" colspan="1">Unset Detection</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#encoding" class="auto internal xref">Section 8.1</a> of [TBD: this document]</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">1</td>
               <td class="text-left" rowspan="1" colspan="1">Reserved (Delegation)</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <a href="#design-rationale-envelope" class="auto internal xref">Appendix C.1</a> of [TBD: this document]</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">2</td>
@@ -3745,8 +3742,9 @@ and a page within this category for SUIT manifests.<a href="#section-11-3" class
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved</td>
               <td class="text-left" rowspan="1" colspan="1">Unset Detection</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <a href="#encoding" class="auto internal xref">Section 8.1</a> of [TBD: this document]</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">1</td>
@@ -3830,8 +3828,9 @@ and a page within this category for SUIT manifests.<a href="#section-11-3" class
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved</td>
               <td class="text-left" rowspan="1" colspan="1">Unset Detection</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <a href="#encoding" class="auto internal xref">Section 8.1</a> of [TBD: this document]</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">2</td>
@@ -3867,8 +3866,9 @@ and a page within this category for SUIT manifests.<a href="#section-11-3" class
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved</td>
               <td class="text-left" rowspan="1" colspan="1">Unset Detection</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <a href="#encoding" class="auto internal xref">Section 8.1</a> of [TBD: this document]</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">1</td>
@@ -3993,8 +3993,9 @@ and a page within this category for SUIT manifests.<a href="#section-11-3" class
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved</td>
               <td class="text-left" rowspan="1" colspan="1">Unset Detection</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <a href="#encoding" class="auto internal xref">Section 8.1</a> of [TBD: this document]</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">1</td>
@@ -4096,8 +4097,9 @@ and a page within this category for SUIT manifests.<a href="#section-11-3" class
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved</td>
               <td class="text-left" rowspan="1" colspan="1">Unset Detection</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <a href="#encoding" class="auto internal xref">Section 8.1</a> of [TBD: this document]</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">1</td>
@@ -4151,8 +4153,9 @@ and a page within this category for SUIT manifests.<a href="#section-11-3" class
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved</td>
               <td class="text-left" rowspan="1" colspan="1">Unset Detection</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <a href="#encoding" class="auto internal xref">Section 8.1</a> of [TBD: this document]</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">1</td>
@@ -4187,12 +4190,6 @@ and a page within this category for SUIT manifests.<a href="#section-11-3" class
             <tr>
               <td class="text-left" rowspan="1" colspan="1">6</td>
               <td class="text-left" rowspan="1" colspan="1">Component Version</td>
-              <td class="text-left" rowspan="1" colspan="1">
-                <a href="#manifest-digest-text" class="auto internal xref">Section 8.4.4</a> of [TBD: this document]</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">7</td>
-              <td class="text-left" rowspan="1" colspan="1">Component Version Required</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#manifest-digest-text" class="auto internal xref">Section 8.4.4</a> of [TBD: this document]</td>
             </tr>
@@ -4696,10 +4693,6 @@ for their feedback and support.<a href="#section-13-3" class="pilcrow">¶</a></p
         <dd>
 <span class="refAuthor">Moran, B.</span>, <span class="refAuthor">Rønningstad, O.</span>, and <span class="refAuthor">A. Tsukamoto</span>, <span class="refTitle">"Mandatory-to-Implement Algorithms for Authors and Recipients of Software Update for the Internet of Things manifests"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-suit-mti-08</span>, <time datetime="2024-10-21" class="refDate">21 October 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-suit-mti-08">https://datatracker.ietf.org/doc/html/draft-ietf-suit-mti-08</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.ietf-uuidrev-rfc4122bis">[I-D.ietf-uuidrev-rfc4122bis]</dt>
-        <dd>
-<span class="refAuthor">Davis, K. R.</span>, <span class="refAuthor">Peabody, B.</span>, and <span class="refAuthor">P. Leach</span>, <span class="refTitle">"Universally Unique IDentifiers (UUID)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-uuidrev-rfc4122bis-14</span>, <time datetime="2023-11-06" class="refDate">6 November 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-uuidrev-rfc4122bis-14">https://datatracker.ietf.org/doc/html/draft-ietf-uuidrev-rfc4122bis-14</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
@@ -4708,9 +4701,17 @@ for their feedback and support.<a href="#section-13-3" class="pilcrow">¶</a></p
         <dd>
 <span class="refAuthor">Berners-Lee, T.</span>, <span class="refAuthor">Fielding, R.</span>, and <span class="refAuthor">L. Masinter</span>, <span class="refTitle">"Uniform Resource Identifier (URI): Generic Syntax"</span>, <span class="seriesInfo">STD 66</span>, <span class="seriesInfo">RFC 3986</span>, <span class="seriesInfo">DOI 10.17487/RFC3986</span>, <time datetime="2005-01" class="refDate">January 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3986">https://www.rfc-editor.org/rfc/rfc3986</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC4122bis">[RFC4122bis]</dt>
+        <dd>
+<span class="refAuthor">Leach, P.</span>, <span class="refAuthor">Mealling, M.</span>, and <span class="refAuthor">R. Salz</span>, <span class="refTitle">"A Universally Unique IDentifier (UUID) URN Namespace"</span>, <span class="seriesInfo">RFC 4122</span>, <span class="seriesInfo">DOI 10.17487/RFC4122</span>, <time datetime="2005-07" class="refDate">July 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4122">https://www.rfc-editor.org/rfc/rfc4122</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8610">[RFC8610]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8610">https://www.rfc-editor.org/rfc/rfc8610</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8949">[RFC8949]</dt>
         <dd>
@@ -4791,7 +4792,7 @@ for their feedback and support.<a href="#section-13-3" class="pilcrow">¶</a></p
       <h2 id="name-full-cddl">
 <a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-full-cddl" class="section-name selfRef">Full CDDL</a>
       </h2>
-<p id="appendix-A-1">In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message <span class="bcp14">MUST</span> adhere to the following CDDL data definition.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">In order to create a valid SUIT Manifest document the structure of the corresponding CBOR message <span class="bcp14">MUST</span> adhere to the following CDDL (<span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>) data definition.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <p id="appendix-A-2">To be valid, the following CDDL <span class="bcp14">MUST</span> have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>], <a href="https://rfc-editor.org/rfc/rfc9052#section-1.4" class="relref">Section 1.4</a></span>.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 <div class="breakable lang-CDDL sourcecode" id="appendix-A-3">
 <pre>
