@@ -4,20 +4,19 @@
             / digest: / << [
                 / algorithm-id / -16 / "sha256" /,
                 / digest-bytes /
-h'b3e6a52776bf3ed218feba031c609c98260e1a52fc1f019683edb6d1c5c4a379'
+h'f6d44a62ec906b392500c242e78e908e9cc5057f3f04104a06a8566200da2ee0'
             ] >>,
             / signature: / << 18([
-                    / protected / << {
-                        / alg / 1:-7 / "ES256" /,
-                    } >>,
-                    / unprotected / {
-                    },
-                    / payload / F6 / nil /,
-                    / signature / h'a72d9dabc04af139a0a5b3ef775234b9ed
-1c2390e03ffa1454458b2394cca16aced37039bbf84ea898a54a242d0d04883f22135a
-9b98efe042015041f0142d4e'
-                ]) >>
-            ]
+                / protected / << {
+                    / alg / 1:-7 / "ES256" /
+                } >>,
+                / unprotected / {
+                },
+                / payload / null / nil /,
+                / signature / h'260b7dc147840f848228486060d6c492f12baf
+5d90b0d49a052305fae97c5eb70f69dacd9d8bca2fd82646aafb0f86d0d1157d287c14
+c03ff6c9820b7f132c6f'
+            ]) >>
         ] >>,
         / manifest / 3:<< {
             / manifest-version / 1:1,
@@ -33,70 +32,70 @@ h'b3e6a52776bf3ed218feba031c609c98260e1a52fc1f019683edb6d1c5c4a379'
 be9d-e663e4d41ffe /,
                         / class-id /
 2:h'1492af1425695e48bf429b2d51f2ab45' /
-1492af14-2569-5e48-bf42-9b2d51f2ab45 /,
-                    } ,
+1492af14-2569-5e48-bf42-9b2d51f2ab45 /
+                    },
                     / directive-try-each / 15,[
                         << [
                             / directive-override-parameters / 20,{
-                                / slot / 5:0,
-                            } ,
-                            / condition-component-slot / 5,5 ,
+                                / slot / 5:0
+                            },
+                            / condition-component-slot / 5,5,
                             / directive-override-parameters / 20,{
                                 / image-digest / 3:<< [
                                     / algorithm-id / -16 / "sha256" /,
                                     / digest-bytes /
 h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                                 ] >>,
-                                / image-size / 14:34768,
+                                / image-size / 14:34768
                             }
-                        ] >> ,
+                        ] >>,
                         << [
                             / directive-override-parameters / 20,{
-                                / slot / 5:1,
-                            } ,
-                            / condition-component-slot / 5,5 ,
+                                / slot / 5:1
+                            },
+                            / condition-component-slot / 5,5,
                             / directive-override-parameters / 20,{
                                 / image-digest / 3:<< [
                                     / algorithm-id / -16 / "sha256" /,
                                     / digest-bytes /
 h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                                 ] >>,
-                                / image-size / 14:76834,
+                                / image-size / 14:76834
                             }
                         ] >>
-                    ] ,
-                    / condition-vendor-identifier / 1,15 ,
+                    ],
+                    / condition-vendor-identifier / 1,15,
                     / condition-class-identifier / 2,15
-                ] >>,
+                ] >>
             } >>,
             / validate / 7:<< [
                 / condition-image-match / 3,15
             ] >>,
-            / install / 17:<< [
+            / install / 20:<< [
                 / directive-try-each / 15,[
                     << [
                         / directive-override-parameters / 20,{
-                            / slot / 5:0,
-                        } ,
-                        / condition-component-slot / 5,5 ,
+                            / slot / 5:0
+                        },
+                        / condition-component-slot / 5,5,
                         / directive-override-parameters / 20,{
-                            / uri / 21:'http://example.com/file1.bin',
+                            / uri / 21:'http://example.com/file1.bin'
                         }
-                    ] >> ,
+                    ] >>,
                     << [
                         / directive-override-parameters / 20,{
-                            / slot / 5:1,
-                        } ,
-                        / condition-component-slot / 5,5 ,
+                            / slot / 5:1
+                        },
+                        / condition-component-slot / 5,5,
                         / directive-override-parameters / 20,{
-                            / uri / 21:'http://example.com/file2.bin',
+                            / uri / 21:'http://example.com/file2.bin'
                         }
                     ] >>
-                ] ,
-                / directive-fetch / 21,2 ,
+                ],
+                / directive-fetch / 21,2,
                 / condition-image-match / 3,15
-            ] >>,
-        } >>,
+            ] >>
+        } >>
     })
 ~~~
 
@@ -105,14 +104,14 @@ Total size of Envelope without COSE authentication object:  320
 Envelope:
 
 ~~~
-d86ba2025827815824822f5820b3e6a52776bf3ed218feba031c609c9826
-0e1a52fc1f019683edb6d1c5c4a3790359010fa5010102030358a4a20281
+d86ba2025827815824822f5820f6d44a62ec906b392500c242e78e908e9c
+c5057f3f04104a06a8566200da2ee00359010fa5010102030358a4a20281
 81410004589b8814a20150fa6b4a53d5ad5fdfbe9de663e4d41ffe025014
 92af1425695e48bf429b2d51f2ab450f8258348614a10500050514a20358
 24822f582000112233445566778899aabbccddeeff0123456789abcdeffe
 dcba98765432100e1987d058368614a10501050514a2035824822f582001
 23456789abcdeffedcba987654321000112233445566778899aabbccddee
-ff0e1a00012c22010f020f074382030f11585b860f8258288614a1050005
+ff0e1a00012c22010f020f074382030f14585b860f8258288614a1050005
 0514a115781c687474703a2f2f6578616d706c652e636f6d2f66696c6531
 2e62696e58288614a10501050514a115781c687474703a2f2f6578616d70
 6c652e636f6d2f66696c65322e62696e1502030f
@@ -123,17 +122,17 @@ Total size of Envelope with COSE authentication object:  396
 Envelope with COSE authentication object:
 
 ~~~
-d86ba2025873825824822f5820b3e6a52776bf3ed218feba031c609c9826
-0e1a52fc1f019683edb6d1c5c4a379584ad28443a10126a0f65840a72d9d
-abc04af139a0a5b3ef775234b9ed1c2390e03ffa1454458b2394cca16ace
-d37039bbf84ea898a54a242d0d04883f22135a9b98efe042015041f0142d
-4e0359010fa5010102030358a4a2028181410004589b8814a20150fa6b4a
+d86ba2025873825824822f5820f6d44a62ec906b392500c242e78e908e9c
+c5057f3f04104a06a8566200da2ee0584ad28443a10126a0f65840260b7d
+c147840f848228486060d6c492f12baf5d90b0d49a052305fae97c5eb70f
+69dacd9d8bca2fd82646aafb0f86d0d1157d287c14c03ff6c9820b7f132c
+6f0359010fa5010102030358a4a2028181410004589b8814a20150fa6b4a
 53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab
 450f8258348614a10500050514a2035824822f5820001122334455667788
 99aabbccddeeff0123456789abcdeffedcba98765432100e1987d0583686
 14a10501050514a2035824822f58200123456789abcdeffedcba98765432
 1000112233445566778899aabbccddeeff0e1a00012c22010f020f074382
-030f11585b860f8258288614a10500050514a115781c687474703a2f2f65
+030f14585b860f8258288614a10500050514a115781c687474703a2f2f65
 78616d706c652e636f6d2f66696c65312e62696e58288614a10501050514
 a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e62
 696e1502030f

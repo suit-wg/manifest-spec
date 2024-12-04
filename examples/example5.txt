@@ -4,31 +4,30 @@
             / digest: / << [
                 / algorithm-id / -16 / "sha256" /,
                 / digest-bytes /
-h'264dc89eb4a39ae7a8ed05e4d6232153bce4fb9a111a31310b90627d1edfc3bb'
+h'15ce60f77657e4531dc329155f8b0ed78f94bdc6d165b2665473693dcc34f470'
             ] >>,
             / signature: / << 18([
-                    / protected / << {
-                        / alg / 1:-7 / "ES256" /,
-                    } >>,
-                    / unprotected / {
-                    },
-                    / payload / F6 / nil /,
-                    / signature / h'9350fcb80d59f9be2a923bc144c5f64022
-b57d18ccddd9c0477a5be608b04200689373d42fc42fc154dce2d54255d64be9f5bd55
-efddb5de22354ec0894e979a'
-                ]) >>
-            ]
+                / protected / << {
+                    / alg / 1:-7 / "ES256" /
+                } >>,
+                / unprotected / {
+                },
+                / payload / null / nil /,
+                / signature / h'b8a0683079e9ebb496655313cbc7ce67f2b1f8
+f9b6572727b6930ae7c061917c077cc784018fecebfa6a7a23f598039fee37fe5866c9
+842b391a112f795ded60'
+            ]) >>
         ] >>,
         / manifest / 3:<< {
             / manifest-version / 1:1,
             / manifest-sequence-number / 2:5,
             / common / 3:<< {
                 / components / 2:[
-                    [h'00'] ,
+                    [h'00'],
                     [h'01']
                 ],
                 / shared-sequence / 4:<< [
-                    / directive-set-component-index / 12,0 ,
+                    / directive-set-component-index / 12,0,
                     / directive-override-parameters / 20,{
                         / vendor-id /
 1:h'fa6b4a53d5ad5fdfbe9de663e4d41ffe' / fa6b4a53-d5ad-5fdf-
@@ -41,46 +40,46 @@ be9d-e663e4d41ffe /,
                             / digest-bytes /
 h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                         ] >>,
-                        / image-size / 14:34768,
-                    } ,
-                    / condition-vendor-identifier / 1,15 ,
-                    / condition-class-identifier / 2,15 ,
-                    / directive-set-component-index / 12,1 ,
+                        / image-size / 14:34768
+                    },
+                    / condition-vendor-identifier / 1,15,
+                    / condition-class-identifier / 2,15,
+                    / directive-set-component-index / 12,1,
                     / directive-override-parameters / 20,{
                         / image-digest / 3:<< [
                             / algorithm-id / -16 / "sha256" /,
                             / digest-bytes /
 h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                         ] >>,
-                        / image-size / 14:76834,
+                        / image-size / 14:76834
                     }
-                ] >>,
+                ] >>
             } >>,
             / validate / 7:<< [
-                / directive-set-component-index / 12,0 ,
-                / condition-image-match / 3,15 ,
-                / directive-set-component-index / 12,1 ,
+                / directive-set-component-index / 12,0,
+                / condition-image-match / 3,15,
+                / directive-set-component-index / 12,1,
                 / condition-image-match / 3,15
             ] >>,
             / run / 9:<< [
-                / directive-set-component-index / 12,0 ,
+                / directive-set-component-index / 12,0,
                 / directive-run / 23,2
             ] >>,
-            / install / 17:<< [
-                / directive-set-component-index / 12,0 ,
+            / install / 20:<< [
+                / directive-set-component-index / 12,0,
                 / directive-override-parameters / 20,{
-                    / uri / 21:'http://example.com/file1.bin',
-                } ,
-                / directive-fetch / 21,2 ,
-                / condition-image-match / 3,15 ,
-                / directive-set-component-index / 12,1 ,
+                    / uri / 21:'http://example.com/file1.bin'
+                },
+                / directive-fetch / 21,2,
+                / condition-image-match / 3,15,
+                / directive-set-component-index / 12,1,
                 / directive-override-parameters / 20,{
-                    / uri / 21:'http://example.com/file2.bin',
-                } ,
-                / directive-fetch / 21,2 ,
+                    / uri / 21:'http://example.com/file2.bin'
+                },
+                / directive-fetch / 21,2,
                 / condition-image-match / 3,15
-            ] >>,
-        } >>,
+            ] >>
+        } >>
     })
 ~~~
 
@@ -89,14 +88,14 @@ Total size of Envelope without COSE authentication object:  306
 Envelope:
 
 ~~~
-d86ba2025827815824822f5820264dc89eb4a39ae7a8ed05e4d6232153bc
-e4fb9a111a31310b90627d1edfc3bb03590101a601010205035895a20282
+d86ba2025827815824822f582015ce60f77657e4531dc329155f8b0ed78f
+94bdc6d165b2665473693dcc34f47003590101a601010205035895a20282
 8141008141010458898c0c0014a40150fa6b4a53d5ad5fdfbe9de663e4d4
 1ffe02501492af1425695e48bf429b2d51f2ab45035824822f5820001122
 33445566778899aabbccddeeff0123456789abcdeffedcba98765432100e
 1987d0010f020f0c0114a2035824822f58200123456789abcdeffedcba98
 7654321000112233445566778899aabbccddeeff0e1a00012c220749880c
-00030f0c01030f0945840c00170211584f900c0014a115781c687474703a
+00030f0c01030f0945840c00170214584f900c0014a115781c687474703a
 2f2f6578616d706c652e636f6d2f66696c65312e62696e1502030f0c0114
 a115781c687474703a2f2f6578616d706c652e636f6d2f66696c65322e62
 696e1502030f
@@ -107,17 +106,17 @@ Total size of Envelope with COSE authentication object:  382
 Envelope with COSE authentication object:
 
 ~~~
-d86ba2025873825824822f5820264dc89eb4a39ae7a8ed05e4d6232153bc
-e4fb9a111a31310b90627d1edfc3bb584ad28443a10126a0f658409350fc
-b80d59f9be2a923bc144c5f64022b57d18ccddd9c0477a5be608b0420068
-9373d42fc42fc154dce2d54255d64be9f5bd55efddb5de22354ec0894e97
-9a03590101a601010205035895a202828141008141010458898c0c0014a4
+d86ba2025873825824822f582015ce60f77657e4531dc329155f8b0ed78f
+94bdc6d165b2665473693dcc34f470584ad28443a10126a0f65840b8a068
+3079e9ebb496655313cbc7ce67f2b1f8f9b6572727b6930ae7c061917c07
+7cc784018fecebfa6a7a23f598039fee37fe5866c9842b391a112f795ded
+6003590101a601010205035895a202828141008141010458898c0c0014a4
 0150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf42
 9b2d51f2ab45035824822f582000112233445566778899aabbccddeeff01
 23456789abcdeffedcba98765432100e1987d0010f020f0c0114a2035824
 822f58200123456789abcdeffedcba987654321000112233445566778899
 aabbccddeeff0e1a00012c220749880c00030f0c01030f0945840c001702
-11584f900c0014a115781c687474703a2f2f6578616d706c652e636f6d2f
+14584f900c0014a115781c687474703a2f2f6578616d706c652e636f6d2f
 66696c65312e62696e1502030f0c0114a115781c687474703a2f2f657861
 6d706c652e636f6d2f66696c65322e62696e1502030f
 ~~~

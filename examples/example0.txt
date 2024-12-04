@@ -7,17 +7,16 @@
 h'6658ea560262696dd1f13b782239a064da7c6c5cbaf52fded428a6fc83c7e5af'
             ] >>,
             / signature: / << 18([
-                    / protected / << {
-                        / alg / 1:-7 / "ES256" /,
-                    } >>,
-                    / unprotected / {
-                    },
-                    / payload / F6 / nil /,
-                    / signature / h'56acf3c133338f558bbbac1e73a62bffac
-2a0067d0f7a2e860e20b9119a61d964af04fb56c2c7618d3d74558c14f5daf7cafa877
-1b34ec42160f5c94250a57eb'
-                ]) >>
-            ]
+                / protected / << {
+                    / alg / 1:-7 / "ES256" /
+                } >>,
+                / unprotected / {
+                },
+                / payload / null / nil /,
+                / signature / h'1554ee9e9c467bc036bde0c534e021bdeb9a6a
+206aa4c088cf916181bc30a05e313d34927f66fd4f5e788b8cb3fc9621f1322a142c1f
+3cdab20a64a862ff115f'
+            ]) >>
         ] >>,
         / manifest / 3:<< {
             / manifest-version / 1:1,
@@ -39,19 +38,19 @@ be9d-e663e4d41ffe /,
                             / digest-bytes /
 h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                         ] >>,
-                        / image-size / 14:34768,
-                    } ,
-                    / condition-vendor-identifier / 1,15 ,
+                        / image-size / 14:34768
+                    },
+                    / condition-vendor-identifier / 1,15,
                     / condition-class-identifier / 2,15
-                ] >>,
+                ] >>
             } >>,
             / validate / 7:<< [
                 / condition-image-match / 3,15
             ] >>,
             / run / 9:<< [
                 / directive-run / 23,2
-            ] >>,
-        } >>,
+            ] >>
+        } >>
     })
 ~~~
 
@@ -74,10 +73,10 @@ Envelope with COSE authentication object:
 
 ~~~
 d86ba2025873825824822f58206658ea560262696dd1f13b782239a064da
-7c6c5cbaf52fded428a6fc83c7e5af584ad28443a10126a0f6584056acf3
-c133338f558bbbac1e73a62bffac2a0067d0f7a2e860e20b9119a61d964a
-f04fb56c2c7618d3d74558c14f5daf7cafa8771b34ec42160f5c94250a57
-eb035871a50101020003585fa202818141000458568614a40150fa6b4a53
+7c6c5cbaf52fded428a6fc83c7e5af584ad28443a10126a0f658401554ee
+9e9c467bc036bde0c534e021bdeb9a6a206aa4c088cf916181bc30a05e31
+3d34927f66fd4f5e788b8cb3fc9621f1322a142c1f3cdab20a64a862ff11
+5f035871a50101020003585fa202818141000458568614a40150fa6b4a53
 d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
 035824822f582000112233445566778899aabbccddeeff0123456789abcd
 effedcba98765432100e1987d0010f020f074382030f0943821702
