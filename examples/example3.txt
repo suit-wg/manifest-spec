@@ -13,9 +13,9 @@ h'f6d44a62ec906b392500c242e78e908e9cc5057f3f04104a06a8566200da2ee0'
                 / unprotected / {
                 },
                 / payload / null / nil /,
-                / signature / h'260b7dc147840f848228486060d6c492f12baf
-5d90b0d49a052305fae97c5eb70f69dacd9d8bca2fd82646aafb0f86d0d1157d287c14
-c03ff6c9820b7f132c6f'
+                / signature / h'b5db8091cbaaa151876a9ce9e66e21c31ad5fa
+54b1dee3db0f7f432dee521305a530f5308b378a923b40c8ba1ff5cbfee75f2a42b718
+cd4f988f51cd9038e34c'
             ]) >>
         ] >>,
         / manifest / 3:<< {
@@ -79,7 +79,7 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                         },
                         / condition-component-slot / 5,5,
                         / directive-override-parameters / 20,{
-                            / uri / 21:'http://example.com/file1.bin'
+                            / uri / 21:"http://example.com/file1.bin"
                         }
                     ] >>,
                     << [
@@ -88,7 +88,7 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                         },
                         / condition-component-slot / 5,5,
                         / directive-override-parameters / 20,{
-                            / uri / 21:'http://example.com/file2.bin'
+                            / uri / 21:"http://example.com/file2.bin"
                         }
                     ] >>
                 ],
@@ -123,10 +123,10 @@ Envelope with COSE authentication object:
 
 ~~~
 d86ba2025873825824822f5820f6d44a62ec906b392500c242e78e908e9c
-c5057f3f04104a06a8566200da2ee0584ad28443a10126a0f65840260b7d
-c147840f848228486060d6c492f12baf5d90b0d49a052305fae97c5eb70f
-69dacd9d8bca2fd82646aafb0f86d0d1157d287c14c03ff6c9820b7f132c
-6f0359010fa5010102030358a4a2028181410004589b8814a20150fa6b4a
+c5057f3f04104a06a8566200da2ee0584ad28443a10126a0f65840b5db80
+91cbaaa151876a9ce9e66e21c31ad5fa54b1dee3db0f7f432dee521305a5
+30f5308b378a923b40c8ba1ff5cbfee75f2a42b718cd4f988f51cd9038e3
+4c0359010fa5010102030358a4a2028181410004589b8814a20150fa6b4a
 53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab
 450f8258348614a10500050514a2035824822f5820001122334455667788
 99aabbccddeeff0123456789abcdeffedcba98765432100e1987d0583686
