@@ -52,30 +52,30 @@ ${CDDL}:
 
 .PRECIOUS: %.suit
 %.suit:%.json #${CDDL}
-	${SUITTOOL} create -i $< -o $@
-	${CDDLTOOL} ${CDDL} validate $@
+	@${SUITTOOL} create -i $< -o $@
+	@${CDDLTOOL} ${CDDL} validate $@
 
 .PRECIOUS: %.signed
 %.signed:%.suit #${CDDL}
-	${SUITTOOL} sign -m $< -k private_key.pem -o $@
-	${CDDLTOOL} ${CDDL} validate $@
+	@${SUITTOOL} sign -m $< -k private_key.pem -o $@
+	@${CDDLTOOL} ${CDDL} validate $@
 
 .PRECIOUS: %.severed
 %.severed:%.suit #${CDDL}
-	${SUITTOOL} sever -a -m $< -o $@
-	${CDDLTOOL} ${CDDL} validate $@
+	@${SUITTOOL} sever -a -m $< -o $@
+	@${CDDLTOOL} ${CDDL} validate $@
 
 .PRECIOUS: %.severed-signed
 %.severed-signed:%.signed #${CDDL}
-	${SUITTOOL} sever -a -m $< -o $@
-	${CDDLTOOL} ${CDDL} validate $@
+	@${SUITTOOL} sever -a -m $< -o $@
+	@${CDDLTOOL} ${CDDL} validate $@
 
 %.txt:%.severed-signed %.signed %.severed %.suit %.json
-	echo "~~~" > $@
-	${SUITTOOL} parse -m $< >> $@
-	echo "~~~" >> $@
-	echo "" >> $@
-	sh ./mk-text.sh $@ $^
+	@echo "~~~ cbor-diag" > $@
+	@${SUITTOOL} parse -m $< >> $@
+	@echo "~~~" >> $@
+	@echo "" >> $@
+	@sh ./mk-text.sh $@ $^
 
 .PHONY:clean
 clean:

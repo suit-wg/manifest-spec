@@ -3,7 +3,7 @@ v: 3
 
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-30
+docname: draft-ietf-suit-manifest-31
 ipr: trust200902
 category: std
 stream: IETF
@@ -748,7 +748,7 @@ The Envelope is encoded as a CBOR Map. Each element of the Envelope is enclosed 
 
 SUIT_Authentication contains a list of elements, which consist of a SUIT_Digest calculated over the manifest, and zero or more SUIT_Authentication_Block's calculated over the SUIT_Digest.
 
-~~~
+~~~ cddl-snippet
 SUIT_Authentication = [
     bstr .cbor SUIT_Digest,
     * bstr .cbor SUIT_Authentication_Block
@@ -803,7 +803,7 @@ suit-text SHOULD be a severable element. suit-text is a map of language identifi
 
 The SUIT_Text_Map is defined in the following CDDL.
 
-~~~
+~~~ cddl-snippet
 tag38-ltag = text .regexp "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
 
 SUIT_Text_Map = {
@@ -970,7 +970,7 @@ The CBOR PEN UUID Namespace Identifier is constructed as follows:
 
 It uses the OID Namespace as a starting point, then uses the CBOR absolute OID encoding for the IANA PEN OID (1.3.6.1.4.1):
 
-~~~
+~~~ cbor-pretty
 D8 6F                # tag(111)
    45                # bytes(5)
 # Absolute OID encoding of IANA Private Enterprise Number:
@@ -1166,7 +1166,7 @@ This directive compares the specified component identifier to the data indicated
 
 The following pseudo-code described an example content checking algorithm:
 
-~~~
+~~~ c
 // content & component must be same length
 // returns 0 for match
 int check_content(content, component, length) {
@@ -1643,7 +1643,7 @@ In order to create a valid SUIT Manifest document the structure of the correspon
 
 To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in {{-cose, Section 1.4}}.
 
-~~~ CDDL
+~~~ cddl
 {::include draft-ietf-suit-manifest.cddl}
 ~~~
 

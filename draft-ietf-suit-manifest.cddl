@@ -1,3 +1,4 @@
+SUIT_start = SUIT_Envelope_Tagged / SUIT_Manifest_Tagged / start
 SUIT_Envelope_Tagged = #6.107(SUIT_Envelope)
 SUIT_Envelope = {
   suit-authentication-wrapper => bstr .cbor SUIT_Authentication,
