@@ -1,4 +1,4 @@
-~~~
+~~~ cbor-diag
 107({
         / authentication-wrapper / 2:<< [
             / digest: / << [
@@ -13,9 +13,9 @@ h'5b5f6586b1e6cdf19ee479a5adabf206581000bd584b0832a9bdaf4f72cdbdd6'
                 / unprotected / {
                 },
                 / payload / null / nil /,
-                / signature / h'7d15aaf4f91848dc98d89433cbb4512f3bed0a
-043c68c2f9bbef5f48028ae714f8f837e7262717806894f5b1027e5e938c772b75071c
-7819a064b8e0f961a448'
+                / signature / h'c53c2826b042384e95c646cbcd4308b181f1ed
+2bfbeb4e70b93cac9fbdc82e382d877e2c2bcfaf975ffcd36941f2f4db89f68d3c77d6
+a3506e9b1509a49dec46'
             ]) >>
         ] >>,
         / manifest / 3:<< {
@@ -65,9 +65,9 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                 / directive-copy / 22,2,
                 / condition-image-match / 3,15
             ] >>,
-            / run / 9:<< [
+            / invoke / 9:<< [
                 / directive-set-component-index / 12,2,
-                / directive-run / 23,2
+                / directive-invoke / 23,2
             ] >>,
             / payload-fetch / 16:<< [
                 / directive-set-component-index / 12,1,
@@ -77,7 +77,7 @@ h'0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff'
                         / digest-bytes /
 h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                     ] >>,
-                    / uri / 21:'http://example.com/file.bin'
+                    / uri / 21:"http://example.com/file.bin"
                 },
                 / directive-fetch / 21,2,
                 / condition-image-match / 3,15
@@ -93,6 +93,7 @@ h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
         } >>
     })
 ~~~
+{: sourcecode-name="example4.cbor-diag"}
 
 Total size of Envelope without COSE authentication object:  327
 
@@ -118,10 +119,10 @@ Envelope with COSE authentication object:
 
 ~~~
 d86ba2025873825824822f58205b5f6586b1e6cdf19ee479a5adabf20658
-1000bd584b0832a9bdaf4f72cdbdd6584ad28443a10126a0f658407d15aa
-f4f91848dc98d89433cbb4512f3bed0a043c68c2f9bbef5f48028ae714f8
-f837e7262717806894f5b1027e5e938c772b75071c7819a064b8e0f961a4
-4803590116a801010204035867a20283814100814102814101045858880c
+1000bd584b0832a9bdaf4f72cdbdd6584ad28443a10126a0f65840c53c28
+26b042384e95c646cbcd4308b181f1ed2bfbeb4e70b93cac9fbdc82e382d
+877e2c2bcfaf975ffcd36941f2f4db89f68d3c77d6a3506e9b1509a49dec
+4603590116a801010204035867a20283814100814102814101045858880c
 0014a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e
 48bf429b2d51f2ab45035824822f582000112233445566778899aabbccdd
 eeff0123456789abcdeffedcba98765432100e1987d0010f020f0745840c

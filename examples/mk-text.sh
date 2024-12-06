@@ -1,4 +1,4 @@
-set -x
+# set -x
 set -e
 TXT=$1
 SEVERED_SIGNED=$2

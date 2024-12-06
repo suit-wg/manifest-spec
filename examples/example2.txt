@@ -1,4 +1,4 @@
-~~~
+~~~ cbor-diag
 107({
         / authentication-wrapper / 2:<< [
             / digest: / << [
@@ -13,9 +13,9 @@ h'6a5197ed8f9dccf733d1c89a359441708e070b4c6dcb9a1c2c82c6165f609b90'
                 / unprotected / {
                 },
                 / payload / null / nil /,
-                / signature / h'8f481019e5f4e3085322006a5d7cb54dc8cd8c
-7e3247ba04c0cc88bda5b3f48b0a55116b3a6b59a1e28840f86b27a14920c5d650fae9
-c269337e939589761cae'
+                / signature / h'073d8d80ca67d61cdf04d813c748b2de98fe78
+6fc67b764431307c8dbcbe91dc6f762c2c4d7bb998ff9ead4798e03c8ee26b89ef7a9a
+d4569f6e187ce89e16c5'
             ]) >>
         ] >>,
         / manifest / 3:<< {
@@ -44,12 +44,12 @@ h'00112233445566778899aabbccddeeff0123456789abcdeffedcba9876543210'
                     / condition-class-identifier / 2,15
                 ] >>
             } >>,
-            / reference-uri / 4:'https://git.io/JJYoj',
+            / reference-uri / 4:"https://git.io/JJYoj",
             / validate / 7:<< [
                 / condition-image-match / 3,15
             ] >>,
-            / run / 9:<< [
-                / directive-run / 23,2
+            / invoke / 9:<< [
+                / directive-invoke / 23,2
             ] >>,
             / install / 20:[
                 / algorithm-id / -16 / "sha256" /,
@@ -64,6 +64,7 @@ h'302196d452bce5e8bfeaf71e395645ede6d365e63507a081379721eeecf00007'
         } >>
     })
 ~~~
+{: sourcecode-name="example2.cbor-diag"}
 
 Total size of the Envelope without COSE authentication object or Severable Elements:  257
 
@@ -86,10 +87,10 @@ Envelope:
 
 ~~~
 d86ba2025873825824822f58206a5197ed8f9dccf733d1c89a359441708e
-070b4c6dcb9a1c2c82c6165f609b90584ad28443a10126a0f658408f4810
-19e5f4e3085322006a5d7cb54dc8cd8c7e3247ba04c0cc88bda5b3f48b0a
-55116b3a6b59a1e28840f86b27a14920c5d650fae9c269337e939589761c
-ae0358d1a80101020203585fa202818141000458568614a40150fa6b4a53
+070b4c6dcb9a1c2c82c6165f609b90584ad28443a10126a0f65840073d8d
+80ca67d61cdf04d813c748b2de98fe786fc67b764431307c8dbcbe91dc6f
+762c2c4d7bb998ff9ead4798e03c8ee26b89ef7a9ad4569f6e187ce89e16
+c50358d1a80101020203585fa202818141000458568614a40150fa6b4a53
 d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
 035824822f582000112233445566778899aabbccddeeff0123456789abcd
 effedcba98765432100e1987d0010f020f047468747470733a2f2f676974
@@ -105,10 +106,10 @@ Envelope with COSE authentication object:
 
 ~~~
 d86ba4025873825824822f58206a5197ed8f9dccf733d1c89a359441708e
-070b4c6dcb9a1c2c82c6165f609b90584ad28443a10126a0f658408f4810
-19e5f4e3085322006a5d7cb54dc8cd8c7e3247ba04c0cc88bda5b3f48b0a
-55116b3a6b59a1e28840f86b27a14920c5d650fae9c269337e939589761c
-ae0358d1a80101020203585fa202818141000458568614a40150fa6b4a53
+070b4c6dcb9a1c2c82c6165f609b90584ad28443a10126a0f65840073d8d
+80ca67d61cdf04d813c748b2de98fe786fc67b764431307c8dbcbe91dc6f
+762c2c4d7bb998ff9ead4798e03c8ee26b89ef7a9ad4569f6e187ce89e16
+c50358d1a80101020203585fa202818141000458568614a40150fa6b4a53
 d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
 035824822f582000112233445566778899aabbccddeeff0123456789abcd
 effedcba98765432100e1987d0010f020f047468747470733a2f2f676974
