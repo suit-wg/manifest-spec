@@ -1643,6 +1643,7 @@ In order to create a valid SUIT Manifest document the structure of the correspon
 
 To be valid, the following CDDL MUST have the COSE CDDL appended to it. The COSE CDDL can be obtained by following the directions in {{-cose, Section 1.4}}.
 
+ {: sourcecode-name="draft-ietf-suit-manifest.cddl"}
 ~~~ cddl
 {::include draft-ietf-suit-manifest.cddl}
 ~~~
