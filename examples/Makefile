@@ -71,10 +71,10 @@ ${CDDL}:
 	@${CDDLTOOL} ${CDDL} validate $@
 
 %.txt:%.severed-signed %.signed %.severed %.suit %.json
-	@echo "{: sourcecode-name=\"`basename $@ .txt`.cbor-diag\"}" > $@
-	@echo "~~~ cbor-diag" >> $@
+	@echo "~~~ cbor-diag" > $@
 	@${SUITTOOL} parse -m $< >> $@
 	@echo "~~~" >> $@
+	@echo "{: sourcecode-name=\"`basename $@ .txt`.cbor-diag\"}" >> $@
 	@echo "" >> $@
 	@sh ./mk-text.sh $@ $^
 
