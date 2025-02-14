@@ -966,7 +966,7 @@ CBOR-encoded object parameters are still wrapped in a bstr. This is because it a
 
 #### CBOR PEN UUID Namespace Identifier
 
-The CBOR PEN UUID Namespace Identifier is constructed as follows:
+The CBOR PEN (Private Enterprise Number) UUID Namespace Identifier is constructed as follows:
 
 It uses the OID Namespace as a starting point, then uses the CBOR absolute OID encoding for the IANA PEN OID (1.3.6.1.4.1):
 
