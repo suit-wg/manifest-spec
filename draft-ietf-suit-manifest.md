@@ -122,10 +122,10 @@ The SUIT manifest can be used for a variety of purposes throughout its lifecycle
 
 * a Network Operator to reason about compatibility of a firmware, such as timing and acceptance of firmware updates.
 * a Device Operator to reason about the impact of a firmware.
-* a device to reason about the authority & authenticity of a firmware prior to installation.
-* a device to reason about the applicability of a firmware.
-* a device to reason about the installation of a firmware.
-* a device to reason about the authenticity & encoding of a firmware at boot.
+* enabling a device to reason about the authority & authenticity of a firmware prior to installation.
+* enabling a device to reason about the applicability of a firmware.
+* enabling a device to reason about the installation of a firmware.
+* enabling a device to reason about the authenticity & encoding of a firmware at boot.
 
 Each of these uses happens at a different stage of the manifest lifecycle, so each has different requirements.
 
