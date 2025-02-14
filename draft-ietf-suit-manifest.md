@@ -416,9 +416,7 @@ Following these initial tests, the manifest processor clears all parameter stora
 
 ## Required Checks {#required-checks}
 
-The RECOMMENDED process is to verify the signature of the manifest prior to parsing/executing any section of the manifest. This guards the parser against arbitrary input by unauthenticated third parties, but it costs extra energy when a Recipient receives an incompatible manifest.
-
-When validating authenticity of manifests, the manifest processor MAY use an ACL (see {{access-control-lists}}) to determine the extent of the rights conferred by that authenticity.
+The manifest processor MUST verify the signature of the manifest prior to parsing/executing any section of the manifest. This guards the parser against arbitrary input by unauthenticated third parties. When validating authenticity of manifests, the manifest processor MAY use an ACL (see {{access-control-lists}}) to determine the extent of the rights conferred by that authenticity.
 
 Once a valid, authentic manifest has been selected, the manifest processor MUST examine the component list and
 check that the number of components listed in the manifest is not larger than the number in the target system.
