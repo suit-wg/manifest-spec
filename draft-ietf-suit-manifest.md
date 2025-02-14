@@ -3,7 +3,7 @@ v: 3
 
 title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
 abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-31
+docname: draft-ietf-suit-manifest-33
 ipr: trust200902
 category: std
 stream: IETF
@@ -64,18 +64,23 @@ normative:
   RFC9019:
   RFC9124:
   I-D.ietf-suit-mti:
+  I-D.ietf-suit-firmware-encryption:
+  I-D.ietf-suit-update-management:
+  I-D.ietf-suit-trust-domains:
+  I-D.ietf-suit-report:
   RFC9090: oid
   RFC9054: hash-algs
   RFC8610: cddl
+  COSE_Alg:
+    title: "COSE Algorithms"
+    author: IANA
+    date: 2024
+    target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
 
 
 informative:
   RFC9397:
   RFC9334:
-  I-D.ietf-suit-firmware-encryption:
-  I-D.ietf-suit-update-management:
-  I-D.ietf-suit-trust-domains:
-  I-D.ietf-suit-report:
   I-D.tschofenig-cose-cwt-chain:
   RFC7228:
   YAML:
@@ -83,11 +88,6 @@ informative:
     author:
     date: 2021
     target: https://yaml.org/spec/1.2.2/
-  COSE_Alg:
-    title: "COSE Algorithms"
-    author:
-    date: 2023
-    target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
 
 --- abstract
 This specification describes the format of a manifest.  A manifest is
@@ -450,16 +450,13 @@ NOTE: when using A/B images, the manifest functions as two (or more) logical man
 
 As required in {{Section 3 of RFC9019}} and as an extension of design goal 1, devices must remain operable after a disruption, such as a power failure or network interruption, interrupts the update process.
 
-The manifest processor must be resilient to these faults. In order to enable this resilience, systems implementing the manifest processor MUST make the following guarantees:
+The manifest processor must be resilient to these faults. In order to enable this resilience, systems implementing the manifest processor MUST guarantee that manifests can be either resumed or reapplied.
 
-One of:
+This can be achieved in a variety of ways:
 1. A fallback/recovery image is provided so that a disrupted system can apply the SUIT Manifest again.
-2. Manifest Authors MUST construct Manifests in such a way that repeated partial invocations of any Manifest always results in a correct system state. Typically this is done by using Try-Each and Conditions to bypass operations that have already been completed.
+2. Manifest Authors construct Manifests in such a way that repeated partial invocations of any Manifest always results in a correct system state. Typically this is done by using Try-Each and Conditions to bypass operations that have already been completed.
 3. A journal of manifest operations is stored in nonvolatile memory. The journal enables the parser to re-create the state just prior to the disruption. This journal can, for example, be a SUIT Report or a journaling file system.
-
-    AND
-
-4. Where a command is not repeatable because of the way in which it alters system state (e.g. swapping images or in-place delta) it MUST be resumable or revertible. This applies to commands that modify at least one source component as well as the destination component.
+4. Where a command is not repeatable because of the way in which it alters system state (e.g. swapping images or in-place delta) it is resumable or revertible. This applies primarily to commands that modify at least one source component as well as the destination component.
 
 ## Abstract Machine Description {#command-behavior}
 
@@ -1146,7 +1143,7 @@ Conditions compare parameters against properties of the system. These properties
 
 Each condition MUST report a result code on completion. If a condition reports failure, then the current sequence of commands MUST terminate. A subsequent command or command sequence MAY continue executing if suit-parameter-soft-failure ({{suit-parameter-soft-failure}}) is set. If a condition requires additional information, this MUST be specified in one or more parameters before the condition is executed. If a Recipient attempts to process a condition that expects additional information and that information has not been set, it MUST report a failure. If a Recipient encounters an unknown condition, it MUST report a failure.
 
-Condition labels in the positive number range are reserved for IANA registration while those in the negative range are custom conditions reserved for proprietary definition by the author of a manifest processor. See {{iana}} for more details.
+Condition labels greater than or equal to -256 are reserved for IANA registration while those lesser than -256 are custom conditions reserved for proprietary definition by the author of a manifest processor. See {{iana}} for more details.
 
 #### suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier {#identifier-conditions}
 
@@ -1291,13 +1288,65 @@ suit-directive-swap instructs the manifest processor to move the source to the d
 
 ### suit-command-custom {#SUIT_Command_Custom}
 
-suit-command-custom describes any experimental, proprietary, or application specific condition or directive. This is encoded as a negative integer, chosen by the firmware developer. If additional information must be provided, it should be encoded in a custom parameter (as described in {{secparameters}}). Any number of custom commands is permitted. SUIT_Command_Custom is OPTIONAL to implement.
+suit-command-custom describes any experimental, proprietary, or application specific condition or directive. This is encoded as an integer, lesser than -256, chosen by the firmware developer. If additional information must be provided, it should be encoded in a custom parameter (as described in {{secparameters}}). Any number of custom commands is permitted. SUIT_Command_Custom is OPTIONAL to implement.
 
 ### Integrity Check Values {#integrity-checks}
 
 When the Text section or any Command Sequence of the Update Procedure is made severable, it is moved to the Envelope and replaced with a SUIT_Digest. The SUIT_Digest is computed over the entire bstr enclosing the Manifest element that has been moved to the Envelope. Each element that is made severable from the Manifest is placed in the Envelope. The keys for the envelope elements have the same values as the keys for the manifest elements.
 
 Each Integrity Check Value covers the corresponding Envelope Element as described in {{severable-fields}}.
+
+## Implementation Conformance Matrix {#implementation-matrix}
+
+This section summarizes the functionality a minimal manifest processor
+implementation needs
+to offer to claim conformance to this specification, in the absence of
+an application profile standard specifying otherwise.
+
+The subsequent table shows the conditions.
+
+Name | Reference | Implementation
+---|---|---
+Vendor Identifier | {{uuid-identifiers}} | REQUIRED
+Class Identifier | {{uuid-identifiers}} | REQUIRED
+Device Identifier | {{uuid-identifiers}} | OPTIONAL
+Image Match | {{suit-condition-image-match}} | REQUIRED
+Check Content | {{suit-condition-check-content}} | OPTIONAL
+Component Slot | {{suit-condition-component-slot}} | OPTIONAL
+Abort | {{suit-condition-abort}} | OPTIONAL
+Custom Condition | {{SUIT_Command_Custom}} | OPTIONAL
+
+The subsequent table shows the directives.
+
+Name | Reference | Implementation
+---|---|---
+Set Component Index | {{suit-directive-set-component-index}} | REQUIRED if more than one component
+Write Content | {{suit-directive-write}} | OPTIONAL
+Try Each | {{suit-directive-try-each}} | OPTIONAL
+Override Parameters | {{suit-directive-override-parameters}} | REQUIRED
+Fetch | {{suit-directive-fetch}} | REQUIRED for Updater
+Copy | {{suit-directive-copy}} | OPTIONAL
+Invoke | {{suit-directive-invoke}} | REQUIRED for Bootloader
+Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
+Swap | {{suit-directive-swap}} | OPTIONAL
+
+The subsequent table shows the parameters.
+
+Name | Reference | Implementation
+---|---|---
+Vendor ID | {{suit-parameter-vendor-identifier}} | REQUIRED
+Class ID | {{suit-parameter-class-identifier}} | REQUIRED
+Image Digest | {{suit-parameter-image-digest}} | REQUIRED
+Image Size | {{suit-parameter-image-size}} | REQUIRED
+Component Slot | {{suit-parameter-component-slot}} | OPTIONAL
+Content | {{suit-parameter-content}} | OPTIONAL
+URI | {{suit-parameter-uri}} | REQUIRED for Updater
+Source Component | {{suit-parameter-source-component}} | OPTIONAL
+Invoke Args | {{suit-parameter-invoke-args}} | OPTIONAL
+Device ID | {{suit-parameter-device-identifier}} | OPTIONAL
+Strict Order | {{suit-parameter-strict-order}} | OPTIONAL
+Soft Failure | {{suit-parameter-soft-failure}} | OPTIONAL
+Custom | {{suit-parameter-custom}} | OPTIONAL
 
 ## Severable Elements {#severable-fields}
 
@@ -1432,7 +1481,7 @@ Label | Name | Reference
 22 | Source Component | {{suit-parameter-source-component}} of [TBD: this document]
 23 | Invoke Args | {{suit-parameter-invoke-args}} of [TBD: this document]
 24 | Device ID | {{suit-parameter-device-identifier}} of [TBD: this document]
-< -255 | Custom | {{suit-parameter-custom}} of [TBD: this document]
+< -256 | Custom | {{suit-parameter-custom}} of [TBD: this document]
 
 ## SUIT Text Values
 
@@ -1445,7 +1494,7 @@ Label | Name | Reference
 2 | Update Description | {{manifest-digest-text}} of [TBD: this document]
 3 | Manifest JSON Source | {{manifest-digest-text}} of [TBD: this document]
 4 | Manifest YAML Source | {{manifest-digest-text}} of [TBD: this document]
-< -255 | Custom | {{manifest-digest-text}} of [TBD: this document]
+< -256 | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## SUIT Component Text Values
 
@@ -1460,7 +1509,7 @@ Label | Name | Reference
 4 | Model Info | {{manifest-digest-text}} of [TBD: this document]
 5 | Component Description | {{manifest-digest-text}} of [TBD: this document]
 6 | Component Version | {{manifest-digest-text}} of [TBD: this document]
-< -255 | Custom | {{manifest-digest-text}} of [TBD: this document]
+< -256 | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## Expert Review Instructions
 
@@ -1811,56 +1860,3 @@ The common block is re-parsed in order to find components identifiers from their
 A severed SUIT command sequence will appear in the envelope, so it must be wrapped as with all envelope elements. For consistency, command sequences are also wrapped in the manifest. This also allows the parser to discern the difference between a command sequence and a SUIT_Digest.
 
 Parameters that are structured types (arrays and maps) are also wrapped in a bstr. This is so that parser extents can be set correctly using only a reference to the beginning of the parameter. This enables a parser to store a simple list of references to parameters that can be retrieved when needed.
-
-
-# D. Implementation Conformance Matrix {#implementation-matrix}
-
-This section summarizes the functionality a minimal manifest processor
-implementation needs
-to offer to claim conformance to this specification, in the absence of
-an application profile standard specifying otherwise.
-
-The subsequent table shows the conditions.
-
-Name | Reference | Implementation
----|---|---
-Vendor Identifier | {{uuid-identifiers}} | REQUIRED
-Class Identifier | {{uuid-identifiers}} | REQUIRED
-Device Identifier | {{uuid-identifiers}} | OPTIONAL
-Image Match | {{suit-condition-image-match}} | REQUIRED
-Check Content | {{suit-condition-check-content}} | OPTIONAL
-Component Slot | {{suit-condition-component-slot}} | OPTIONAL
-Abort | {{suit-condition-abort}} | OPTIONAL
-Custom Condition | {{SUIT_Command_Custom}} | OPTIONAL
-
-The subsequent table shows the directives.
-
-Name | Reference | Implementation
----|---|---
-Set Component Index | {{suit-directive-set-component-index}} | REQUIRED if more than one component
-Write Content | {{suit-directive-write}} | OPTIONAL
-Try Each | {{suit-directive-try-each}} | OPTIONAL
-Override Parameters | {{suit-directive-override-parameters}} | REQUIRED
-Fetch | {{suit-directive-fetch}} | REQUIRED for Updater
-Copy | {{suit-directive-copy}} | OPTIONAL
-Invoke | {{suit-directive-invoke}} | REQUIRED for Bootloader
-Run Sequence | {{suit-directive-run-sequence}} | OPTIONAL
-Swap | {{suit-directive-swap}} | OPTIONAL
-
-The subsequent table shows the parameters.
-
-Name | Reference | Implementation
----|---|---
-Vendor ID | {{suit-parameter-vendor-identifier}} | REQUIRED
-Class ID | {{suit-parameter-class-identifier}} | REQUIRED
-Image Digest | {{suit-parameter-image-digest}} | REQUIRED
-Image Size | {{suit-parameter-image-size}} | REQUIRED
-Component Slot | {{suit-parameter-component-slot}} | OPTIONAL
-Content | {{suit-parameter-content}} | OPTIONAL
-URI | {{suit-parameter-uri}} | REQUIRED for Updater
-Source Component | {{suit-parameter-source-component}} | OPTIONAL
-Invoke Args | {{suit-parameter-invoke-args}} | OPTIONAL
-Device ID | {{suit-parameter-device-identifier}} | OPTIONAL
-Strict Order | {{suit-parameter-strict-order}} | OPTIONAL
-Soft Failure | {{suit-parameter-soft-failure}} | OPTIONAL
-Custom | {{suit-parameter-custom}} | OPTIONAL
