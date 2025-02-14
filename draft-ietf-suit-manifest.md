@@ -994,7 +994,7 @@ A Recipient MAY match any number of UUIDs for vendor or class identifier. This m
 Identifiers are used for compatibility checks. They MUST NOT be used as assertions of identity. They are evaluated by identifier conditions ({{identifier-conditions}}).
 
 A more complete example: Imagine a device has the following physical components:
-1. A host MCU
+1. A host Microcontroller
 2. A WiFi module
 
 This same device has three software modules:
