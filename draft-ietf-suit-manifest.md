@@ -1018,7 +1018,7 @@ UUIDs MUST be created according to versions 3, 4, or 5 of {{RFC4122bis}}. Versio
 The RECOMMENDED method to create a vendor ID is:
 
 ~~~
-Vendor ID = UUID5(DNS_PREFIX, vendor domain name)
+Vendor ID = UUID5(<IANA UUID Namespace ID DNS>, vendor domain name)
 ~~~
 
 In this case, the vendor domain name is a UTF-8 encoded string. Since UUID version 5
