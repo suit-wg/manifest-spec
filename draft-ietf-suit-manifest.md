@@ -1372,7 +1372,7 @@ A third model allows a Recipient to provide even more fine-grained controls: The
 
 The SUIT digest is a CBOR array containing two elements: an algorithm identifier and a bstr containing the bytes of the digest. Some forms of digest may require additional parameters. These can be added following the digest.
 
-The values of the algorithm identifier are found in the IANA "COSE Algorithms" registry {{COSE_Alg}}, which was created by {{-hash-algs}}. SHA-256 (-16) MUST be implemented by all Manifest Processors.
+The values of the algorithm identifier are found in the IANA "COSE Algorithms" registry {{COSE-Alg}}, which was created by {{-hash-algs}}. SHA-256 (-16) MUST be implemented by all Manifest Processors.
 
 Any other algorithm defined in the IANA "COSE Algorithms" registry, such as SHA-512 (-44), MAY be implemented in a Manifest Processor.
 
