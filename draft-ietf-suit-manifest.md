@@ -56,7 +56,7 @@ author:
       email: oyvind.ronningstad@gmail.com
 
 normative:
-  RFC4122bis:
+  RFC9562:
   RFC9052: cose
 #  RFC9053: cose-algs
   RFC3986:
@@ -982,7 +982,7 @@ NAMESPACE_CBOR_PEN = 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e
 
 #### Constructing UUIDs {#uuid-identifiers}
 
-Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 4122bis {{RFC4122bis}} UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.
+Several conditions use identifiers to determine whether a manifest matches a given Recipient or not. These identifiers are defined to be RFC 9562 {{RFC9562}} UUIDs. These UUIDs are not human-readable and are therefore used for machine-based processing only.
 
 A Recipient MAY match any number of UUIDs for vendor or class identifier. This may be relevant to physical or software modules. For example, a Recipient that has an OS and one or more applications might list one Vendor ID for the OS and one or more additional Vendor IDs for the applications. This Recipient might also have a Class ID that must be matched for the OS and one or more Class IDs for the applications.
 
@@ -1008,12 +1008,13 @@ This allows the OS, WiFi module, and application to be updated independently. To
 
 This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.
 
-UUIDs MUST be created according to versions 3, 4, or 5 of {{RFC4122bis}}. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
+UUIDs MUST be created according to versions 3, 4, or 5 of {{RFC9562}}. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
 
 The RECOMMENDED method to create a vendor ID is:
 
 ~~~
-Vendor ID = UUID5(DNS_PREFIX, vendor domain name)
+# The IANA UUID Namespace ID for DNS is: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+Vendor ID = UUID5(<IANA UUID Namespace ID DNS>, vendor domain name)
 ~~~
 
 In this case, the vendor domain name is a UTF-8 encoded string. Since UUID version 5
@@ -1046,17 +1047,17 @@ Class-specific-information is composed of a variety of data, for example:
 suit-parameter-vendor-identifier may be presented in one of two ways:
 
 - A Private Enterprise Number
-- A byte string containing a UUID {{RFC4122bis}}
+- A byte string containing a UUID {{RFC9562}}
 
 Private Enterprise Numbers are encoded as a relative OID, according to the definition in {{-oid}}. All PENs are relative to the IANA PEN: 1.3.6.1.4.1.
 
 #### suit-parameter-class-identifier {#suit-parameter-class-identifier}
 
-A RFC 4122 UUID representing the class of the device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in {{uuid-identifiers}}
+A RFC 9562 UUID representing the class of the device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in {{uuid-identifiers}}
 
 #### suit-parameter-device-identifier {#suit-parameter-device-identifier}
 
-A RFC 4122 UUID representing the specific device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in {{uuid-identifiers}}
+A RFC 9562 UUID representing the specific device or component. The UUID is encoded as a 16 byte bstr, containing the raw bytes of the UUID. It MUST be constructed as described in {{uuid-identifiers}}
 
 #### suit-parameter-image-digest {#suit-parameter-image-digest}
 
@@ -1145,7 +1146,7 @@ Condition labels greater than or equal to -256 are reserved for IANA registratio
 
 #### suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier {#identifier-conditions}
 
-There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a UUID {{RFC4122bis}} that MUST have already been set as a parameter. The installing Recipient MUST match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. Each component MAY match more than one identifier. Care is needed to ensure that manifests correctly identify their targets using these conditions. Using only a generic class ID for a device-specific firmware could result in matching devices that are not compatible.
+There are three identifier-based conditions: suit-condition-vendor-identifier, suit-condition-class-identifier, and suit-condition-device-identifier. Each of these conditions match a UUID {{RFC9562}} that MUST have already been set as a parameter. The installing Recipient MUST match the specified UUID in order to consider the manifest valid. These identifiers are scoped by component in the manifest. Each component MAY match more than one identifier. Care is needed to ensure that manifests correctly identify their targets using these conditions. Using only a generic class ID for a device-specific firmware could result in matching devices that are not compatible.
 
 The Recipient uses the ID parameter that has already been set using the Set Parameters directive. If no ID has been set, this condition fails. suit-condition-class-identifier and suit-condition-vendor-identifier are REQUIRED to implement. suit-condition-device-identifier is OPTIONAL to implement.
 
