@@ -118,7 +118,7 @@ It is intended to meet several goals:
 * Expressive enough to enable advanced use cases on advanced nodes.
 * Extensible.
 
-The SUIT manifest can be used for a variety of purposes throughout its lifecycle, such as:
+The SUIT manifest can be used for a variety of purposes throughout its lifecycle, such as enabling:
 
 * a Network Operator to reason about compatibility of a firmware, such as timing and acceptance of firmware updates.
 * a Device Operator to reason about the impact of a firmware.
