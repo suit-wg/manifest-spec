@@ -73,7 +73,11 @@ normative:
   RFC8610: cddl
   COSE-Alg:
     title: "CBOR Object Signing and Encryption (COSE) — COSE Algorithms"
-    author: IANA
+    author:
+        -
+            ins: "IANA"
+            organization: "Internet Assigned Numbers Authority"
+            email: iana@iana.org
     date: false
     target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
 
@@ -122,10 +126,11 @@ The SUIT manifest can be used for a variety of purposes throughout its lifecycle
 
 * a Network Operator to reason about compatibility of a firmware, such as timing and acceptance of firmware updates.
 * a Device Operator to reason about the impact of a firmware.
-* a device to reason about the authority & authenticity of a firmware prior to installation.
-* a device to reason about the applicability of a firmware.
-* a device to reason about the installation of a firmware.
-* a device to reason about the authenticity & encoding of a firmware at boot.
+* a device to evaluate the authenticity of a firmware and the authority of the firmware author prior to installation.
+* a device to evaluate the applicability of a firmware.
+* a device to determine the installation process of a firmware.
+* a device to evaluate the authenticity of a firmware pre-boot
+* a device to determine the encoding and boot process of a firmware.
 
 Each of these uses happens at a different stage of the manifest lifecycle, so each has different requirements.
 
@@ -217,6 +222,8 @@ The various constraints of IoT devices and the range of use cases that need to b
 
 * limited processing power and storage may require a simple representation of metadata.
 * bandwidth constraints may require firmware compression or partial update support.
+* intermittent or unstable connectivity.
+* intermittent power, for example due to energy harvesting.
 * bootloader complexity constraints may require simple selection between two bootable images.
 * small internal storage may require external storage support.
 * multiple microcontrollers may require coordinated update of all applications.
@@ -252,7 +259,7 @@ When installation is complete, similar information can be used for validating an
 7. Load image(s).
 8. Invoke image(s).
 
-If verification and invocation is implemented in a bootloader, then the bootloader MUST also verify the signature of the manifest and the applicability of the manifest in order to implement secure boot workflows. Because signature verifications can be costly in constrained applications, the bootloader may add its own authentication, e.g. a Message Authentication Code (MAC), to the manifest in order to prevent further signature verifications and save energy, provided that the bootloader can protect its authentication key.
+If verification and invocation is implemented in a bootloader, then the bootloader MUST also verify the signature of the manifest and the applicability of the manifest in order to implement secure boot workflows. Because signature verifications can be costly in constrained applications, the bootloader may add its own authentication, e.g., a Message Authentication Code (MAC), to the manifest in order to prevent further signature verifications and save energy, provided that the bootloader can protect its authentication key.
 
 # Metadata Structure Overview {#metadata-structure-overview}
 
@@ -397,7 +404,7 @@ Prior to executing any command sequence, the manifest processor or its host appl
 
 Here, valid means that a manifest has a supported encoding version and it has not been excluded for other reasons. Reasons for excluding typically involve first executing the manifest and may include:
 
-* Test failed (e.g. Vendor ID/Class ID).
+* Test failed (e.g., Vendor ID/Class ID).
 * Unsupported command encountered.
 * Unsupported parameter encountered.
 * Unsupported Component Identifier encountered.
@@ -454,7 +461,7 @@ This can be achieved in a variety of ways:
 1. A fallback/recovery image is provided so that a disrupted system can apply the SUIT Manifest again.
 2. Manifest Authors construct Manifests in such a way that repeated partial invocations of any Manifest always results in a correct system state. Typically this is done by using Try-Each and Conditions to bypass operations that have already been completed.
 3. A journal of manifest operations is stored in nonvolatile memory. The journal enables the parser to re-create the state just prior to the disruption. This journal can, for example, be a SUIT Report or a journaling file system.
-4. Where a command is not repeatable because of the way in which it alters system state (e.g. swapping images or in-place delta) it is resumable or revertible. This applies primarily to commands that modify at least one source component as well as the destination component.
+4. Where a command is not repeatable because of the way in which it alters system state (e.g., swapping images or in-place delta) it is resumable or revertible. This applies primarily to commands that modify at least one source component as well as the destination component.
 
 ## Abstract Machine Description {#command-behavior}
 
@@ -990,23 +997,23 @@ Identifiers are used for compatibility checks. They MUST NOT be used as assertio
 
 A more complete example: Imagine a device has the following physical components:
 1. A host Microcontroller
-2. A WiFi module
+2. A Wi-Fi module
 
 This same device has three software modules:
 1. An operating system
-2. A WiFi module interface driver
+2. A Wi-Fi module interface driver
 3. An application
 
-Suppose that the WiFi module's firmware has a proprietary update mechanism and doesn't support manifest processing. This device can report four class IDs:
+Suppose that the Wi-Fi module's firmware has a proprietary update mechanism and doesn't support manifest processing. This device can report four class IDs:
 
 1. Hardware model/revision
 2. OS
-3. WiFi module model/revision
+3. Wi-Fi module model/revision
 4. Application
 
-This allows the OS, WiFi module, and application to be updated independently. To combat possible incompatibilities, the OS class ID can be changed each time the OS has a change to its API.
+This allows the OS, Wi-Fi module, and application to be updated independently. To combat possible incompatibilities, the OS class ID can be changed each time the OS has a change to its API.
 
-This approach allows a vendor to target, for example, all devices with a particular WiFi module with an update, which is a very powerful mechanism, particularly when used for security updates.
+This approach allows a vendor to target, for example, all devices with a particular Wi-Fi module with an update, which is a very powerful mechanism, particularly when used for security updates.
 
 UUIDs MUST be created according to versions 3, 4, or 5 of {{RFC9562}}. Versions 1 and 2 do not provide a tangible benefit over version 4 for this application.
 
@@ -1075,7 +1082,7 @@ This parameter sets the slot index of a component. Some components support multi
 
 A block of raw data for use with {{suit-directive-write}}. It contains a byte string of data to be written to a specified component ID in the same way as a fetch or a copy.
 
-If data is encoded this way, it should be small, e.g. 10's of bytes. Large payloads, e.g. 1000's of bytes, written via this method might prevent the manifest from being held in memory during validation. Typical applications include small configuration parameters.
+If data is encoded this way, it should be small, e.g., 10's of bytes. Large payloads, e.g., 1000's of bytes, written via this method might prevent the manifest from being held in memory during validation. Typical applications include small configuration parameters.
 
 The size of payload embedded in suit-parameter-content impacts the security requirement defined in {{RFC9124}}, Section 4.3.21 REQ.SEC.MFST.CONST: Manifest Kept Immutable between Check and Use. Actual limitations on payload size for suit-parameter-content depend on the application, in particular the available memory that satisfies REQ.SEC.MFST.CONST. If the availability of tamper resistant memory is less than the manifest size, then REQ.SEC.MFST.CONST cannot be satisfied.
 
