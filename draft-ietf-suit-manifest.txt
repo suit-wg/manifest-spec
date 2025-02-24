@@ -5,19 +5,19 @@
 SUIT                                                            B. Moran
 Internet-Draft                                               Arm Limited
 Intended status: Standards Track                           H. Tschofenig
-Expires: 7 June 2025                                                    
+Expires: 28 August 2025                                                 
                                                              H. Birkholz
                                                           Fraunhofer SIT
                                                              K. Zandberg
                                                                    Inria
                                                           Ø. Rønningstad
                                                     Nordic Semiconductor
-                                                         4 December 2024
+                                                        24 February 2025
 
 
 A Concise Binary Object Representation (CBOR)-based Serialization Format
     for the Software Updates for Internet of Things (SUIT) Manifest
-                      draft-ietf-suit-manifest-31
+                      draft-ietf-suit-manifest-33
 
 Abstract
 
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 June 2025.
+   This Internet-Draft will expire on 28 August 2025.
 
 
 
@@ -53,14 +53,14 @@ Status of This Memo
 
 
 
-Moran, et al.              Expires 7 June 2025                  [Page 1]
+Moran, et al.            Expires 28 August 2025                 [Page 1]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -88,10 +88,10 @@ Table of Contents
        5.3.2.  Common  . . . . . . . . . . . . . . . . . . . . . . .  13
        5.3.3.  Command Sequences . . . . . . . . . . . . . . . . . .  14
        5.3.4.  Integrity Check Values  . . . . . . . . . . . . . . .  14
-       5.3.5.  Human-Readable Text . . . . . . . . . . . . . . . . .  14
+       5.3.5.  Human-Readable Text . . . . . . . . . . . . . . . . .  15
      5.4.   Severable Elements . . . . . . . . . . . . . . . . . . .  15
      5.5.  Integrated Payloads . . . . . . . . . . . . . . . . . . .  15
-   6.  Manifest Processor Behavior . . . . . . . . . . . . . . . . .  15
+   6.  Manifest Processor Behavior . . . . . . . . . . . . . . . . .  16
      6.1.  Manifest Processor Setup  . . . . . . . . . . . . . . . .  16
      6.2.   Required Checks  . . . . . . . . . . . . . . . . . . . .  17
      6.3.  Interpreter Fundamental Properties  . . . . . . . . . . .  18
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Moran, et al.              Expires 7 June 2025                  [Page 2]
+Moran, et al.            Expires 28 August 2025                 [Page 2]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
      7.6.  Load from Nonvolatile Storage Template  . . . . . . . . .  27
@@ -133,46 +133,46 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
        8.4.10. SUIT_Directive  . . . . . . . . . . . . . . . . . . .  49
        8.4.11. suit-command-custom . . . . . . . . . . . . . . . . .  54
        8.4.12. Integrity Check Values  . . . . . . . . . . . . . . .  55
-     8.5.  Severable Elements  . . . . . . . . . . . . . . . . . . .  55
-   9.  Access Control Lists  . . . . . . . . . . . . . . . . . . . .  56
-   10. SUIT Digest Container . . . . . . . . . . . . . . . . . . . .  56
-   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  56
-     11.1.  SUIT Envelope Elements . . . . . . . . . . . . . . . . .  57
-     11.2.  SUIT Manifest Elements . . . . . . . . . . . . . . . . .  58
-     11.3.  SUIT Common Elements . . . . . . . . . . . . . . . . . .  59
-     11.4.  SUIT Commands  . . . . . . . . . . . . . . . . . . . . .  60
-     11.5.  SUIT Parameters  . . . . . . . . . . . . . . . . . . . .  61
-     11.6.  SUIT Text Values . . . . . . . . . . . . . . . . . . . .  63
-     11.7.   SUIT Component Text Values  . . . . . . . . . . . . . .  63
-     11.8.  Expert Review Instructions . . . . . . . . . . . . . . .  64
-     11.9.  Media Type Registration  . . . . . . . . . . . . . . . .  65
-   12. Security Considerations . . . . . . . . . . . . . . . . . . .  67
-   13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  69
-   14. References  . . . . . . . . . . . . . . . . . . . . . . . . .  70
-     14.1.  Normative References . . . . . . . . . . . . . . . . . .  70
-     14.2.  Informative References . . . . . . . . . . . . . . . . .  71
-   Appendix A.  Full CDDL  . . . . . . . . . . . . . . . . . . . . .  72
-   Appendix B.  Examples . . . . . . . . . . . . . . . . . . . . . .  78
-     B.1.  Example 0: Secure Boot  . . . . . . . . . . . . . . . . .  80
+     8.5.  Implementation Conformance Matrix . . . . . . . . . . . .  55
+     8.6.  Severable Elements  . . . . . . . . . . . . . . . . . . .  57
+   9.  Access Control Lists  . . . . . . . . . . . . . . . . . . . .  58
+   10. SUIT Digest Container . . . . . . . . . . . . . . . . . . . .  59
+   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  59
+     11.1.  SUIT Envelope Elements . . . . . . . . . . . . . . . . .  60
+     11.2.  SUIT Manifest Elements . . . . . . . . . . . . . . . . .  60
+     11.3.  SUIT Common Elements . . . . . . . . . . . . . . . . . .  61
+     11.4.  SUIT Commands  . . . . . . . . . . . . . . . . . . . . .  62
+     11.5.  SUIT Parameters  . . . . . . . . . . . . . . . . . . . .  63
+     11.6.  SUIT Text Values . . . . . . . . . . . . . . . . . . . .  65
+     11.7.   SUIT Component Text Values  . . . . . . . . . . . . . .  65
+     11.8.  Expert Review Instructions . . . . . . . . . . . . . . .  66
+     11.9.  Media Type Registration  . . . . . . . . . . . . . . . .  67
+   12. Security Considerations . . . . . . . . . . . . . . . . . . .  69
+   13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  71
+   14. References  . . . . . . . . . . . . . . . . . . . . . . . . .  72
+     14.1.  Normative References . . . . . . . . . . . . . . . . . .  72
+     14.2.  Informative References . . . . . . . . . . . . . . . . .  74
+   Appendix A.  Full CDDL  . . . . . . . . . . . . . . . . . . . . .  74
+   Appendix B.  Examples . . . . . . . . . . . . . . . . . . . . . .  81
+     B.1.  Example 0: Secure Boot  . . . . . . . . . . . . . . . . .  82
      B.2.  Example 1: Simultaneous Download and Installation of
-           Payload . . . . . . . . . . . . . . . . . . . . . . . . .  82
+           Payload . . . . . . . . . . . . . . . . . . . . . . . . .  84
      B.3.  Example 2: Simultaneous Download, Installation, Secure
-           Boot, Severed Fields  . . . . . . . . . . . . . . . . . .  84
-     B.4.  Example 3: A/B images . . . . . . . . . . . . . . . . . .  87
-     B.5.  Example 4: Load from External Storage . . . . . . . . . .  90
-     B.6.  Example 5: Two Images . . . . . . . . . . . . . . . . . .  93
-   Appendix C.  Design Rationale . . . . . . . . . . . . . . . . . .  96
+           Boot, Severed Fields  . . . . . . . . . . . . . . . . . .  86
+     B.4.  Example 3: A/B images . . . . . . . . . . . . . . . . . .  89
+     B.5.  Example 4: Load from External Storage . . . . . . . . . .  92
+     B.6.  Example 5: Two Images . . . . . . . . . . . . . . . . . .  95
 
 
 
-Moran, et al.              Expires 7 June 2025                  [Page 3]
+Moran, et al.            Expires 28 August 2025                 [Page 3]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
-     C.1.  C.1 Design Rationale: Envelope  . . . . . . . . . . . . .  97
-     C.2.  C.2 Byte String Wrappers  . . . . . . . . . . . . . . . .  98
-   Appendix D.  D.  Implementation Conformance Matrix  . . . . . . .  99
+   Appendix C.  Design Rationale . . . . . . . . . . . . . . . . . .  98
+     C.1.  C.1 Design Rationale: Envelope  . . . . . . . . . . . . .  99
+     C.2.  C.2 Byte String Wrappers  . . . . . . . . . . . . . . . . 100
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 101
 
 1.  Introduction
@@ -221,30 +221,31 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                  [Page 4]
+Moran, et al.            Expires 28 August 2025                 [Page 4]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    *  Extensible.
 
    The SUIT manifest can be used for a variety of purposes throughout
-   its lifecycle, such as:
+   its lifecycle, such as enabling:
 
    *  a Network Operator to reason about compatibility of a firmware,
       such as timing and acceptance of firmware updates.
 
    *  a Device Operator to reason about the impact of a firmware.
 
-   *  a device to reason about the authority & authenticity of a
-      firmware prior to installation.
+   *  a device to evaluate the authenticity of a firmware and the
+      authority of the firmware author prior to installation.
 
-   *  a device to reason about the applicability of a firmware.
+   *  a device to evaluate the applicability of a firmware.
 
-   *  a device to reason about the installation of a firmware.
+   *  a device to determine the installation process of a firmware.
 
-   *  a device to reason about the authenticity & encoding of a firmware
-      at boot.
+   *  a device to evaluate the authenticity of a firmware pre-boot
+
+   *  a device to determine the encoding and boot process of a firmware.
 
    Each of these uses happens at a different stage of the manifest
    lifecycle, so each has different requirements.
@@ -276,10 +277,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-
-Moran, et al.              Expires 7 June 2025                  [Page 5]
+Moran, et al.            Expires 28 August 2025                 [Page 5]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    The available commands support simple steps, such as copying a
@@ -326,16 +326,16 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
       with cryptographic information protecting the manifest,
       authorization information, and severable elements.  Severable
       elements can be removed from the manifest without impacting its
-      security, see Section 8.5.
+      security, see Section 8.6.
 
    *  Update: One or more manifests that describe one or more payloads.
 
 
 
 
-Moran, et al.              Expires 7 June 2025                  [Page 6]
+Moran, et al.            Expires 28 August 2025                 [Page 6]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    *  Update Authority: The owner of a cryptographic key used to sign
@@ -389,9 +389,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                  [Page 7]
+Moran, et al.            Expires 28 August 2025                 [Page 7]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    *  Firmware: Software that is typically changed infrequently, stored
@@ -445,14 +445,14 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                  [Page 8]
+Moran, et al.            Expires 28 August 2025                 [Page 8]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    The complete CDDL ([RFC8610]) definition is provided in Appendix A,
    examples are given in Appendix B and a design rationale is offered in
-   Appendix C.  Finally, Appendix D summarizes the mandatory-to-
+   Appendix C.  Finally, Section 8.5 summarizes the mandatory-to-
    implement features of this specification.
 
    Additional specifications describe functionality needed to implement
@@ -494,17 +494,22 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    *  bandwidth constraints may require firmware compression or partial
       update support.
 
+   *  intermittent or unstable connectivity.
+
+   *  intermittent power, for example due to energy harvesting.
+
+
+
+
+Moran, et al.            Expires 28 August 2025                 [Page 9]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
    *  bootloader complexity constraints may require simple selection
       between two bootable images.
 
    *  small internal storage may require external storage support.
-
-
-
-Moran, et al.              Expires 7 June 2025                  [Page 9]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
    *  multiple microcontrollers may require coordinated update of all
       applications.
@@ -549,18 +554,19 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
    1.  Verify the signature of the manifest.
 
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 10]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
    2.  Verify the applicability of the manifest.
 
    3.  Fetch payload(s).
 
    4.  Install payload(s).
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 10]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
    5.  Verify image(s).
 
@@ -578,7 +584,7 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    applicability of the manifest in order to implement secure boot
    workflows.  Because signature verifications can be costly in
    constrained applications, the bootloader may add its own
-   authentication, e.g. a Message Authentication Code (MAC), to the
+   authentication, e.g., a Message Authentication Code (MAC), to the
    manifest in order to prevent further signature verifications and save
    energy, provided that the bootloader can protect its authentication
    key.
@@ -604,19 +610,20 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
        1.  Critical metadata, such as sequence number.
 
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 11]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
        2.  Common metadata, such as affected components.
 
        3.  Command sequences, directing the Recipient how to install and
            use the payload(s).
 
        4.  Integrity check values for severable elements.
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 11]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
    4.  Severable elements (see Section 5.4).
 
@@ -660,19 +667,14 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    solutions.  See Appendix C.1 for a description of the reasoning for
    this.
 
-   See Section 8.2 for more detail.
 
 
-
-
-
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 12]
+Moran, et al.            Expires 28 August 2025                [Page 12]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
+
+   See Section 8.2 for more detail.
 
 5.2.  Authentication Block
 
@@ -720,15 +722,15 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    sequence to execute prior to each other command sequence.  The common
    command sequence is typically used to set commonly used values and
    perform compatibility checks.  The common command sequence MUST NOT
-   have any side-effects outside of setting parameter values.
 
 
 
-
-Moran, et al.              Expires 7 June 2025                 [Page 13]
+Moran, et al.            Expires 28 August 2025                [Page 13]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
+
+   have any side-effects outside of setting parameter values.
 
    See Section 8.4.5 for more detail.
 
@@ -771,6 +773,19 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
    See Section 8.4.12 for more detail.
 
+
+
+
+
+
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 14]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
 5.3.5.  Human-Readable Text
 
    Text is typically a Severable Element (Section 5.4).  It contains all
@@ -778,13 +793,6 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    human consumption, it is all grouped together so that it can be
    Severed easily.  The text section has space both for describing the
    manifest as a whole and for describing each individual component.
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 14]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
    See Section 8.4.4 for more detail.
 
@@ -809,7 +817,7 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    *  A Recipient severs the Installation section after installing the
       Update, which saves storage space.
 
-   See Section 8.5 for more detail.
+   See Section 8.6 for more detail.
 
 5.5.  Integrated Payloads
 
@@ -825,6 +833,15 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
    See Section 7.5 for more detail.
 
+
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 15]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
 6.  Manifest Processor Behavior
 
    This section describes the behavior of the manifest processor and
@@ -832,15 +849,6 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    there are several other important behaviors of the manifest
    processor: encoding version detection, rollback protection, and
    authenticity verification are chief among these.
-
-
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 15]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
 6.1.  Manifest Processor Setup
 
@@ -864,7 +872,7 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    excluding typically involve first executing the manifest and may
    include:
 
-   *  Test failed (e.g.  Vendor ID/Class ID).
+   *  Test failed (e.g., Vendor ID/Class ID).
 
    *  Unsupported command encountered.
 
@@ -882,6 +890,14 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
    *  Missing required component from a Component Set.
 
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 16]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
    *  Required parameter not supplied.
 
    These failure reasons MAY be combined with retry mechanisms prior to
@@ -890,14 +906,6 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    Selecting an older manifest in the event of failure of the latest
    valid manifest is one possible strategy to provide robustness of the
    firmware update process.  It may not be appropriate for all
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 16]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
-
    applications.  In particular Trusted Execution Environments MAY
    require a failure to invoke a new installation, rather than a
    rollback approach.  See [RFC9124], Section 4.2.1 for more discussion
@@ -909,12 +917,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 6.2.   Required Checks
 
-   The RECOMMENDED process is to verify the signature of the manifest
+   The manifest processor MUST verify the signature of the manifest
    prior to parsing/executing any section of the manifest.  This guards
-   the parser against arbitrary input by unauthenticated third parties,
-   but it costs extra energy when a Recipient receives an incompatible
-   manifest.
-
+   the parser against arbitrary input by unauthenticated third parties.
    When validating authenticity of manifests, the manifest processor MAY
    use an ACL (see Section 9) to determine the extent of the rights
    conferred by that authenticity.
@@ -942,17 +947,16 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    If the manifest contains more than one component, each command
    sequence MUST begin with a Set Component Index Section 8.4.10.1.
 
+
+
+Moran, et al.            Expires 28 August 2025                [Page 17]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
    If a Recipient supports groups of interdependent components (a
    Component Set), then it SHOULD verify that all Components in the
    Component Set are specified by one update, that is:
-
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 17]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
    1.  the manifest Author has sufficient permissions for the requested
        operations (see Section 9) and
@@ -985,36 +989,31 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
    The manifest processor must be resilient to these faults.  In order
    to enable this resilience, systems implementing the manifest
-   processor MUST make the following guarantees:
+   processor MUST guarantee that manifests can be either resumed or
+   reapplied.
 
-   One of: 1.  A fallback/recovery image is provided so that a disrupted
-   system can apply the SUIT Manifest again. 2.  Manifest Authors MUST
-   construct Manifests in such a way that repeated partial invocations
-   of any Manifest always results in a correct system state.  Typically
-   this is done by using Try-Each and Conditions to bypass operations
-   that have already been completed. 3.  A journal of manifest
-   operations is stored in nonvolatile memory.  The journal enables the
-   parser to re-create the state just prior to the disruption.  This
-   journal can, for example, be a SUIT Report or a journaling file
-   system.
-
-   AND
-
+   This can be achieved in a variety of ways: 1.  A fallback/recovery
+   image is provided so that a disrupted system can apply the SUIT
+   Manifest again. 2.  Manifest Authors construct Manifests in such a
+   way that repeated partial invocations of any Manifest always results
+   in a correct system state.  Typically this is done by using Try-Each
+   and Conditions to bypass operations that have already been completed.
+   3.  A journal of manifest operations is stored in nonvolatile memory.
+   The journal enables the parser to re-create the state just prior to
+   the disruption.  This journal can, for example, be a SUIT Report or a
+   journaling file system. 4.  Where a command is not repeatable because
 
 
 
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 18]
+Moran, et al.            Expires 28 August 2025                [Page 18]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
-   1.  Where a command is not repeatable because of the way in which it
-       alters system state (e.g. swapping images or in-place delta) it
-       MUST be resumable or revertible.  This applies to commands that
-       modify at least one source component as well as the destination
-       component.
+   of the way in which it alters system state (e.g., swapping images or
+   in-place delta) it is resumable or revertible.  This applies
+   primarily to commands that modify at least one source component as
+   well as the destination component.
 
 6.4.  Abstract Machine Description
 
@@ -1061,9 +1060,10 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 19]
+
+Moran, et al.            Expires 28 August 2025                [Page 19]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
     +========================+========================================+
@@ -1117,9 +1117,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 20]
+Moran, et al.            Expires 28 August 2025                [Page 20]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
     |                         | fetch(current.params[uri]))          |
@@ -1173,9 +1173,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 21]
+Moran, et al.            Expires 28 August 2025                [Page 21]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    Integer indices are the default case as described in the previous
@@ -1229,9 +1229,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 22]
+Moran, et al.            Expires 28 August 2025                [Page 22]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    In order to operate in this mode, the manifest processor loops on
@@ -1285,9 +1285,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 23]
+Moran, et al.            Expires 28 August 2025                [Page 23]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    A Component MUST NOT be both a target of an operation and a source of
@@ -1341,9 +1341,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 24]
+Moran, et al.            Expires 28 August 2025                [Page 24]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    Compiling desired system state into a sequence of operations can be
@@ -1397,9 +1397,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 25]
+Moran, et al.            Expires 28 August 2025                [Page 25]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    The system validation sequence contains the following commands:
@@ -1453,9 +1453,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 26]
+Moran, et al.            Expires 28 August 2025                [Page 26]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    This template is typically used with the Component Download template,
@@ -1509,9 +1509,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 27]
+Moran, et al.            Expires 28 August 2025                [Page 27]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    As outlined in Section 6.4, the Copy directive needs a source and a
@@ -1565,9 +1565,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 28]
+Moran, et al.            Expires 28 August 2025                [Page 28]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
          o  Set Parameters directive (see Section 8.4.10.3) for URI A
@@ -1621,9 +1621,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 29]
+Moran, et al.            Expires 28 August 2025                [Page 29]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    For a diagram of the metadata structure, see Section 5.
@@ -1677,9 +1677,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 30]
+Moran, et al.            Expires 28 August 2025                [Page 30]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    The SUIT_Digest is computed over the bstr-wrapped SUIT_Manifest that
@@ -1733,9 +1733,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 31]
+Moran, et al.            Expires 28 August 2025                [Page 31]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    the SUIT_Digest provides for a severable element.  Severable elements
@@ -1789,9 +1789,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 32]
+Moran, et al.            Expires 28 August 2025                [Page 32]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    tag38-ltag = text .regexp "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
@@ -1845,9 +1845,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 33]
+Moran, et al.            Expires 28 August 2025                [Page 33]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    The following table describes the text fields available in each map
@@ -1901,9 +1901,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 34]
+Moran, et al.            Expires 28 August 2025                [Page 34]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    suit-shared-sequence is a SUIT_Command_Sequence to execute prior to
@@ -1957,9 +1957,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 35]
+Moran, et al.            Expires 28 August 2025                [Page 35]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    3.  Image Validation: suit-validate is a SUIT_Command_Sequence to
@@ -2013,9 +2013,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 36]
+Moran, et al.            Expires 28 August 2025                [Page 36]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    *  Try Each
@@ -2069,9 +2069,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 37]
+Moran, et al.            Expires 28 August 2025                [Page 37]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    At the completion of each command, a Manifest Processor MAY forward
@@ -2125,9 +2125,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 38]
+Moran, et al.            Expires 28 August 2025                [Page 38]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    Most parameters are scoped to a specific component.  This means that
@@ -2181,9 +2181,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 39]
+Moran, et al.            Expires 28 August 2025                [Page 39]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    +==============+==================================+=================+
@@ -2237,9 +2237,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 40]
+Moran, et al.            Expires 28 August 2025                [Page 40]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    division of responsibility within a pull parser.  The same
@@ -2248,7 +2248,8 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 8.4.8.1.  CBOR PEN UUID Namespace Identifier
 
-   The CBOR PEN UUID Namespace Identifier is constructed as follows:
+   The CBOR PEN (Private Enterprise Number) UUID Namespace Identifier is
+   constructed as follows:
 
    It uses the OID Namespace as a starting point, then uses the CBOR
    absolute OID encoding for the IANA PEN OID (1.3.6.1.4.1):
@@ -2268,8 +2269,8 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
    Several conditions use identifiers to determine whether a manifest
    matches a given Recipient or not.  These identifiers are defined to
-   be RFC 4122bis [RFC4122bis] UUIDs.  These UUIDs are not human-
-   readable and are therefore used for machine-based processing only.
+   be RFC 9562 [RFC9562] UUIDs.  These UUIDs are not human-readable and
+   are therefore used for machine-based processing only.
 
    A Recipient MAY match any number of UUIDs for vendor or class
    identifier.  This may be relevant to physical or software modules.
@@ -2284,21 +2285,20 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    conditions (Section 8.4.9.1).
 
    A more complete example: Imagine a device has the following physical
-   components: 1.  A host MCU 2.  A WiFi module
+   components: 1.  A host Microcontroller 2.  A Wi-Fi module
 
    This same device has three software modules: 1.  An operating system
-   2.  A WiFi module interface driver 3.  An application
+   2.  A Wi-Fi module interface driver 3.  An application
 
 
 
 
-
-Moran, et al.              Expires 7 June 2025                 [Page 41]
+Moran, et al.            Expires 28 August 2025                [Page 41]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
-   Suppose that the WiFi module's firmware has a proprietary update
+   Suppose that the Wi-Fi module's firmware has a proprietary update
    mechanism and doesn't support manifest processing.  This device can
    report four class IDs:
 
@@ -2306,25 +2306,26 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
    2.  OS
 
-   3.  WiFi module model/revision
+   3.  Wi-Fi module model/revision
 
    4.  Application
 
-   This allows the OS, WiFi module, and application to be updated
+   This allows the OS, Wi-Fi module, and application to be updated
    independently.  To combat possible incompatibilities, the OS class ID
    can be changed each time the OS has a change to its API.
 
    This approach allows a vendor to target, for example, all devices
-   with a particular WiFi module with an update, which is a very
+   with a particular Wi-Fi module with an update, which is a very
    powerful mechanism, particularly when used for security updates.
 
-   UUIDs MUST be created according to versions 3, 4, or 5 of
-   [RFC4122bis].  Versions 1 and 2 do not provide a tangible benefit
-   over version 4 for this application.
+   UUIDs MUST be created according to versions 3, 4, or 5 of [RFC9562].
+   Versions 1 and 2 do not provide a tangible benefit over version 4 for
+   this application.
 
    The RECOMMENDED method to create a vendor ID is:
 
-   Vendor ID = UUID5(DNS_PREFIX, vendor domain name)
+# The IANA UUID Namespace ID for DNS is: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+Vendor ID = UUID5(<IANA UUID Namespace ID DNS>, vendor domain name)
 
    In this case, the vendor domain name is a UTF-8 encoded string.
    Since UUID version 5 applies a digest, internationalization
@@ -2348,10 +2349,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-
-Moran, et al.              Expires 7 June 2025                 [Page 42]
+Moran, et al.            Expires 28 August 2025                [Page 42]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    *  Model number.
@@ -2366,7 +2366,7 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
    *  A Private Enterprise Number
 
-   *  A byte string containing a UUID [RFC4122bis]
+   *  A byte string containing a UUID [RFC9562]
 
    Private Enterprise Numbers are encoded as a relative OID, according
    to the definition in [RFC9090].  All PENs are relative to the IANA
@@ -2374,13 +2374,13 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 8.4.8.4.  suit-parameter-class-identifier
 
-   A RFC 4122 UUID representing the class of the device or component.
+   A RFC 9562 UUID representing the class of the device or component.
    The UUID is encoded as a 16 byte bstr, containing the raw bytes of
    the UUID.  It MUST be constructed as described in Section 8.4.8.2
 
 8.4.8.5.  suit-parameter-device-identifier
 
-   A RFC 4122 UUID representing the specific device or component.  The
+   A RFC 9562 UUID representing the specific device or component.  The
    UUID is encoded as a 16 byte bstr, containing the raw bytes of the
    UUID.  It MUST be constructed as described in Section 8.4.8.2
 
@@ -2405,9 +2405,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 43]
+Moran, et al.            Expires 28 August 2025                [Page 43]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
 8.4.8.9.  suit-parameter-content
@@ -2416,8 +2416,8 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    byte string of data to be written to a specified component ID in the
    same way as a fetch or a copy.
 
-   If data is encoded this way, it should be small, e.g. 10's of bytes.
-   Large payloads, e.g. 1000's of bytes, written via this method might
+   If data is encoded this way, it should be small, e.g., 10's of bytes.
+   Large payloads, e.g., 1000's of bytes, written via this method might
    prevent the manifest from being held in memory during validation.
    Typical applications include small configuration parameters.
 
@@ -2461,9 +2461,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 44]
+Moran, et al.            Expires 28 August 2025                [Page 44]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
 8.4.8.13.  suit-parameter-fetch-arguments
@@ -2517,9 +2517,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 45]
+Moran, et al.            Expires 28 August 2025                [Page 45]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    When the enclosing SUIT_Command_Sequence terminates, suit-parameter-
@@ -2573,9 +2573,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 46]
+Moran, et al.            Expires 28 August 2025                [Page 46]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    +===================+==================================+===========+
@@ -2629,9 +2629,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 47]
+Moran, et al.            Expires 28 August 2025                [Page 47]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    executing if suit-parameter-soft-failure (Section 8.4.8.15) is set.
@@ -2642,8 +2642,8 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    report a failure.  If a Recipient encounters an unknown condition, it
    MUST report a failure.
 
-   Condition labels in the positive number range are reserved for IANA
-   registration while those in the negative range are custom conditions
+   Condition labels greater than or equal to -256 are reserved for IANA
+   registration while those lesser than -256 are custom conditions
    reserved for proprietary definition by the author of a manifest
    processor.  See Section 11 for more details.
 
@@ -2652,15 +2652,15 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
    There are three identifier-based conditions: suit-condition-vendor-
    identifier, suit-condition-class-identifier, and suit-condition-
-   device-identifier.  Each of these conditions match a UUID
-   [RFC4122bis] that MUST have already been set as a parameter.  The
-   installing Recipient MUST match the specified UUID in order to
-   consider the manifest valid.  These identifiers are scoped by
-   component in the manifest.  Each component MAY match more than one
-   identifier.  Care is needed to ensure that manifests correctly
-   identify their targets using these conditions.  Using only a generic
-   class ID for a device-specific firmware could result in matching
-   devices that are not compatible.
+   device-identifier.  Each of these conditions match a UUID [RFC9562]
+   that MUST have already been set as a parameter.  The installing
+   Recipient MUST match the specified UUID in order to consider the
+   manifest valid.  These identifiers are scoped by component in the
+   manifest.  Each component MAY match more than one identifier.  Care
+   is needed to ensure that manifests correctly identify their targets
+   using these conditions.  Using only a generic class ID for a device-
+   specific firmware could result in matching devices that are not
+   compatible.
 
    The Recipient uses the ID parameter that has already been set using
    the Set Parameters directive.  If no ID has been set, this condition
@@ -2685,9 +2685,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 48]
+Moran, et al.            Expires 28 August 2025                [Page 48]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
 8.4.9.3.  suit-condition-check-content
@@ -2741,9 +2741,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 49]
+Moran, et al.            Expires 28 August 2025                [Page 49]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
     +===============+====================================+===========+
@@ -2797,9 +2797,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 50]
+Moran, et al.            Expires 28 August 2025                [Page 50]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    If the following commands apply to ONE component, an unsigned integer
@@ -2853,9 +2853,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 51]
+Moran, et al.            Expires 28 August 2025                [Page 51]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
 8.4.10.4.  suit-directive-fetch
@@ -2909,9 +2909,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 52]
+Moran, et al.            Expires 28 August 2025                [Page 52]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    The size and digest of the payload to be fetched are typically set
@@ -2965,9 +2965,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 53]
+Moran, et al.            Expires 28 August 2025                [Page 53]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
 8.4.10.8.  suit-directive-run-sequence
@@ -3005,11 +3005,12 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 8.4.11.  suit-command-custom
 
    suit-command-custom describes any experimental, proprietary, or
-   application specific condition or directive.  This is encoded as a
-   negative integer, chosen by the firmware developer.  If additional
-   information must be provided, it should be encoded in a custom
-   parameter (as described in Section 8.4.8).  Any number of custom
-   commands is permitted.  SUIT_Command_Custom is OPTIONAL to implement.
+   application specific condition or directive.  This is encoded as an
+   integer, lesser than -256, chosen by the firmware developer.  If
+   additional information must be provided, it should be encoded in a
+   custom parameter (as described in Section 8.4.8).  Any number of
+   custom commands is permitted.  SUIT_Command_Custom is OPTIONAL to
+   implement.
 
 
 
@@ -3020,10 +3021,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-
-Moran, et al.              Expires 7 June 2025                 [Page 54]
+Moran, et al.            Expires 28 August 2025                [Page 54]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
 8.4.12.  Integrity Check Values
@@ -3037,9 +3037,140 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    values as the keys for the manifest elements.
 
    Each Integrity Check Value covers the corresponding Envelope Element
-   as described in Section 8.5.
+   as described in Section 8.6.
 
-8.5.  Severable Elements
+8.5.  Implementation Conformance Matrix
+
+   This section summarizes the functionality a minimal manifest
+   processor implementation needs to offer to claim conformance to this
+   specification, in the absence of an application profile standard
+   specifying otherwise.
+
+   The subsequent table shows the conditions.
+
+         +===================+=================+================+
+         | Name              | Reference       | Implementation |
+         +===================+=================+================+
+         | Vendor Identifier | Section 8.4.8.2 | REQUIRED       |
+         +-------------------+-----------------+----------------+
+         | Class Identifier  | Section 8.4.8.2 | REQUIRED       |
+         +-------------------+-----------------+----------------+
+         | Device Identifier | Section 8.4.8.2 | OPTIONAL       |
+         +-------------------+-----------------+----------------+
+         | Image Match       | Section 8.4.9.2 | REQUIRED       |
+         +-------------------+-----------------+----------------+
+         | Check Content     | Section 8.4.9.3 | OPTIONAL       |
+         +-------------------+-----------------+----------------+
+         | Component Slot    | Section 8.4.9.4 | OPTIONAL       |
+         +-------------------+-----------------+----------------+
+         | Abort             | Section 8.4.9.5 | OPTIONAL       |
+         +-------------------+-----------------+----------------+
+         | Custom Condition  | Section 8.4.11  | OPTIONAL       |
+         +-------------------+-----------------+----------------+
+
+                                 Table 9
+
+   The subsequent table shows the directives.
+
+
+
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 55]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
+      +=====================+==================+====================+
+      | Name                | Reference        | Implementation     |
+      +=====================+==================+====================+
+      | Set Component Index | Section 8.4.10.1 | REQUIRED if more   |
+      |                     |                  | than one component |
+      +---------------------+------------------+--------------------+
+      | Write Content       | Section 8.4.10.6 | OPTIONAL           |
+      +---------------------+------------------+--------------------+
+      | Try Each            | Section 8.4.10.2 | OPTIONAL           |
+      +---------------------+------------------+--------------------+
+      | Override Parameters | Section 8.4.10.3 | REQUIRED           |
+      +---------------------+------------------+--------------------+
+      | Fetch               | Section 8.4.10.4 | REQUIRED for       |
+      |                     |                  | Updater            |
+      +---------------------+------------------+--------------------+
+      | Copy                | Section 8.4.10.5 | OPTIONAL           |
+      +---------------------+------------------+--------------------+
+      | Invoke              | Section 8.4.10.7 | REQUIRED for       |
+      |                     |                  | Bootloader         |
+      +---------------------+------------------+--------------------+
+      | Run Sequence        | Section 8.4.10.8 | OPTIONAL           |
+      +---------------------+------------------+--------------------+
+      | Swap                | Section 8.4.10.9 | OPTIONAL           |
+      +---------------------+------------------+--------------------+
+
+                                  Table 10
+
+   The subsequent table shows the parameters.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 56]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
+      +==================+==================+======================+
+      | Name             | Reference        | Implementation       |
+      +==================+==================+======================+
+      | Vendor ID        | Section 8.4.8.3  | REQUIRED             |
+      +------------------+------------------+----------------------+
+      | Class ID         | Section 8.4.8.4  | REQUIRED             |
+      +------------------+------------------+----------------------+
+      | Image Digest     | Section 8.4.8.6  | REQUIRED             |
+      +------------------+------------------+----------------------+
+      | Image Size       | Section 8.4.8.7  | REQUIRED             |
+      +------------------+------------------+----------------------+
+      | Component Slot   | Section 8.4.8.8  | OPTIONAL             |
+      +------------------+------------------+----------------------+
+      | Content          | Section 8.4.8.9  | OPTIONAL             |
+      +------------------+------------------+----------------------+
+      | URI              | Section 8.4.8.10 | REQUIRED for Updater |
+      +------------------+------------------+----------------------+
+      | Source Component | Section 8.4.8.11 | OPTIONAL             |
+      +------------------+------------------+----------------------+
+      | Invoke Args      | Section 8.4.8.12 | OPTIONAL             |
+      +------------------+------------------+----------------------+
+      | Device ID        | Section 8.4.8.5  | OPTIONAL             |
+      +------------------+------------------+----------------------+
+      | Strict Order     | Section 8.4.8.14 | OPTIONAL             |
+      +------------------+------------------+----------------------+
+      | Soft Failure     | Section 8.4.8.15 | OPTIONAL             |
+      +------------------+------------------+----------------------+
+      | Custom           | Section 8.4.8.16 | OPTIONAL             |
+      +------------------+------------------+----------------------+
+
+                                 Table 11
+
+8.6.  Severable Elements
 
    Because the manifest can be used by different actors at different
    times, some parts of the manifest can be removed or "Severed" without
@@ -3053,6 +3184,15 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    used by the manifest to be greatly reduced.  For example, no text
    size limits are needed if text is removed from the manifest prior to
    delivery to a constrained device.
+
+
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 57]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
 
    At time of manifest creation, the Author MAY chose to make a manifest
    element severable by removing it from the manifest, encoding it in a
@@ -3071,16 +3211,6 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    Because of this, all command sequences in the manifest are encoded in
    a bstr so that there is a single code path needed for all command
    sequences.
-
-
-
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 55]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
 9.  Access Control Lists
 
@@ -3108,6 +3238,18 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    commands and parameters that the identity can use in combination with
    that Component Identifier.
 
+
+
+
+
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 58]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
 10.  SUIT Digest Container
 
    The SUIT digest is a CBOR array containing two elements: an algorithm
@@ -3116,7 +3258,7 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    following the digest.
 
    The values of the algorithm identifier are found in the IANA "COSE
-   Algorithms" registry [COSE_Alg], which was created by [RFC9054].
+   Algorithms" registry [COSE-Alg], which was created by [RFC9054].
    SHA-256 (-16) MUST be implemented by all Manifest Processors.
 
    Any other algorithm defined in the IANA "COSE Algorithms" registry,
@@ -3130,20 +3272,16 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
       the SUIT Envelope.  The CBOR Tag's Data Item is a SUIT_Envelope as
       defined in Appendix A
 
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 56]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
-
    *  allocate CBOR tag 1070 (suggested) in the "CBOR Tags" registry for
       the SUIT Manifest.  The CBOR Tag's Data Item is a SUIT_Manifest as
       defined in Appendix A
 
    *  allocate media type application/suit-envelope in the "Media Types"
       registry, see below.
+
+   *  allocate Namespace CBOR PEN in the "UUID Namespace IDs" registry
+      with value 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e, as defined in
+      Section 8.4.8.1
 
    *  setup several registries as described below.
 
@@ -3158,6 +3296,16 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    greater are Specification Required.  Negative values -255 to 0 are
    Standards Action, and -256 and lower are Private Use.
 
+
+
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 59]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
    New entries to those registries need to provide a label, a name and a
    reference to a specification that describes the functionality.  More
    guidance on the expert review can be found below.
@@ -3166,33 +3314,6 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
    IANA is requested to create a new registry for SUIT envelope
    elements.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 57]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
      +=======+=================+=====================================+
      | Label | Name            | Reference                           |
@@ -3217,7 +3338,7 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
      |       | Description     | document]                           |
      +-------+-----------------+-------------------------------------+
 
-                                  Table 9
+                                  Table 12
 
 11.2.  SUIT Manifest Elements
 
@@ -3236,18 +3357,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-
-
-
-
-
-
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 58]
+Moran, et al.            Expires 28 August 2025                [Page 60]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    +=======+==================+=======================================+
@@ -3277,7 +3389,7 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    | 23    | Text Description | Section 8.4.4 of [TBD: this document] |
    +-------+------------------+---------------------------------------+
 
-                                 Table 10
+                                 Table 13
 
 11.3.  SUIT Common Elements
 
@@ -3295,15 +3407,15 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
      |       | Sequence        | document]                           |
      +-------+-----------------+-------------------------------------+
 
-                                  Table 11
+                                  Table 14
 
 
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 59]
+Moran, et al.            Expires 28 August 2025                [Page 61]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
 11.4.  SUIT Commands
@@ -3357,9 +3469,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 60]
+Moran, et al.            Expires 28 August 2025                [Page 62]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
     |       |                   | document]                           |
@@ -3374,7 +3486,7 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
     | -255  |                   | document]                           |
     +-------+-------------------+-------------------------------------+
 
-                                  Table 12
+                                  Table 15
 
 11.5.  SUIT Parameters
 
@@ -3413,9 +3525,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 61]
+Moran, et al.            Expires 28 August 2025                [Page 63]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    +=======+=================+=========================================+
@@ -3460,18 +3572,18 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    |       |                 | document]                               |
    +-------+-----------------+-----------------------------------------+
    | <     | Custom          | Section 8.4.8.16 of [TBD: this          |
-   | -255  |                 | document]                               |
+   | -256  |                 | document]                               |
    +-------+-----------------+-----------------------------------------+
 
-                                  Table 13
+                                  Table 16
 
 
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 62]
+Moran, et al.            Expires 28 August 2025                [Page 64]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
 11.6.  SUIT Text Values
@@ -3496,10 +3608,10 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
      |       | Source          | document]                           |
      +-------+-----------------+-------------------------------------+
      | <     | Custom          | Section 8.4.4 of [TBD: this         |
-     | -255  |                 | document]                           |
+     | -256  |                 | document]                           |
      +-------+-----------------+-------------------------------------+
 
-                                  Table 14
+                                  Table 17
 
 11.7.   SUIT Component Text Values
 
@@ -3525,9 +3637,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 63]
+Moran, et al.            Expires 28 August 2025                [Page 65]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
     +=======+=================+=======================================+
@@ -3550,10 +3662,10 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
     |       | Version         |                                       |
     +-------+-----------------+---------------------------------------+
     | <     | Custom          | Section 8.4.4 of [TBD: this document] |
-    | -255  |                 |                                       |
+    | -256  |                 |                                       |
     +-------+-----------------+---------------------------------------+
 
-                                  Table 15
+                                  Table 18
 
 11.8.  Expert Review Instructions
 
@@ -3581,9 +3693,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 64]
+Moran, et al.            Expires 28 August 2025                [Page 66]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    *  Specifications are required for the standards track range of point
@@ -3637,9 +3749,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 65]
+Moran, et al.            Expires 28 August 2025                [Page 67]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
         Type name: application
@@ -3693,9 +3805,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 66]
+Moran, et al.            Expires 28 August 2025                [Page 68]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
 12.  Security Considerations
@@ -3749,9 +3861,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 67]
+Moran, et al.            Expires 28 August 2025                [Page 69]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    +----------------------------+-------------------+-----------------------------------+
@@ -3805,9 +3917,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 68]
+Moran, et al.            Expires 28 August 2025                [Page 70]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    +----------------------------+-------------------+-----------------------------------+
@@ -3824,7 +3936,7 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    |REQ.USE.DELEGATION          |Delegation Chain   |[I-D.tschofenig-cose-cwt-chain]    |
    +----------------------------+-------------------+-----------------------------------+
 
-                                  Table 16
+                                  Table 19
 
 13.  Acknowledgements
 
@@ -3861,9 +3973,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 69]
+Moran, et al.            Expires 28 August 2025                [Page 71]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    We would like to thank our responsible area director, Roman Danyliw,
@@ -3875,6 +3987,18 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 14.1.  Normative References
 
+   [COSE-Alg] IANA, "CBOR Object Signing and Encryption (COSE) — COSE
+              Algorithms", <https://www.iana.org/assignments/cose/
+              cose.xhtml#algorithms>.
+
+   [I-D.ietf-suit-firmware-encryption]
+              Tschofenig, H., Housley, R., Moran, B., Brown, D., and K.
+              Takayama, "Encrypted Payloads in SUIT Manifests", Work in
+              Progress, Internet-Draft, draft-ietf-suit-firmware-
+              encryption-23, 29 January 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-suit-
+              firmware-encryption-23>.
+
    [I-D.ietf-suit-mti]
               Moran, B., Rønningstad, O., and A. Tsukamoto, "Mandatory-
               to-Implement Algorithms for Authors and Recipients of
@@ -3882,6 +4006,41 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
               Work in Progress, Internet-Draft, draft-ietf-suit-mti-08,
               21 October 2024, <https://datatracker.ietf.org/doc/html/
               draft-ietf-suit-mti-08>.
+
+   [I-D.ietf-suit-report]
+              Moran, B. and H. Birkholz, "Secure Reporting of Update
+              Status", Work in Progress, Internet-Draft, draft-ietf-
+              suit-report-10, 21 October 2024,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-suit-
+              report-10>.
+
+   [I-D.ietf-suit-trust-domains]
+              Moran, B. and K. Takayama, "SUIT Manifest Extensions for
+              Multiple Trust Domains", Work in Progress, Internet-Draft,
+              draft-ietf-suit-trust-domains-09, 4 December 2024,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-suit-
+              trust-domains-09>.
+
+
+
+
+
+
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 72]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
+   [I-D.ietf-suit-update-management]
+              Moran, B. and K. Takayama, "Update Management Extensions
+              for Software Updates for Internet of Things (SUIT)
+              Manifests", Work in Progress, Internet-Draft, draft-ietf-
+              suit-update-management-07, 8 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-suit-
+              update-management-07>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -3892,12 +4051,6 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
               Resource Identifier (URI): Generic Syntax", STD 66,
               RFC 3986, DOI 10.17487/RFC3986, January 2005,
               <https://www.rfc-editor.org/rfc/rfc3986>.
-
-   [RFC4122bis]
-              Leach, P., Mealling, M., and R. Salz, "A Universally
-              Unique IDentifier (UUID) URN Namespace", RFC 4122,
-              DOI 10.17487/RFC4122, July 2005,
-              <https://www.rfc-editor.org/rfc/rfc4122>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -3914,14 +4067,6 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
               DOI 10.17487/RFC8949, December 2020,
               <https://www.rfc-editor.org/rfc/rfc8949>.
 
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 70]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
-
    [RFC9019]  Moran, B., Tschofenig, H., Brown, D., and M. Meriac, "A
               Firmware Update Architecture for Internet of Things",
               RFC 9019, DOI 10.17487/RFC9019, April 2021,
@@ -3936,6 +4081,15 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
               Hash Algorithms", RFC 9054, DOI 10.17487/RFC9054, August
               2022, <https://www.rfc-editor.org/rfc/rfc9054>.
 
+
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 73]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
    [RFC9090]  Bormann, C., "Concise Binary Object Representation (CBOR)
               Tags for Object Identifiers", RFC 9090,
               DOI 10.17487/RFC9090, July 2021,
@@ -3946,49 +4100,11 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
               Things (IoT) Devices", RFC 9124, DOI 10.17487/RFC9124,
               January 2022, <https://www.rfc-editor.org/rfc/rfc9124>.
 
+   [RFC9562]  Davis, K., Peabody, B., and P. Leach, "Universally Unique
+              IDentifiers (UUIDs)", RFC 9562, DOI 10.17487/RFC9562, May
+              2024, <https://www.rfc-editor.org/rfc/rfc9562>.
+
 14.2.  Informative References
-
-   [COSE_Alg] "COSE Algorithms", 2023,
-              <https://www.iana.org/assignments/cose/
-              cose.xhtml#algorithms>.
-
-   [I-D.ietf-suit-firmware-encryption]
-              Tschofenig, H., Housley, R., Moran, B., Brown, D., and K.
-              Takayama, "Encrypted Payloads in SUIT Manifests", Work in
-              Progress, Internet-Draft, draft-ietf-suit-firmware-
-              encryption-21, 21 October 2024,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-suit-
-              firmware-encryption-21>.
-
-   [I-D.ietf-suit-report]
-              Moran, B. and H. Birkholz, "Secure Reporting of Update
-              Status", Work in Progress, Internet-Draft, draft-ietf-
-              suit-report-10, 21 October 2024,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-suit-
-              report-10>.
-
-   [I-D.ietf-suit-trust-domains]
-              Moran, B. and K. Takayama, "SUIT Manifest Extensions for
-              Multiple Trust Domains", Work in Progress, Internet-Draft,
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 71]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
-
-              draft-ietf-suit-trust-domains-09, 4 December 2024,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-suit-
-              trust-domains-09>.
-
-   [I-D.ietf-suit-update-management]
-              Moran, B. and K. Takayama, "Update Management Extensions
-              for Software Updates for Internet of Things (SUIT)
-              Manifests", Work in Progress, Internet-Draft, draft-ietf-
-              suit-update-management-07, 8 July 2024,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-suit-
-              update-management-07>.
 
    [I-D.tschofenig-cose-cwt-chain]
               Tschofenig, H. and B. Moran, "CBOR Object Signing and
@@ -4022,17 +4138,17 @@ Appendix A.  Full CDDL
    the corresponding CBOR message MUST adhere to the following CDDL
    ([RFC8610]) data definition.
 
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 74]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
    To be valid, the following CDDL MUST have the COSE CDDL appended to
    it.  The COSE CDDL can be obtained by following the directions in
    [RFC9052], Section 1.4.
-
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 72]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
    SUIT_start = SUIT_Envelope_Tagged / SUIT_Manifest_Tagged / start
    SUIT_Envelope_Tagged = #6.107(SUIT_Envelope)
@@ -4078,17 +4194,17 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
        suit-common                   => bstr .cbor SUIT_Common,
        ? suit-reference-uri          => tstr,
        SUIT_Unseverable_Members,
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 75]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
        SUIT_Severable_Members_Choice,
        * $$SUIT_Manifest_Extensions,
    }
-
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 73]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
    SUIT_Unseverable_Members = (
      ? suit-validate => bstr .cbor SUIT_Command_Sequence,
@@ -4134,18 +4250,18 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    SUIT_Shared_Commands //= (suit-directive-try-each,
        SUIT_Directive_Try_Each_Argument_Shared)
    SUIT_Shared_Commands //= (suit-directive-override-parameters,
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 76]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
        {+ $$SUIT_Parameters})
 
    IndexArg /= uint
    IndexArg /= true
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 74]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
-
    IndexArg /= [+uint]
 
 
@@ -4190,17 +4306,17 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    suit-reporting-bits = &(
        suit-send-record-success : 0,
        suit-send-record-failure : 1,
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 77]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
        suit-send-sysinfo-success : 2,
        suit-send-sysinfo-failure : 3
    )
-
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 75]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
    $$SUIT_Parameters //= (suit-parameter-vendor-identifier =>
        (RFC4122_UUID / cbor-pen))
@@ -4246,18 +4362,18 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
        ? suit-text-model-info            => tstr,
        ? suit-text-component-description => tstr,
        ? suit-text-component-version     => tstr,
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 78]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
        * $$suit-text-component-key-extensions
    )
 
    SUIT_Text_Keys = (
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 76]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
-
        ? suit-text-manifest-description => tstr,
        ? suit-text-update-description   => tstr,
        ? suit-text-manifest-json-source => tstr,
@@ -4302,18 +4418,18 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    suit-condition-component-slot    = 5
    suit-condition-check-content     = 6
 
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 79]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
    suit-condition-abort                    = 14
    suit-condition-device-identifier        = 24
 
    suit-directive-set-component-index      = 12
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 77]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
-
    suit-directive-try-each                 = 15
    suit-directive-write                    = 18
    suit-directive-override-parameters      = 20
@@ -4355,6 +4471,17 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    suit-text-component-description = 5
    suit-text-component-version     = 6
 
+
+
+
+
+
+
+Moran, et al.            Expires 28 August 2025                [Page 80]
+
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
+
+
 Appendix B.  Examples
 
    The following examples demonstrate a small subset of the
@@ -4362,13 +4489,6 @@ Appendix B.  Examples
    execute most of these manifests.
 
    The examples are signed using the following ECDSA secp256r1 key:
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 78]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
 
    -----BEGIN PRIVATE KEY-----
    MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgApZYjZCUGLM50VBC
@@ -4401,7 +4521,7 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
                 | suit-send-sysinfo-failure   | Sys-Fail |
                 +-----------------------------+----------+
 
-                                 Table 17
+                                 Table 20
 
 
 
@@ -4413,17 +4533,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-
-
-
-
-
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 79]
+Moran, et al.            Expires 28 August 2025                [Page 81]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
      +===================+==========+==========+==========+==========+
@@ -4451,7 +4563,7 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
      | invoke            |          |          |          |          |
      +-------------------+----------+----------+----------+----------+
 
-                                  Table 18
+                                  Table 21
 
 B.1.  Example 0: Secure Boot
 
@@ -4477,17 +4589,17 @@ B.1.  Example 0: Secure Boot
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 80]
+Moran, et al.            Expires 28 August 2025                [Page 82]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
                    / unprotected / {
                    },
                    / payload / null / nil /,
-                   / signature / h'6a5328052109c8dde772422346b32b91ba2e6e
-   461108eaacbd320ffce97cbb99c4da431d9d328d10860588cc32a75794c0f296546518
-   7281a9baf46939a2831e'
+                   / signature / h'408d0816f9b510749bf6a51b066951e08a4438
+   f849eb092a1ac768eed9de696c1b1dd35d82ef149e6a73a61976ad2cfe78444b806429
+   3350a122f332cb49f0da'
                ]) >>
            ] >>,
            / manifest / 3:<< {
@@ -4533,9 +4645,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 81]
+Moran, et al.            Expires 28 August 2025                [Page 83]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    d86ba2025827815824822f58206658ea560262696dd1f13b782239a064da
@@ -4550,10 +4662,10 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    Envelope with COSE authentication object:
 
    d86ba2025873825824822f58206658ea560262696dd1f13b782239a064da
-   7c6c5cbaf52fded428a6fc83c7e5af584ad28443a10126a0f658406a5328
-   052109c8dde772422346b32b91ba2e6e461108eaacbd320ffce97cbb99c4
-   da431d9d328d10860588cc32a75794c0f2965465187281a9baf46939a283
-   1e035871a50101020003585fa202818141000458568614a40150fa6b4a53
+   7c6c5cbaf52fded428a6fc83c7e5af584ad28443a10126a0f65840408d08
+   16f9b510749bf6a51b066951e08a4438f849eb092a1ac768eed9de696c1b
+   1dd35d82ef149e6a73a61976ad2cfe78444b8064293350a122f332cb49f0
+   da035871a50101020003585fa202818141000458568614a40150fa6b4a53
    d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
    035824822f582000112233445566778899aabbccddeeff0123456789abcd
    effedcba98765432100e1987d0010f020f074382030f0943821702
@@ -4583,15 +4695,15 @@ B.2.  Example 1: Simultaneous Download and Installation of Payload
                    / unprotected / {
                    },
                    / payload / null / nil /,
-                   / signature / h'f2e24e761b283e8e1678485d4136109eca1206
-   3466e0e916c101b3e0e798e8c95831c517507bb25278d77636fd75fb6b4a5f745a13f6
-   87f2a823fa576f0f0986'
+                   / signature / h'27a3d7986eddcc1bee04e1436746408c308ed3
+   c15ac590a1ca0cf96f85671ccac216cb9a1497fc59e21c15f33c95cf75203e25c287b3
+   1a57d6cd2ef950b27a7a'
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 82]
+Moran, et al.            Expires 28 August 2025                [Page 84]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
                ]) >>
@@ -4645,9 +4757,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 83]
+Moran, et al.            Expires 28 August 2025                [Page 85]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    d86ba2025827815824822f58201f2e7acca0dc2786f2fe4eb947f50873a6
@@ -4663,10 +4775,10 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    Envelope with COSE authentication object:
 
    d86ba2025873825824822f58201f2e7acca0dc2786f2fe4eb947f50873a6
-   a3cfaa98866c5b02e621f42074daf2584ad28443a10126a0f65840f2e24e
-   761b283e8e1678485d4136109eca12063466e0e916c101b3e0e798e8c958
-   31c517507bb25278d77636fd75fb6b4a5f745a13f687f2a823fa576f0f09
-   86035894a50101020103585fa202818141000458568614a40150fa6b4a53
+   a3cfaa98866c5b02e621f42074daf2584ad28443a10126a0f6584027a3d7
+   986eddcc1bee04e1436746408c308ed3c15ac590a1ca0cf96f85671ccac2
+   16cb9a1497fc59e21c15f33c95cf75203e25c287b31a57d6cd2ef950b27a
+   7a035894a50101020103585fa202818141000458568614a40150fa6b4a53
    d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
    035824822f582000112233445566778899aabbccddeeff0123456789abcd
    effedcba98765432100e1987d0010f020f074382030f1458258614a11578
@@ -4701,17 +4813,17 @@ B.3.  Example 2: Simultaneous Download, Installation, Secure Boot,
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 84]
+Moran, et al.            Expires 28 August 2025                [Page 86]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
                    / unprotected / {
                    },
                    / payload / null / nil /,
-                   / signature / h'e48b4b535750162163b7208c39e0b27cdf6eec
-   18838a2afc8fadc35e42679b96dabffe84660df11e3689b8344784098aa1d757d67793
-   40305873b20a388e1619'
+                   / signature / h'073d8d80ca67d61cdf04d813c748b2de98fe78
+   6fc67b764431307c8dbcbe91dc6f762c2c4d7bb998ff9ead4798e03c8ee26b89ef7a9a
+   d4569f6e187ce89e16c5'
                ]) >>
            ] >>,
            / manifest / 3:<< {
@@ -4757,9 +4869,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 85]
+Moran, et al.            Expires 28 August 2025                [Page 87]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
                    / digest-bytes /
@@ -4789,10 +4901,10 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    Envelope:
 
    d86ba2025873825824822f58206a5197ed8f9dccf733d1c89a359441708e
-   070b4c6dcb9a1c2c82c6165f609b90584ad28443a10126a0f65840e48b4b
-   535750162163b7208c39e0b27cdf6eec18838a2afc8fadc35e42679b96da
-   bffe84660df11e3689b8344784098aa1d757d6779340305873b20a388e16
-   190358d1a80101020203585fa202818141000458568614a40150fa6b4a53
+   070b4c6dcb9a1c2c82c6165f609b90584ad28443a10126a0f65840073d8d
+   80ca67d61cdf04d813c748b2de98fe786fc67b764431307c8dbcbe91dc6f
+   762c2c4d7bb998ff9ead4798e03c8ee26b89ef7a9ad4569f6e187ce89e16
+   c50358d1a80101020203585fa202818141000458568614a40150fa6b4a53
    d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
    035824822f582000112233445566778899aabbccddeeff0123456789abcd
    effedcba98765432100e1987d0010f020f047468747470733a2f2f676974
@@ -4813,16 +4925,16 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 86]
+Moran, et al.            Expires 28 August 2025                [Page 88]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    d86ba4025873825824822f58206a5197ed8f9dccf733d1c89a359441708e
-   070b4c6dcb9a1c2c82c6165f609b90584ad28443a10126a0f65840e48b4b
-   535750162163b7208c39e0b27cdf6eec18838a2afc8fadc35e42679b96da
-   bffe84660df11e3689b8344784098aa1d757d6779340305873b20a388e16
-   190358d1a80101020203585fa202818141000458568614a40150fa6b4a53
+   070b4c6dcb9a1c2c82c6165f609b90584ad28443a10126a0f65840073d8d
+   80ca67d61cdf04d813c748b2de98fe786fc67b764431307c8dbcbe91dc6f
+   762c2c4d7bb998ff9ead4798e03c8ee26b89ef7a9ad4569f6e187ce89e16
+   c50358d1a80101020203585fa202818141000458568614a40150fa6b4a53
    d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab45
    035824822f582000112233445566778899aabbccddeeff0123456789abcd
    effedcba98765432100e1987d0010f020f047468747470733a2f2f676974
@@ -4869,9 +4981,9 @@ B.4.  Example 3: A/B images
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 87]
+Moran, et al.            Expires 28 August 2025                [Page 89]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    107({
@@ -4888,9 +5000,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
                    / unprotected / {
                    },
                    / payload / null / nil /,
-                   / signature / h'ad6fa749ff2f798e8d80317dd9681b0d8ba269
-   c352f09fdc5230fc5b936c933f0d2158c65a69d69675ae75b69720f0e109d044adbbef
-   b0028b364f71c8c9fb69'
+                   / signature / h'0bbf7058c1a79dff23c7755d36aae5c6cc1aac
+   b818f456e2e03f2664c369b9c6700931a52f1f8d808aa4a8e5220d479c9661d2bce0a4
+   4974004325001e3b1abb'
                ]) >>
            ] >>,
            / manifest / 3:<< {
@@ -4925,9 +5037,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 88]
+Moran, et al.            Expires 28 August 2025                [Page 90]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
                                }
@@ -4981,9 +5093,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 89]
+Moran, et al.            Expires 28 August 2025                [Page 91]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
            } >>
@@ -5010,10 +5122,10 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    Envelope with COSE authentication object:
 
    d86ba2025873825824822f5820f6d44a62ec906b392500c242e78e908e9c
-   c5057f3f04104a06a8566200da2ee0584ad28443a10126a0f65840ad6fa7
-   49ff2f798e8d80317dd9681b0d8ba269c352f09fdc5230fc5b936c933f0d
-   2158c65a69d69675ae75b69720f0e109d044adbbefb0028b364f71c8c9fb
-   690359010fa5010102030358a4a2028181410004589b8814a20150fa6b4a
+   c5057f3f04104a06a8566200da2ee0584ad28443a10126a0f658400bbf70
+   58c1a79dff23c7755d36aae5c6cc1aacb818f456e2e03f2664c369b9c670
+   0931a52f1f8d808aa4a8e5220d479c9661d2bce0a44974004325001e3b1a
+   bb0359010fa5010102030358a4a2028181410004589b8814a20150fa6b4a
    53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf429b2d51f2ab
    450f8258348614a10500050514a2035824822f5820001122334455667788
    99aabbccddeeff0123456789abcdeffedcba98765432100e1987d0583686
@@ -5037,9 +5149,9 @@ B.5.  Example 4: Load from External Storage
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 90]
+Moran, et al.            Expires 28 August 2025                [Page 92]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    *  Install (Section 7.4)
@@ -5060,9 +5172,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
                    / unprotected / {
                    },
                    / payload / null / nil /,
-                   / signature / h'138ba3245191ebbf83b128d34c0469928d8942
-   c2f7700a843d6a63c52fb8f78d7f07b9181e0645cbaa27600335738f04087b367f88df
-   87a861cb84c0eae72e4e'
+                   / signature / h'c53c2826b042384e95c646cbcd4308b181f1ed
+   2bfbeb4e70b93cac9fbdc82e382d877e2c2bcfaf975ffcd36941f2f4db89f68d3c77d6
+   a3506e9b1509a49dec46'
                ]) >>
            ] >>,
            / manifest / 3:<< {
@@ -5093,9 +5205,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 91]
+Moran, et al.            Expires 28 August 2025                [Page 93]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
                        / condition-vendor-identifier / 1,15,
@@ -5149,9 +5261,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 92]
+Moran, et al.            Expires 28 August 2025                [Page 94]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
        })
@@ -5177,10 +5289,10 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    Envelope with COSE authentication object:
 
    d86ba2025873825824822f58205b5f6586b1e6cdf19ee479a5adabf20658
-   1000bd584b0832a9bdaf4f72cdbdd6584ad28443a10126a0f65840138ba3
-   245191ebbf83b128d34c0469928d8942c2f7700a843d6a63c52fb8f78d7f
-   07b9181e0645cbaa27600335738f04087b367f88df87a861cb84c0eae72e
-   4e03590116a801010204035867a20283814100814102814101045858880c
+   1000bd584b0832a9bdaf4f72cdbdd6584ad28443a10126a0f65840c53c28
+   26b042384e95c646cbcd4308b181f1ed2bfbeb4e70b93cac9fbdc82e382d
+   877e2c2bcfaf975ffcd36941f2f4db89f68d3c77d6a3506e9b1509a49dec
+   4603590116a801010204035867a20283814100814102814101045858880c
    0014a40150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e
    48bf429b2d51f2ab45035824822f582000112233445566778899aabbccdd
    eeff0123456789abcdeffedcba98765432100e1987d0010f020f0745840c
@@ -5205,9 +5317,9 @@ B.6.  Example 5: Two Images
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 93]
+Moran, et al.            Expires 28 August 2025                [Page 95]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    107({
@@ -5224,9 +5336,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
                    / unprotected / {
                    },
                    / payload / null / nil /,
-                   / signature / h'468f88390a9d132ac1da2a5d029b4364292f05
-   adcf4b8cb2dd4d55d83ceb3c32dda1cda03ed3d2344c9d9c5134b59b9ad2be8ad0eb19
-   8007a7e600fb50a5bb8e'
+                   / signature / h'53505bf2b1aba7f3c3e142d6c02350daf95331
+   a8942e77d7378c6670285638e0fe460fe7cebcbe242b14e7ac1a4482cf500136a2568a
+   92a803f614d5f87ef7a7'
                ]) >>
            ] >>,
            / manifest / 3:<< {
@@ -5261,9 +5373,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 94]
+Moran, et al.            Expires 28 August 2025                [Page 96]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
                                / algorithm-id / -16 / "sha256" /,
@@ -5317,9 +5429,9 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 95]
+Moran, et al.            Expires 28 August 2025                [Page 97]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    d86ba2025827815824822f582015ce60f77657e4531dc329155f8b0ed78f
@@ -5339,10 +5451,10 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    Envelope with COSE authentication object:
 
    d86ba2025873825824822f582015ce60f77657e4531dc329155f8b0ed78f
-   94bdc6d165b2665473693dcc34f470584ad28443a10126a0f65840468f88
-   390a9d132ac1da2a5d029b4364292f05adcf4b8cb2dd4d55d83ceb3c32dd
-   a1cda03ed3d2344c9d9c5134b59b9ad2be8ad0eb198007a7e600fb50a5bb
-   8e03590101a601010205035895a202828141008141010458898c0c0014a4
+   94bdc6d165b2665473693dcc34f470584ad28443a10126a0f6584053505b
+   f2b1aba7f3c3e142d6c02350daf95331a8942e77d7378c6670285638e0fe
+   460fe7cebcbe242b14e7ac1a4482cf500136a2568a92a803f614d5f87ef7
+   a703590101a601010205035895a202828141008141010458898c0c0014a4
    0150fa6b4a53d5ad5fdfbe9de663e4d41ffe02501492af1425695e48bf42
    9b2d51f2ab45035824822f582000112233445566778899aabbccddeeff01
    23456789abcdeffedcba98765432100e1987d0010f020f0c0114a2035824
@@ -5373,9 +5485,9 @@ Appendix C.  Design Rationale
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 96]
+Moran, et al.            Expires 28 August 2025                [Page 98]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    the language specifies linear behavior, without reverse branches.
@@ -5421,7 +5533,7 @@ C.1.  C.1 Design Rationale: Envelope
 
    The Envelope is used instead of a COSE structure for several reasons:
 
-   1.  This enables the use of Severable Elements (Section 8.5)
+   1.  This enables the use of Severable Elements (Section 8.6)
 
    2.  This enables modular processing of manifests, particularly with
        large signatures.
@@ -5429,9 +5541,9 @@ C.1.  C.1 Design Rationale: Envelope
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 97]
+Moran, et al.            Expires 28 August 2025                [Page 99]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    3.  This enables multiple authentication schemes.
@@ -5485,9 +5597,9 @@ C.2.  C.2 Byte String Wrappers
 
 
 
-Moran, et al.              Expires 7 June 2025                 [Page 98]
+Moran, et al.            Expires 28 August 2025               [Page 100]
 
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
+Internet-Draft          CBOR-based SUIT Manifest           February 2025
 
 
    A severed SUIT command sequence will appear in the envelope, so it
@@ -5501,138 +5613,6 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
    correctly using only a reference to the beginning of the parameter.
    This enables a parser to store a simple list of references to
    parameters that can be retrieved when needed.
-
-Appendix D.  D.  Implementation Conformance Matrix
-
-   This section summarizes the functionality a minimal manifest
-   processor implementation needs to offer to claim conformance to this
-   specification, in the absence of an application profile standard
-   specifying otherwise.
-
-   The subsequent table shows the conditions.
-
-         +===================+=================+================+
-         | Name              | Reference       | Implementation |
-         +===================+=================+================+
-         | Vendor Identifier | Section 8.4.8.2 | REQUIRED       |
-         +-------------------+-----------------+----------------+
-         | Class Identifier  | Section 8.4.8.2 | REQUIRED       |
-         +-------------------+-----------------+----------------+
-         | Device Identifier | Section 8.4.8.2 | OPTIONAL       |
-         +-------------------+-----------------+----------------+
-         | Image Match       | Section 8.4.9.2 | REQUIRED       |
-         +-------------------+-----------------+----------------+
-         | Check Content     | Section 8.4.9.3 | OPTIONAL       |
-         +-------------------+-----------------+----------------+
-         | Component Slot    | Section 8.4.9.4 | OPTIONAL       |
-         +-------------------+-----------------+----------------+
-         | Abort             | Section 8.4.9.5 | OPTIONAL       |
-         +-------------------+-----------------+----------------+
-         | Custom Condition  | Section 8.4.11  | OPTIONAL       |
-         +-------------------+-----------------+----------------+
-
-                                 Table 19
-
-   The subsequent table shows the directives.
-
-
-
-
-
-
-
-Moran, et al.              Expires 7 June 2025                 [Page 99]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
-
-      +=====================+==================+====================+
-      | Name                | Reference        | Implementation     |
-      +=====================+==================+====================+
-      | Set Component Index | Section 8.4.10.1 | REQUIRED if more   |
-      |                     |                  | than one component |
-      +---------------------+------------------+--------------------+
-      | Write Content       | Section 8.4.10.6 | OPTIONAL           |
-      +---------------------+------------------+--------------------+
-      | Try Each            | Section 8.4.10.2 | OPTIONAL           |
-      +---------------------+------------------+--------------------+
-      | Override Parameters | Section 8.4.10.3 | REQUIRED           |
-      +---------------------+------------------+--------------------+
-      | Fetch               | Section 8.4.10.4 | REQUIRED for       |
-      |                     |                  | Updater            |
-      +---------------------+------------------+--------------------+
-      | Copy                | Section 8.4.10.5 | OPTIONAL           |
-      +---------------------+------------------+--------------------+
-      | Invoke              | Section 8.4.10.7 | REQUIRED for       |
-      |                     |                  | Bootloader         |
-      +---------------------+------------------+--------------------+
-      | Run Sequence        | Section 8.4.10.8 | OPTIONAL           |
-      +---------------------+------------------+--------------------+
-      | Swap                | Section 8.4.10.9 | OPTIONAL           |
-      +---------------------+------------------+--------------------+
-
-                                  Table 20
-
-   The subsequent table shows the parameters.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Moran, et al.              Expires 7 June 2025                [Page 100]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
-
-
-      +==================+==================+======================+
-      | Name             | Reference        | Implementation       |
-      +==================+==================+======================+
-      | Vendor ID        | Section 8.4.8.3  | REQUIRED             |
-      +------------------+------------------+----------------------+
-      | Class ID         | Section 8.4.8.4  | REQUIRED             |
-      +------------------+------------------+----------------------+
-      | Image Digest     | Section 8.4.8.6  | REQUIRED             |
-      +------------------+------------------+----------------------+
-      | Image Size       | Section 8.4.8.7  | REQUIRED             |
-      +------------------+------------------+----------------------+
-      | Component Slot   | Section 8.4.8.8  | OPTIONAL             |
-      +------------------+------------------+----------------------+
-      | Content          | Section 8.4.8.9  | OPTIONAL             |
-      +------------------+------------------+----------------------+
-      | URI              | Section 8.4.8.10 | REQUIRED for Updater |
-      +------------------+------------------+----------------------+
-      | Source Component | Section 8.4.8.11 | OPTIONAL             |
-      +------------------+------------------+----------------------+
-      | Invoke Args      | Section 8.4.8.12 | OPTIONAL             |
-      +------------------+------------------+----------------------+
-      | Device ID        | Section 8.4.8.5  | OPTIONAL             |
-      +------------------+------------------+----------------------+
-      | Strict Order     | Section 8.4.8.14 | OPTIONAL             |
-      +------------------+------------------+----------------------+
-      | Soft Failure     | Section 8.4.8.15 | OPTIONAL             |
-      +------------------+------------------+----------------------+
-      | Custom           | Section 8.4.8.16 | OPTIONAL             |
-      +------------------+------------------+----------------------+
-
-                                 Table 21
 
 Authors' Addresses
 
@@ -5648,14 +5628,6 @@ Authors' Addresses
    Henk Birkholz
    Fraunhofer SIT
    Email: henk.birkholz@sit.fraunhofer.de
-
-
-
-
-
-Moran, et al.              Expires 7 June 2025                [Page 101]
-
-Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
    Koen Zandberg
@@ -5681,32 +5653,4 @@ Internet-Draft          CBOR-based SUIT Manifest           December 2024
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Moran, et al.              Expires 7 June 2025                [Page 102]
+Moran, et al.            Expires 28 August 2025               [Page 101]
