@@ -71,10 +71,10 @@ normative:
   RFC9090: oid
   RFC9054: hash-algs
   RFC8610: cddl
-  COSE_Alg:
-    title: "COSE Algorithms"
+  COSE-Alg:
+    title: "CBOR Object Signing and Encryption (COSE) — COSE Algorithms"
     author: IANA
-    date: 2024
+    date: false
     target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
 
 
