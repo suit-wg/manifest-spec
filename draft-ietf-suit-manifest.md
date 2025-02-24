@@ -959,7 +959,7 @@ Custom | suit-parameter-custom | {{suit-parameter-custom}}
 
 CBOR-encoded object parameters are still wrapped in a bstr. This is because it allows a parser that is aggregating parameters to reference the object with a single pointer and traverse it without understanding the contents. This is important for modularization and division of responsibility within a pull parser. The same consideration does not apply to Directives because those elements are invoked with their arguments immediately.
 
-#### CBOR PEN UUID Namespace Identifier
+#### CBOR PEN UUID Namespace Identifier {#cbor-pen}
 
 The CBOR PEN (Private Enterprise Number) UUID Namespace Identifier is constructed as follows:
 
@@ -1381,6 +1381,7 @@ IANA is requested to:
 * allocate CBOR tag 107 (suggested) in the "CBOR Tags" registry for the SUIT Envelope. The CBOR Tag's Data Item is a SUIT_Envelope as defined in {{full-cddl}}
 * allocate CBOR tag 1070 (suggested) in the "CBOR Tags" registry for the SUIT Manifest. The CBOR Tag's Data Item is a SUIT_Manifest as defined in {{full-cddl}}
 * allocate media type application/suit-envelope in the "Media Types" registry, see below.
+* allocate Namespace CBOR PEN in the "UUID Namespace IDs" registry with value 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e, as defined in {{cbor-pen}}
 * setup several registries as described below.
 
 IANA is requested to create a new category for Software Update for the Internet of Things (SUIT)
