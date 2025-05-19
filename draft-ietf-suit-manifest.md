@@ -1384,10 +1384,20 @@ Any other algorithm defined in the IANA "COSE Algorithms" registry, such as SHA-
 
 #  IANA Considerations {#iana}
 
-IANA is requested to:
+IANA is requested to register the following CBOR Tags:
 
-* allocate CBOR tag 107 (suggested) in the "CBOR Tags" registry for the SUIT Envelope. The CBOR Tag's Data Item is a SUIT_Envelope as defined in {{full-cddl}}
-* allocate CBOR tag 1070 (suggested) in the "CBOR Tags" registry for the SUIT Manifest. The CBOR Tag's Data Item is a SUIT_Manifest as defined in {{full-cddl}}
+- Tag: 107
+- Data Item: map
+- Semantics: SUIT_Envelope as defined in {{full-cddl}}
+- Reference: [RFC-ietf-suit-manifest-33]
+
+- Tag: 1070
+- Data Item: map
+- Semantics: SUIT_Manifest as defined in {{full-cddl}}
+- Reference: [RFC-ietf-suit-manifest-33]
+
+Additionally, IANA is requested to register:
+
 * allocate media type application/suit-envelope in the "Media Types" registry, see below.
 * allocate Namespace CBOR PEN in the "UUID Namespace IDs" registry with value 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e, as defined in {{cbor-pen}}
 * setup several registries as described below.
