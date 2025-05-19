@@ -1388,7 +1388,7 @@ IANA is requested to:
 
 * allocate CBOR tag 107 (suggested) in the "CBOR Tags" registry for the SUIT Envelope. The CBOR Tag's Data Item is a SUIT_Envelope as defined in {{full-cddl}}
 * allocate CBOR tag 1070 (suggested) in the "CBOR Tags" registry for the SUIT Manifest. The CBOR Tag's Data Item is a SUIT_Manifest as defined in {{full-cddl}}
-* allocate media type application/suit-envelope in the "Media Types" registry, see below.
+* allocate media type application/suit-envelope+cose in the "Media Types" registry, see below.
 * allocate Namespace CBOR PEN in the "UUID Namespace IDs" registry with value 47fbdabb-f2e4-55f0-bb39-3620c2f6df4e, as defined in {{cbor-pen}}
 * setup several registries as described below.
 
