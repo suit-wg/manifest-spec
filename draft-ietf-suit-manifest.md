@@ -1475,7 +1475,6 @@ Label | Name | Reference
 25 to 30 | Unassigned |
 31 | Swap | {{suit-directive-swap}} of [TBD: this document]
 32 | Run Sequence | {{suit-directive-run-sequence}} of [TBD: this document]
-< -255 | Custom Command | {{SUIT_Command_Custom}} of [TBD: this document]
 
 ## SUIT Parameters
 
