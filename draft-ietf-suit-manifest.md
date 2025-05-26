@@ -1517,7 +1517,6 @@ Label | Name | Reference
 4 | Model Info | {{manifest-digest-text}} of [TBD: this document]
 5 | Component Description | {{manifest-digest-text}} of [TBD: this document]
 6 | Component Version | {{manifest-digest-text}} of [TBD: this document]
-< -256 | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## Expert Review Instructions
 
