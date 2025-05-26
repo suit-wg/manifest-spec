@@ -1502,7 +1502,6 @@ Label | Name | Reference
 2 | Update Description | {{manifest-digest-text}} of [TBD: this document]
 3 | Manifest JSON Source | {{manifest-digest-text}} of [TBD: this document]
 4 | Manifest YAML Source | {{manifest-digest-text}} of [TBD: this document]
-< -256 | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## SUIT Component Text Values
 
