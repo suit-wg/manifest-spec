@@ -1493,7 +1493,6 @@ Label | Name | Reference
 22 | Source Component | {{suit-parameter-source-component}} of [TBD: this document]
 23 | Invoke Args | {{suit-parameter-invoke-args}} of [TBD: this document]
 24 | Device ID | {{suit-parameter-device-identifier}} of [TBD: this document]
-< -256 | Custom | {{suit-parameter-custom}} of [TBD: this document]
 
 ## SUIT Text Values
 
