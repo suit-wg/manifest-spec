@@ -32,10 +32,12 @@ author:
       organization: Arm Limited
       email: brendan.moran.ietf@gmail.com
 
- -
+  -
       ins: H. Tschofenig
       name: Hannes Tschofenig
-      email: hannes.tschofenig@gmx.net
+      organization: University of Applied Sciences Bonn-Rhein-Siegx
+      abbrev: H-BRS
+      email: Hannes.Tschofenig@gmx.net
 
  -
       ins: H. Birkholz
