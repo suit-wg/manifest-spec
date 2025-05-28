@@ -1641,7 +1641,7 @@ the content is a SUIT envelope.
 
       Author: Brendan Moran, <brendan.moran.ietf@gmail.com>
 
-      Change Controller: IESG
+      Change Controller: IETF
 
       Provisional registration?  No
 ~~~
