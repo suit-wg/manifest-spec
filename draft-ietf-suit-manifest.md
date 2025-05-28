@@ -1412,7 +1412,12 @@ and a page within this category for SUIT manifests.
 
 IANA is also requested to create several registries defined in the subsections below.
 
-For each registry, values 0-255 are Standards Action and 256 or greater are Specification Required. Negative values -255 to 0 are Standards Action, and -256 and lower are Private Use.
+For each registry, the number space is partitioned, with each range governed by a different allocation policy:
+
+ - Values 256 and above are subject to Specification Required,
+ - Values in the range 0 to 255 follow a Standards Action policy,
+ - Values from –255 to 0 are also governed by Standards Action, and
+ - Values –256 and below are designated for Private Use (also referred to as custom values).
 
 New entries to those registries need to provide a label, a name and a reference to a specification that describes the functionality. More guidance on the expert review can be found below.
 
