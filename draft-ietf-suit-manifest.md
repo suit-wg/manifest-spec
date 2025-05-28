@@ -1022,7 +1022,9 @@ UUIDs MUST be created according to versions 3, 4, or 5 of {{RFC9562}}. Versions 
 The RECOMMENDED method to create a vendor ID is:
 
 ~~~
-# The IANA UUID Namespace ID for DNS is: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+The "IANA UUID Namespace ID for DNS" is:
+6ba7b810-9dad-11d1-80b4-00c04fd430c8
+
 Vendor ID = UUID5(<IANA UUID Namespace ID DNS>, vendor domain name)
 ~~~
 
