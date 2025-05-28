@@ -1460,8 +1460,11 @@ IANA is requested to create a new registry for SUIT common elements.
 
 Label | Name | Reference
 ---|---|---
+-255 to -1 | Unassigned |
 0 | Unset Detection | {{encoding}} of [TBD: this document]
+1 | Unassigned |
 2 | Component Identifiers | {{manifest-common}} of [TBD: this document]
+3 | Unassigned |
 4 | Common Command Sequence | {{manifest-common}} of [TBD: this document]
 
 ## SUIT Commands
