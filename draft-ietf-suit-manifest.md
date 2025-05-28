@@ -1419,14 +1419,17 @@ IANA is requested to create a new registry for SUIT envelope elements.
 
 Label | Name | Reference
 ---|---|---
+-255 to -1 | Unassigned | 
 0 | Unset Detection | {{encoding}} of [TBD: this document]
 1 | Reserved (Delegation) | {{design-rationale-envelope}} of [TBD: this document]
 2 | Authentication Wrapper | {{authentication-info}} of [TBD: this document]
 3 | Manifest | {{manifest-structure}} of [TBD: this document]
+4 to 15 | Unassigned | 
 16 | Payload Fetch | {{manifest-commands}} of [TBD: this document]
+17 to 19 | Unassigned | 
 20 | Payload Installation | {{manifest-commands}} of [TBD: this document]
+21 to 22 | Unassigned | 
 23 | Text Description | {{manifest-digest-text}} of [TBD: this document]
-
 
 ## SUIT Manifest Elements
 
