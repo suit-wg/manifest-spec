@@ -1530,12 +1530,12 @@ IANA is requested to create a new registry for SUIT text values.
 
 Label | Name | Reference
 ---|---|---
+-255 to -1 | Unassigned |
 0 | Unset Detection | {{encoding}} of [TBD: this document]
 1 | Manifest Description | {{manifest-digest-text}} of [TBD: this document]
 2 | Update Description | {{manifest-digest-text}} of [TBD: this document]
 3 | Manifest JSON Source | {{manifest-digest-text}} of [TBD: this document]
 4 | Manifest YAML Source | {{manifest-digest-text}} of [TBD: this document]
-< -256 | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## SUIT Component Text Values
 
