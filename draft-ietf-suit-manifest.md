@@ -1543,6 +1543,7 @@ IANA is requested to create a new registry for SUIT component text values.
 
 Label | Name | Reference
 ---|---|---
+-255 to -1 | Unassigned |
 0 | Unset Detection | {{encoding}} of [TBD: this document]
 1 | Vendor Name | {{manifest-digest-text}} of [TBD: this document]
 2 | Model Name | {{manifest-digest-text}} of [TBD: this document]
@@ -1550,7 +1551,6 @@ Label | Name | Reference
 4 | Model Info | {{manifest-digest-text}} of [TBD: this document]
 5 | Component Description | {{manifest-digest-text}} of [TBD: this document]
 6 | Component Version | {{manifest-digest-text}} of [TBD: this document]
-< -256 | Custom | {{manifest-digest-text}} of [TBD: this document]
 
 ## Expert Review Instructions
 
