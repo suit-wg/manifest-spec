@@ -1190,6 +1190,7 @@ Verify that the slot index of the current component matches the slot index set i
 Unconditionally fail. This operation is typically used in conjunction with suit-directive-try-each ({{suit-directive-try-each}}).
 
 ### SUIT_Directive
+
 Directives are used to define the behavior of the recipient. Directives include:
 
 Name | CDDL Structure | Reference
@@ -1473,24 +1474,30 @@ IANA is requested to create a new registry for SUIT commands.
 
 Label | Name | Reference
 ---|---|---
+-255 to -1 | Unassigned |
 0 | Unset Detection | {{encoding}} of [TBD: this document]
 1 | Vendor Identifier | {{identifier-conditions}} of [TBD: this document]
 2 | Class Identifier | {{identifier-conditions}} of [TBD: this document]
 3 | Image Match | {{suit-condition-image-match}} of [TBD: this document]
+4 | Unassigned |
 5 | Component Slot | {{suit-condition-component-slot}} of [TBD: this document]
 6 | Check Content | {{suit-condition-check-content}} of [TBD: this document]
+7 to 11 | Unassigned |
 12 | Set Component Index | {{suit-directive-set-component-index}} of [TBD: this document]
-14 | Abort
+13 | Unassigned |
+14 | Abort | {{suit-condition-abort}} of [TBD: this document]
 15 | Try Each | {{suit-directive-try-each}} of [TBD: this document]
+16 to 17 | Unassigned |
 18 | Write Content | {{suit-directive-write}} of [TBD: this document]
+19 | Unassigned |
 20 | Override Parameters | {{suit-directive-override-parameters}} of [TBD: this document]
 21 | Fetch | {{suit-directive-fetch}} of [TBD: this document]
 22 | Copy | {{suit-directive-copy}} of [TBD: this document]
 23 | Invoke | {{suit-directive-invoke}} of [TBD: this document]
 24 | Device Identifier | {{identifier-conditions}} of [TBD: this document]
+25 to 30 | Unassigned |
 31 | Swap | {{suit-directive-swap}} of [TBD: this document]
 32 | Run Sequence | {{suit-directive-run-sequence}} of [TBD: this document]
-< -255 | Custom Command | {{SUIT_Command_Custom}} of [TBD: this document]
 
 ## SUIT Parameters
 
