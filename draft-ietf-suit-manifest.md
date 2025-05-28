@@ -1,61 +1,43 @@
 ---
+title: "A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest"
+abbrev: "CBOR-based SUIT Manifest"
+category: std
+
+docname: draft-ietf-suit-manifest-34
+submissiontype: IETF
+consensus: true
 v: 3
 
-title: A Concise Binary Object Representation (CBOR)-based Serialization Format for the Software Updates for Internet of Things (SUIT) Manifest
-abbrev: CBOR-based SUIT Manifest
-docname: draft-ietf-suit-manifest-34
-ipr: trust200902
-category: std
-stream: IETF
-
-area: Security
-workgroup: SUIT
-keyword: Internet-Draft
-
-pi:
-  rfcedstyle: yes
-  toc: yes
-  tocindent: yes
-  sortrefs: yes
-  symrefs: yes
-  strict: yes
-  comments: yes
-  inline: yes
-  text-list-symbols: -o*+
-  docmapping: yes
-  toc_levels: 4
-
 author:
- -
-      ins: B. Moran
-      name: Brendan Moran
-      organization: Arm Limited
-      email: brendan.moran.ietf@gmail.com
-
   -
-      ins: H. Tschofenig
-      name: Hannes Tschofenig
-      organization: University of Applied Sciences Bonn-Rhein-Siegx
-      abbrev: H-BRS
-      email: Hannes.Tschofenig@gmx.net
-
- -
-      ins: H. Birkholz
-      name: Henk Birkholz
-      organization: Fraunhofer SIT
-      email: henk.birkholz@sit.fraunhofer.de
-
- -
-      ins: K. Zandberg
-      name: Koen Zandberg
-      organization: Inria
-      email: koen.zandberg@inria.fr
-
- -
-      ins: Ø. Rønningstad
-      name: Øyvind Rønningstad
-      organization: Nordic Semiconductor
-      email: oyvind.ronningstad@gmail.com
+    ins: B. Moran
+    name: Brendan Moran
+    organization: Arm Limited
+    email: brendan.moran.ietf@gmail.com
+  -
+    ins: H. Tschofenig
+    name: Hannes Tschofenig
+    organization: University of Applied Sciences Bonn-Rhein-Sieg
+    abbrev: H-BRS
+    country: Germany
+    email: Hannes.Tschofenig@gmx.net
+  -
+    name: Henk Birkholz
+    org: Fraunhofer SIT
+    abbrev: Fraunhofer SIT
+    email: henk.birkholz@sit.fraunhofer.de
+    street: Rheinstrasse 75
+    code: '64295'
+    city: Darmstadt
+    country: Germany
+  -
+    name: Koen Zandberg
+    org: Inria
+    email: koen.zandberg@inria.fr
+  -
+    name: Øyvind Rønningstad
+    org: Nordic Semiconductor
+    email: oyvind.ronningstad@gmail.com
 
 normative:
   RFC9562:
@@ -1394,12 +1376,12 @@ IANA is requested to register the following CBOR Tags:
 - Tag: 107
 - Data Item: map
 - Semantics: SUIT_Envelope as defined in {{full-cddl}}
-- Reference: [RFC-ietf-suit-manifest-33]
+- Reference: [this RFC]
 
 - Tag: 1070
 - Data Item: map
 - Semantics: SUIT_Manifest as defined in {{full-cddl}}
-- Reference: [RFC-ietf-suit-manifest-33]
+- Reference: [this RFC]
 
 Additionally, IANA is requested to register:
 
