@@ -1505,20 +1505,24 @@ IANA is requested to create a new registry for SUIT parameters.
 
 Label | Name | Reference
 ---|---|---
+-255 to -1 | Unassigned |
 0 | Unset Detection | {{encoding}} of [TBD: this document]
 1 | Vendor ID | {{suit-parameter-vendor-identifier}} of [TBD: this document]
 2 | Class ID | {{suit-parameter-class-identifier}} of [TBD: this document]
 3 | Image Digest | {{suit-parameter-image-digest}} of [TBD: this document]
+4 | Unassigned |
 5 | Component Slot | {{suit-parameter-component-slot}} of [TBD: this document]
+6 to 11 | Unassigned |
 12 | Strict Order | {{suit-parameter-strict-order}} of [TBD: this document]
 13 | Soft Failure | {{suit-parameter-soft-failure}} of [TBD: this document]
 14 | Image Size | {{suit-parameter-image-size}} of [TBD: this document]
+15 to 17 | Unassigned |
 18 | Content | {{suit-parameter-content}} of [TBD: this document]
+19 to 20 | Unassigned |
 21 | URI | {{suit-parameter-uri}} of [TBD: this document]
 22 | Source Component | {{suit-parameter-source-component}} of [TBD: this document]
 23 | Invoke Args | {{suit-parameter-invoke-args}} of [TBD: this document]
 24 | Device ID | {{suit-parameter-device-identifier}} of [TBD: this document]
-< -256 | Custom | {{suit-parameter-custom}} of [TBD: this document]
 
 ## SUIT Text Values
 
