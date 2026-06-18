@@ -17,7 +17,7 @@ Expires: 20 December 2026                                          H-BRS
 
 A Concise Binary Object Representation (CBOR)-based Serialization Format
     for the Software Updates for Internet of Things (SUIT) Manifest
-                      draft-ietf-suit-manifest-36
+                      draft-ietf-suit-manifest-37
 
 Abstract
 
@@ -3287,12 +3287,12 @@ Internet-Draft          CBOR-based SUIT Manifest               June 2026
    Additionally, IANA is requested to register:
 
    *  allocate CBOR tag 107 (suggested) in the "CBOR Tags" registry for
-      the SUIT Envelope.  The CBOR Tag's Data Item is a SUIT_Envelope as
-      defined in Appendix A
+      the SUIT Envelope.  The CBOR Tag's Data Item is a map, with
+      semantics of a SUIT_Envelope as defined in Appendix A
 
    *  allocate CBOR tag 1070 (suggested) in the "CBOR Tags" registry for
-      the SUIT Manifest.  The CBOR Tag's Data Item is a SUIT_Manifest as
-      defined in Appendix A
+      the SUIT Manifest.  The CBOR Tag's Data Item is a map, with
+      semantics of a SUIT_Manifest as defined in Appendix A
 
    *  allocate media type application/suit-envelope+cose in the "Media
       Types" registry, see below.
@@ -4090,9 +4090,9 @@ Moran, et al.           Expires 20 December 2026               [Page 73]
 Internet-Draft          CBOR-based SUIT Manifest               June 2026
 
 
-              suit-update-management-11, 26 May 2026,
+              suit-update-management-12, 18 June 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-suit-
-              update-management-11>.
+              update-management-12>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
