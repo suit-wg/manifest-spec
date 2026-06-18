@@ -136,8 +136,8 @@ SUIT_Directive_Try_Each_Argument = [
 SUIT_Rep_Policy = uint .bits suit-reporting-bits
 
 suit-reporting-bits = &(
-    suit-send-record-success : 0,
-    suit-send-record-failure : 1,
+    suit-send-record-on-success : 0,
+    suit-send-record-on-failure : 1,
     suit-send-sysinfo-success : 2,
     suit-send-sysinfo-failure : 3
 )

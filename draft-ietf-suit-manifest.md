@@ -3,7 +3,7 @@ title: "A Concise Binary Object Representation (CBOR)-based Serialization Format
 abbrev: "CBOR-based SUIT Manifest"
 category: std
 
-docname: draft-ietf-suit-manifest-34
+docname: draft-ietf-suit-manifest-36
 submissiontype: IETF
 consensus: true
 v: 3
